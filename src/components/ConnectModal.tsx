@@ -23,7 +23,7 @@ interface ConnectModalProps {
         <IonModal isOpen={open} onWillDismiss={(ev) => handleDismiss(ev)}>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>Modal</IonTitle>
+            <IonTitle>Login Options</IonTitle>
             <IonButtons slot="end">
               <IonButton onClick={() => setIsOpen(false)}>Close</IonButton>
             </IonButtons>

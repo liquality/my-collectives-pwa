@@ -1,6 +1,6 @@
 
-import React, { createContext, useContext, useState, PropsWithChildren, useRef } from "React";
 import { SmartWallet, SmartWalletConfig, MetaMaskWallet, EmbeddedWallet } from "@thirdweb-dev/wallets";
+import { createContext, useContext, PropsWithChildren, useState, useRef } from "react";
 
 interface WalletState {
     connected: boolean;

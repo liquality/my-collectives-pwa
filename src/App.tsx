@@ -34,12 +34,14 @@ import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
 import Header from "@/components/Header";
+import { WalletProvider } from "@/utils";
 /* Theme variables */
 //import './theme/variables.css';
 
 setupIonicReact();
 
 const App: React.FC = () => (
+  <WalletProvider>
   <IonApp>
     <Header />
     <IonReactRouter>
@@ -71,6 +73,7 @@ const App: React.FC = () => (
       </IonTabs>
     </IonReactRouter>
   </IonApp>
+  </WalletProvider>
 );
 
 export default App;
