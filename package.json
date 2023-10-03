@@ -12,6 +12,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@capacitor/app": "5.0.6",
     "@capacitor/core": "5.4.1",
     "@capacitor/haptics": "5.0.6",
@@ -31,6 +32,19 @@
     "react-router-dom": "^5.3.4",
     "universal-cookie": "^6.1.1",
     "valtio": "^1.11.2"
+=======
+    "@ionic/react": "^7.4.2",
+    "@thirdweb-dev/chains": "^0.1.54-nightly-7ebe6cde-20231002232933",
+    "@thirdweb-dev/react": "^3.16.3-nightly-04f2f7b8-20231003142052",
+    "@thirdweb-dev/sdk": "^3.10.65-nightly-04f2f7b8-20231003142052",
+    "bootstrap": "^5.3.2",
+    "ethers": "^5",
+    "ionicons": "^7.1.2",
+    "next": "^13",
+    "next-pwa": "^5.6.0",
+    "react": "^18.2",
+    "react-dom": "^18.2"
+>>>>>>> e148562 (chore: added thirdweb call for test)
   },
   "devDependencies": {
     "@capacitor/cli": "5.4.1",
