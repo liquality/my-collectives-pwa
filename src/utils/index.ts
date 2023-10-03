@@ -1,6 +1,3 @@
-import Cookies from "universal-cookie"
-
-const cookies = new Cookies()
-export const checkAuth = () => {
-    return cookies.get("auth-token")
-}
+export * from './checkAuth'
+export * from './globalState'
+export * from './WalletProvider'
