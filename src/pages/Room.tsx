@@ -7,11 +7,6 @@ const Room = () => {
   const [room, setRoom] = useState("");
   return (
     <IonPage>
-    <IonHeader>
-      <IonToolbar>
-        <IonTitle>Chats</IonTitle>
-      </IonToolbar>
-    </IonHeader>
     <IonContent fullscreen>
       <ProtectedRoute>
       {" "}
