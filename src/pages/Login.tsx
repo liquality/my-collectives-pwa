@@ -1,12 +1,21 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import Auth from '@/components/Auth';
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
+import Auth from "@/components/Auth";
+import { checkAuth } from "@/utils";
 
 const Settings: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Login Page</IonTitle>
+          <IonTitle>
+            {checkAuth() ? <p>Home Page</p> : <p>Login Page</p>}{" "}
+          </IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>

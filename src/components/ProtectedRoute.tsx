@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { useIonRouter } from '@ionic/react';
+import { useIonRouter } from "@ionic/react";
 import { useSnapshot } from "valtio";
-import { globalState, checkAuth,  } from "@/utils";
+import { checkAuth } from "@/utils";
 
 const ProtectedRoute = ({ children }) => {
   //const snap = useSnapshot(globalState);
