@@ -1,0 +1,7 @@
+{
+  "name": "group-mints",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
