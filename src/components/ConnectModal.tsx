@@ -1,6 +1,6 @@
 import { LocalWalletType } from "@/types/wallet";
 import { IonHeader, IonToolbar, IonTitle, IonButton, IonButtons, IonContent, IonModal, IonItem, IonLabel, IonList } from "@ionic/react";
-import { useState } from "react";
+import React, { useState } from "react";
 
 interface ConnectModalProps {
     open: boolean;

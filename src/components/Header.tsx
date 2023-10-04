@@ -1,83 +1,122 @@
-import { IonHeader, IonToolbar, IonTitle, IonButton, IonButtons } from "@ionic/react";
-import { SmartWallet, SmartWalletConfig, MetaMaskWallet, EmbeddedWallet } from "@thirdweb-dev/wallets";
-import { BaseGoerli as ActiveChain, updateChainRPCs } from "@thirdweb-dev/chains";
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonButton,
+  IonButtons,
+  IonProgressBar,
+} from "@ionic/react";
+import {
+  SmartWallet,
+  SmartWalletConfig,
+  MetaMaskWallet,
+  EmbeddedWallet,
+  PrivateKeyWallet,
+} from "@thirdweb-dev/wallets";
+import {
+  BaseGoerli as ActiveChain,
+  updateChainRPCs,
+} from "@thirdweb-dev/chains";
 import { useState } from "react";
 import ConnectModal from "./ConnectModal";
 import { LocalWalletType } from "@/types/wallet";
-import { useConnectedWallet, useWalletContext } from "@/utils";
+import {
+  globalState as State,
+  useConnectedWallet,
+  useWalletContext,
+} from "@/utils";
+import React from "react";
 
-  const smartWalletConfig: SmartWalletConfig = {
-      chain: ActiveChain,
-      factoryAddress: import.meta.env.VITE_THIRDWEB_FACTORY_CONTRACT,
-      gasless: true,
-      clientId: import.meta.env.VITE_THIRDWEB_CLIENT_ID,// Use secret key if using on the server, get it from dashboard settings
-    };
+const smartWalletConfig: SmartWalletConfig = {
+  chain: ActiveChain,
+  factoryAddress: import.meta.env.VITE_THIRDWEB_FACTORY_CONTRACT,
+  gasless: true,
+  clientId: import.meta.env.VITE_THIRDWEB_CLIENT_ID, // Use secret key if using on the server, get it from dashboard settings
+};
 
-  const Header: React.FC = () => {
-    const [connectedModalOpen, setConnectedModalOpen] = useState(false);
-    const [requestedWallet, setRequestedWallet] = useState<string>();
-    const { connected, setConnected, setConnectedWallet, connectedWallet, setSmartContractWallet, smartContractWallet } = useWalletContext();
-    const handleRequestedWallet = async (walletType: LocalWalletType) => {
-      setRequestedWallet(walletType);
+const Header: React.FC = () => {
+  const [connectedModalOpen, setConnectedModalOpen] = useState(false);
+  const [requestedWallet, setRequestedWallet] = useState<string>();
+  const {
+    connected,
+    setConnected,
+    setConnectedWallet,
+    connectedWallet,
+    setSmartContractWallet,
+    smartContractWallet,
+  } = useWalletContext();
+  const handleRequestedWallet = async (
+    walletType: LocalWalletType,
+    { privateKey }: { privateKey: string }
+  ) => {
+    setRequestedWallet(walletType);
 
-      switch (walletType) {
-        case 'metamask':
-          setConnectedWallet(new MetaMaskWallet({
-            
-          }));
-          
-          break;
-          case 'embedded':
-            setConnectedWallet(new EmbeddedWallet({
-                chain: updateChainRPCs(ActiveChain), 
-                clientId: import.meta.env.VITE_THIRDWEB_CLIENT_ID || ''
-              }));
-          break;
-        default:
-          break;
-      }
+    switch (walletType) {
+      case "privateKey":
+        setConnectedWallet(new PrivateKeyWallet(privateKey));
 
-      setSmartContractWallet(new SmartWallet(smartWalletConfig));
-      if(connectedWallet) {
-      const connectedWalletAddress = await connectedWallet?.connect();
-        const smartWalletAddress = await smartContractWallet?.connect({
-          personalWallet: connectedWallet,
-        });
-        setConnected(true);
-        console.log({ smartWalletAddress, connectedWalletAddress})
-      }
-    }
-  
-    const disconnect = async () => {
-      await connectedWallet?.disconnect();
-      await smartContractWallet?.disconnect();
-      setConnected(false);
-      console.log('wallet disconnected')
+        break;
+      case "embedded":
+        setConnectedWallet(
+          new EmbeddedWallet({
+            chain: updateChainRPCs(ActiveChain),
+            clientId: import.meta.env.VITE_THIRDWEB_CLIENT_ID || "",
+          })
+        );
+        break;
+      default:
+        break;
     }
 
-    return (
-        <IonHeader>
-        <IonToolbar>
-          <IonTitle>
-            {" "}
-            <img
-              src="/logo.svg"
-              alt=""
-              height={30}
-              width={30}
-              style={{ verticalAlign: "middle" }}
-            />{" "}
-            Group Mints
-          </IonTitle>
-          <IonButtons slot="end">
-            {connected ? <IonButton onClick={disconnect}>Disconnect</IonButton> : <IonButton onClick={() =>setConnectedModalOpen(true)}>Login</IonButton>}
-      
-      </IonButtons>
-        </IonToolbar>
-        <ConnectModal open={connectedModalOpen} setIsOpen={setConnectedModalOpen} setRequestedWallet={handleRequestedWallet}/>
-      </IonHeader>
-    );
+    const connectedWalletAddress = await connectedWallet?.connect();
+      setConnected(true);
+      console.log({ connectedWalletAddress });
   };
-  
-  export default Header;
-  
+
+  const disconnect = async () => {
+    await connectedWallet?.disconnect();
+    await smartContractWallet?.disconnect();
+    setConnected(false);
+    console.log("wallet disconnected");
+  };
+
+  return (
+    <IonHeader>
+      <IonToolbar color="primary">
+        <IonTitle>
+          {" "}
+          <img
+            src="/logo.svg"
+            alt=""
+            height={30}
+            width={30}
+            style={{ verticalAlign: "middle" }}
+          />{" "}
+          Group Mints
+        </IonTitle>
+        {State.loading ? (
+          <IonProgressBar
+            color="secondary"
+            type="indeterminate"
+          ></IonProgressBar>
+        ) : null}
+        <IonButtons slot="end">
+          {connected ? (
+            <IonButton onClick={disconnect}>Disconnect</IonButton>
+          ) : (
+            <IonButton onClick={() => setConnectedModalOpen(true)}>
+              Login
+            </IonButton>
+          )}
+        </IonButtons>
+      </IonToolbar>
+      <ConnectModal
+        open={connectedModalOpen}
+        setIsOpen={setConnectedModalOpen}
+        setRequestedWallet={handleRequestedWallet}
+      />
+    </IonHeader>
+  );
+};
+
+export default Header;
