@@ -1,5 +1,4 @@
 import { IonHeader, IonToolbar, IonTitle, IonButton, IonButtons } from "@ionic/react";
-import LogoIcon from "@/assets/logo.svg";
 import { SmartWallet, SmartWalletConfig, MetaMaskWallet, EmbeddedWallet } from "@thirdweb-dev/wallets";
 import { BaseGoerli as ActiveChain, updateChainRPCs } from "@thirdweb-dev/chains";
 import { useState } from "react";
@@ -62,7 +61,7 @@ import { useConnectedWallet, useWalletContext } from "@/utils";
           <IonTitle>
             {" "}
             <img
-              src={LogoIcon}
+              src="/logo.svg"
               alt=""
               height={30}
               width={30}
