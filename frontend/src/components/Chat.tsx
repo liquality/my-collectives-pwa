@@ -7,13 +7,15 @@ import { messageTypes } from "../services/Websocket/MessageHandler";
 //@ts-ignore
 import UserService from "../services/UserService";
 import { Message } from "@/types/chat";
+import Invite from "./Invite";
 
 interface ChatProps {
-  group: string;
+  groupName: string;
+  groupId: number | null;
 }
 
 export const Chat = (props: ChatProps) => {
-  const { group } = props;
+  const { groupName, groupId } = props;
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -24,7 +26,7 @@ export const Chat = (props: ChatProps) => {
   };
 
   useEffect(() => {
-    websocketService.connect(1); //TODO add users id/public address here
+    websocketService.connect(3); //TODO add users id/public address here
     eventBus.on(messageTypes.CROSSMINT_SUCCESS, listenToCrossmintSuccess);
     return () => {
       eventBus.remove(messageTypes.CROSSMINT_SUCCESS, listenToCrossmintSuccess);
@@ -48,12 +50,12 @@ export const Chat = (props: ChatProps) => {
     }
     setNewMessage("");
   };
-  console.log(messages, "msgs", group);
+  console.log(messages, "msgs", groupName);
   return (
     <div className="chat">
       <u>
         WELCOME TO
-        <b> {group}</b>
+        <b> {groupName}</b>
       </u>
       <br></br>
       <br></br>
@@ -76,6 +78,7 @@ export const Chat = (props: ChatProps) => {
         ></input>
         <button type="submit">Send</button>
       </form>
+      <Invite groupId={groupId} />
     </div>
   );
 };

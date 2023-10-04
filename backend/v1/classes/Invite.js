@@ -1,16 +1,18 @@
 const MySQL = require("../../MySQL");
 const ApiError = require("./ApiError");
 
-class Group {
-  constructor(group) {
-    this.set(group);
+class Invite {
+  constructor(invite) {
+    this.set(invite);
   }
 
-  set(group) {
-    if (typeof group !== "undefined") {
-      this.id = group.id;
-      this.group_name = group.group_name;
-      this.created_at = group.created_at;
+  set(invite) {
+    if (typeof invite !== "undefined") {
+      this.id = invite.id;
+      this.group_id = invite.group_id;
+      this.link = invite.link;
+      this.is_used = invite.is_used;
+      this.expiry_date = invite.expiry_date;
     }
   }
 
@@ -18,30 +20,31 @@ class Group {
   /* CRUD OPERATIONS  */
   /*                  */
   create = async () => {
-    const group = this;
-    console.log(group, "wats group?");
+    const invite = this;
+    console.log(invite, "wats invite?");
+    const inviteLink = this.generateInviteLink();
     const promise = new Promise((resolve, reject) => {
       // Insert new row
       MySQL.pool.getConnection((err, db) => {
         db.query(
-          "INSERT INTO `group` (group_name, created_at) VALUES (?,  UTC_TIMESTAMP());",
-          [group.group_name],
+          "INSERT INTO `invite` (group_id, invite_link, is_used, expiry_date) VALUES (?, ?, ?, UTC_TIMESTAMP());",
+          [invite.group_id, inviteLink, false],
           (err, results, fields) => {
             if (err) {
               reject(new ApiError(500, err));
             } else {
-              // Get the ID of the newly inserted group
-              const groupId = results.insertId;
+              // Get the ID of the newly inserted invite
+              const inviteId = results.insertId;
 
-              // Create a query to select the newly inserted group
+              // Create a query to select the newly inserted invite
               db.query(
-                "SELECT * FROM `group` WHERE id = ?",
-                [groupId],
+                "SELECT * FROM `invite` WHERE id = ?",
+                [inviteId],
                 (err, results, fields) => {
                   if (err) {
                     reject(new ApiError(500, err));
                   } else {
-                    // Resolve with the selected group object
+                    // Resolve with the selected invite object
                     resolve(results[0]);
                   }
                   db.release();
@@ -54,6 +57,20 @@ class Group {
       });
     });
     return promise;
+  };
+
+  generateInviteLink = () => {
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let inviteLink = "";
+    const linkLength = 10; // You can adjust the length as needed
+
+    for (let i = 0; i < linkLength; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      inviteLink += characters.charAt(randomIndex);
+    }
+
+    return inviteLink;
   };
 
   read = async (id) => {
@@ -146,4 +163,4 @@ class Group {
   };
 }
 
-module.exports = Group;
+module.exports = Invite;

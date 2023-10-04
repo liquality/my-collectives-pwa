@@ -17,14 +17,17 @@ import { Group } from "@/types/chat";
 
 const Room = () => {
   const [isInChat, setIsInChat] = useState(false);
-  const [group, setGroup] = useState("");
+  const [groupName, setGroupName] = useState("");
+  const [groupId, setGroupId] = useState<number | null>(null);
 
   const handleEnterChat = async () => {
     const groupObject: Group = {
-      group_name: group,
+      group_name: groupName,
     };
     try {
-      UserService.createGroup(groupObject);
+      const result = await UserService.createGroup(groupObject);
+      console.log(result, "RESULT OF creating");
+      setGroupId(result.id);
       setIsInChat(true);
     } catch (error) {
       console.log(error, "error posting group");
@@ -47,11 +50,11 @@ const Room = () => {
             <IonItem className="room">
               <IonLabel>Type room name: </IonLabel>
 
-              <input onChange={(e) => setGroup(e.target.value)} />
+              <input onChange={(e) => setGroupName(e.target.value)} />
               <IonButton onClick={handleEnterChat}>Enter Chat</IonButton>
             </IonItem>
           ) : (
-            <Chat group={group} />
+            <Chat groupName={groupName} groupId={groupId} />
           )}
         </ProtectedRoute>
       </IonContent>

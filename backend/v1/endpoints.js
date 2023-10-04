@@ -4,6 +4,7 @@ var messageHandler = require("./handlers/messageHandler");
 
 var middleware = require("./middleware");
 const groupHandler = require("./handlers/groupHandler");
+const inviteHandler = require("./handlers/inviteHandler");
 
 endpoints.createUser = {
   url: "/v1/user",
@@ -60,6 +61,14 @@ endpoints.createGroup = {
   middleware: [],
   handler: groupHandler.create,
   description: "create group",
+};
+
+endpoints.createInvite = {
+  url: "/v1/invite",
+  method: "post",
+  middleware: [],
+  handler: inviteHandler.create,
+  description: "create invite",
 };
 endpoints.readGame = {
   url: "/v1/game/:id",

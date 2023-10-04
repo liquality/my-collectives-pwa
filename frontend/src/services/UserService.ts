@@ -13,6 +13,10 @@ const UserService = {
     return NetworkService.postResourceWithAuth("/v1/message/", messageObject);
   },
 
+  createInvite: async function (groupId: Group) {
+    return NetworkService.postResourceWithAuth("/v1/invite/", groupId);
+  },
+
   loginUser: async function (userEmail: string) {
     return NetworkService.getResourceWithAuth("/v1/user/login/" + userEmail);
   },

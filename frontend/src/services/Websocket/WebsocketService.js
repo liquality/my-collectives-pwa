@@ -28,7 +28,7 @@ websocketService.connect = (userid) => {
   const ws = websocketService.getWS(userid);
 
   ws.onopen = () => {
-    console.log("WebSocket connected. ");
+    console.log("WebSocket connected. ", userid);
     // Reset reconnectAttempts on connection opening
     websocketService.reconnectAttempts = 0;
   };
