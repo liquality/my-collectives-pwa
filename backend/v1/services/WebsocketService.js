@@ -64,7 +64,8 @@ websocketService.checkAuth = async (req, callback) => {
 };
 
 websocketService.send = (recipientId, messageType, messageContent) => {
-  recipientId.forEach((id) => {
+  recipientId.forEach((id, index) => {
+    console.log(index, id, "INDEX AND ID");
     const client = clients[id];
 
     if (client?.sockets) {

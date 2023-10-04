@@ -25,7 +25,6 @@ class Message {
     const promise = new Promise((resolve, reject) => {
       // Insert new row
       MySQL.pool.getConnection((err, db) => {
-        console.log(message, "wats msg?");
         db.query(
           "INSERT INTO `message` (group_id, sender, text, created_at) VALUES (?, ?, ?, UTC_TIMESTAMP());",
           [message.group_id, message.sender, message.text],
@@ -34,6 +33,7 @@ class Message {
               reject(new ApiError(500, err));
             } else {
               console.log(message, "group resolved");
+
               resolve(message);
             }
             db.release();

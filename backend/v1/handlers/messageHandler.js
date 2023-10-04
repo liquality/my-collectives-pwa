@@ -14,6 +14,7 @@ messageHandler.create = function (req, res) {
   message.create().then(
     (msg) => {
       websocketService.send([1], "crossmint_success", msg);
+
       res.status(200).send(msg);
     },
     (reject) => {

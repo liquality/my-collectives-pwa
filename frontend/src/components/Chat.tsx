@@ -58,8 +58,8 @@ export const Chat = (props: ChatProps) => {
       <br></br>
       <br></br>
       <div>
-        {messages.map((message) => (
-          <div key={message.id}>
+        {messages.map((message, index) => (
+          <div key={index}>
             <span>
               <b>{message.sender}</b>
             </span>
