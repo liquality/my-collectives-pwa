@@ -9,7 +9,7 @@ import { useConnectedWallet, useWalletContext } from "@/utils";
 
   const smartWalletConfig: SmartWalletConfig = {
       chain: ActiveChain,
-      factoryAddress: "0x7f81fb5b32fA60DB8ddBa9db4d1A933CD07235e9",
+      factoryAddress: import.meta.env.VITE_THIRDWEB_FACTORY_CONTRACT,
       gasless: true,
       clientId: import.meta.env.VITE_THIRDWEB_CLIENT_ID,// Use secret key if using on the server, get it from dashboard settings
     };
