@@ -39,6 +39,8 @@ export const Chat = (props: ChatProps) => {
     return () => unsubscribe();
   }, []);
 
+  console.log(messages, "msgs should include id");
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newMessage === "") return;
