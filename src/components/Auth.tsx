@@ -2,7 +2,14 @@ import React from "react";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "@/firebase.config";
 import Cookies from "universal-cookie";
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, useIonRouter } from '@ionic/react';
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  useIonRouter,
+} from "@ionic/react";
 import { checkAuth } from "@/utils";
 const cookies = new Cookies();
 const Auth = () => {
@@ -24,14 +31,14 @@ const Auth = () => {
     <>
       {checkAuth() ? null : (
         <IonCard>
-        <IonCardHeader>
-          <IonCardTitle>Sign in with Google</IonCardTitle>
-        </IonCardHeader>
-  
-        <IonCardContent>
-        <IonButton onClick={signInWithGoogle}>Sign in</IonButton>
-        </IonCardContent>
-      </IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Sign in with Google</IonCardTitle>
+          </IonCardHeader>
+
+          <IonCardContent>
+            <IonButton onClick={signInWithGoogle}>Sign in</IonButton>
+          </IonCardContent>
+        </IonCard>
       )}
     </>
   );
