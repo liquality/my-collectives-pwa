@@ -4,44 +4,56 @@ import { SmartWallet, SmartWalletConfig, MetaMaskWallet, EmbeddedWallet } from "
 import { BaseGoerli as ActiveChain, updateChainRPCs } from "@thirdweb-dev/chains";
 import { useState } from "react";
 import ConnectModal from "./ConnectModal";
+import { LocalWalletType } from "@/types/wallet";
+import { useConnectedWallet, useWalletContext } from "@/utils";
+
+  const smartWalletConfig: SmartWalletConfig = {
+      chain: ActiveChain,
+      factoryAddress: import.meta.env.VITE_THIRDWEB_FACTORY_CONTRACT,
+      gasless: true,
+      clientId: import.meta.env.VITE_THIRDWEB_CLIENT_ID,// Use secret key if using on the server, get it from dashboard settings
+    };
 
   const Header: React.FC = () => {
     const [connectedModalOpen, setConnectedModalOpen] = useState(false);
     const [requestedWallet, setRequestedWallet] = useState<string>();
-    const handleRequestedWallet = (wallet: string) => {
-      setRequestedWallet(wallet);
-      console.log('wallet', wallet);
+    const { connected, setConnected, setConnectedWallet, connectedWallet, setSmartContractWallet, smartContractWallet } = useWalletContext();
+    const handleRequestedWallet = async (walletType: LocalWalletType) => {
+      setRequestedWallet(walletType);
+
+      switch (walletType) {
+        case 'metamask':
+          setConnectedWallet(new MetaMaskWallet({
+            
+          }));
+          
+          break;
+          case 'embedded':
+            setConnectedWallet(new EmbeddedWallet({
+                chain: updateChainRPCs(ActiveChain), 
+                clientId: import.meta.env.VITE_THIRDWEB_CLIENT_ID || ''
+              }));
+          break;
+        default:
+          break;
+      }
+
+      setSmartContractWallet(new SmartWallet(smartWalletConfig));
+      if(connectedWallet) {
+      const connectedWalletAddress = await connectedWallet?.connect();
+        const smartWalletAddress = await smartContractWallet?.connect({
+          personalWallet: connectedWallet,
+        });
+        setConnected(true);
+        console.log({ smartWalletAddress, connectedWalletAddress})
+      }
     }
-    // const config: SmartWalletConfig = {
-    //   chain: ActiveChain,
-    //   factoryAddress: "0x7f81fb5b32fA60DB8ddBa9db4d1A933CD07235e9",
-    //   gasless: true,
-    //   clientId: import.meta.env.VITE_THIRDWEB_CLIENT_ID,// Use secret key if using on the server, get it from dashboard settings
-    // };
-    
-    const connect = () => {
-      setConnectedModalOpen(true);
-      // const personalWallet = new MetaMaskWallet({
-        
-      // });
-      // const embeddedWallet = new EmbeddedWallet({
-      //   chain: updateChainRPCs(ActiveChain), 
-      //   clientId: import.meta.env.VITE_THIRDWEB_CLIENT_ID || '', // client ID
-      // });
-      // // const personalWalletAddress = await personalWallet.connect();
-      // // // Then, connect the Smart wallet
-      // // const smartWallet = new SmartWallet(config);
-      
-      // // const smartWalletAddress = await smartWallet.connect({
-      // //   personalWallet: embeddedWallet,
-      // // });
-    
-      // // const signer = await smartWallet.getSigner();
-      // // const message = await signer.signMessage('test message');
-      // // console.log({personalWalletAddress, smartWalletAddress, message} )
-      // const address = await embeddedWallet.connect();
-      // const email = await embeddedWallet.getEmail();
-      // console.log({ address, email })
+  
+    const disconnect = async () => {
+      await connectedWallet?.disconnect();
+      await smartContractWallet?.disconnect();
+      setConnected(false);
+      console.log('wallet disconnected')
     }
 
     return (
@@ -59,7 +71,8 @@ import ConnectModal from "./ConnectModal";
             Group Mints
           </IonTitle>
           <IonButtons slot="end">
-          <IonButton onClick={() =>connect()}>Login</IonButton>
+            {connected ? <IonButton onClick={disconnect}>Disconnect</IonButton> : <IonButton onClick={() =>setConnectedModalOpen(true)}>Login</IonButton>}
+      
       </IonButtons>
         </IonToolbar>
         <ConnectModal open={connectedModalOpen} setIsOpen={setConnectedModalOpen} setRequestedWallet={handleRequestedWallet}/>

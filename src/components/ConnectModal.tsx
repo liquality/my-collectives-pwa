@@ -1,21 +1,21 @@
+import { LocalWalletType } from "@/types/wallet";
 import { IonHeader, IonToolbar, IonTitle, IonButton, IonButtons, IonContent, IonModal, IonItem, IonLabel, IonList } from "@ionic/react";
 import { useState } from "react";
 
 interface ConnectModalProps {
     open: boolean;
     setIsOpen: (open: boolean) => void;
-    setRequestedWallet: (option: string) => void;
+    setRequestedWallet: (walletType?: LocalWalletType) => void;
   }
   
   const ConnectModal: React.FC<ConnectModalProps> = ({ open, setIsOpen, setRequestedWallet }) => {
-    const [walletOption, setWalletOption] = useState<string>();
-    const handleDismiss = (ev: any) => {
-        console.log('ev', ev);
-        setRequestedWallet(walletOption || '')
+    const [walletType, setWalletType] = useState<LocalWalletType>();
+    const handleDismiss = () => {
+        setRequestedWallet(walletType)
     }
 
-    const handleSetWalletOption = (option: string) => {
-        setWalletOption(option);
+    const handleSetWalletOption = (_walletType: LocalWalletType) => {
+        setWalletType(_walletType);
         setIsOpen(false)
     }
 
