@@ -1,0 +1,1 @@
+export type LocalWalletType = 'metamask' | 'embedded';

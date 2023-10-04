@@ -1,11 +1,11 @@
 
-import { SmartWallet, SmartWalletConfig, MetaMaskWallet, EmbeddedWallet } from "@thirdweb-dev/wallets";
+import { SmartWallet, SmartWalletConfig, MetaMaskWallet, EmbeddedWallet, EVMWallet, AbstractClientWallet } from "@thirdweb-dev/wallets";
 import { createContext, useContext, PropsWithChildren, useState, useRef } from "react";
 
 interface WalletState {
     connected: boolean;
     smartContractWallet?: SmartWallet;
-    connectedWallet?: MetaMaskWallet | EmbeddedWallet;
+    connectedWallet?: AbstractClientWallet;
     setConnectedWallet(wallet: any): void;
     setSmartContractWallet(wallet: any): void;
     setConnected(connected: boolean): void;
