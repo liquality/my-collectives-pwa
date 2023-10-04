@@ -52,8 +52,9 @@ websocketService.checkAuth = async (req, callback) => {
 
   if (userId && userId !== 0) {
     try {
-      const user = await new User().read(userId);
-      callback(user.id);
+      //TODO: read from our real user table?
+      //const user = await new User().read(userId);
+      callback(userId);
       return;
     } catch (error) {
       console.log({ error }, "Failed to check socket authentication.");

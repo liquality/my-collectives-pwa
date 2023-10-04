@@ -12,10 +12,27 @@ import {
   IonLabel,
 } from "@ionic/react";
 import Chat from "@/components/Chat";
+import UserService from "../services/UserService";
+import { Group } from "@/types/chat";
 
 const Room = () => {
   const [isInChat, setIsInChat] = useState(false);
-  const [room, setRoom] = useState("");
+  const [group, setGroup] = useState("");
+
+  const handleEnterChat = async () => {
+    const groupObject: Group = {
+      group_name: group,
+    };
+    try {
+      UserService.createGroup(groupObject);
+      setIsInChat(true);
+    } catch (error) {
+      console.log(error, "error posting group");
+    }
+  };
+
+  //TODO: add usefecct/custom hook here that fetches all users groups
+  //and displays them if he/she is in them, if not display 'create group'
   return (
     <IonPage>
       <IonHeader>
@@ -30,17 +47,11 @@ const Room = () => {
             <IonItem className="room">
               <IonLabel>Type room name: </IonLabel>
 
-              <input onChange={(e) => setRoom(e.target.value)} />
-              <IonButton
-                onClick={() => {
-                  setIsInChat(true);
-                }}
-              >
-                Enter Chat
-              </IonButton>
+              <input onChange={(e) => setGroup(e.target.value)} />
+              <IonButton onClick={handleEnterChat}>Enter Chat</IonButton>
             </IonItem>
           ) : (
-            <Chat group={room} />
+            <Chat group={group} />
           )}
         </ProtectedRoute>
       </IonContent>

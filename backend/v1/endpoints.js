@@ -1,8 +1,9 @@
 var endpoints = {};
 var userHandler = require("./handlers/userHandler");
-var gameHandler = require("./handlers/gameHandler");
+var messageHandler = require("./handlers/messageHandler");
 
 var middleware = require("./middleware");
+const groupHandler = require("./handlers/groupHandler");
 
 endpoints.createUser = {
   url: "/v1/user",
@@ -45,18 +46,26 @@ endpoints.deleteUser = {
 /*  */
 //Game endpoints
 /*  */
-endpoints.createGame = {
-  url: "/v1/game",
+endpoints.createMessage = {
+  url: "/v1/message",
   method: "post",
-  middleware: [middleware.authenticateJWT],
-  handler: gameHandler.create,
-  description: "create game",
+  middleware: [],
+  handler: messageHandler.create,
+  description: "create msg",
+};
+
+endpoints.createGroup = {
+  url: "/v1/group",
+  method: "post",
+  middleware: [],
+  handler: groupHandler.create,
+  description: "create group",
 };
 endpoints.readGame = {
   url: "/v1/game/:id",
   method: "get",
   middleware: [middleware.authenticateJWT],
-  handler: gameHandler.read,
+  handler: messageHandler.read,
   description: "read game",
 };
 
@@ -64,7 +73,7 @@ endpoints.readGameByUserId = {
   url: "/v1/games/:userid/:artistNumberId?",
   method: "get",
   middleware: [middleware.authenticateJWT],
-  handler: gameHandler.readGamesByUserId,
+  handler: messageHandler.readGamesByUserId,
   description: "read game by user id ",
 };
 
@@ -72,7 +81,7 @@ endpoints.getLeaderboardData = {
   url: "/v1/game/leaderboard/:game_symbol_id",
   method: "get",
   middleware: [],
-  handler: gameHandler.getLeaderboardData,
+  handler: messageHandler.getLeaderboardData,
   description: "read leaderboard data based on game symbol id ",
 };
 
@@ -80,7 +89,7 @@ endpoints.updateGame = {
   url: "/v1/game/:userid",
   method: "put",
   middleware: [middleware.authenticateJWT],
-  handler: gameHandler.update,
+  handler: messageHandler.update,
   description: "update game",
 };
 
@@ -88,16 +97,8 @@ endpoints.deleteGame = {
   url: "/v1/game/:id",
   method: "delete",
   middleware: [],
-  handler: gameHandler.delete,
+  handler: messageHandler.delete,
   description: "delete game",
-};
-
-endpoints.getBurnStatus = {
-  url: "/v1/game/burn-status/:gameId/:levelId/:userAddress",
-  method: "get",
-  middleware: [],
-  handler: gameHandler.getBurnStatus,
-  description: "Get burn status of a user in a game level",
 };
 
 /*WEBHOOK EVENTS FROM CROSSMINT*/
@@ -106,15 +107,8 @@ endpoints.listenToWebhook = {
   url: "/v1/webhook",
   method: "post",
   middleware: [],
-  handler: gameHandler.webhook,
+  handler: messageHandler.webhook,
   description: "listen to crossmint webhook",
 };
 
-endpoints.getLevelSettings = {
-  url: "/v1/level-settings",
-  method: "get",
-  middleware: [],
-  handler: gameHandler.getLevelSettings,
-  description: "Get all level settings",
-};
 module.exports = endpoints;

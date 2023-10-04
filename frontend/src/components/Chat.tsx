@@ -1,15 +1,13 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import "../theme/chat-box.css";
-import {
-  addDoc,
-  collection,
-  serverTimestamp,
-  onSnapshot,
-  query,
-  where,
-  orderBy,
-} from "firebase/firestore";
-import { db, auth } from "@/firebase.config";
+//@ts-ignore
+import websocketService from "../services/Websocket/WebsocketService";
+import eventBus from "../services/Websocket/EventBus";
+import { messageTypes } from "../services/Websocket/MessageHandler";
+//@ts-ignore
+import UserService from "../services/UserService";
+import { Message } from "@/types/chat";
+
 interface ChatProps {
   group: string;
 }
@@ -17,41 +15,37 @@ interface ChatProps {
 export const Chat = (props: ChatProps) => {
   const { group } = props;
   const [newMessage, setNewMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<Message[]>([]);
 
-  const messagesRef = collection(db, "messages");
+  const listenToCrossmintSuccess = (data: Message) => {
+    const newMessage = data;
+    setMessages((prevMessages: Message[]) => [...prevMessages, newMessage]);
+    console.log("Websocket event sent from db", data);
+  };
 
   useEffect(() => {
-    const queryMessages = query(
-      messagesRef,
-      where("group", "==", group),
-      orderBy("createdAt")
-    );
-    const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
-      let messages = [];
-      snapshot.forEach((doc) => {
-        console.log(doc, "wats doc??");
-        messages.push({ ...doc.data(), id: doc.id });
-      });
-      setMessages(messages);
-    });
-
-    return () => unsubscribe();
+    websocketService.connect(1); //TODO add users id/public address here
+    eventBus.on(messageTypes.CROSSMINT_SUCCESS, listenToCrossmintSuccess);
+    return () => {
+      eventBus.remove(messageTypes.CROSSMINT_SUCCESS, listenToCrossmintSuccess);
+    };
   }, []);
-
-  console.log(messages, "msgs should include id");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newMessage === "") return;
+    //submit message to db
 
-    console.log(auth, "wats auth?");
-    const hej = await addDoc(messagesRef, {
-      text: newMessage,
-      createdAt: serverTimestamp(),
-      user: auth.currentUser.displayName,
-      group: group,
-    });
+    try {
+      const message = {
+        sender: "0x012", //TODO replace with user public address
+        text: newMessage,
+        group_id: 1, //todo fetch group_id from group name or props?
+      };
+      const postMessage = await UserService.createMessage(message);
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
     setNewMessage("");
   };
   console.log(messages, "msgs", group);
@@ -67,7 +61,7 @@ export const Chat = (props: ChatProps) => {
         {messages.map((message) => (
           <div key={message.id}>
             <span>
-              <b>{message.user}</b>
+              <b>{message.sender}</b>
             </span>
             <div>{message.text}</div>{" "}
           </div>
@@ -83,22 +77,6 @@ export const Chat = (props: ChatProps) => {
         <button type="submit">Send</button>
       </form>
     </div>
-
-    /* <ion-item 
-  lines="none" 
-  [class]="chat?.sender != current_user_id ? 'sender' : 'user'">
-  <ion-label 
-    [slot]="chat?.sender == current_user_id ? 'end' : 'start'" class="ion-text-wrap">
-    <ion-text>{{chat?.message}}</ion-text>
-    <ion-note>
-      <!-- <small>{{(chat?.createdAt)?.toDate() | date: 'HH:mm'}}</small> -->
-      <small>10:00AM</small>
-      <ion-icon 
-        [color]="chat?.sender == current_user_id ? 'light' : 'primary'" 
-        name="checkmark-done-outline"></ion-icon>
-    </ion-note>
-  </ion-label>
-</ion-item> */
   );
 };
 
