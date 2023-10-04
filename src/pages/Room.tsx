@@ -6,6 +6,10 @@ import {
   IonToolbar,
   IonTitle,
   IonContent,
+  IonItem,
+  IonInput,
+  IonButton,
+  IonLabel,
 } from "@ionic/react";
 import Chat from "@/components/Chat";
 
@@ -23,21 +27,21 @@ const Room = () => {
         <ProtectedRoute>
           {" "}
           {!isInChat ? (
-            <div className="room">
-              <label> Type room name: </label>
+            <IonItem className="room">
+              <IonLabel>Type room name: </IonLabel>
+
               <input onChange={(e) => setRoom(e.target.value)} />
-              <button
+              <IonButton
                 onClick={() => {
                   setIsInChat(true);
                 }}
               >
                 Enter Chat
-              </button>
-            </div>
+              </IonButton>
+            </IonItem>
           ) : (
             <Chat group={room} />
           )}
-          ;
         </ProtectedRoute>
       </IonContent>
     </IonPage>

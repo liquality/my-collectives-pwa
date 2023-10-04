@@ -2,11 +2,13 @@ import {
   IonContent,
   IonHeader,
   IonPage,
+  IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import Auth from "@/components/Auth";
 import { checkAuth } from "@/utils";
+import React from "react";
 
 const Settings: React.FC = () => {
   return (
@@ -14,7 +16,11 @@ const Settings: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>
-            {checkAuth() ? <p>Home Page</p> : <p>Login Page</p>}{" "}
+            {checkAuth() ? (
+              <IonText>Home Page</IonText>
+            ) : (
+              <IonText>Login Page</IonText>
+            )}{" "}
           </IonTitle>
         </IonToolbar>
       </IonHeader>

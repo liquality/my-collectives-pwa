@@ -7,6 +7,7 @@ import {
   onSnapshot,
   query,
   where,
+  orderBy,
 } from "firebase/firestore";
 import { db, auth } from "@/firebase.config";
 interface ChatProps {
@@ -21,7 +22,11 @@ export const Chat = (props: ChatProps) => {
   const messagesRef = collection(db, "messages");
 
   useEffect(() => {
-    const queryMessages = query(messagesRef, where("group", "==", group));
+    const queryMessages = query(
+      messagesRef,
+      where("group", "==", group),
+      orderBy("createdAt")
+    );
     const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
       let messages = [];
       snapshot.forEach((doc) => {
@@ -47,14 +52,21 @@ export const Chat = (props: ChatProps) => {
     });
     setNewMessage("");
   };
-  console.log(messages, "msgs");
+  console.log(messages, "msgs", group);
   return (
     <div className="chat">
-      Chat compoentn
+      <u>
+        WELCOME TO
+        <b> {group}</b>
+      </u>
+      <br></br>
+      <br></br>
       <div>
         {messages.map((message) => (
           <div key={message.id}>
-            <span>{message.user}</span>
+            <span>
+              <b>{message.user}</b>
+            </span>
             <div>{message.text}</div>{" "}
           </div>
         ))}
