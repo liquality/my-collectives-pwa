@@ -8,3 +8,6 @@
 
 ## Development
 - run `npm run dev`
+
+## PWA asset generator
+- run `npm run generate-pwa-assets` this will take the `/public/icon.svg` and generate all the images/assets required inside the same folder
