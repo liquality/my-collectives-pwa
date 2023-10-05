@@ -3,14 +3,22 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const Invite = () => {
-  const { invitationStatus, inviteCode, loading } = useValidateInvite();
+  const { invitationStatus, inviteLink, loading } = useValidateInvite();
+  console.log(invitationStatus, "inv status");
   return (
     <div>
       <h1>Invite Confirmation</h1>
-      {invitationStatus && !loading ? (
-        <p>{invitationStatus}</p>
-      ) : (
+      {loading ? (
         <p>Validating your invitation...</p>
+      ) : (
+        <div>
+          {" "}
+          {invitationStatus ? (
+            <p>Congrats, you joined the group!</p>
+          ) : (
+            <p>Could not find group invite...</p>
+          )}
+        </div>
       )}
     </div>
   );

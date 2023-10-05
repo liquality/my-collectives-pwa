@@ -85,7 +85,7 @@ class Invite {
               if (err) {
                 reject(new ApiError(500, err));
               } else if (results.length < 1) {
-                reject(new ApiError(404, "invite not found"));
+                resolve({ id: null });
               } else {
                 invite.set(results[0]);
                 resolve(invite);
