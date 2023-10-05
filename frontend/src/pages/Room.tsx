@@ -26,7 +26,6 @@ const Room = () => {
     };
     try {
       const result = await UserService.createGroup(groupObject);
-      console.log(result, "RESULT OF creating");
       setGroupId(result.id);
       setIsInChat(true);
     } catch (error) {

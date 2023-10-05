@@ -25,6 +25,10 @@ const UserService = {
     return NetworkService.getResourceWithAuth("/v1/invite/" + inviteLink);
   },
 
+  readMessagesByGroupId: async function (groupId: number) {
+    return NetworkService.getResourceWithAuth("/v1/message/" + groupId);
+  },
+
 
   loginUser: async function (userEmail: string) {
     return NetworkService.getResourceWithAuth("/v1/user/login/" + userEmail);

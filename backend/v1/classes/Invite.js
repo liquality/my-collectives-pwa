@@ -21,7 +21,6 @@ class Invite {
   /*                  */
   create = async () => {
     const invite = this;
-    console.log(invite, "wats invite?");
     const inviteLink = this.generateInviteLink();
     const promise = new Promise((resolve, reject) => {
       // Insert new row
@@ -88,6 +87,7 @@ class Invite {
                 resolve({ id: null });
               } else {
                 invite.set(results[0]);
+
                 resolve(invite);
               }
               db.release();

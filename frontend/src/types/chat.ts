@@ -12,3 +12,11 @@ export interface Group {
     created_at?: string;
 }
 
+export interface Invite {
+    id: number;
+    group_id: number;
+    invite_link: string;
+    is_used: boolean;
+    expire_date: string;
+}
+

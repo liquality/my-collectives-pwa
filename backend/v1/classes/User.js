@@ -48,65 +48,6 @@ class User {
   /*                  */
   /* CRUD OPERATIONS  */
   /*                  */
-  create = async () => {
-    const user = this;
-    return new Promise((resolve, reject) => {
-      MySQL.pool.getConnection((error, db) => {
-        if (!error) {
-          db.query(
-            `INSERT INTO user (serviceprovider_name, username, avatar, public_address)
-                  VALUES (?, ?, ?, ?)
-                  ON DUPLICATE KEY UPDATE
-                      serviceprovider_name = VALUES(serviceprovider_name),
-                      username = VALUES(username),
-                      avatar = VALUES(avatar),
-                      public_address = VALUES(public_address);
-                      `,
-            [
-              user.serviceprovider_name,
-              user.username,
-              user.avatar,
-              user.public_address,
-            ],
-            (err, insertResult) => {
-              if (err) {
-                console.log("came to create  user error -> ", err);
-
-                reject(new ApiError(500, err));
-              } else if (insertResult.affectedRows < 1) {
-                console.log("User not saved!");
-
-                reject(new ApiError(500, "User not saved!"));
-              } else {
-                console.log("User Saved!");
-
-                const id = insertResult.insertId; // Retrieve the generated ID directly
-
-                const {
-                  serviceprovider_name,
-                  avatar,
-                  username,
-                  public_address,
-                } = user;
-                const token = jwt.sign({ id, public_address }, "my-secret");
-                resolve({
-                  id,
-                  serviceprovider_name,
-                  avatar,
-                  username,
-                  public_address,
-                  token,
-                });
-              }
-              db.release();
-            }
-          );
-        } else {
-          reject(new ApiError(500, error));
-        }
-      });
-    });
-  };
 
   read = async (id) => {
     const user = this;

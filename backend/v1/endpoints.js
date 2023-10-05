@@ -6,21 +6,6 @@ var middleware = require("./middleware");
 const groupHandler = require("./handlers/groupHandler");
 const inviteHandler = require("./handlers/inviteHandler");
 
-endpoints.createUser = {
-  url: "/v1/user",
-  method: "post",
-  middleware: [],
-  handler: userHandler.create,
-  description: "create user",
-};
-endpoints.readUser = {
-  url: "/v1/user/:id",
-  method: "get",
-  middleware: [middleware.authenticateJWT],
-  handler: userHandler.read,
-  description: "create user",
-};
-
 endpoints.loginUser = {
   url: "/v1/user/login/:serviceprovider_name",
   method: "get",
@@ -29,23 +14,8 @@ endpoints.loginUser = {
   description: "login user",
 };
 
-endpoints.updateUser = {
-  url: "/v1/user/:id",
-  method: "put",
-  middleware: [middleware.authenticateJWT],
-  handler: userHandler.update,
-  description: "update user",
-};
-
-endpoints.deleteUser = {
-  url: "/v1/user/:id",
-  method: "delete",
-  middleware: [middleware.authenticateJWT],
-  handler: userHandler.delete,
-  description: "delete user",
-};
 /*  */
-//Game endpoints
+//Message endpoints
 /*  */
 endpoints.createMessage = {
   url: "/v1/message",
@@ -86,44 +56,20 @@ endpoints.readInvite = {
   description: "read invite by invite link",
 };
 
-endpoints.readGame = {
+endpoints.readMessageByGroupId = {
+  url: "/v1/message/:groupId",
+  method: "get",
+  middleware: [],
+  handler: messageHandler.readMessageByGroupId,
+  description: "read messages by groupid",
+};
+
+endpoints.readMessage = {
   url: "/v1/game/:id",
   method: "get",
   middleware: [middleware.authenticateJWT],
   handler: messageHandler.read,
   description: "read game",
-};
-
-endpoints.readGameByUserId = {
-  url: "/v1/games/:userid/:artistNumberId?",
-  method: "get",
-  middleware: [middleware.authenticateJWT],
-  handler: messageHandler.readGamesByUserId,
-  description: "read game by user id ",
-};
-
-endpoints.getLeaderboardData = {
-  url: "/v1/game/leaderboard/:game_symbol_id",
-  method: "get",
-  middleware: [],
-  handler: messageHandler.getLeaderboardData,
-  description: "read leaderboard data based on game symbol id ",
-};
-
-endpoints.updateGame = {
-  url: "/v1/game/:userid",
-  method: "put",
-  middleware: [middleware.authenticateJWT],
-  handler: messageHandler.update,
-  description: "update game",
-};
-
-endpoints.deleteGame = {
-  url: "/v1/game/:id",
-  method: "delete",
-  middleware: [],
-  handler: messageHandler.delete,
-  description: "delete game",
 };
 
 /*WEBHOOK EVENTS FROM CROSSMINT*/

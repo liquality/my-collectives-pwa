@@ -1,10 +1,12 @@
+import Chat from "@/components/Chat";
 import useValidateInvite from "@/hooks/useValidateInvite";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const Invite = () => {
-  const { invitationStatus, inviteLink, loading } = useValidateInvite();
-  console.log(invitationStatus, "inv status");
+  const { invitationStatus, inviteLink, loading, invite } = useValidateInvite();
+
+  const handleGoToGroupMessages = async () => {};
   return (
     <div>
       <h1>Invite Confirmation</h1>
@@ -20,6 +22,7 @@ const Invite = () => {
           )}
         </div>
       )}
+      {invitationStatus && invite ? <Chat groupId={invite.group_id} /> : null}
     </div>
   );
 };

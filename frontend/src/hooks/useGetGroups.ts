@@ -9,7 +9,7 @@ export function useGetGroups() {
     const [groups, setGroups] = useState<Group[]>([]);
 
     useEffect(() => {
-        const fetchGroups = async (publicAddress: string) => {
+        const fetchGroups = async () => {
             //await getMyGroups(publicAddress)
             //TODO HERE: fetch all members of multisig and filter out by publicconst isAuthenticated = await UserService.readGroup();
 

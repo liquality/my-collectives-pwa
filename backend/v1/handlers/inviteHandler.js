@@ -8,7 +8,6 @@ var inviteHandler = {};
 
 inviteHandler.create = function (req, res) {
   var invite = new Invite();
-  console.log(req.body, "req body?", invite);
   invite.set(req.body); // should be a user object
 
   invite.create().then(
@@ -16,7 +15,6 @@ inviteHandler.create = function (req, res) {
       res.status(200).send(result);
     },
     (reject) => {
-      console.log(reject, "why reject?");
       res.status(400).send(new ApiError(400, reject));
     }
   );
