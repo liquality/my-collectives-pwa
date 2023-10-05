@@ -37,43 +37,46 @@ import Header from "@/components/Header";
 import { WalletProvider } from "@/utils";
 import React from "react";
 /* Theme variables */
-import './theme/variables.css';
+import "./theme/variables.css";
+import "./theme/main.css";
 
-setupIonicReact();
+setupIonicReact({
+  mode: 'ios'
+});
 
 const App: React.FC = () => (
   <WalletProvider>
-  <IonApp>
-    <Header />
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route exact path="/room">
-            <Room />
-          </Route>
-          <Route exact path="/settings">
-            <Settings />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/login" />
-          </Route>
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="tab1" href="/room">
-            <IonIcon aria-hidden="true" icon={chatbubblesOutline} />
-            <IonLabel>Room</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="tab2" href="/settings">
-            <IonIcon aria-hidden="true" icon={settingsOutline} />
-            <IonLabel>Settings</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
-  </IonApp>
+    <IonApp>
+      <Header />
+      <IonReactRouter>
+        <IonTabs>
+          <IonRouterOutlet>
+            <Route exact path="/room">
+              <Room />
+            </Route>
+            <Route exact path="/settings">
+              <Settings />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route exact path="/">
+              <Redirect to="/login" />
+            </Route>
+          </IonRouterOutlet>
+          <IonTabBar slot="bottom">
+            <IonTabButton tab="tab1" href="/room">
+              <IonIcon aria-hidden="true" icon={chatbubblesOutline} />
+              <IonLabel>Room</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="tab2" href="/settings">
+              <IonIcon aria-hidden="true" icon={settingsOutline} />
+              <IonLabel>Settings</IonLabel>
+            </IonTabButton>
+          </IonTabBar>
+        </IonTabs>
+      </IonReactRouter>
+    </IonApp>
   </WalletProvider>
 );
 
