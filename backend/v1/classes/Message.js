@@ -1,24 +1,18 @@
 const MySQL = require("../../MySQL");
 const ApiError = require("./ApiError");
 
-class Game {
-  constructor(game) {
-    this.set(game);
+class Message {
+  constructor(message) {
+    this.set(message);
   }
 
-  set(game) {
-    if (typeof game !== "undefined") {
-      this.id = game.id;
-      this.status = game.status;
-      this.user_id = game.user_id;
-      this.level = game.level;
-      this.artist_name = game.artist_name;
-      this.level_4_claimed_prizes = game.level_4_claimed_prizes;
-      this.level_5_claimed_prizes = game.level_5_claimed_prizes;
-      this.level_6_claimed_main_prize = game.level_6_claimed_main_prize;
-      this.claimable_prize_count = game.claimable_prize_count;
-      this.game_symbol_id = game.game_symbol_id;
-      this.created_at = game.created_at;
+  set(message) {
+    if (typeof message !== "undefined") {
+      this.id = message.id;
+      this.group_id = message.group_id;
+      this.sender = message.sender;
+      this.text = message.text;
+      this.created_at = message.created_at;
     }
   }
 
@@ -27,72 +21,22 @@ class Game {
   /*                  */
 
   create = async () => {
-    const game = this;
+    const message = this;
     const promise = new Promise((resolve, reject) => {
+      // Insert new row
       MySQL.pool.getConnection((err, db) => {
         db.query(
-          "SELECT COUNT(*) AS count FROM `game` WHERE user_id = ? AND game_symbol_id = ?",
-          [game.user_id, game.game_symbol_id],
-          (err, results) => {
+          "INSERT INTO `message` (group_id, sender, text, created_at) VALUES (?, ?, ?, UTC_TIMESTAMP());",
+          [message.group_id, message.sender, message.text],
+          (err, results, fields) => {
             if (err) {
               reject(new ApiError(500, err));
-              db.release();
-              return;
-            }
-            const rowCount = results[0].count;
-
-            if (rowCount > 0) {
-              // Update existing row
-              db.query(
-                "UPDATE `game` SET status=?, level=?, artist_name=?, level_4_claimed_prizes=?, level_5_claimed_prizes=?, level_6_claimed_main_prize=?, claimable_prize_count=? WHERE user_id=? AND game_symbol_id=?;",
-                [
-                  "in_progress",
-                  game.level,
-                  game.artist_name,
-                  game.level_4_claimed_prizes,
-                  game.level_5_claimed_prizes,
-                  game.level_6_claimed_main_prize,
-                  game.claimable_prize_count,
-                  game.user_id,
-                  game.game_symbol_id,
-                ],
-                (err, results, fields) => {
-                  if (err) {
-                    reject(new ApiError(500, err));
-                  } else if (results.affectedRows < 1) {
-                    reject(new ApiError(404, "Game not found!"));
-                  } else {
-                    resolve(game);
-                  }
-                  db.release();
-                }
-              );
             } else {
-              // Insert new row
-              db.query(
-                "INSERT INTO `game` (status, user_id, level, artist_name, level_4_claimed_prizes, level_5_claimed_prizes, level_6_claimed_main_prize, claimable_prize_count, game_symbol_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, UTC_TIMESTAMP());",
-                [
-                  "in_progress",
-                  game.user_id,
-                  1,
-                  game.artist_name,
-                  game.level_4_claimed_prizes,
-                  game.level_5_claimed_prizes,
-                  game.level_6_claimed_main_prize,
-                  game.claimable_prize_count,
-                  game.game_symbol_id,
-                ],
-                (err, results, fields) => {
-                  if (err) {
-                    reject(new ApiError(500, err));
-                  } else {
-                    game.id = results.insertId;
-                    resolve(game);
-                  }
-                  db.release();
-                }
-              );
+              console.log(message, "group resolved");
+
+              resolve(message);
             }
+            db.release();
           }
         );
       });
@@ -344,4 +288,4 @@ class Game {
   };
 }
 
-module.exports = Game;
+module.exports = Message;
