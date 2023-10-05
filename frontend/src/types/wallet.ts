@@ -1,1 +1,1 @@
-export type LocalWalletType = 'metamask' | 'embedded';
+export type LocalWalletType = 'privateKey' | 'embedded';

@@ -1,0 +1,11 @@
+.dark-ion-popover {
+    --background: var(--ion-color-primary)
+    --color: white;
+    --box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.6);
+  }
+  
+.dark-ion-popover ion-content  {
+    --background: var(--ion-color-primary)
+    
+  }
+  
