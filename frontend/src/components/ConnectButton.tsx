@@ -1,6 +1,6 @@
 import { LocalWalletType } from "@/types/wallet";
 import { useWalletContext } from "@/utils";
-import { shortenAddress } from "@/utils/address";
+import { shortenAddress } from "@/utils/adddress";
 import {
   IonButton,
   IonContent,
@@ -18,6 +18,7 @@ import {
 } from "@ionic/react";
 import { logIn, logOut, wallet, key, copy, copyOutline } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
+// import { setup } from "@liquality/safe-wrapper";
 
 const ConnectButton: React.FC = () => {
   const [address, setAddress] = useState("");
@@ -45,6 +46,18 @@ const ConnectButton: React.FC = () => {
   };
 
   const copyAddress = () => {};
+
+  const runSetup = async () => {
+    if (connectedWallet) {
+      // const signer = await connectedWallet?.getSigner();
+      // setup({
+      //   signer,
+      //   rpcUrl: import.meta.env.VITE_RPC_URL,
+      //   gelatoRelayApiKey: import.meta.env.VITE_GELATO_API_KEY,
+      //   appName: "Group Mints",
+      // });
+    }
+  };
 
   useEffect(() => {
     const setup = async () => {
@@ -77,7 +90,7 @@ const ConnectButton: React.FC = () => {
             <IonContent>
               <IonCard color="primary">
                 <IonCardContent>
-                  <IonGrid >
+                  <IonGrid>
                     {/* <IonRow className="flex-flow-row">
                       <IonCol className="align-items-center">
                         <IonIcon icon={key}></IonIcon>
@@ -89,12 +102,17 @@ const ConnectButton: React.FC = () => {
                         </IonButton>
                       </IonCol>
                     </IonRow> */}
-                    <IonRow >
+                    <IonRow>
                       <IonCol>
                         <IonButton onClick={logout}>
                           <IonIcon slot="end" icon={logOut}></IonIcon>
                           Logout
                         </IonButton>
+                      </IonCol>
+                    </IonRow>
+                    <IonRow>
+                      <IonCol>
+                        <IonButton onClick={runSetup}>Setup</IonButton>
                       </IonCol>
                     </IonRow>
                   </IonGrid>
