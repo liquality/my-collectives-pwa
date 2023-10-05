@@ -2,10 +2,27 @@
 
 var User = require("../classes/User");
 var ApiError = require("../classes/ApiError");
+const Invite = require("../classes/Invite");
 
-var userHandler = {};
+var inviteHandler = {};
 
-userHandler.read = function (req, res) {
+inviteHandler.create = function (req, res) {
+  var invite = new Invite();
+  console.log(req.body, "req body?", invite);
+  invite.set(req.body); // should be a user object
+
+  invite.create().then(
+    (result) => {
+      res.status(200).send(result);
+    },
+    (reject) => {
+      console.log(reject, "why reject?");
+      res.status(400).send(new ApiError(400, reject));
+    }
+  );
+};
+
+inviteHandler.read = function (req, res) {
   var id = req.params.id;
   //var userid = req.apiSession.userid;
 
@@ -28,22 +45,7 @@ userHandler.read = function (req, res) {
   }
 };
 
-userHandler.create = function (req, res) {
-  var user = new User();
-
-  user.set(req.body); // should be a user object
-
-  user.create().then(
-    (result) => {
-      res.status(200).send(result);
-    },
-    (reject) => {
-      res.status(400).send(new ApiError(400, reject));
-    }
-  );
-};
-
-userHandler.update = function (req, res) {
+inviteHandler.update = function (req, res) {
   var user = new User();
   user.set(req.body);
   var userid = Number(req.user.id);
@@ -61,7 +63,7 @@ userHandler.update = function (req, res) {
   }
 };
 
-userHandler.delete = function (req, res) {
+inviteHandler.delete = function (req, res) {
   var id = req.params.id;
   var userid = req.apiSession.userid;
   if (id == userid) {
@@ -86,7 +88,7 @@ userHandler.delete = function (req, res) {
   }
 };
 
-userHandler.loginUser = function (req, res) {
+inviteHandler.loginUser = function (req, res) {
   var serviceprovider_name = req.params.serviceprovider_name;
   var user = new User();
   user.loginUser(serviceprovider_name).then(
@@ -99,4 +101,4 @@ userHandler.loginUser = function (req, res) {
   );
 };
 
-module.exports = userHandler;
+module.exports = inviteHandler;
