@@ -55,7 +55,7 @@ const App: React.FC = () => (
             <Route exact path="/settings">
               <Settings />
             </Route>
-            <Route path="/invite/:inviteCode" component={Invite} />
+            <Route path="/invite/:inviteLink" component={Invite} />
 
             <Route path="/login">
               <Login />

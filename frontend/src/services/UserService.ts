@@ -22,7 +22,7 @@ const UserService = {
   },
 
   readInvite: async function (inviteLink: string) {
-    return NetworkService.getResourceWithAuth("/v1/invite/", inviteLink);
+    return NetworkService.getResourceWithAuth("/v1/invite/" + inviteLink);
   },
 
 

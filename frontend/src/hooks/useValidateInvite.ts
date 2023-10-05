@@ -9,15 +9,16 @@ import { useParams } from "react-router";
 
 
 export function useValidateInvite() {
-    const { inviteCode } = useParams<{ inviteCode: string }>();
+    const { inviteLink } = useParams<{ inviteLink: string }>();
     const [invitationStatus, setInvitationStatus] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    console.log(inviteLink, 'INV link from params')
 
     useEffect(() => {
         const fetchGroups = async () => {
             try {
                 setLoading(true)
-                const readInvite = await UserService.readInvite(inviteCode)
+                const readInvite = await UserService.readInvite(inviteLink)
                 setLoading(false)
                 if (readInvite.id) {
                     setInvitationStatus(
@@ -36,7 +37,7 @@ export function useValidateInvite() {
         fetchGroups();
     }, [invitationStatus]);
 
-    return { invitationStatus, inviteCode, loading };
+    return { invitationStatus, inviteLink, loading };
 }
 
 export default useValidateInvite;

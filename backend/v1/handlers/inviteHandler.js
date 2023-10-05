@@ -24,6 +24,7 @@ inviteHandler.create = function (req, res) {
 
 inviteHandler.read = function (req, res) {
   const invite_link = req.params.inviteLink;
+  console.log("INSIDE INVITE LINK READ", req.params);
 
   if (invite_link) {
     if (invite_link == invite_link) {
