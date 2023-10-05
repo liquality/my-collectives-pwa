@@ -37,10 +37,14 @@ import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
 import Header from "@/components/Header";
 import { WalletProvider } from "@/utils";
+import React from "react";
 /* Theme variables */
-//import './theme/variables.css';
+import "./theme/variables.css";
+import "./theme/main.css";
 
-setupIonicReact();
+setupIonicReact({
+  mode: "ios",
+});
 
 const App: React.FC = () => (
   <WalletProvider>
@@ -55,11 +59,10 @@ const App: React.FC = () => (
             <Route exact path="/settings">
               <Settings />
             </Route>
-            <Route path="/invite/:inviteLink" component={Invite} />
-
             <Route path="/login">
               <Login />
             </Route>
+            <Route path="/invite/:inviteLink" component={Invite} />
             <Route exact path="/">
               <Redirect to="/login" />
             </Route>
