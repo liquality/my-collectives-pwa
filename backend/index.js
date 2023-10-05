@@ -3,6 +3,7 @@ var app = express();
 var v1 = require("./v1/");
 var bodyParser = require("body-parser");
 var cors = require("cors");
+var { Server } = require("socket.io");
 
 var { expressjwt: jwt } = require("express-jwt");
 const { addConnectionListener } = require("./v1/services/WebsocketService");
@@ -27,4 +28,9 @@ console.log(
   "\n\nIF THIS THROWS AN ERROR -\nMAKE SURE YOU ARE ALLOWED TO OPEN PORT 3000!\n\n"
 );
 const server = app.listen(appPort);
+/* const io = new Server(server, {
+  origin: "http://localhost:5173",
+  methods: ["POST", "GET"],
+}); */
+
 addConnectionListener(server);

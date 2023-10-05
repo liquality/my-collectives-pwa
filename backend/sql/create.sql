@@ -31,3 +31,12 @@ CREATE TABLE `message` (
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (`group_id`) REFERENCES `group` (`id`)
 );
+
+
+CREATE TABLE members (
+  `member_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `group_id` INT NOT NULL,
+  `sender` VARCHAR(255) NOT NULL, 
+  `joined_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`group_id`) REFERENCES `group` (`id`)
+);

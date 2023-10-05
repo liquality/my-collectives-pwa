@@ -63,6 +63,14 @@ endpoints.createGroup = {
   description: "create group",
 };
 
+endpoints.readGroup = {
+  url: "/v1/group/:id",
+  method: "get",
+  middleware: [],
+  handler: groupHandler.read,
+  description: "read group by userid/public address",
+};
+
 endpoints.createInvite = {
   url: "/v1/invite",
   method: "post",
@@ -70,6 +78,14 @@ endpoints.createInvite = {
   handler: inviteHandler.create,
   description: "create invite",
 };
+endpoints.readInvite = {
+  url: "/v1/invite/:inviteLink",
+  method: "get",
+  middleware: [],
+  handler: inviteHandler.read,
+  description: "read invite by invite link",
+};
+
 endpoints.readGame = {
   url: "/v1/game/:id",
   method: "get",

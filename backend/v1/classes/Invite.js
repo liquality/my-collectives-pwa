@@ -73,29 +73,29 @@ class Invite {
     return inviteLink;
   };
 
-  read = async (id) => {
-    const game = this;
+  read = async (invite_link) => {
+    const invite = this;
     const promise = new Promise((resolve, reject) => {
-      if (id) {
+      if (invite_link) {
         MySQL.pool.getConnection((err, db) => {
           db.execute(
-            "select * from `game` where user_id = ?",
-            [id],
+            "select * from `invite` where invite_link = ?",
+            [invite_link],
             (err, results, fields) => {
               if (err) {
                 reject(new ApiError(500, err));
               } else if (results.length < 1) {
-                reject(new ApiError(404, "Game not found"));
+                reject(new ApiError(404, "invite not found"));
               } else {
-                game.set(results[0]);
-                resolve(game);
+                invite.set(results[0]);
+                resolve(invite);
               }
               db.release();
             }
           );
         });
       } else {
-        reject(new ApiError(500, "Missing game id"));
+        reject(new ApiError(500, "Missing invite id/link"));
       }
     });
     return promise;

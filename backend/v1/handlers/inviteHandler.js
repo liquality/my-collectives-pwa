@@ -23,15 +23,14 @@ inviteHandler.create = function (req, res) {
 };
 
 inviteHandler.read = function (req, res) {
-  var id = req.params.id;
-  //var userid = req.apiSession.userid;
+  const invite_link = req.params.inviteLink;
 
-  if (id) {
-    if (id == id) {
-      var user = new User();
-      user.read(id).then(
-        (user) => {
-          res.status(200).send(user);
+  if (invite_link) {
+    if (invite_link == invite_link) {
+      var invite = new Invite();
+      invite.read(invite_link).then(
+        (inv) => {
+          res.status(200).send(inv);
         },
         (reason) => {
           res.status(400).send(new ApiError(400, reason));

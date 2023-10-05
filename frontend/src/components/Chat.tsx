@@ -7,7 +7,7 @@ import { messageTypes } from "../services/Websocket/MessageHandler";
 //@ts-ignore
 import UserService from "../services/UserService";
 import { Message } from "@/types/chat";
-import Invite from "./Invite";
+import GenerateInvite from "./GenerateInvite";
 
 interface ChatProps {
   groupName: string;
@@ -78,7 +78,7 @@ export const Chat = (props: ChatProps) => {
         ></input>
         <button type="submit">Send</button>
       </form>
-      <Invite groupId={groupId} />
+      <GenerateInvite groupId={groupId} />
     </div>
   );
 };

@@ -51,7 +51,7 @@ const Room = () => {
               <IonLabel>Type room name: </IonLabel>
 
               <input onChange={(e) => setGroupName(e.target.value)} />
-              <IonButton onClick={handleEnterChat}>Enter Chat</IonButton>
+              <IonButton onClick={handleEnterChat}>Create Chat</IonButton>
             </IonItem>
           ) : (
             <Chat groupName={groupName} groupId={groupId} />

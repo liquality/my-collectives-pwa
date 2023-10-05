@@ -9,6 +9,10 @@ const UserService = {
     return NetworkService.postResourceWithAuth("/v1/group/", groupObject);
   },
 
+  readGroup: async function (id: string) {
+    return NetworkService.getResourceWithAuth("/v1/group/", id);
+  },
+
   createMessage: async function (messageObject: Message) {
     return NetworkService.postResourceWithAuth("/v1/message/", messageObject);
   },
@@ -16,6 +20,11 @@ const UserService = {
   createInvite: async function (groupId: Group) {
     return NetworkService.postResourceWithAuth("/v1/invite/", groupId);
   },
+
+  readInvite: async function (inviteLink: string) {
+    return NetworkService.getResourceWithAuth("/v1/invite/", inviteLink);
+  },
+
 
   loginUser: async function (userEmail: string) {
     return NetworkService.getResourceWithAuth("/v1/user/login/" + userEmail);

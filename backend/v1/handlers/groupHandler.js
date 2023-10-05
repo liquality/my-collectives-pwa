@@ -24,12 +24,10 @@ groupHandler.create = function (req, res) {
 
 groupHandler.read = function (req, res) {
   var id = req.params.id;
-  //var userid = req.apiSession.userid;
-
   if (id) {
     if (id == id) {
-      var user = new User();
-      user.read(id).then(
+      var group = new Group();
+      group.read(id).then(
         (user) => {
           res.status(200).send(user);
         },
