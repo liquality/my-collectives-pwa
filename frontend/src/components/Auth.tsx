@@ -19,7 +19,6 @@ const Auth = () => {
     try {
       const result = await signInWithPopup(auth, provider);
       cookies.set("auth-token", result.user.refreshToken);
-      console.log(result, "result from signing in", result.user.refreshToken);
       router.push("/room");
     } catch (error) {
       console.log(error, "ERROR in Auth");

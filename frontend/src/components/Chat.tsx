@@ -7,10 +7,11 @@ import { messageTypes } from "../services/Websocket/MessageHandler";
 //@ts-ignore
 import UserService from "../services/UserService";
 import { Message } from "@/types/chat";
-import Invite from "./Invite";
+import GenerateInvite from "./GenerateInvite";
+import { useChatHistory } from "@/hooks/useChatHistory";
 
 interface ChatProps {
-  groupName: string;
+  groupName?: string;
   groupId: number | null;
 }
 
@@ -18,6 +19,7 @@ export const Chat = (props: ChatProps) => {
   const { groupName, groupId } = props;
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
+  const { chatHistory, loading } = useChatHistory(groupId as number);
 
   const listenToCrossmintSuccess = (data: Message) => {
     const newMessage = data;
@@ -26,12 +28,16 @@ export const Chat = (props: ChatProps) => {
   };
 
   useEffect(() => {
-    websocketService.connect(3); //TODO add users id/public address here
+    //TODO: replace with userid/address
+    if (chatHistory.length) {
+      setMessages(chatHistory);
+    }
+    websocketService.connect(2);
     eventBus.on(messageTypes.CROSSMINT_SUCCESS, listenToCrossmintSuccess);
     return () => {
       eventBus.remove(messageTypes.CROSSMINT_SUCCESS, listenToCrossmintSuccess);
     };
-  }, []);
+  }, [chatHistory]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,7 +48,7 @@ export const Chat = (props: ChatProps) => {
       const message = {
         sender: "0x012", //TODO replace with user public address
         text: newMessage,
-        group_id: 1, //todo fetch group_id from group name or props?
+        group_id: groupId as number,
       };
       const postMessage = await UserService.createMessage(message);
     } catch (error) {
@@ -50,7 +56,7 @@ export const Chat = (props: ChatProps) => {
     }
     setNewMessage("");
   };
-  console.log(messages, "msgs", groupName);
+  console.log(messages, "msgs", groupId, newMessage);
   return (
     <div className="chat">
       <u>
@@ -78,7 +84,7 @@ export const Chat = (props: ChatProps) => {
         ></input>
         <button type="submit">Send</button>
       </form>
-      <Invite groupId={groupId} />
+      <GenerateInvite groupId={groupId} />
     </div>
   );
 };

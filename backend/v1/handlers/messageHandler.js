@@ -13,7 +13,8 @@ messageHandler.create = function (req, res) {
 
   message.create().then(
     (msg) => {
-      websocketService.send([1], "crossmint_success", msg);
+      //TODO: replace with userid/address
+      websocketService.send([2], "crossmint_success", msg);
 
       res.status(200).send(msg);
     },
@@ -46,28 +47,23 @@ messageHandler.read = function (req, res) {
   }
 };
 
-messageHandler.readGamesByUserId = function (req, res) {
-  const userid = Number(req.params.userid);
-  const gameNumberId = Number(req.params.artistNumberId);
-  const userIdFromSession = Number(req.user.id);
-  userid === userIdFromSession;
+messageHandler.readMessageByGroupId = function (req, res) {
+  const groupId = req.params.groupId;
 
-  if (userid) {
-    if (userid === userIdFromSession) {
-      var game = new Message();
-      game.readGameByUserId(userid, gameNumberId).then(
-        (game) => {
-          res.status(200).send(game);
-        },
-        (reason) => {
-          res.status(400).send(new ApiError(400, reason));
-        }
-      );
-    } else {
-      res
-        .status(403)
-        .send(new ApiError(403, "Access denied, gameid does not match"));
-    }
+  if (groupId) {
+    var message = new Message();
+    message.readMessageByGroupId(groupId).then(
+      (msgs) => {
+        res.status(200).send(msgs);
+      },
+      (reason) => {
+        res.status(400).send(new ApiError(400, reason));
+      }
+    );
+  } else {
+    res
+      .status(403)
+      .send(new ApiError(403, "Access denied, group_id does not match"));
   }
 };
 
@@ -135,22 +131,12 @@ messageHandler.delete = function (req, res) {
 };
 
 messageHandler.webhook = async function (req, res) {
-  console.log(req.body, "req body???");
-
   const { status, tokenIds, passThroughArgs, walletAddress, txId } = req.body;
   const argsDeserialized = JSON.parse(passThroughArgs);
   const argsDeseralisedSecond = JSON.parse(argsDeserialized);
   const argsDeseralisedThird = JSON.parse(argsDeseralisedSecond);
 
-  console.log(
-    argsDeserialized,
-    "decentralized",
-    typeof argsDeseralisedSecond,
-    typeof argsDeseralisedThird,
-    argsDeseralisedThird
-  );
   const userId = argsDeseralisedThird.id;
-  console.log(userId, "USERID??");
   if (status === "success") {
     websocketService.send([userId], "crossmint_success", {
       tokenId: tokenIds,

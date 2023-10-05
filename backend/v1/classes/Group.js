@@ -57,28 +57,28 @@ class Group {
   };
 
   read = async (id) => {
-    const game = this;
+    const group = this;
     const promise = new Promise((resolve, reject) => {
       if (id) {
         MySQL.pool.getConnection((err, db) => {
           db.execute(
-            "select * from `game` where user_id = ?",
+            "select * from `group` where user_id = ?",
             [id],
             (err, results, fields) => {
               if (err) {
                 reject(new ApiError(500, err));
               } else if (results.length < 1) {
-                reject(new ApiError(404, "Game not found"));
+                reject(new ApiError(404, "Group not found"));
               } else {
-                game.set(results[0]);
-                resolve(game);
+                group.set(results[0]);
+                resolve(group);
               }
               db.release();
             }
           );
         });
       } else {
-        reject(new ApiError(500, "Missing game id"));
+        reject(new ApiError(500, "Missing group id"));
       }
     });
     return promise;

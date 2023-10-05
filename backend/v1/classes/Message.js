@@ -32,14 +32,39 @@ class Message {
             if (err) {
               reject(new ApiError(500, err));
             } else {
-              console.log(message, "group resolved");
-
               resolve(message);
             }
             db.release();
           }
         );
       });
+    });
+    return promise;
+  };
+
+  readMessageByGroupId = async (groupId) => {
+    const message = this;
+    const promise = new Promise((resolve, reject) => {
+      if (groupId) {
+        MySQL.pool.getConnection((err, db) => {
+          db.execute(
+            "SELECT * FROM `message` WHERE group_id = ? ORDER BY created_at ASC",
+            [groupId],
+            (err, results, fields) => {
+              if (err) {
+                reject(new ApiError(500, err));
+              } else if (results.length < 1) {
+                reject(new ApiError(404, "Messages not found"));
+              } else {
+                resolve(results);
+              }
+              db.release();
+            }
+          );
+        });
+      } else {
+        reject(new ApiError(500, "Missing game id"));
+      }
     });
     return promise;
   };

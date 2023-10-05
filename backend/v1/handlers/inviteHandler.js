@@ -8,7 +8,6 @@ var inviteHandler = {};
 
 inviteHandler.create = function (req, res) {
   var invite = new Invite();
-  console.log(req.body, "req body?", invite);
   invite.set(req.body); // should be a user object
 
   invite.create().then(
@@ -16,22 +15,20 @@ inviteHandler.create = function (req, res) {
       res.status(200).send(result);
     },
     (reject) => {
-      console.log(reject, "why reject?");
       res.status(400).send(new ApiError(400, reject));
     }
   );
 };
 
 inviteHandler.read = function (req, res) {
-  var id = req.params.id;
-  //var userid = req.apiSession.userid;
+  const invite_link = req.params.inviteLink;
 
-  if (id) {
-    if (id == id) {
-      var user = new User();
-      user.read(id).then(
-        (user) => {
-          res.status(200).send(user);
+  if (invite_link) {
+    if (invite_link == invite_link) {
+      var invite = new Invite();
+      invite.read(invite_link).then(
+        (inv) => {
+          res.status(200).send(inv);
         },
         (reason) => {
           res.status(400).send(new ApiError(400, reason));

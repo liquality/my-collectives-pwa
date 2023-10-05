@@ -96,7 +96,6 @@ const NetworkService = {
         headers["Authorization"] = "Bearer " + jwt;
       }
 
-      console.log(data, "wats data?", JSON.stringify(data));
       let request = {
         method: "POST",
         headers: headers,

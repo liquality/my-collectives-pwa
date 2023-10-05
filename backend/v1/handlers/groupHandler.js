@@ -8,7 +8,6 @@ var groupHandler = {};
 
 groupHandler.create = function (req, res) {
   var group = new Group();
-  console.log(req.body, "req body?", group);
   group.set(req.body); // should be a user object
 
   group.create().then(
@@ -16,7 +15,6 @@ groupHandler.create = function (req, res) {
       res.status(200).send(result);
     },
     (reject) => {
-      console.log(reject, "why reject?");
       res.status(400).send(new ApiError(400, reject));
     }
   );
@@ -24,12 +22,10 @@ groupHandler.create = function (req, res) {
 
 groupHandler.read = function (req, res) {
   var id = req.params.id;
-  //var userid = req.apiSession.userid;
-
   if (id) {
     if (id == id) {
-      var user = new User();
-      user.read(id).then(
+      var group = new Group();
+      group.read(id).then(
         (user) => {
           res.status(200).send(user);
         },

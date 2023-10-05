@@ -65,7 +65,8 @@ websocketService.checkAuth = async (req, callback) => {
 
 websocketService.send = (recipientId, messageType, messageContent) => {
   recipientId.forEach((id, index) => {
-    console.log(index, id, "INDEX AND ID");
+    console.log(id, "userid");
+    //TODO: we need to pass in all public addresses/userids of all members of the team
     const client = clients[id];
 
     if (client?.sockets) {

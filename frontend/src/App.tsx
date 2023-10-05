@@ -16,6 +16,8 @@ import { IonReactRouter } from "@ionic/react-router";
 import { settingsOutline, chatbubblesOutline } from "ionicons/icons";
 import Login from "./pages/Login";
 import Settings from "./pages/Settings";
+import Invite from "./pages/Invite";
+
 import Room from "./pages/Room";
 
 /* Core CSS required for Ionic components to work properly */
@@ -41,7 +43,7 @@ import "./theme/variables.css";
 import "./theme/main.css";
 
 setupIonicReact({
-  mode: 'ios'
+  mode: "ios",
 });
 
 const App: React.FC = () => (
@@ -60,6 +62,7 @@ const App: React.FC = () => (
             <Route path="/login">
               <Login />
             </Route>
+            <Route path="/invite/:inviteLink" component={Invite} />
             <Route exact path="/">
               <Redirect to="/login" />
             </Route>
