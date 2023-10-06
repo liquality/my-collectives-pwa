@@ -10,7 +10,6 @@ class Auth {
   set(auth) {
     if (typeof auth !== "undefined") {
       this.id = auth.id;
-      this.serviceprovider_name = auth.serviceprovider_name;
     }
   }
 
