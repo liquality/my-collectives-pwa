@@ -1,6 +1,6 @@
 "use strict";
 
-var User = require("../classes/User");
+var User = require("../classes/Auth");
 var ApiError = require("../classes/ApiError");
 const Group = require("../classes/Group");
 

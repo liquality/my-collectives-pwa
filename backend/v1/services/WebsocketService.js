@@ -1,5 +1,5 @@
 const WebSocket = require("ws").WebSocket;
-const User = require("../../v1/classes/User");
+const User = require("../classes/Auth");
 
 const wss = new WebSocket.Server({
   noServer: true,

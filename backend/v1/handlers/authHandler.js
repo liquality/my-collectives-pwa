@@ -1,11 +1,11 @@
 "use strict";
 
-var User = require("../classes/User");
+var User = require("../classes/Auth");
 var ApiError = require("../classes/ApiError");
 
-var userHandler = {};
+var authHandler = {};
 
-userHandler.read = function (req, res) {
+authHandler.read = function (req, res) {
   var id = req.params.id;
   //var userid = req.apiSession.userid;
 
@@ -28,7 +28,7 @@ userHandler.read = function (req, res) {
   }
 };
 
-userHandler.create = function (req, res) {
+authHandler.create = function (req, res) {
   var user = new User();
 
   user.set(req.body); // should be a user object
@@ -43,7 +43,7 @@ userHandler.create = function (req, res) {
   );
 };
 
-userHandler.update = function (req, res) {
+authHandler.update = function (req, res) {
   var user = new User();
   user.set(req.body);
   var userid = Number(req.user.id);
@@ -61,7 +61,7 @@ userHandler.update = function (req, res) {
   }
 };
 
-userHandler.delete = function (req, res) {
+authHandler.delete = function (req, res) {
   var id = req.params.id;
   var userid = req.apiSession.userid;
   if (id == userid) {
@@ -86,7 +86,7 @@ userHandler.delete = function (req, res) {
   }
 };
 
-userHandler.loginUser = function (req, res) {
+authHandler.loginUser = function (req, res) {
   var serviceprovider_name = req.params.serviceprovider_name;
   var user = new User();
   user.loginUser(serviceprovider_name).then(
@@ -99,4 +99,4 @@ userHandler.loginUser = function (req, res) {
   );
 };
 
-module.exports = userHandler;
+module.exports = authHandler;

@@ -1,5 +1,5 @@
 var endpoints = {};
-var userHandler = require("./handlers/userHandler");
+var authHandler = require("./handlers/authHandler");
 var messageHandler = require("./handlers/messageHandler");
 
 var middleware = require("./middleware");
@@ -10,7 +10,7 @@ endpoints.loginUser = {
   url: "/v1/user/login/:serviceprovider_name",
   method: "get",
   middleware: [],
-  handler: userHandler.loginUser,
+  handler: authHandler.loginUser,
   description: "login user",
 };
 
