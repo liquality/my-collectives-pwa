@@ -9,21 +9,12 @@ import {
 import Auth from "@/components/Auth";
 import { checkAuth } from "@/utils";
 import React from "react";
+import Header from "@/components/Header";
 
 const Settings: React.FC = () => {
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>
-            {checkAuth() ? (
-              <IonText>Home Page</IonText>
-            ) : (
-              <IonText>Login Page</IonText>
-            )}{" "}
-          </IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <Header />
       <IonContent>
         <Auth />
       </IonContent>

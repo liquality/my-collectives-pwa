@@ -18,7 +18,8 @@
      "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "types": ["bun-types"]
   },
   "include": ["src", "src/firebase.config.js"],
   "references": [{ "path": "./tsconfig.node.json" }]

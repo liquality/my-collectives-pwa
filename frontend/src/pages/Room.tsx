@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import ProtectedRoute from "../components/ProtectedRoute";
 import {
   IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent,
   IonItem,
   IonInput,
@@ -14,6 +11,7 @@ import {
 import Chat from "@/components/Chat";
 import UserService from "../services/UserService";
 import { Group } from "@/types/chat";
+import Header from "@/components/Header";
 
 const Room = () => {
   const [isInChat, setIsInChat] = useState(false);
@@ -37,11 +35,7 @@ const Room = () => {
   //and displays them if he/she is in them, if not display 'create group'
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Chats</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+     <Header />
       <IonContent fullscreen>
         <ProtectedRoute>
           {" "}

@@ -1,15 +1,15 @@
 import Header from '@/components/Header';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 
-const Settings: React.FC = () => {
+const Home: React.FC = () => {
   return (
     <IonPage>
       <Header />
       <IonContent fullscreen>
-        Settings
+        Home
       </IonContent>
     </IonPage>
   );
 };
 
-export default Settings;
+export default Home;
