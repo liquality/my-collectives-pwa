@@ -9,7 +9,7 @@ import v1 from "./v1/";
 const secret = process.env.JWT_SECRET || "my-secret";
 
 const app = express();
-const appPort = process.env.PORT || 6000;
+const appPort = process.env.PORT || 3000;
 
 const jwtMiddleware = jwt({
   secret: secret,
@@ -26,7 +26,7 @@ app.use(
 
 // Requires access to lower ports
 console.log(
-  "\n\nIF THIS THROWS AN ERROR -\nMAKE SURE YOU ARE ALLOWED TO OPEN PORT 6000!\n\n"
+  "\n\nIF THIS THROWS AN ERROR -\nMAKE SURE YOU ARE ALLOWED TO OPEN PORT 3000!\n\n"
 );
 const server = app.listen(appPort);
 

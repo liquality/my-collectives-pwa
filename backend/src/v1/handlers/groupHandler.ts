@@ -7,12 +7,13 @@ const groupHandler = {
   create: async (req: Request, res: Response) => {
     const group = new Group();
     group.set(req.body); // should be a user object
+    console.log(req, 'wats reqqqq body?')
 
     try {
       const result = await group.create();
       res.status(200).send(result);
     } catch (err) {
-      console.log(err, 'creating group error')
+      //console.log(err, 'creating group error')
 
       //res.status(400).send(new ApiError(400, reject));
     }
