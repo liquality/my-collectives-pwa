@@ -1,24 +1,20 @@
-import { LocalWalletType } from "@/types/wallet";
 import { useWalletContext } from "@/utils";
 import { shortenAddress } from "@/utils/adddress";
 import {
   IonButton,
   IonContent,
-  IonItem,
-  IonList,
   IonPopover,
   IonIcon,
   IonSpinner,
   IonCard,
   IonCardContent,
-  IonLabel,
   IonCol,
   IonGrid,
   IonRow,
 } from "@ionic/react";
 import { logIn, logOut, wallet, key, copy, copyOutline } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
-// import { setup } from "@liquality/safe-wrapper";
+
 
 const ConnectButton: React.FC = () => {
   const [address, setAddress] = useState("");
@@ -47,18 +43,6 @@ const ConnectButton: React.FC = () => {
 
   const copyAddress = () => {};
 
-  const runSetup = async () => {
-    if (connectedWallet) {
-      // const signer = await connectedWallet?.getSigner();
-      // setup({
-      //   signer,
-      //   rpcUrl: import.meta.env.VITE_RPC_URL,
-      //   gelatoRelayApiKey: import.meta.env.VITE_GELATO_API_KEY,
-      //   appName: "Group Mints",
-      // });
-    }
-  };
-
   useEffect(() => {
     const setup = async () => {
       if (!walletLoading && connected && !address) {
@@ -69,6 +53,7 @@ const ConnectButton: React.FC = () => {
         }
         setLoading(false);
       }
+      console.log( { address })
     };
     setup();
   });
@@ -108,11 +93,6 @@ const ConnectButton: React.FC = () => {
                           <IonIcon slot="end" icon={logOut}></IonIcon>
                           Logout
                         </IonButton>
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol>
-                        <IonButton onClick={runSetup}>Setup</IonButton>
                       </IonCol>
                     </IonRow>
                   </IonGrid>
