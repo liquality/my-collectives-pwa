@@ -5,6 +5,7 @@ var messageHandler = require("./handlers/messageHandler");
 var middleware = require("./middleware");
 const groupHandler = require("./handlers/groupHandler");
 const inviteHandler = require("./handlers/inviteHandler");
+const memberHandler = require("./handlers/memberHandler");
 
 endpoints.loginUser = {
   url: "/v1/user/login/:serviceprovider_name",
@@ -71,6 +72,34 @@ endpoints.readMessage = {
   handler: messageHandler.read,
   description: "read game",
 };
+
+/*  */
+//Member endpoints
+/*  */
+endpoints.createMember = {
+  url: "/v1/member",
+  method: "post",
+  middleware: [],
+  handler: memberHandler.create,
+  description: "create member",
+};
+
+endpoints.updateMembers = {
+  url: "/v1/member",
+  method: "put",
+  middleware: [],
+  handler: memberHandler.update,
+  description: "update members",
+};
+
+endpoints.readMembers = {
+  url: "/v1/member",
+  method: "get",
+  middleware: [],
+  handler: memberHandler.read,
+  description: "read members",
+};
+
 
 /*WEBHOOK EVENTS FROM CROSSMINT*/
 
