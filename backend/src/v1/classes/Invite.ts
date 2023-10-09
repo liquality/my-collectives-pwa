@@ -1,13 +1,22 @@
-const MySQL = require("../../MySQL");
-const ApiError = require("./ApiError");
+import MySQL from "../../MySQL";
+import ApiError from "./ApiError";
+import { OkPacket, QueryError, RowDataPacket } from "mysql2"
 
 class Invite {
-  constructor(invite) {
-    this.set(invite);
+  id?: number;
+  group_id?: number;
+  link?: string;
+  is_used?: boolean;
+  expiry_date?: Date;
+
+  constructor(invite?: Invite) {
+    if (invite) {
+      this.set(invite);
+    }
   }
 
-  set(invite) {
-    if (typeof invite !== "undefined") {
+  set(invite: Invite) {
+    if (invite) {
       this.id = invite.id;
       this.group_id = invite.group_id;
       this.link = invite.link;
@@ -19,46 +28,57 @@ class Invite {
   /*                  */
   /* CRUD OPERATIONS  */
   /*                  */
-  create = async () => {
+  create = async (): Promise<Invite> => {
     const invite = this;
     const inviteLink = this.generateInviteLink();
-    const promise = new Promise((resolve, reject) => {
+
+    return new Promise<Invite>((resolve, reject) => {
       // Insert new row
       MySQL.pool.getConnection((err, db) => {
+        if (err) {
+          reject(new ApiError(500, err.toString()));
+          return;
+        }
+
         db.query(
           "INSERT INTO `invite` (group_id, invite_link, is_used, expiry_date) VALUES (?, ?, ?, UTC_TIMESTAMP());",
           [invite.group_id, inviteLink, false],
-          (err, results, fields) => {
+          (err, results: RowDataPacket[], fields) => {
             if (err) {
-              reject(new ApiError(500, err));
-            } else {
-              // Get the ID of the newly inserted invite
-              const inviteId = results.insertId;
+              db.release();
+              reject(new ApiError(500, err.toString()));
+              return;
+            }
 
-              // Create a query to select the newly inserted invite
+            if ("insertId" in results) {
+              const inviteId = results.insertId;
+              // Create a query to select the newly inserted group
               db.query(
                 "SELECT * FROM `invite` WHERE id = ?",
                 [inviteId],
-                (err, results, fields) => {
+                (err, results: RowDataPacket[], fields) => {
                   if (err) {
-                    reject(new ApiError(500, err));
-                  } else {
-                    // Resolve with the selected invite object
-                    resolve(results[0]);
+                    db.release();
+                    reject(new ApiError(500, err.toString()));
+                    return;
                   }
+
+                  const newInvite = new Invite(results[0] as Invite);
+                  resolve(newInvite);
                   db.release();
                 }
               );
+            } else {
+              db.release();
             }
-            db.release();
           }
         );
       });
     });
-    return promise;
   };
 
-  generateInviteLink = () => {
+
+  generateInviteLink = (): string => {
     const characters =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let inviteLink = "";
@@ -72,22 +92,21 @@ class Invite {
     return inviteLink;
   };
 
-  read = async (invite_link) => {
+  read = async (invite_link: string): Promise<Invite | { id: null }> => {
     const invite = this;
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise<Invite | { id: null }>((resolve, reject) => {
       if (invite_link) {
         MySQL.pool.getConnection((err, db) => {
           db.execute(
             "select * from `invite` where invite_link = ?",
             [invite_link],
-            (err, results, fields) => {
+            (err: any, results: any, fields: any) => {
               if (err) {
                 reject(new ApiError(500, err));
               } else if (results.length < 1) {
                 resolve({ id: null });
               } else {
                 invite.set(results[0]);
-
                 resolve(invite);
               }
               db.release();
@@ -101,31 +120,26 @@ class Invite {
     return promise;
   };
 
-  update = async () => {
-    const game = this;
-    const promise = new Promise((resolve, reject) => {
+  update = async (): Promise<Invite> => {
+    const invite = this;
+    const promise = new Promise<Invite>((resolve, reject) => {
       MySQL.pool.getConnection((err, db) => {
         db.query(
-          "UPDATE `game` SET status=?, user_id=?, level=?, artist_name=?, level_4_claimed_prizes=?, level_5_claimed_prizes=?, level_6_claimed_main_prize=?, claimable_prize_count=?, game_symbol_id=? WHERE id=?;",
+          "UPDATE `invite` SET group_id=?, link=?, is_used=?, expiry_date=? WHERE id=?;",
           [
-            game.status,
-            game.user_id,
-            game.level,
-            game.artist_name,
-            game.level_4_claimed_prizes,
-            game.level_5_claimed_prizes,
-            game.level_6_claimed_main_prize,
-            game.claimable_prize_count,
-            game.game_symbol_id,
-            game.id,
+            invite.group_id,
+            invite.link,
+            invite.is_used,
+            invite.expiry_date,
+            invite.id,
           ],
-          (err, results, fields) => {
+          (err, results: OkPacket, fields) => {
             if (err) {
-              reject(new ApiError(500, err));
+              reject(new ApiError(500, err.toString()));
             } else if (results.affectedRows < 1) {
-              reject(new ApiError(404, "Game not found!"));
+              reject(new ApiError(404, "Invite not found!"));
             } else {
-              resolve(game);
+              resolve(invite);
             }
             db.release();
           }
@@ -135,17 +149,17 @@ class Invite {
     return promise;
   };
 
-  delete = async (id) => {
-    const game = this;
-    const promise = new Promise((resolve, reject) => {
+
+  delete = async (id: number): Promise<void> => {
+    const promise = new Promise<void>((resolve, reject) => {
       if (id) {
-        this.MySQL.pool.getConnection((err, db) => {
+        MySQL.pool.getConnection((err, db) => {
           db.execute(
-            "delete from `game` where `id` = ?",
+            "delete from `invite` where `id` = ?",
             [id],
-            (err, results, fields) => {
+            (err, results: RowDataPacket[], fields) => {
               if (err) {
-                reject(new ApiError(500, err));
+                reject(new ApiError(500, err.toString()));
               } else if (results.length < 1) {
                 reject(new ApiError(400, "Nothing deleted"));
               } else {
@@ -156,11 +170,11 @@ class Invite {
           );
         });
       } else {
-        reject(new ApiError(400, "Missing game id"));
+        reject(new ApiError(400, "Missing invite id"));
       }
     });
     return promise;
   };
 }
 
-module.exports = Invite;
+export default Invite;

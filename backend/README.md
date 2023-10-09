@@ -1,24 +1,56 @@
-## Setup
+# Express Typescript Starter
 
-Create a .config file similar to the config-sample.json file and substitute with your own DB credentials, API key(s) and RPC URL(s)
+Starter kit to build with Express and thirdweb without additional initial configuration.
 
-```
-{
-"database_connection": {
-"host": "localhost",
-"user": "wav_game",
-"database": "wav_game",
-"password": "YOUR_DB_PASSWORD"
-},
+## Installation
 
+Install the template with [thirdweb create](https://portal.thirdweb.com/cli/create)
 
-}
+```bash
+  npx thirdweb create app --express --typescript --evm
 ```
 
-Then go to the `create.sql`file and copy its content. Paste the content in your local mysql server, I am using mariadb.
+## Run Locally
 
-## Start backend server with:
+Install dependencies:
 
-npm i && npm start
+```bash
+  yarn
+```
 
-(Nodemon listening for changes)
+Start the server:
+
+```bash
+  yarn build
+  yarn start
+```
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file:
+
+```bash
+WALLET_PRIVATE_KEY=paste_your_private_key_here
+THIRDWEB_SECRET_KEY=paste_your_secret_key_here
+```
+
+- Generate your `THIRDWEB_SECRET_KEY` via thirdweb's [dashboard](https://thirdweb.com/create-api-key).
+
+- For `WALLET_PRIVATE_KEY` export your wallet private key from your wallet.
+
+## Additional Resources
+
+- [Documentation](https://portal.thirdweb.com)
+- [Templates](https://thirdweb.com/templates)
+- [Video Tutorials](https://youtube.com/thirdweb_)
+- [Blog](https://blog.thirdweb.com)
+
+## Contributing
+
+Contributions and [feedback](https://feedback.thirdweb.com) are always welcome!
+
+Please visit our [open source page](https://thirdweb.com/open-source) for more information.
+
+## Need help?
+
+For help, join the [discord](https://discord.gg/thirdweb) or visit our [support page](https://support.thirdweb.com).

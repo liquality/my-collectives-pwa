@@ -1,22 +1,30 @@
-var endpoints = {};
-var userHandler = require("./handlers/userHandler");
-var messageHandler = require("./handlers/messageHandler");
+import authHandler from "./handlers/authHandler";
+import messageHandler from "./handlers/messageHandler";
+import middleware from "./middleware";
+import groupHandler from "./handlers/groupHandler";
+import inviteHandler from "./handlers/inviteHandler";
+import { Express, Request, Response } from "express"; // Import Express types
 
-var middleware = require("./middleware");
-const groupHandler = require("./handlers/groupHandler");
-const inviteHandler = require("./handlers/inviteHandler");
+type Endpoint = {
+  url: string;
+  method: "get" | "post" | "put" | "delete" | "patch";
+  middleware: any[]; // You should replace 'any[]' with a more specific type for middleware
+  handler: (req: Request, res: Response) => void;
+  description: string;
+};
 
+const endpoints: Record<string, Endpoint> = {}; // Define the endpoints object
+
+// Define and populate the endpoints
 endpoints.loginUser = {
   url: "/v1/user/login/:serviceprovider_name",
   method: "get",
   middleware: [],
-  handler: userHandler.loginUser,
+  handler: authHandler.loginUser,
   description: "login user",
 };
 
-/*  */
-//Message endpoints
-/*  */
+// Message endpoints
 endpoints.createMessage = {
   url: "/v1/message",
   method: "post",
@@ -48,6 +56,7 @@ endpoints.createInvite = {
   handler: inviteHandler.create,
   description: "create invite",
 };
+
 endpoints.readInvite = {
   url: "/v1/invite/:inviteLink",
   method: "get",
@@ -64,22 +73,8 @@ endpoints.readMessageByGroupId = {
   description: "read messages by groupid",
 };
 
-endpoints.readMessage = {
-  url: "/v1/game/:id",
-  method: "get",
-  middleware: [middleware.authenticateJWT],
-  handler: messageHandler.read,
-  description: "read game",
-};
 
-/*WEBHOOK EVENTS FROM CROSSMINT*/
 
-endpoints.listenToWebhook = {
-  url: "/v1/webhook",
-  method: "post",
-  middleware: [],
-  handler: messageHandler.webhook,
-  description: "listen to crossmint webhook",
-};
 
-module.exports = endpoints;
+
+export default endpoints;
