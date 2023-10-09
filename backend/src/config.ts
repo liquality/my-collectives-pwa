@@ -1,4 +1,4 @@
-{
+const configDb = {
   "database_connection": {
     "host": "localhost",
     "user": "group_mints",
@@ -7,3 +7,4 @@
     "port": 3306
   }
 }
+export default configDb;
