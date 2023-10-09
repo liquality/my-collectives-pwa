@@ -4,6 +4,8 @@ import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import path from "path";
 
+import nodePolyfills from 'vite-plugin-node-stdlib-browser'
+
 // https://vitejs.dev/config/
 export default defineConfig({
   define: {
@@ -15,6 +17,7 @@ export default defineConfig({
     },
   },
   plugins: [
+    nodePolyfills(),
     react(),
     legacy(),
     VitePWA({
