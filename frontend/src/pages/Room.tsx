@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import ProtectedRoute from "../components/ProtectedRoute";
 import {
   IonPage,
   IonContent,
   IonItem,
-  IonInput,
   IonButton,
   IonLabel,
 } from "@ionic/react";
@@ -12,7 +11,6 @@ import Chat from "@/components/Chat";
 import UserService from "../services/UserService";
 import { Group } from "@/types/chat";
 import Header from "@/components/Header";
-import socket from "@/services/SocketService";
 
 const Room = () => {
   const [isInChat, setIsInChat] = useState(false);
@@ -26,26 +24,11 @@ const Room = () => {
     try {
       const result = await UserService.createGroup(groupObject);
       setGroupId(result.id);
-      // setIsInChat(true);
+      setIsInChat(true);
     } catch (error) {
       console.log(error, "error posting group");
     }
   };
-
-  useEffect(() => {
-    // Example: Listen for a "message" event from the server
-    socket.on("groupCreation", (data) => {
-      console.log("Received a message:", data);
-    });
-
-    // Example: Emit a "chat message" event to the server
-    socket.emit("chat message", "Hello, server!");
-
-    return () => {
-      // Clean up event listeners when the component unmounts
-      socket.off("message");
-    };
-  }, []);
 
   //TODO: add usefecct/custom hook here that fetches all users groups
   //and displays them if he/she is in them, if not display 'create group'

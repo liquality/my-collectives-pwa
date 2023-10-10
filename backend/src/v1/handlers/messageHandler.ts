@@ -2,17 +2,16 @@ import { Request, Response } from "express";
 import Message from "../classes/Message";
 import ApiError from "../classes/ApiError";
 import { QueryError } from "mysql2";
+import io from "../../index" // Import the socket instance
 
 const messageHandler = {
   create: async (req: Request, res: Response) => {
     const message = new Message({});
-    message.set(req.body); // should be a game object
+    message.set(req.body);
 
     try {
       const msg = await message.create();
-
-      //TODO: replace with userid/address
-      //websocketService.send([2], "crossmint_success", msg);
+      io.emit("messageCreation", msg);
 
       res.status(200).send(msg);
     } catch (err) {
@@ -27,6 +26,7 @@ const messageHandler = {
     const groupId = req.params.groupId;
 
     if (groupId) {
+      console.log(groupId, 'groupID')
       const message = new Message({});
       try {
         const msgs = await message.readMessageByGroupId(Number(groupId));

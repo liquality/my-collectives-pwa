@@ -32,7 +32,6 @@ console.log(
 const server = app.listen(appPort);
 
 
-
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173",

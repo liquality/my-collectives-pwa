@@ -1,6 +1,5 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import "../theme/chat-box.css";
-
 //@ts-ignore
 import UserService from "../services/UserService";
 import { Message } from "@/types/chat";
@@ -19,23 +18,20 @@ export const Chat = (props: ChatProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const { chatHistory, loading } = useChatHistory(groupId as number);
 
-  const listenToCrossmintSuccess = (data: Message) => {
-    const newMessage = data;
-    setMessages((prevMessages: Message[]) => [...prevMessages, newMessage]);
-    console.log("Websocket event sent from db", data);
-  };
-
   useEffect(() => {
-    //TODO: replace with userid/address
-    if (chatHistory.length) {
+    if (chatHistory) {
       setMessages(chatHistory);
     }
-    /*    websocketService.connect(2);
-    eventBus.on(messageTypes.CROSSMINT_SUCCESS, listenToCrossmintSuccess);
+    socket.on("messageCreation", (data) => {
+      const newMessage = data;
+      setMessages((prevMessages: Message[]) => [...prevMessages, newMessage]);
+      console.log("Websocket event sent from db", data);
+    });
+
     return () => {
-      eventBus.remove(messageTypes.CROSSMINT_SUCCESS, listenToCrossmintSuccess);
-    }; */
-  }, [chatHistory]);
+      socket.off("messageCreation");
+    };
+  }, [chatHistory, messages]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
