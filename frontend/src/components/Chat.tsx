@@ -1,14 +1,12 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import "../theme/chat-box.css";
-//@ts-ignore
-import websocketService from "../services/Websocket/WebsocketService";
-import eventBus from "../services/Websocket/EventBus";
-import { messageTypes } from "../services/Websocket/MessageHandler";
+
 //@ts-ignore
 import UserService from "../services/UserService";
 import { Message } from "@/types/chat";
 import GenerateInvite from "./GenerateInvite";
 import { useChatHistory } from "@/hooks/useChatHistory";
+import socket from "../services/SocketService"; // Import the socket instance
 
 interface ChatProps {
   groupName?: string;
@@ -32,11 +30,11 @@ export const Chat = (props: ChatProps) => {
     if (chatHistory.length) {
       setMessages(chatHistory);
     }
-    websocketService.connect(2);
+    /*    websocketService.connect(2);
     eventBus.on(messageTypes.CROSSMINT_SUCCESS, listenToCrossmintSuccess);
     return () => {
       eventBus.remove(messageTypes.CROSSMINT_SUCCESS, listenToCrossmintSuccess);
-    };
+    }; */
   }, [chatHistory]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {

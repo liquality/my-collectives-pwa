@@ -5,6 +5,8 @@ import ApiError from './classes/ApiError';
 const middleware: {
   authenticateJWT?: (req: Request, res: Response, next: NextFunction) => void;
   adminArea?: (req: Request, res: Response, next: NextFunction) => void;
+  authenticateJWTForWebsocket?: (socket: any, next: NextFunction) => void;
+
 } = {};
 middleware.authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
@@ -24,6 +26,21 @@ middleware.authenticateJWT = (req: Request, res: Response, next: NextFunction) =
     next();
   });
 };
+
+middleware.authenticateJWTForWebsocket = (socket, next: NextFunction) => {
+  // Extract the token from the client
+  const token = socket.handshake.auth.token;
+  console.log(token, 'wats token?')
+  // Verify the token
+  jwt.verify(token, "your-secret-key", (err: any, decoded: any) => {
+    if (err) {
+      return next(new Error("Authentication error"));
+    }
+    // Attach the user data to the socket for future use
+    socket.user = decoded.user;
+    next();
+  });
+}
 
 middleware.adminArea = (req: Request, res: Response, next: NextFunction) => {
   /*  if (req.apiSession.is_admin) {

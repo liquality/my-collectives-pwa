@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import Message from "../classes/Message";
 import ApiError from "../classes/ApiError";
 import { QueryError } from "mysql2";
-import websocketService from "../services/WebsocketService.ts";
 
 const messageHandler = {
   create: async (req: Request, res: Response) => {
@@ -13,7 +12,7 @@ const messageHandler = {
       const msg = await message.create();
 
       //TODO: replace with userid/address
-      websocketService.send([2], "crossmint_success", msg);
+      //websocketService.send([2], "crossmint_success", msg);
 
       res.status(200).send(msg);
     } catch (err) {

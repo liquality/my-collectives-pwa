@@ -26,7 +26,6 @@ class Message {
 
   create = async (): Promise<Message | undefined> => {
     const message = this;
-    console.log(message, "wats group?");
     return new Promise<Message | undefined>((resolve, reject) => {
       // Insert new row
       MySQL.pool.getConnection((err, db) => {
@@ -52,7 +51,6 @@ class Message {
 
   readMessageByGroupId = async (groupId: number): Promise<Message | undefined> => {
     const message = this;
-    console.log(message, "wats group?");
     if (groupId) {
       return new Promise<Message | undefined>((resolve, reject) => {
         // Insert new row
