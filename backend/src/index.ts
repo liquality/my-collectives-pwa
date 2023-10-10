@@ -4,6 +4,7 @@ import cors from "cors";
 import { Server } from "socket.io";
 import { expressjwt as jwt } from "express-jwt";
 import v1 from "./v1/";
+import websocketService from "./v1/services/WebsocketService.ts"
 
 // TODO: Store a better secret in a hidden config file
 const secret = process.env.JWT_SECRET || "my-secret";
@@ -30,9 +31,5 @@ console.log(
 );
 const server = app.listen(appPort);
 
-/* addConnectionListener(server); */
+websocketService.addConnectionListener(server)
 
-/* const io = new Server(server, {
-  origin: "http://localhost:5173",
-  methods: ["POST", "GET"],
-}); */
