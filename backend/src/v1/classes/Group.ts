@@ -24,7 +24,6 @@ class Group {
   /*                  */
   create = async (): Promise<Group | undefined> => {
     const group = this;
-    console.log(group, "wats group?");
     return new Promise<Group | undefined>((resolve, reject) => {
       // Insert new row
       MySQL.pool.getConnection((err, db) => {
