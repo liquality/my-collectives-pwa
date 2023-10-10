@@ -7,6 +7,7 @@
 - copy the file file named `.env.example` and rename it to `.env.local` and add the dev values
 
 ## Development
+- Copy the file named `.env.example` and set the name `.env.local`, fill all the environment variables with the proper values.
 - run `npm run dev`
 
 ## PWA asset generator

@@ -1,4 +1,3 @@
-import { useWalletContext } from "@/utils";
 import { shortenAddress } from "@/utils/adddress";
 import {
   IonButton,
@@ -14,56 +13,45 @@ import {
 } from "@ionic/react";
 import { logIn, logOut, wallet, key, copy, copyOutline } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
-
+import { useWeb3Modal, useWeb3ModalState } from "@web3modal/wagmi/react";
+import { useAccount, useDisconnect } from "wagmi";
 
 const ConnectButton: React.FC = () => {
-  const [address, setAddress] = useState("");
-  const [loading, setLoading] = useState(false);
-  const { walletLoading, connected, setConnected, connectedWallet } =
-    useWalletContext();
-
+  const { open } = useWeb3Modal();
+  const { address, isConnecting, isDisconnected } = useAccount();
+  const { disconnect } = useDisconnect();
   const logout = () => {
-    connectedWallet?.disconnect();
-    setConnected(false);
+    disconnect();
   };
 
   const login = async () => {
-    setLoading(true);
     try {
-      const _address = await connectedWallet?.connect();
-      if (_address) {
-        setAddress(_address);
-        setConnected(true);
-      }
+      await open();
     } catch (error) {
       console.error(error);
     }
-    setLoading(false);
   };
 
   const copyAddress = () => {};
 
-  useEffect(() => {
-    const setup = async () => {
-      if (!walletLoading && connected && !address) {
-        setLoading(true);
-        const _address = await connectedWallet?.getAddress();
-        if (_address) {
-          setAddress(_address);
-        }
-        setLoading(false);
-      }
-      console.log( { address })
-    };
-    setup();
-  });
   return (
     <>
-      {connected ? (
+      {isDisconnected ? (
+        <IonButton onClick={login}>
+          {isConnecting ? (
+            <IonSpinner name="circular" />
+          ) : (
+            <>
+              <IonIcon slot="end" icon={logIn}></IonIcon>
+              Connect Wallet
+            </>
+          )}
+        </IonButton>
+      ) : (
         <>
           <IonButton id="logout-options-triggger">
             <IonIcon slot="end" icon={wallet}></IonIcon>
-            {shortenAddress(address)}
+            {shortenAddress(address || '')}
           </IonButton>
           <IonPopover
             size="auto"
@@ -101,17 +89,6 @@ const ConnectButton: React.FC = () => {
             </IonContent>
           </IonPopover>
         </>
-      ) : (
-        <IonButton onClick={login}>
-          {loading ? (
-            <IonSpinner name="circular" />
-          ) : (
-            <>
-              <IonIcon slot="end" icon={logIn}></IonIcon>
-              {walletLoading ? "..." : "Connect Wallet"}
-            </>
-          )}
-        </IonButton>
       )}
     </>
   );

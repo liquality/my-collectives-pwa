@@ -24,7 +24,6 @@ import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
-import { WalletProvider } from "@/utils";
 import React from "react";
 /* Theme variables */
 import "./theme/variables.css";
@@ -33,13 +32,33 @@ import Menu from "./components/Menu";
 import Groups from "./pages/Groups";
 import Home from "./pages/Home";
 import Pools from "./pages/Pools";
+import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
+import { WagmiConfig } from 'wagmi';
+import { baseGoerli } from 'wagmi/chains';
 
 setupIonicReact({
   mode: "ios",
 });
 
+// 1. Get projectId
+const projectId = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID
+
+// 2. Create wagmiConfig
+const metadata = {
+  name: 'Group Mints',
+  description: 'Liquality Group Mints',
+  url: 'https://liquality.io',
+  icons: ['https://uploads-ssl.webflow.com/63e610c62d73bd54e8ee8455/63e610c62d73bd46ffee8583_Liquality_logo.svg']
+}
+
+const chains = [baseGoerli]
+const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata })
+
+// 3. Create modal
+createWeb3Modal({ wagmiConfig, projectId, chains })
+
 const App: React.FC = () => (
-  <WalletProvider>
+  <WagmiConfig config={wagmiConfig}>
     <IonApp>
       <IonSplitPane when="sm" contentId="main-content">
         <IonReactRouter>
@@ -69,7 +88,7 @@ const App: React.FC = () => (
         </IonReactRouter>
       </IonSplitPane>
     </IonApp>
-  </WalletProvider>
+  </WagmiConfig>
 );
 
 export default App;
