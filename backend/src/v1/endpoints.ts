@@ -4,6 +4,8 @@ import middleware from "./middleware";
 import groupHandler from "./handlers/groupHandler";
 import inviteHandler from "./handlers/inviteHandler";
 import { Express, Request, Response } from "express"; // Import Express types
+import memberHandler from "./handlers/memberHandler";
+import poolHandler from "./handlers/poolHandler";
 
 type Endpoint = {
   url: string;
@@ -71,6 +73,44 @@ endpoints.readMessageByGroupId = {
   middleware: [],
   handler: messageHandler.readMessageByGroupId,
   description: "read messages by groupid",
+};
+
+
+endpoints.createMember = {
+  url: "/v1/member",
+  method: "post",
+  middleware: [],
+  handler: memberHandler.create,
+  description: "create member",
+};
+
+
+
+endpoints.readAllGroupsForMember = {
+  url: "/v1/member/:senderAddress",
+  method: "get",
+  middleware: [],
+  handler: memberHandler.readAllGroupsForMember,
+  description: "get all groups member is a part of",
+};
+
+
+endpoints.createPool = {
+  url: "/v1/pool",
+  method: "post",
+  middleware: [],
+  handler: poolHandler.create,
+  description: "create pool",
+};
+
+
+
+endpoints.readAllPoolsForGroup = {
+  url: "/v1/pool/:groupId",
+  method: "get",
+  middleware: [],
+  handler: poolHandler.readAllPoolsForGroup,
+  description: "get all pools by groupid",
 };
 
 

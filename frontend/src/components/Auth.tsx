@@ -1,6 +1,4 @@
 import React from "react";
-import { signInWithPopup } from "firebase/auth";
-import { auth, provider } from "@/firebase.config";
 import Cookies from "universal-cookie";
 import {
   IonButton,
@@ -17,15 +15,14 @@ const Auth = () => {
 
   const signInWithGoogle = async () => {
     try {
-      const result = await signInWithPopup(auth, provider);
-      cookies.set("auth-token", result.user.refreshToken);
+      //const result = await signInWithPopup(auth, provider);
+      //cookies.set("auth-token", result.user.refreshToken);
       router.push("/room");
     } catch (error) {
       console.log(error, "ERROR in Auth");
     }
   };
 
-  console.log(checkAuth(), "check auth");
   return (
     <>
       {checkAuth() ? null : (
