@@ -42,8 +42,8 @@ class Pool {
                 }
 
                 db.query(
-                    "INSERT INTO `pool` (group_id, minting_contract_address, chain_id created_at) VALUES (?, ?, ?, UTC_TIMESTAMP());",
-                    [pool.group_id, pool.minting_contract_address],
+                    "INSERT INTO `pool` (group_id, minting_contract_address, chain_id, created_at) VALUES (?, ?, ?, UTC_TIMESTAMP());",
+                    [pool.group_id, pool.minting_contract_address, pool.chain_id],
                     (err, results: RowDataPacket[], fields) => {
                         if (err) {
                             db.release();
