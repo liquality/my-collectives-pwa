@@ -116,7 +116,7 @@ const ConnectButton: React.FC = () => {
           <IonModal ref={modal} trigger="open-auth-modal">
             <IonHeader>
               <IonToolbar>
-                <IonTitle>Modal</IonTitle>
+                <IonTitle>Connect Wallet</IonTitle>
                 <IonButtons slot="end">
                   <IonButton onClick={() => dismiss()}>Close</IonButton>
                 </IonButtons>
