@@ -32,33 +32,42 @@ import Menu from "./components/Menu";
 import Groups from "./pages/Groups";
 import Home from "./pages/Home";
 import Pools from "./pages/Pools";
-import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
-import { WagmiConfig } from 'wagmi';
+import { WagmiConfig, createConfig, configureChains } from 'wagmi'
+import { publicProvider } from 'wagmi/providers/public'
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { baseGoerli } from 'wagmi/chains';
 
 setupIonicReact({
   mode: "ios",
 });
 
-// 1. Get projectId
-const projectId = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID
+// Auth and Wallet setup
+const { chains, publicClient } = configureChains([baseGoerli], [publicProvider()])
+ 
+const config = createConfig({
+  connectors: [
+    new MetaMaskConnector({ chains }),
+    new WalletConnectConnector({
+      chains,
+      options: {
+        projectId: import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID,
+        metadata: {
+          name: 'Group Mints',
+          description: 'Liquality Group Mints',
+          url: 'https://liquality.io',
+          icons: ['https://uploads-ssl.webflow.com/63e610c62d73bd54e8ee8455/63e610c62d73bd46ffee8583_Liquality_logo.svg']
+        }
+      },
+    }),
+  ],
+  publicClient,
+})
 
-// 2. Create wagmiConfig
-const metadata = {
-  name: 'Group Mints',
-  description: 'Liquality Group Mints',
-  url: 'https://liquality.io',
-  icons: ['https://uploads-ssl.webflow.com/63e610c62d73bd54e8ee8455/63e610c62d73bd46ffee8583_Liquality_logo.svg']
-}
 
-const chains = [baseGoerli]
-const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata })
-
-// 3. Create modal
-createWeb3Modal({ wagmiConfig, projectId, chains })
-
-const App: React.FC = () => (
-  <WagmiConfig config={wagmiConfig}>
+const App: React.FC = () => {
+  return (
+  <WagmiConfig config={config}>
     <IonApp>
       <IonSplitPane when="sm" contentId="main-content">
         <IonReactRouter>
@@ -90,5 +99,6 @@ const App: React.FC = () => (
     </IonApp>
   </WagmiConfig>
 );
+};
 
 export default App;

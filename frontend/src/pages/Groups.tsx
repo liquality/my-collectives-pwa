@@ -6,7 +6,7 @@ const Groups: React.FC = () => {
     <IonPage>
       <Header />
       <IonContent fullscreen>
-        Pools
+        Groups
       </IonContent>
     </IonPage>
   );

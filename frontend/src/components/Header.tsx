@@ -1,9 +1,7 @@
 import {
   IonHeader,
   IonToolbar,
-  IonTitle,
   IonButtons,
-  IonProgressBar,
   IonMenuButton,
 } from "@ionic/react";
 import ConnectButton from "./ConnectButton";
