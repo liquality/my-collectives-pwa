@@ -2,17 +2,17 @@ import { useState, useEffect } from "react";
 import { Message } from "@/types/chat";
 import UserService from "@/services/UserService";
 interface ChatHistoryHookResult {
-    chatHistory: Message[];
+    chatHistory: Message[] | null;
     loading: boolean
 }
 export function useChatHistory(groupId: number): ChatHistoryHookResult {
-    const [chatHistory, setChatHistory] = useState<Message[]>([]);
+    const [chatHistory, setChatHistory] = useState<Message[] | null>(null);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchChat = async () => {
             try {
-                if (!chatHistory.length) {
+                if (chatHistory) {
                     setLoading(true)
                     const result = await UserService.readMessagesByGroupId(groupId);
                     setChatHistory(result);

@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ProtectedRoute from "../components/ProtectedRoute";
 import {
   IonPage,
   IonContent,
   IonItem,
-  IonInput,
   IonButton,
   IonLabel,
 } from "@ionic/react";
@@ -35,7 +34,7 @@ const Room = () => {
   //and displays them if he/she is in them, if not display 'create group'
   return (
     <IonPage>
-     <Header />
+      <Header />
       <IonContent fullscreen>
         <ProtectedRoute>
           {" "}
