@@ -40,3 +40,12 @@ CREATE TABLE member (
   `joined_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (`group_id`) REFERENCES `group` (`id`)
 );
+
+CREATE TABLE pool (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `group_id` INT NOT NULL,
+  `minting_contract_address` VARCHAR(255) NOT NULL, 
+  `chain_id` INT NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`group_id`) REFERENCES `group` (`id`)
+);

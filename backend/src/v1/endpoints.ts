@@ -75,6 +75,15 @@ endpoints.readMessageByGroupId = {
 };
 
 
+endpoints.createMember = {
+  url: "/v1/member",
+  method: "post",
+  middleware: [],
+  handler: memberHandler.create,
+  description: "create member",
+};
+
+
 
 endpoints.readAllGroupsForMember = {
   url: "/v1/member/:senderAddress",

@@ -5,6 +5,8 @@ import Member from "../classes/Member";
 
 const memberHandler = {
     create: async (req: Request, res: Response) => {
+        console.log(req.body, 'wats member body?')
+
         const member = new Member();
         member.set(req.body); // should be a user object
 
@@ -24,8 +26,9 @@ const memberHandler = {
             if (senderAddress == senderAddress) {
                 const member = new Member();
                 try {
-                    const inv = await member.read(senderAddress);
-                    res.status(200).send(inv);
+                    const allGroups = await member.readAllGroupsForMember(senderAddress);
+                    console.log(allGroups, 'allgroups')
+                    res.status(200).send(allGroups);
                 } catch (err) {
                     res.status(400).send(new ApiError(400, 'Error' + err));
                 }
