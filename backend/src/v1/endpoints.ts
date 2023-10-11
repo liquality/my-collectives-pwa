@@ -4,6 +4,7 @@ import middleware from "./middleware";
 import groupHandler from "./handlers/groupHandler";
 import inviteHandler from "./handlers/inviteHandler";
 import { Express, Request, Response } from "express"; // Import Express types
+import memberHandler from "./handlers/memberHandler";
 
 type Endpoint = {
   url: string;
@@ -73,6 +74,15 @@ endpoints.readMessageByGroupId = {
   description: "read messages by groupid",
 };
 
+
+
+endpoints.readAllGroupsForMember = {
+  url: "/v1/member/:senderAddress",
+  method: "get",
+  middleware: [],
+  handler: memberHandler.readAllGroupsForMember,
+  description: "get all groups member is a part of",
+};
 
 
 

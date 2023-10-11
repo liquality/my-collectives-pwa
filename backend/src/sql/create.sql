@@ -33,8 +33,8 @@ CREATE TABLE `message` (
 );
 
 
-CREATE TABLE members (
-  `member_id` INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE member (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
   `group_id` INT NOT NULL,
   `sender` VARCHAR(255) NOT NULL, 
   `joined_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
