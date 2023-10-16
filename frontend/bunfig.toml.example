@@ -1,6 +1,0 @@
-[install]
-# set default registry as a string
-registry = "https://registry.npmjs.org"
-# set a token
-[install.scopes]
-"@liquality" = { url = "https://npm.pkg.github.com", token = "" }

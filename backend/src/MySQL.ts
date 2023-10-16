@@ -20,7 +20,7 @@ const pool: Pool = mysql.createPool(mysqlConfig);
 export default pool;  */
 
 
-import mysql, { Pool, PoolOptions } from "mysql2";
+import mysql, { Pool, PoolOptions, RowDataPacket } from "mysql2";
 import config from "./config";
 import dotenv from "dotenv";
 
@@ -38,5 +38,32 @@ const mysqlConfig: PoolOptions = !process.env.MYSQLDATABASE
   };
 
 const pool: Pool = mysql.createPool(mysqlConfig);
+
+export const db = {
+  query: async (sql: string, params: any[]): Promise<RowDataPacket[]> => {
+    return new Promise<RowDataPacket[]>((resolve, reject) => {
+      pool.getConnection((error, db) => {
+        if(error) {
+          reject(error);
+        } else {
+  
+          db.query(
+            sql,
+            params,
+            (err, results: RowDataPacket[], fields) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(results);
+              }
+              db.release();
+            }
+          );
+        }
+      })
+    });
+    
+  }
+}
 
 export default { pool }; 

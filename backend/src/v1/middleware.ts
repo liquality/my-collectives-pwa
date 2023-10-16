@@ -32,7 +32,9 @@ middleware.authenticateJWTForWebsocket = (socket, next: NextFunction) => {
   const token = socket.handshake.auth.token;
   console.log(token, 'wats token?')
   // Verify the token
-  jwt.verify(token, "your-secret-key", (err: any, decoded: any) => {
+
+  // TODO: add secret in env variable/config file
+  jwt.verify(token, "my-secret", (err: any, decoded: any) => {
     if (err) {
       return next(new Error("Authentication error"));
     }

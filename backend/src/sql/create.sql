@@ -49,3 +49,14 @@ CREATE TABLE pool (
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (`group_id`) REFERENCES `group` (`id`)
 );
+
+CREATE TABLE user (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `service_provider_name` VARCHAR(255) NOT NULL, 
+  `first_name` VARCHAR(255) NULL, 
+  `last_name` VARCHAR(255) NULL, 
+  `email` VARCHAR(255) NULL, 
+  `nonce` INT NOT NULL,
+  `public_address` VARCHAR(255) NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
