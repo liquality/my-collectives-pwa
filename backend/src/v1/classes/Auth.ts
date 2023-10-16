@@ -33,6 +33,22 @@ class Auth {
     }
   }
 
+  async find(
+    publicAddress: string
+  ): Promise<UserModel | null> {
+    // TODO: clean not required fields from the query
+    const results = await db.query(
+      "SELECT * FROM `user` WHERE public_address = ?",
+      [publicAddress]
+    );
+
+    if (results.length > 0) {
+      return results[0] as UserModel;
+    }
+
+    return null;
+  }
+
   async authenticatePublicAddress(
     publicAddress: string,
     signature: string
@@ -60,6 +76,8 @@ class Auth {
 
     return null;
   }
+
+  
 
   async createUser(
     model: UserCreateModel
