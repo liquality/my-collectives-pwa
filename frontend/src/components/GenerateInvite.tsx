@@ -10,7 +10,8 @@ const Invite = (props: InviteProps) => {
   const handleGenerateInvite = async () => {
     const result = await UserService.createInvite({
       group_id: groupId,
-    } as Group);
+    } as Partial<Group>);
+    console.log(result, "wats result of inv link?");
     setInviteLink(result.invite_link);
   };
 

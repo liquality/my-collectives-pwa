@@ -9,6 +9,11 @@ const UserService = {
     return NetworkService.postResourceWithAuth("/v1/group/", groupObject);
   },
 
+  //Includes groupId and public address
+  createMember: async function (member: any) {
+    return NetworkService.postResourceWithAuth("/v1/member/", member);
+  },
+
   readGroup: async function (groupId: string) {
     return NetworkService.getResourceWithAuth("/v1/group/" + groupId);
   },
@@ -25,7 +30,7 @@ const UserService = {
     return NetworkService.postResourceWithAuth("/v1/message/", messageObject);
   },
 
-  createInvite: async function (groupId: Group) {
+  createInvite: async function (groupId: Partial<Group>) {
     return NetworkService.postResourceWithAuth("/v1/invite/", groupId);
   },
 

@@ -17,8 +17,9 @@ export function useValidateInvite() {
     console.log(inviteLink, 'INV link from params')
 
     useEffect(() => {
-        const fetchGroups = async () => {
+        const fetchInvite = async () => {
             try {
+                console.log('i')
                 setLoading(true)
                 const readInvite = await UserService.readInvite(inviteLink)
                 console.log(readInvite, 'readinvie')
@@ -34,7 +35,7 @@ export function useValidateInvite() {
             }
         };
 
-        fetchGroups();
+        fetchInvite();
     }, [invitationStatus]);
 
     return { invitationStatus, inviteLink, loading, invite };

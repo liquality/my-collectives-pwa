@@ -10,6 +10,7 @@ const inviteHandler = {
 
         try {
             const result = await invite.create();
+            console.log(result, 'result of created invite')
             res.status(200).send(result);
         } catch (err) {
 
