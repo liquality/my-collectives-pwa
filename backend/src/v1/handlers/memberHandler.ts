@@ -19,6 +19,19 @@ const memberHandler = {
         }
     },
 
+    getNumberOfGroupMembers: async (req: Request, res: Response) => {
+        const member = new Member();
+        const groupAddress = req.params.groupAddress;
+        try {
+            const result = await member.getNumberOfGroupMembers(groupAddress);
+            console.log('result')
+            res.status(200).send(result);
+        } catch (err) {
+            console.log(err)
+            res.status(400).send(new ApiError(400, 'Error' + err));
+        }
+    },
+
 
     readAllGroupsForMember: async (req: Request, res: Response) => {
         const senderAddress = req.params.senderAddress;

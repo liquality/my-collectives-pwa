@@ -13,6 +13,10 @@ const UserService = {
     return NetworkService.getResourceWithAuth("/v1/group/", id);
   },
 
+  readGroupByMemberAddress: async function (memberAddress: string) {
+    return NetworkService.getResourceWithAuth("/v1/member/" + memberAddress);
+  },
+
   createMessage: async function (messageObject: Message) {
     return NetworkService.postResourceWithAuth("/v1/message/", messageObject);
   },

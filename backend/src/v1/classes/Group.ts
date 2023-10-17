@@ -6,16 +6,22 @@ class Group {
   id?: number;
   group_name?: string;
   created_at?: Date;
+  public_address?: string;
+  rewards?: number
 
-  constructor(group?: { id?: number; group_name?: string; created_at?: Date }) {
+  constructor(group: Group) {
     this.set(group);
   }
 
-  set(group?: { id?: number; group_name?: string; created_at?: Date }) {
+  set(group: Group) {
     if (group !== undefined) {
       this.id = group.id;
       this.group_name = group.group_name;
       this.created_at = group.created_at;
+      this.public_address = group.public_address;
+      this.rewards = group.rewards;
+
+
     }
   }
 
@@ -28,8 +34,8 @@ class Group {
       // Insert new row
       MySQL.pool.getConnection((err, db) => {
         db.query(
-          "INSERT INTO `group` (group_name, created_at) VALUES (?,  UTC_TIMESTAMP());",
-          [group.group_name],
+          "INSERT INTO `group` (group_name, public_address, rewards, created_at) VALUES (?, ?, ?,  UTC_TIMESTAMP());",
+          [group.group_name, group.public_address, 0],
           (err, results, fields) => {
             if (err) {
               reject(new ApiError(500, err.toString()));

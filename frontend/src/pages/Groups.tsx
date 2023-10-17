@@ -1,13 +1,13 @@
-import Header from '@/components/Header';
-import { IonContent, IonPage } from '@ionic/react';
+import GroupRows from "@/components/Groups/GroupRows";
+import Header from "@/components/Header";
+import { IonContent, IonPage } from "@ionic/react";
 
 const Groups: React.FC = () => {
   return (
     <IonPage>
       <Header />
-      <IonContent fullscreen>
-        Pools
-      </IonContent>
+      <IonContent fullscreen>Groups</IonContent>
+      <GroupRows />
     </IonPage>
   );
 };

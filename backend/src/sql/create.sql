@@ -11,6 +11,9 @@ FLUSH PRIVILEGES;
 CREATE TABLE `group` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `group_name` VARCHAR(255) NOT NULL,
+  `public_address` VARCHAR(255) NOT NULL,
+  `rewards` INT NOT NULL,
+
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

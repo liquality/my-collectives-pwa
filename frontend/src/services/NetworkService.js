@@ -41,6 +41,7 @@ const NetworkService = {
         },
       };
 
+      console.log(serverAddress + url, request, "SERVER ADDRESS");
       fetch(serverAddress + url, request)
         .then((response) => {
           return NetworkService.handleJsonResponse(response);

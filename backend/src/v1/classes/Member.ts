@@ -1,4 +1,4 @@
-import MySQL from "../../MySQL";
+import MySQL, { db } from "../../MySQL";
 import ApiError from "./ApiError";
 import { OkPacket, QueryError, RowDataPacket } from "mysql2"
 import Group from "./Group";
@@ -107,9 +107,27 @@ class Member {
         return promise;
     };
 
+    async getNumberOfGroupMembers(groupAddress: string): Promise<number | null> {
+        const query = `
+          SELECT COUNT(m.id) AS member_count
+          FROM \`group\` g
+          LEFT JOIN member m ON g.id = m.group_id
+          WHERE g.public_address = ?;
+        `;
+        const results = await db.query(query, [groupAddress]);
+
+        if (results.length > 0) {
+            console.log(results, 'wats ressult in getnumbnerof group members?')
+            return results[0].member_count;
+        }
+
+        return null;
+    }
+
 
     readAllGroupsForMember = async (senderAddress: string): Promise<Group[] | { id: null }> => {
         const promise = new Promise<Group[] | { id: null }>((resolve, reject) => {
+            console.log(senderAddress, 'semnder address')
             if (senderAddress) {
                 MySQL.pool.getConnection((err, db) => {
                     db.execute(
@@ -129,6 +147,8 @@ class Member {
                                     group_name: row.group_name,
                                     created_at: row.created_at,
                                 }));
+                                console.log(groups, 'groups')
+
 
                                 resolve(groups);
                             }
