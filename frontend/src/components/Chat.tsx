@@ -6,6 +6,7 @@ import { Group, Message } from "@/types/chat";
 import GenerateInvite from "./GenerateInvite";
 import { useChatHistory } from "@/hooks/useChatHistory";
 import socket from "../services/SocketService"; // Import the socket instance
+import { useAccount } from "wagmi";
 
 interface ChatProps {
   group: Group;
@@ -15,30 +16,30 @@ export const Chat = (props: ChatProps) => {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const { chatHistory, loading } = useChatHistory(id as number);
+  console.log(chatHistory, "chathistory?");
+  const { address } = useAccount();
 
   useEffect(() => {
     if (chatHistory) {
       setMessages(chatHistory);
     }
     socket.on("messageCreation", (data) => {
-      const newMessage = data;
-      setMessages((prevMessages: Message[]) => [...prevMessages, newMessage]);
-      console.log("Websocket event sent from db", data);
+      setMessages((prevMessages) => [...prevMessages, data]); // Use functional update
     });
 
     return () => {
       socket.off("messageCreation");
     };
-  }, [chatHistory, messages]);
+  }, [chatHistory]);
+
+  console.log(messages, "messages");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newMessage === "") return;
-    //submit message to db
-
     try {
       const message = {
-        sender: "0x012", //TODO replace with user public address
+        sender: address as string,
         text: newMessage,
         group_id: id as number,
       };
@@ -48,16 +49,16 @@ export const Chat = (props: ChatProps) => {
     }
     setNewMessage("");
   };
-  console.log(messages, "msgs", id, newMessage);
-  console.log(group_name, "props?", props);
+
   return (
     <div className="chat">
       <u>
-        WELCOME TO
+        Group Name:
         <b> {group_name}</b>
       </u>
       <br></br>
       <br></br>
+      Group messages:
       <div>
         {messages.map((message, index) => (
           <div key={index}>
@@ -77,6 +78,7 @@ export const Chat = (props: ChatProps) => {
         ></input>
         <button type="submit">Send</button>
       </form>
+      <br></br> <br></br>
       <GenerateInvite groupId={id as number} />
     </div>
   );

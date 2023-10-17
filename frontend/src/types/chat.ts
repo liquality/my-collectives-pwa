@@ -15,6 +15,11 @@ export interface Group {
     public_address: string
 }
 
+export interface GroupCreation {
+    group_name?: string;
+    public_address: string
+}
+
 export interface Invite {
     id: number;
     group_id: number;

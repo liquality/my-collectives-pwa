@@ -1,11 +1,11 @@
-import { Message, Group } from "@/types/chat";
+import { Message, Group, GroupCreation } from "@/types/chat";
 //@ts-ignore
 import NetworkService from "./NetworkService";
 
 
 
 const UserService = {
-  createGroup: async function (groupObject: Group) {
+  createGroup: async function (groupObject: GroupCreation) {
     return NetworkService.postResourceWithAuth("/v1/group/", groupObject);
   },
 

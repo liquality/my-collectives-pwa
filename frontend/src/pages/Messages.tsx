@@ -17,7 +17,6 @@ const Messages = () => {
     <IonPage>
       <Header />
       <IonContent fullscreen>
-        Messages!
         {!loading && group ? (
           <Chat group={group} />
         ) : (
