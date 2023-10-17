@@ -19,6 +19,7 @@ const GroupRows: React.FC = () => {
 
   console.log(myGroups, "mygroups??");
   const handleGroupClick = (groupId: string) => {
+    console.log(groupId, "clicked id");
     router.push(`messages/${groupId}`);
   };
 
@@ -27,18 +28,19 @@ const GroupRows: React.FC = () => {
     <IonContent color="light">
       <IonList inset={true}>
         {myGroups ? (
-          <IonContent>
-            {myGroups?.map((group, index) => (
-              <IonItem
-                onClick={() => handleGroupClick(group.id?.toString())}
-                key={index}
-              >
-                <IonTitle>{group.group_name}</IonTitle>
-                <IonLabel>Members: {group.number_of_members} </IonLabel>
-                <IonItem> {shortenAddress(group.public_address)}</IonItem>
-              </IonItem>
-            ))}
-          </IonContent>
+          myGroups.map((group, index) => (
+            <IonItem
+              onClick={() => handleGroupClick(group.id?.toString())}
+              key={index}
+            >
+              <IonTitle>
+                {group.group_name}
+                {group.id}
+              </IonTitle>
+              <IonLabel>Members: {group.number_of_members} </IonLabel>
+              <IonItem> {shortenAddress(group.public_address)}</IonItem>
+            </IonItem>
+          ))
         ) : (
           <IonTitle>Loading...</IonTitle>
         )}

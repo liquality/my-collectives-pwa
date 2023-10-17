@@ -9,8 +9,8 @@ const Groups: React.FC = () => {
       <Header />
       <IonContent fullscreen>
         <CreateGroup />
+        <GroupRows />
       </IonContent>
-      <GroupRows />
     </IonPage>
   );
 };

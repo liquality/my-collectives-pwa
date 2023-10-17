@@ -9,8 +9,7 @@ import { useParams } from "react-router-dom";
 const Messages = () => {
   const { groupId } = useParams<{ groupId: string }>();
   const { group, loading } = useGetGroupById(groupId);
-
-  console.log(groupId, "grpup id?");
+  console.log(groupId, "groupid in msgs and", group);
 
   const handleGoToGroupMessages = async () => {};
   return (

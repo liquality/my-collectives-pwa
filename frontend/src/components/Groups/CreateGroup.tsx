@@ -34,17 +34,15 @@ const CreateGroup: React.FC = () => {
   };
 
   return (
-    <IonContent>
-      <ProtectedRoute>
-        {" "}
-        <IonItem className="room">
-          <IonLabel>Enter group name: </IonLabel>
+    <ProtectedRoute>
+      {" "}
+      <IonItem className="room">
+        <IonLabel>Enter group name: </IonLabel>
 
-          <input onChange={(e) => setGroupName(e.target.value)} />
-          <IonButton onClick={handleEnterChat}>Create group</IonButton>
-        </IonItem>
-      </ProtectedRoute>
-    </IonContent>
+        <input onChange={(e) => setGroupName(e.target.value)} />
+        <IonButton onClick={handleEnterChat}>Create group</IonButton>
+      </IonItem>
+    </ProtectedRoute>
   );
 };
 
