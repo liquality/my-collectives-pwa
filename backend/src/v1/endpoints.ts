@@ -44,7 +44,7 @@ endpoints.createGroup = {
 };
 
 endpoints.readGroup = {
-  url: "/v1/group/:id",
+  url: "/v1/group/:groupId",
   method: "get",
   middleware: [],
   handler: groupHandler.read,

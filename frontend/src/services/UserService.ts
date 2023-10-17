@@ -9,8 +9,8 @@ const UserService = {
     return NetworkService.postResourceWithAuth("/v1/group/", groupObject);
   },
 
-  readGroup: async function (id: string) {
-    return NetworkService.getResourceWithAuth("/v1/group/", id);
+  readGroup: async function (groupId: string) {
+    return NetworkService.getResourceWithAuth("/v1/group/" + groupId);
   },
 
   readGroupByMemberAddress: async function (memberAddress: string) {

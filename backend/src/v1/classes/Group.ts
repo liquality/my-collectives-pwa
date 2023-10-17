@@ -1,5 +1,5 @@
 import { OkPacket, ResultSetHeader, RowDataPacket } from 'mysql2';
-import MySQL from '../../MySQL';
+import MySQL, { db } from '../../MySQL';
 import ApiError from './ApiError';
 
 class Group {
@@ -77,32 +77,20 @@ class Group {
 
 
 
-  read = async (id: number): Promise<Group | undefined> => {
-    const group = this;
-    return new Promise<Group | undefined>((resolve, reject) => {
-      /*    if (id) {
-           MySQL.pool.getConnection((err, db) => {
-             db.execute(
-               "SELECT * FROM `group` WHERE user_id = ?",
-               [id],
-               (err, results, fields) => {
-                 if (err) {
-                   reject(new ApiError(500, err));
-                 } else if (results.length < 1) {
-                   reject(new ApiError(404, "Group not found"));
-                 } else {
-                   group.set(results[0]);
-                   resolve(group);
-                 }
-                 db.release();
-               }
-             );
-           });
-         } else {
-           reject(new ApiError(500, "Missing group id"));
-         } */
-    });
-  };
+  async read(
+    groupId: number,
+  ): Promise<RowDataPacket | null> {
+    // TODO: clean not required fields from the query
+    const results = await db.query(
+      "SELECT * FROM `group` WHERE id = ?",
+      [groupId]
+    );
+    if (results.length > 0) {
+      return results[0]
+    }
+    return null;
+  }
+
 
 
 

@@ -2,21 +2,19 @@ import React, { FormEvent, useEffect, useState } from "react";
 import "../theme/chat-box.css";
 //@ts-ignore
 import UserService from "../services/UserService";
-import { Message } from "@/types/chat";
+import { Group, Message } from "@/types/chat";
 import GenerateInvite from "./GenerateInvite";
 import { useChatHistory } from "@/hooks/useChatHistory";
 import socket from "../services/SocketService"; // Import the socket instance
 
 interface ChatProps {
-  groupName?: string;
-  groupId: number | null;
+  group: Group;
 }
-
 export const Chat = (props: ChatProps) => {
-  const { groupName, groupId } = props;
+  const { group_name, id, rewards } = props.group;
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
-  const { chatHistory, loading } = useChatHistory(groupId as number);
+  const { chatHistory, loading } = useChatHistory(id as number);
 
   useEffect(() => {
     if (chatHistory) {
@@ -42,7 +40,7 @@ export const Chat = (props: ChatProps) => {
       const message = {
         sender: "0x012", //TODO replace with user public address
         text: newMessage,
-        group_id: groupId as number,
+        group_id: id as number,
       };
       const postMessage = await UserService.createMessage(message);
     } catch (error) {
@@ -50,12 +48,13 @@ export const Chat = (props: ChatProps) => {
     }
     setNewMessage("");
   };
-  console.log(messages, "msgs", groupId, newMessage);
+  console.log(messages, "msgs", id, newMessage);
+  console.log(group_name, "props?", props);
   return (
     <div className="chat">
       <u>
         WELCOME TO
-        <b> {groupName}</b>
+        <b> {group_name}</b>
       </u>
       <br></br>
       <br></br>
@@ -78,7 +77,7 @@ export const Chat = (props: ChatProps) => {
         ></input>
         <button type="submit">Send</button>
       </form>
-      <GenerateInvite groupId={groupId} />
+      <GenerateInvite groupId={id as number} />
     </div>
   );
 };

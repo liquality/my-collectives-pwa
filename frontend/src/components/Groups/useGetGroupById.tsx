@@ -11,7 +11,9 @@ export function useGetGroupById(groupId: string) {
       try {
         if (!group) {
           setLoading(true);
+          console.log(groupId, typeof groupId, "typeof groupud");
           const _group: Group = await UserService.readGroup(groupId);
+          console.log(_group, "GROUPP?");
           setGroup(_group);
           setLoading(false);
         }

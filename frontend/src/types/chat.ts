@@ -7,7 +7,7 @@ export interface Message {
 }
 
 export interface Group {
-    id?: number;
+    id: number;
     group_name?: string;
     created_at?: string;
     number_of_members?: number,
