@@ -3,38 +3,55 @@ import User from "../classes/Auth";
 import ApiError from "../classes/ApiError";
 
 const authHandler = {
-  /* read: async (req: Request, res: Response) => {
-    const id = req.params.id;
-    // const userid = req.apiSession.userid;
-
-    if (id) {
-      if (id == id) {
-        const user = new User();
-        try {
-          const userData = await user.read(id);
-          res.status(200).send(userData);
-        } catch (reason) {
-          res.status(400).send(new ApiError(400, reason));
-        }
-      } else {
-        res.status(403).send(new ApiError(403, "Access denied, userid does not match"));
-      }
-    }
-  }, */
-
-  create: async (req: Request, res: Response) => {
-    /*   const user = new User();
-      user.set(req.body); // should be a user object
-  
+  read: async (req: Request, res: Response) => {
+    const address = req.params.publicAddress;
+    
+    if (address) {
+      const user = new User();
       try {
-        const result = await user.create();
-        res.status(200).send(result);
-      } catch (reject) {
-        res.status(400).send(new ApiError(400, reject));
-      } */
+        const userData = await user.find(address);
+        if (userData) {
+          res.status(200).send(userData);
+        } else {
+          res
+            .status(403)
+            .send(new ApiError(403, "Access denied, userid does not match"));
+        }
+      } catch (reason: any) {
+        res.status(400).send(new ApiError(400, reason));
+      }
+    } else {
+      res.status(400).send(new ApiError(400, "Address is required"));
+    }
   },
 
+  create: async (req: Request, res: Response) => {
+    const {
+      email,
+      first_name,
+      last_name,
+      public_address,
+      service_provider_name,
+    } = req.body;
+    const user = new User();
 
+    try {
+      const result = await user.createUser({
+        email,
+        first_name,
+        last_name,
+        public_address,
+        service_provider_name,
+      });
+      if (result) {
+        res.status(200).send(result);
+      }
+
+      res.status(400).send(new ApiError(400, "Error Creating User"));
+    } catch (err: any) {
+      res.status(400).send(new ApiError(400, err.message));
+    }
+  },
 
   delete: async (req: Request, res: Response) => {
     /*    const id = req.params.id;
@@ -56,15 +73,22 @@ const authHandler = {
   },
 
   loginUser: async (req: Request, res: Response) => {
-    /*   const serviceprovider_name = req.params.serviceprovider_name;
-      const user = new User();
-  
-      try {
-        const result = await user.loginUser(serviceprovider_name);
+    const { publicAddress, signature, providerName } = req.params;
+    const user = new User();
+
+    try {
+      const result = await user.authenticatePublicAddress(
+        publicAddress,
+        signature
+      );
+      if (result) {
         res.status(200).send(result);
-      } catch (reason) {
-        res.status(400).send(new ApiError(400, reason));
-      } */
+      }
+
+      res.status(401).send();
+    } catch (err: any) {
+      res.status(400).send(new ApiError(400, err.message));
+    }
   },
 };
 

@@ -10,6 +10,8 @@ Install the template with [thirdweb create](https://portal.thirdweb.com/cli/crea
   npx thirdweb create app --express --typescript --evm
 ```
 
+## Docker database
+- run `docker run --detach -p 3306:3306 --name group_mints --env MARIADB_USER=group_mints --env MARIADB_PASSWORD=1q2w3e --env MARIADB_ROOT_PASSWORD=1q2w3e  mariadb:latest`
 ## Run Locally
 
 Install dependencies:
