@@ -32,30 +32,33 @@ import Menu from "./components/Menu";
 import Groups from "./pages/Groups";
 import Home from "./pages/Home";
 import Pools from "./pages/Pools";
-import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
-import { WagmiConfig } from 'wagmi';
-import { baseGoerli } from 'wagmi/chains';
+import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
+import { WagmiConfig } from "wagmi";
+import { baseGoerli } from "wagmi/chains";
+import Messages from "./pages/Messages";
 
 setupIonicReact({
   mode: "ios",
 });
 
 // 1. Get projectId
-const projectId = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID
+const projectId = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID;
 
 // 2. Create wagmiConfig
 const metadata = {
-  name: 'Group Mints',
-  description: 'Liquality Group Mints',
-  url: 'https://liquality.io',
-  icons: ['https://uploads-ssl.webflow.com/63e610c62d73bd54e8ee8455/63e610c62d73bd46ffee8583_Liquality_logo.svg']
-}
+  name: "Group Mints",
+  description: "Liquality Group Mints",
+  url: "https://liquality.io",
+  icons: [
+    "https://uploads-ssl.webflow.com/63e610c62d73bd54e8ee8455/63e610c62d73bd46ffee8583_Liquality_logo.svg",
+  ],
+};
 
-const chains = [baseGoerli]
-const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata })
+const chains = [baseGoerli];
+const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
 
 // 3. Create modal
-createWeb3Modal({ wagmiConfig, projectId, chains })
+createWeb3Modal({ wagmiConfig, projectId, chains });
 
 const App: React.FC = () => (
   <WagmiConfig config={wagmiConfig}>
@@ -76,10 +79,10 @@ const App: React.FC = () => (
             <Route path="/settings" exact>
               <Settings />
             </Route>
-            <Route path="/room" exact>
-              <Room />
-            </Route>
+
             <Route path="/login" component={Login} exact />
+            <Route path="/messages/:groupId" component={Messages} />
+
             <Route path="/invite/:inviteLink" component={Invite} />
             <Route exact path="/">
               <Redirect to="/login" />

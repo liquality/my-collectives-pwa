@@ -10,6 +10,9 @@ export interface Group {
     id?: number;
     group_name?: string;
     created_at?: string;
+    number_of_members?: number,
+    rewards?: number;
+    public_address: string
 }
 
 export interface Invite {

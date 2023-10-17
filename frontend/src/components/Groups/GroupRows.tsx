@@ -1,4 +1,6 @@
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
+import useGetNumberOfMembersInGroup from "@/hooks/Groups/useGetNumberOfMembersInGroup";
+import { shortenAddress } from "@/utils";
 import { IonContent, IonItem, IonLabel, IonList, IonTitle } from "@ionic/react";
 
 import React from "react";
@@ -13,8 +15,9 @@ const GroupRows: React.FC = () => {
       <IonList inset={true}>
         {myGroups?.map((group, index) => (
           <IonItem key={index}>
-            <IonLabel>{group.group_name} </IonLabel>
-            <IonTitle>Brää</IonTitle>
+            <IonTitle>{group.group_name}</IonTitle>
+            <IonLabel>Members: {group.number_of_members} </IonLabel>
+            <IonItem> {shortenAddress(group.public_address)}</IonItem>
           </IonItem>
         ))}
       </IonList>
