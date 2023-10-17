@@ -117,7 +117,6 @@ class Member {
         const results = await db.query(query, [groupAddress]);
 
         if (results.length > 0) {
-            console.log(results, 'wats ressult in getnumbnerof group members?')
             let memberCount = { member_count: results[0].member_count }
             return memberCount
         }
@@ -126,7 +125,6 @@ class Member {
     }
 
     readAllGroupsForMember = async (senderAddress: string): Promise<Group[] | { id: null }> => {
-        console.log(senderAddress, 'sender address');
         if (senderAddress) {
             try {
                 const results: any = await db.query(
@@ -152,7 +150,6 @@ class Member {
                         };
                     }));
 
-                    console.log(groups, 'groups');
                     return groups;
                 }
             } catch (err) {

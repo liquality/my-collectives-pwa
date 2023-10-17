@@ -1,11 +1,9 @@
 
 
 import { useState, useEffect } from "react";
-import { checkAuth } from "@/utils";
-import { Group, Invite } from "@/types/chat";
+import { Invite } from "@/types/chat";
 import UserService from "@/services/UserService";
 import { useParams } from "react-router";
-//import { getMyGroups } from "safeWrapperSDK";
 
 
 export function useValidateInvite() {
@@ -14,15 +12,12 @@ export function useValidateInvite() {
     const [loading, setLoading] = useState<boolean>(false);
     const [invite, setInvite] = useState<Invite | null>(null);
 
-    console.log(inviteLink, 'INV link from params')
 
     useEffect(() => {
         const fetchInvite = async () => {
             try {
-                console.log('i')
                 setLoading(true)
                 const readInvite = await UserService.readInvite(inviteLink)
-                console.log(readInvite, 'readinvie')
                 setLoading(false)
                 if (readInvite.id) {
                     setInvite(readInvite)

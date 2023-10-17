@@ -1,20 +1,10 @@
 import { useState } from "react";
-import {
-  IonPage,
-  IonContent,
-  IonItem,
-  IonButton,
-  IonLabel,
-  useIonRouter,
-} from "@ionic/react";
-import Chat from "@/components/Chat";
+import { IonItem, IonButton, IonLabel, useIonRouter } from "@ionic/react";
 import { GroupCreation } from "@/types/chat";
-import Header from "@/components/Header";
 import ProtectedRoute from "../ProtectedRoute";
 import UserService from "@/services/UserService";
 
 const CreateGroup: React.FC = () => {
-  const [isInChat, setIsInChat] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [groupId, setGroupId] = useState<number | null>(null);
   const router = useIonRouter();

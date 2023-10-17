@@ -15,7 +15,6 @@ export function useChatHistory(groupId: number): ChatHistoryHookResult {
                 if (!chatHistory) {
                     setLoading(true)
                     const result = await UserService.readMessagesByGroupId(groupId);
-                    console.log(result, 'wats result?')
                     setChatHistory(result);
                     setLoading(false)
                 }

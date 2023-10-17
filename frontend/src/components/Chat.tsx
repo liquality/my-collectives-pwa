@@ -16,7 +16,6 @@ export const Chat = (props: ChatProps) => {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const { chatHistory, loading } = useChatHistory(id as number);
-  console.log(chatHistory, "chathistory?");
   const { address } = useAccount();
 
   useEffect(() => {
@@ -31,8 +30,6 @@ export const Chat = (props: ChatProps) => {
       socket.off("messageCreation");
     };
   }, [chatHistory]);
-
-  console.log(messages, "messages");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -1,8 +1,6 @@
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
-import useGetNumberOfMembersInGroup from "@/hooks/Groups/useGetNumberOfMembersInGroup";
 import { shortenAddress } from "@/utils";
 import {
-  IonButton,
   IonContent,
   IonItem,
   IonLabel,
@@ -17,13 +15,10 @@ const GroupRows: React.FC = () => {
   const { myGroups, loading } = useGetMyGroups();
   const router = useIonRouter();
 
-  console.log(myGroups, "mygroups??");
   const handleGroupClick = (groupId: string) => {
-    console.log(groupId, "clicked id");
     router.push(`messages/${groupId}`);
   };
 
-  console.log(myGroups, "wats my groups?");
   return (
     <IonContent color="light">
       <IonList inset={true}>

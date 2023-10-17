@@ -30,7 +30,6 @@ middleware.authenticateJWT = (req: Request, res: Response, next: NextFunction) =
 middleware.authenticateJWTForWebsocket = (socket, next: NextFunction) => {
   // Extract the token from the client
   const token = socket.handshake.auth.token;
-  console.log(token, 'wats token?')
   // Verify the token
 
   // TODO: add secret in env variable/config file

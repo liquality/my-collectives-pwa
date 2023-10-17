@@ -25,7 +25,6 @@ const groupHandler = {
 
   read: async (req: Request, res: Response) => {
     const id = Number(req.params.groupId);
-    console.log(id, 'wats id in req?', req.params.groupId)
     if (id) {
       const group = new Group();
       try {
