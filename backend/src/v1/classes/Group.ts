@@ -9,8 +9,12 @@ class Group {
   public_address?: string;
   rewards?: number
 
-  constructor(group: Group) {
-    this.set(group);
+
+
+  constructor(group?: Group) {
+    if (group) {
+      this.set(group);
+    }
   }
 
   set(group: Group) {

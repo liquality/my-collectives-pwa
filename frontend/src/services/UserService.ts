@@ -17,6 +17,10 @@ const UserService = {
     return NetworkService.getResourceWithAuth("/v1/member/" + memberAddress);
   },
 
+  getNumberOfMembersInGroup: async function (groupAddress: string) {
+    return NetworkService.getResourceWithAuth("/v1/members/" + groupAddress);
+  },
+
   createMessage: async function (messageObject: Message) {
     return NetworkService.postResourceWithAuth("/v1/message/", messageObject);
   },

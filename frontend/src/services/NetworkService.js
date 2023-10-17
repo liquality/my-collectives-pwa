@@ -41,7 +41,6 @@ const NetworkService = {
         },
       };
 
-      console.log(serverAddress + url, request, "SERVER ADDRESS");
       fetch(serverAddress + url, request)
         .then((response) => {
           return NetworkService.handleJsonResponse(response);
@@ -50,7 +49,6 @@ const NetworkService = {
           resolve(responseJson);
         })
         .catch((error) => {
-          console.log(error, "network wong");
           reject(error);
         });
     });

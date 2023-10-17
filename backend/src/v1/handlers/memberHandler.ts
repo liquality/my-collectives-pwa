@@ -5,7 +5,6 @@ import Member from "../classes/Member";
 
 const memberHandler = {
     create: async (req: Request, res: Response) => {
-        console.log(req.body, 'wats member body?')
 
         const member = new Member();
         member.set(req.body); // should be a user object
@@ -24,10 +23,11 @@ const memberHandler = {
         const groupAddress = req.params.groupAddress;
         try {
             const result = await member.getNumberOfGroupMembers(groupAddress);
-            console.log('result')
+
             res.status(200).send(result);
+
         } catch (err) {
-            console.log(err)
+            console.log(err);
             res.status(400).send(new ApiError(400, 'Error' + err));
         }
     },
@@ -40,7 +40,6 @@ const memberHandler = {
                 const member = new Member();
                 try {
                     const allGroups = await member.readAllGroupsForMember(senderAddress);
-                    console.log(allGroups, 'allgroups')
                     res.status(200).send(allGroups);
                 } catch (err) {
                     res.status(400).send(new ApiError(400, 'Error' + err));
