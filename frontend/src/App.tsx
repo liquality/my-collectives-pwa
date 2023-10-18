@@ -9,7 +9,6 @@ import { IonReactRouter } from "@ionic/react-router";
 import Login from "./pages/Login";
 import Settings from "./pages/Pools";
 import Invite from "./pages/Invite";
-import Room from "./pages/Room";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -77,7 +76,7 @@ const App: React.FC = () => (
               <Redirect to="/login" />
             </Route>
 
-            {/* Protected routes */}
+            {/* Protected routes, needs auth */}
             <ProtectedRoute>
               <Route path="/home" exact>
                 <Home />

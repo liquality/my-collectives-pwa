@@ -9,9 +9,10 @@ export function useGetGroupById(groupId: string) {
   useEffect(() => {
     const fetchGroup = async () => {
       try {
-        if (!group) {
+        if (!group || group?.id !== Number(groupId)) {
           setLoading(true);
           const _group: Group = await UserService.readGroup(groupId);
+
           setGroup(_group);
           setLoading(false);
         }
@@ -20,7 +21,7 @@ export function useGetGroupById(groupId: string) {
       }
     };
     fetchGroup();
-  }, [group]);
+  }, [group, groupId]);
   return { group, loading };
 }
 
