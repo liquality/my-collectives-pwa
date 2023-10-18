@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { IonItem, IonButton, IonLabel, useIonRouter } from "@ionic/react";
 import { GroupCreation } from "@/types/chat";
-import ProtectedRoute from "../ProtectedRoute";
 import UserService from "@/services/UserService";
 
 const CreateGroup: React.FC = () => {
@@ -24,15 +23,12 @@ const CreateGroup: React.FC = () => {
   };
 
   return (
-    <ProtectedRoute>
-      {" "}
-      <IonItem className="room">
-        <IonLabel>Enter group name: </IonLabel>
+    <IonItem className="room">
+      <IonLabel>Enter group name: </IonLabel>
 
-        <input onChange={(e) => setGroupName(e.target.value)} />
-        <IonButton onClick={handleEnterChat}>Create group</IonButton>
-      </IonItem>
-    </ProtectedRoute>
+      <input onChange={(e) => setGroupName(e.target.value)} />
+      <IonButton onClick={handleEnterChat}>Create group</IonButton>
+    </IonItem>
   );
 };
 

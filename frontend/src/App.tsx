@@ -36,6 +36,7 @@ import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
 import { WagmiConfig } from "wagmi";
 import { baseGoerli } from "wagmi/chains";
 import Messages from "./pages/Messages";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 setupIonicReact({
   mode: "ios",
@@ -59,7 +60,6 @@ const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
 
 // 3. Create modal
 createWeb3Modal({ wagmiConfig, projectId, chains });
-
 const App: React.FC = () => (
   <WagmiConfig config={wagmiConfig}>
     <IonApp>
@@ -67,26 +67,31 @@ const App: React.FC = () => (
         <IonReactRouter>
           <Menu />
           <IonRouterOutlet id="main-content">
-            <Route path="/home" exact>
-              <Home />
-            </Route>
-            <Route path="/groups" exact>
-              <Groups />
-            </Route>
-            <Route path="/pools" exact>
-              <Pools />
-            </Route>
-            <Route path="/settings" exact>
-              <Settings />
-            </Route>
-
+            {/* Routes not requiring authentication */}
             <Route path="/login" component={Login} exact />
             <Route path="/messages/:groupId" component={Messages} />
-
             <Route path="/invite/:inviteLink" component={Invite} />
+
+            {/* Default route (not requiring authentication) */}
             <Route exact path="/">
               <Redirect to="/login" />
             </Route>
+
+            {/* Protected routes */}
+            <ProtectedRoute>
+              <Route path="/home" exact>
+                <Home />
+              </Route>
+              <Route path="/groups" exact>
+                <Groups />
+              </Route>
+              <Route path="/pools" exact>
+                <Pools />
+              </Route>
+              <Route path="/settings" exact>
+                <Settings />
+              </Route>
+            </ProtectedRoute>
           </IonRouterOutlet>
         </IonReactRouter>
       </IonSplitPane>
