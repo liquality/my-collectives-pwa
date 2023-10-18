@@ -7,9 +7,17 @@ export interface Message {
 }
 
 export interface Group {
-    id?: number;
+    id: number;
     group_name?: string;
     created_at?: string;
+    number_of_members?: number,
+    rewards?: number;
+    public_address: string
+}
+
+export interface GroupCreation {
+    group_name?: string;
+    public_address: string
 }
 
 export interface Invite {

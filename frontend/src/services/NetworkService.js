@@ -49,7 +49,6 @@ const NetworkService = {
           resolve(responseJson);
         })
         .catch((error) => {
-          console.log(error, "network wong");
           reject(error);
         });
     });

@@ -2,47 +2,43 @@ import React, { FormEvent, useEffect, useState } from "react";
 import "../theme/chat-box.css";
 //@ts-ignore
 import UserService from "../services/UserService";
-import { Message } from "@/types/chat";
+import { Group, Message } from "@/types/chat";
 import GenerateInvite from "./GenerateInvite";
 import { useChatHistory } from "@/hooks/useChatHistory";
 import socket from "../services/SocketService"; // Import the socket instance
+import { useAccount } from "wagmi";
 
 interface ChatProps {
-  groupName?: string;
-  groupId: number | null;
+  group: Group;
 }
-
 export const Chat = (props: ChatProps) => {
-  const { groupName, groupId } = props;
+  const { group_name, id, rewards } = props.group;
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
-  const { chatHistory, loading } = useChatHistory(groupId as number);
+  const { chatHistory, loading } = useChatHistory(id as number);
+  const { address } = useAccount();
 
   useEffect(() => {
     if (chatHistory) {
       setMessages(chatHistory);
     }
     socket.on("messageCreation", (data) => {
-      const newMessage = data;
-      setMessages((prevMessages: Message[]) => [...prevMessages, newMessage]);
-      console.log("Websocket event sent from db", data);
+      setMessages((prevMessages) => [...prevMessages, data]); // Use functional update
     });
 
     return () => {
       socket.off("messageCreation");
     };
-  }, [chatHistory, messages]);
+  }, [chatHistory]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newMessage === "") return;
-    //submit message to db
-
     try {
       const message = {
-        sender: "0x012", //TODO replace with user public address
+        sender: address as string,
         text: newMessage,
-        group_id: groupId as number,
+        group_id: id as number,
       };
       const postMessage = await UserService.createMessage(message);
     } catch (error) {
@@ -50,15 +46,16 @@ export const Chat = (props: ChatProps) => {
     }
     setNewMessage("");
   };
-  console.log(messages, "msgs", groupId, newMessage);
+
   return (
     <div className="chat">
       <u>
-        WELCOME TO
-        <b> {groupName}</b>
+        Group Name:
+        <b> {group_name}</b>
       </u>
       <br></br>
       <br></br>
+      Group messages:
       <div>
         {messages.map((message, index) => (
           <div key={index}>
@@ -78,7 +75,8 @@ export const Chat = (props: ChatProps) => {
         ></input>
         <button type="submit">Send</button>
       </form>
-      <GenerateInvite groupId={groupId} />
+      <br></br> <br></br>
+      <GenerateInvite groupId={id as number} />
     </div>
   );
 };

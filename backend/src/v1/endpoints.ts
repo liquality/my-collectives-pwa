@@ -44,7 +44,7 @@ endpoints.createGroup = {
 };
 
 endpoints.readGroup = {
-  url: "/v1/group/:id",
+  url: "/v1/group/:groupId",
   method: "get",
   middleware: [],
   handler: groupHandler.read,
@@ -94,6 +94,13 @@ endpoints.readAllGroupsForMember = {
   description: "get all groups member is a part of",
 };
 
+endpoints.getNumberOfGroupMembers = {
+  url: "/v1/members/:groupAddress",
+  method: "get",
+  middleware: [],
+  handler: memberHandler.getNumberOfGroupMembers,
+  description: "get the number of members in specififed group",
+};
 
 endpoints.createPool = {
   url: "/v1/pool",

@@ -6,9 +6,7 @@ import Pool from "../classes/Pool";
 const poolHandler = {
     create: async (req: Request, res: Response) => {
         const pool = new Pool();
-        pool.set(req.body); // should be a user object
-
-        console.log(req.body, 'req body')
+        pool.set(req.body);
         try {
             const result = await pool.create();
             res.status(200).send(result);

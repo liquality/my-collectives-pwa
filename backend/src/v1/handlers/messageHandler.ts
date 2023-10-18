@@ -26,7 +26,6 @@ const messageHandler = {
     const groupId = req.params.groupId;
 
     if (groupId) {
-      console.log(groupId, 'groupID')
       const message = new Message({});
       try {
         const msgs = await message.readMessageByGroupId(Number(groupId));

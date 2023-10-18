@@ -12,7 +12,7 @@ export function useChatHistory(groupId: number): ChatHistoryHookResult {
     useEffect(() => {
         const fetchChat = async () => {
             try {
-                if (chatHistory) {
+                if (!chatHistory) {
                     setLoading(true)
                     const result = await UserService.readMessagesByGroupId(groupId);
                     setChatHistory(result);
@@ -24,7 +24,7 @@ export function useChatHistory(groupId: number): ChatHistoryHookResult {
         };
 
         fetchChat();
-    }, [chatHistory, groupId]); // Include 'groupId' as a dependency for the effect
+    }, [chatHistory, groupId]);
 
-    return { chatHistory, loading }; // Return the array of messages directly
+    return { chatHistory, loading };
 }

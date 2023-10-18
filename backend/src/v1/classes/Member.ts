@@ -1,4 +1,4 @@
-import MySQL from "../../MySQL";
+import MySQL, { db } from "../../MySQL";
 import ApiError from "./ApiError";
 import { OkPacket, QueryError, RowDataPacket } from "mysql2"
 import Group from "./Group";
@@ -107,41 +107,61 @@ class Member {
         return promise;
     };
 
+    async getNumberOfGroupMembers(groupAddress: string): Promise<{ member_count: number } | null> {
+        const query = `
+          SELECT COUNT(m.id) AS member_count
+          FROM \`group\` g
+          LEFT JOIN member m ON g.id = m.group_id
+          WHERE g.public_address = ?;
+        `;
+        const results = await db.query(query, [groupAddress]);
+
+        if (results.length > 0) {
+            let memberCount = { member_count: results[0].member_count }
+            return memberCount
+        }
+
+        return null;
+    }
 
     readAllGroupsForMember = async (senderAddress: string): Promise<Group[] | { id: null }> => {
-        const promise = new Promise<Group[] | { id: null }>((resolve, reject) => {
-            if (senderAddress) {
-                MySQL.pool.getConnection((err, db) => {
-                    db.execute(
-                        "SELECT g.* FROM `group` g " +
-                        "INNER JOIN `member` m ON g.id = m.group_id " +
-                        "WHERE m.sender = ?",
-                        [senderAddress],
-                        (err: any, results: any, fields: any) => {
-                            if (err) {
-                                reject(new ApiError(500, err));
-                            } else if (results.length < 1) {
-                                resolve({ id: null });
-                            } else {
-                                // Map the RowDataPacket array to your Group type directly
-                                const groups: Group[] = results.map((row: RowDataPacket) => ({
-                                    id: row.id,
-                                    group_name: row.group_name,
-                                    created_at: row.created_at,
-                                }));
+        if (senderAddress) {
+            try {
+                const results: any = await db.query(
+                    "SELECT g.* FROM `group` g " +
+                    "INNER JOIN `member` m ON g.id = m.group_id " +
+                    "WHERE m.sender = ?",
+                    [senderAddress]
+                );
 
-                                resolve(groups);
-                            }
-                            db.release();
-                        }
-                    );
-                });
-            } else {
-                reject(new ApiError(500, "Missing sender address"));
+                if (results.length < 1) {
+                    return { id: null };
+                } else {
+                    const groups: Group[] = await Promise.all(results.map(async (row: RowDataPacket) => {
+                        const nrOfMembersData = await this.getNumberOfGroupMembers(row.public_address);
+                        const nrOfMembers = nrOfMembersData ? nrOfMembersData.member_count : 0;
+                        return {
+                            id: row.id,
+                            group_name: row.group_name,
+                            public_address: row.public_address,
+                            rewards: row.rewards,
+                            created_at: row.created_at,
+                            number_of_members: nrOfMembers,
+                        };
+                    }));
+
+                    return groups;
+                }
+            } catch (err) {
+                console.log(err);
+                return { id: null };
             }
-        });
-        return promise;
+        } else {
+            return { id: null };
+        }
     };
+
+
 
 
     update = async (): Promise<Member> => {

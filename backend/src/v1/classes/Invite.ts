@@ -28,11 +28,11 @@ class Invite {
   /*                  */
   /* CRUD OPERATIONS  */
   /*                  */
-  create = async (): Promise<Invite> => {
+  create = async (): Promise<RowDataPacket> => {
     const invite = this;
     const inviteLink = this.generateInviteLink();
 
-    return new Promise<Invite>((resolve, reject) => {
+    return new Promise<RowDataPacket>((resolve, reject) => {
       // Insert new row
       MySQL.pool.getConnection((err, db) => {
         if (err) {
@@ -63,8 +63,7 @@ class Invite {
                     return;
                   }
 
-                  const newInvite = new Invite(results[0] as Invite);
-                  resolve(newInvite);
+                  resolve(results[0]);
                   db.release();
                 }
               );
