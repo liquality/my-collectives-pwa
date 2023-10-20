@@ -6,6 +6,7 @@ import inviteHandler from "./handlers/inviteHandler";
 import { Express, Request, Response } from "express"; // Import Express types
 import memberHandler from "./handlers/memberHandler";
 import poolHandler from "./handlers/poolHandler";
+import moralisHandler from "./handlers/moralisHandler";
 
 type Endpoint = {
   url: string;
@@ -119,6 +120,16 @@ endpoints.readAllPoolsForGroup = {
   handler: poolHandler.readAllPoolsForGroup,
   description: "get all pools by groupid",
 };
+
+/* MORALIS ENDPOINTS */
+endpoints.getTokenMetadata = {
+  url: "/v1/moralis/tokenmetadata",
+  method: "get",
+  middleware: [],
+  handler: moralisHandler.getTokenMetadata,
+  description: "get tokenmetadata given an array of token contracts and ids",
+};
+
 
 
 
