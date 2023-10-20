@@ -5,14 +5,9 @@ import { IonContent, IonPage } from "@ionic/react";
 
 const Pools: React.FC = () => {
   const { tokenData, loading } = useGetPoolsMetadata();
-  console.log(
-    tokenData,
-    "wats tokendata?",
-    import.meta.env.VITE_MORALIS_API_KEY,
-    import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID
-  );
+
   return (
-    <IonPage>
+    <IonPage className="page-padding">
       <Header />
       <IonContent fullscreen>
         Pools

@@ -130,12 +130,12 @@ endpoints.getTokenMetadata = {
   description: "get tokenmetadata given an array of token contracts and ids",
 };
 
-endpoints.getOwners = {
-  url: "/v1/moralis/owners",
+endpoints.getLeaderboard = {
+  url: "/v1/moralis/leaderboard/:tokenId/:contractAddress",
   method: "get",
   middleware: [],
-  handler: moralisHandler.getOwners,
-  description: "get the owners of a certain tokenid and mint nft contract address",
+  handler: moralisHandler.getLeaderboard,
+  description: "get leaderboard of certain tokenid and mint nft contract address",
 };
 
 

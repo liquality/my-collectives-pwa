@@ -40,24 +40,20 @@ const moralisHandler = {
     },
 
 
-    getOwners: async (req: Request, res: Response) => {
+    getLeaderboard: async (req: Request, res: Response) => {
+
         try {
             const chain = EvmChain.ETHEREUM;
-            const metadataPromises = poolsDummyArray.map(async (pool) => {
-                const response = await Moralis.EvmApi.nft.getNFTTokenIdOwners({
-                    "chain": "0x1",
-                    "format": "decimal",
-                    "address": pool.contractAddress,
-                    "tokenId": pool.tokenId.toString(),
-                });
 
-                return response?.toJSON();
+            const response = await Moralis.EvmApi.nft.getNFTTokenIdOwners({
+                "chain": "0x1",
+                "format": "decimal",
+                "address": req.params.contractAddress,
+                "tokenId": req.params.tokenId,
             });
+            console.log(response);
 
-            const metadataResults = await Promise.all(metadataPromises);
-            console.log(metadataResults);
-
-            res.status(200).send(metadataResults);
+            res.status(200).send(response.toJSON());
         } catch (err) {
             console.error(err, 'Error in moralis handler');
             res.status(500).send({ error: 'An error occurred' });

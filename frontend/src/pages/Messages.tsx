@@ -11,7 +11,7 @@ const Messages = () => {
 
   const handleGoToGroupMessages = async () => {};
   return (
-    <IonPage>
+    <IonPage className="page-padding">
       <Header />
       <IonContent fullscreen>
         {!loading && group ? (

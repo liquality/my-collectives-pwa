@@ -1,16 +1,17 @@
 import { poolsDummyData } from "@/poolsdummydata";
 import { Message, Group, GroupCreation } from "@/types/chat";
-
 //@ts-ignore
+import NetworkService from "./NetworkService";
+
 
 
 
 const MoralisService = {
-    fetchNFTOwners: async function () {
-
+    getLeaderboard: async function (tokenId: string, contractAddress: string) {
+        return NetworkService.getResourceWithAuth("/v1/moralis/leaderboard/" + tokenId + "/" + contractAddress);
     },
 
-    getLeaderboard: async function () {
+    getLeaderboardOld: async function () {
 
         /*       const nftObject = await this.fetchNFTOwners();
               const filteredArray = nftObject.result.filter((item) => item.token_id.startsWith(artistNumberId / 1000));

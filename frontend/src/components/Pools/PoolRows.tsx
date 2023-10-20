@@ -17,9 +17,13 @@ const PoolRows: React.FC = () => {
   const { tokenData, loading } = useGetPoolsMetadata();
   const router = useIonRouter();
 
-  const handlePoolClick = (token_id: string, contract_address: string) => {
+  const handlePoolClick = (
+    token_id: string,
+    contract_address: string,
+    imageUrl: string
+  ) => {
     router.push(
-      `/pool/?tokenId=${token_id}&contractAddress=${contract_address}`
+      `/pool/?tokenId=${token_id}&contractAddress=${contract_address}&imageUrl=${imageUrl}`
     );
   };
 
@@ -30,13 +34,17 @@ const PoolRows: React.FC = () => {
           tokenData.map((mintData: any, index: number) => (
             <IonItem
               onClick={() =>
-                handlePoolClick(mintData.token_id, mintData.token_address)
+                handlePoolClick(
+                  mintData.token_id,
+                  mintData.token_address,
+                  convertIpfsImageUrl(mintData.normalized_metadata.image)
+                )
               }
               key={index}
             >
               <IonAvatar>
                 <img
-                  alt="Silhouette of a person's head"
+                  alt="NFT Image"
                   src={convertIpfsImageUrl(mintData.normalized_metadata.image)}
                 />
               </IonAvatar>
