@@ -1,4 +1,5 @@
 import Chat from "@/components/Chat";
+import Header from "@/components/Header";
 import useValidateInvite from "@/hooks/useValidateInvite";
 import ApiService from "@/services/ApiService";
 import { IonButton, useIonRouter } from "@ionic/react";
@@ -9,22 +10,28 @@ import { useAccount } from "wagmi";
 const Invite = () => {
   const { invitationStatus, inviteLink, loading, invite } = useValidateInvite();
   const { address } = useAccount();
+  const [error, setError] = useState("");
   const router = useIonRouter();
   console.log(invite, "INVITE??");
   const handleJoinGroup = async () => {
     //TODO implement join group logic to db here
-    try {
-      ApiService.createMember({
-        group_id: invite?.group_id,
-        sender: address,
-      });
-      router.push(`/group/${invite?.group_id}`);
-    } catch (error) {
-      console.log(error, "Error adding member");
+    if (address) {
+      try {
+        ApiService.createMember({
+          group_id: invite?.group_id,
+          sender: address,
+        });
+        router.push(`/messages/${invite?.group_id}`);
+      } catch (error) {
+        console.log(error, "Error adding member");
+      }
+    } else {
+      setError("Login before you can join the group!");
     }
   };
   return (
     <div>
+      <Header />
       <h1>Invite Confirmation</h1>
       {loading ? (
         <p>Validating your invitation...</p>
@@ -41,6 +48,7 @@ const Invite = () => {
           )}
         </div>
       )}
+      {error ?? ""}
     </div>
   );
 };
