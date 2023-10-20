@@ -130,6 +130,15 @@ endpoints.getTokenMetadata = {
   description: "get tokenmetadata given an array of token contracts and ids",
 };
 
+endpoints.getOwners = {
+  url: "/v1/moralis/owners",
+  method: "get",
+  middleware: [],
+  handler: moralisHandler.getOwners,
+  description: "get the owners of a certain tokenid and mint nft contract address",
+};
+
+
 
 
 

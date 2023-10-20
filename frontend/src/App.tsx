@@ -36,6 +36,7 @@ import { WagmiConfig } from "wagmi";
 import { baseGoerli } from "wagmi/chains";
 import Messages from "./pages/Messages";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Pool from "./pages/Pool";
 
 setupIonicReact({
   mode: "ios",
@@ -86,6 +87,9 @@ const App: React.FC = () => (
               </Route>
               <Route path="/pools" exact>
                 <Pools />
+              </Route>
+              <Route path="/pool">
+                <Pool />
               </Route>
               <Route path="/settings" exact>
                 <Settings />
