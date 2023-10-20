@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Invite } from "@/types/chat";
-import UserService from "@/services/UserService";
+import ApiService from "@/services/ApiService";
 import { useParams } from "react-router";
 
 
@@ -17,7 +17,7 @@ export function useValidateInvite() {
         const fetchInvite = async () => {
             try {
                 setLoading(true)
-                const readInvite = await UserService.readInvite(inviteLink)
+                const readInvite = await ApiService.readInvite(inviteLink)
                 setLoading(false)
                 if (readInvite.id) {
                     setInvite(readInvite)

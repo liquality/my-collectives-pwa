@@ -1,7 +1,7 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import "../theme/chat-box.css";
 //@ts-ignore
-import UserService from "../services/UserService";
+import ApiService from "../services/ApiService";
 import { Group, Message } from "@/types/chat";
 import GenerateInvite from "./GenerateInvite";
 import { useChatHistory } from "@/hooks/useChatHistory";
@@ -40,7 +40,7 @@ export const Chat = (props: ChatProps) => {
         text: newMessage,
         group_id: id as number,
       };
-      const postMessage = await UserService.createMessage(message);
+      const postMessage = await ApiService.createMessage(message);
     } catch (error) {
       console.error("Error sending message:", error);
     }

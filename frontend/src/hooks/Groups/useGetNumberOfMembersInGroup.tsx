@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { checkAuth } from "@/utils";
 import { Group } from "@/types/chat";
-import UserService from "@/services/UserService";
+import ApiService from "@/services/ApiService";
 import { useAccount } from "wagmi";
 
 interface MemberCount {
@@ -18,7 +18,7 @@ export function useGetNumberOfMembersInGroup(groupAddress: string) {
       try {
         if (groupAddress && !numberOfMembersInGroup) {
           setLoading(true);
-          const _memberNumber = await UserService.getNumberOfMembersInGroup(
+          const _memberNumber = await ApiService.getNumberOfMembersInGroup(
             groupAddress
           );
           setNumberOfMembersInGroup(_memberNumber);

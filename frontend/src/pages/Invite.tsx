@@ -1,6 +1,6 @@
 import Chat from "@/components/Chat";
 import useValidateInvite from "@/hooks/useValidateInvite";
-import UserService from "@/services/UserService";
+import ApiService from "@/services/ApiService";
 import { IonButton, useIonRouter } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -14,7 +14,7 @@ const Invite = () => {
   const handleJoinGroup = async () => {
     //TODO implement join group logic to db here
     try {
-      UserService.createMember({
+      ApiService.createMember({
         group_id: invite?.group_id,
         sender: address,
       });

@@ -4,7 +4,7 @@ import NetworkService from "./NetworkService";
 
 
 
-const UserService = {
+const ApiService = {
   createGroup: async function (groupObject: GroupCreation) {
     return NetworkService.postResourceWithAuth("/v1/group/", groupObject);
   },
@@ -48,4 +48,4 @@ const UserService = {
   },
 };
 
-export default UserService;
+export default ApiService;

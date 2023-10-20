@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { checkAuth } from "@/utils";
 import { Group } from "@/types/chat";
-import UserService from "@/services/UserService";
+import ApiService from "@/services/ApiService";
 import { useAccount } from "wagmi";
 
 export function useGetMyGroups() {
@@ -16,7 +16,7 @@ export function useGetMyGroups() {
             try {
                 if (address && !myGroups) {
                     setLoading(true)
-                    const _myGroups: Group[] = await UserService.readGroupByMemberAddress(address)
+                    const _myGroups: Group[] = await ApiService.readGroupByMemberAddress(address)
                     setMyGroups(_myGroups)
                     setLoading(false)
 

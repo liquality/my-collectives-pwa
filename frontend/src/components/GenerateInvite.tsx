@@ -1,4 +1,4 @@
-import UserService from "@/services/UserService";
+import ApiService from "@/services/ApiService";
 import { Group } from "@/types/chat";
 import { IonButton, IonCard, IonLabel, IonTitle } from "@ionic/react";
 import { useState } from "react";
@@ -9,7 +9,7 @@ const Invite = (props: InviteProps) => {
   const { groupId } = props;
   const [inviteLink, setInviteLink] = useState<string>("");
   const handleGenerateInvite = async () => {
-    const result = await UserService.createInvite({
+    const result = await ApiService.createInvite({
       group_id: groupId,
     } as Partial<Group>);
     setInviteLink(result.invite_link);

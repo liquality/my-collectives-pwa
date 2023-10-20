@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Message } from "@/types/chat";
-import UserService from "@/services/UserService";
+import ApiService from "@/services/ApiService";
 interface ChatHistoryHookResult {
     chatHistory: Message[] | null;
     loading: boolean
@@ -14,7 +14,7 @@ export function useChatHistory(groupId: number): ChatHistoryHookResult {
             try {
                 if (!chatHistory) {
                     setLoading(true)
-                    const result = await UserService.readMessagesByGroupId(groupId);
+                    const result = await ApiService.readMessagesByGroupId(groupId);
                     setChatHistory(result);
                     setLoading(false)
                 }
