@@ -5,7 +5,7 @@ import { IonContent, IonPage } from "@ionic/react";
 
 const Groups: React.FC = () => {
   return (
-    <IonPage>
+    <IonPage className="page-padding">
       <Header />
       <IonContent fullscreen>
         <CreateGroup />

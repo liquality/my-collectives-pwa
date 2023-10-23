@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Group } from "@/types/chat";
-import UserService from "@/services/UserService";
+import ApiService from "@/services/ApiService";
 
 export function useGetGroupById(groupId: string) {
   const [group, setGroup] = useState<Group | null>(null);
@@ -11,7 +11,7 @@ export function useGetGroupById(groupId: string) {
       try {
         if (!group || group?.id !== Number(groupId)) {
           setLoading(true);
-          const _group: Group = await UserService.readGroup(groupId);
+          const _group: Group = await ApiService.readGroup(groupId);
 
           setGroup(_group);
           setLoading(false);

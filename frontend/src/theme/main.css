@@ -13,3 +13,7 @@ ion-split-pane {
   --side-max-width: 350px;
 
 }
+
+.page-padding{
+  padding: 25px;
+}

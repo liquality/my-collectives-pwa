@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { IonItem, IonButton, IonLabel, useIonRouter } from "@ionic/react";
 import { GroupCreation } from "@/types/chat";
-import UserService from "@/services/UserService";
+import ApiService from "@/services/ApiService";
+import { useAccount } from "wagmi";
 
 const CreateGroup: React.FC = () => {
   const [groupName, setGroupName] = useState("");
   const [groupId, setGroupId] = useState<number | null>(null);
   const router = useIonRouter();
+  const { address } = useAccount();
 
   const handleEnterChat = async () => {
     const groupObject: GroupCreation = {
@@ -14,8 +16,12 @@ const CreateGroup: React.FC = () => {
       public_address: "0x0232u326483848787ndas7298bda7289da", //TODO: hardcoded for now but will have to create the contract address from our factory
     };
     try {
-      const result = await UserService.createGroup(groupObject);
+      const result = await ApiService.createGroup(groupObject);
       setGroupId(result.id);
+      await ApiService.createMember({
+        group_id: result.id,
+        sender: address,
+      });
       router.push(`messages/${result.id}`);
     } catch (error) {
       console.log(error, "error posting group");

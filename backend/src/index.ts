@@ -5,6 +5,10 @@ import { Server } from "socket.io";
 import { expressjwt as jwt } from "express-jwt";
 import v1 from "./v1/";
 import middleware from "./v1/middleware";
+import Moralis from 'moralis';
+import dotenv from "dotenv"
+dotenv.config()
+
 
 
 // TODO: Store a better secret in a hidden config file
@@ -26,10 +30,24 @@ app.use(
   v1
 );
 
+
+
+
+
+
 console.log(
   "\n\nIF THIS THROWS AN ERROR -\nMAKE SURE YOU ARE ALLOWED TO OPEN PORT 3000!\n\n"
 );
 const server = app.listen(appPort);
+
+const startMoralisSdk = async () => {
+  console.log('Starting moralis sdk', process.env.MORALIS_API_KEY)
+  await Moralis.start({
+    apiKey: process.env.MORALIS_API_KEY,
+  });
+};
+
+startMoralisSdk()
 
 
 const io = new Server(server, {

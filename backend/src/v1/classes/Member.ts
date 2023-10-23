@@ -107,14 +107,14 @@ class Member {
         return promise;
     };
 
-    async getNumberOfGroupMembers(groupAddress: string): Promise<{ member_count: number } | null> {
+    async getNumberOfGroupMembers(groupId: string): Promise<{ member_count: number } | null> {
         const query = `
           SELECT COUNT(m.id) AS member_count
           FROM \`group\` g
           LEFT JOIN member m ON g.id = m.group_id
-          WHERE g.public_address = ?;
+          WHERE g.id = ?;
         `;
-        const results = await db.query(query, [groupAddress]);
+        const results = await db.query(query, [groupId]);
 
         if (results.length > 0) {
             let memberCount = { member_count: results[0].member_count }
@@ -138,8 +138,9 @@ class Member {
                     return { id: null };
                 } else {
                     const groups: Group[] = await Promise.all(results.map(async (row: RowDataPacket) => {
-                        const nrOfMembersData = await this.getNumberOfGroupMembers(row.public_address);
+                        const nrOfMembersData = await this.getNumberOfGroupMembers(row.id);
                         const nrOfMembers = nrOfMembersData ? nrOfMembersData.member_count : 0;
+                        console.log(nrOfMembers, 'NR OF MEMBERS')
                         return {
                             id: row.id,
                             group_name: row.group_name,
