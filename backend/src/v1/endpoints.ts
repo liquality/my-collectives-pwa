@@ -20,10 +20,18 @@ const endpoints: Record<string, Endpoint> = {}; // Define the endpoints object
 
 // Define and populate the endpoints
 endpoints.loginUser = {
-  url: "/v1/user/login/:serviceprovider_name",
-  method: "get",
+  url: "/v1/user/login/:serviceProviderNname",
+  method: "post",
   middleware: [],
   handler: authHandler.loginUser,
+  description: "login user",
+};
+
+endpoints.getUser = {
+  url: "/v1/user/:publicAddress",
+  method: "get",
+  middleware: [],
+  handler: authHandler.read,
   description: "login user",
 };
 

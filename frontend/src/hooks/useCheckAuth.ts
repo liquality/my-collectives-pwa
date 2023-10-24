@@ -5,8 +5,8 @@ export function useCheckAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const checkAuthentication = async () => {
-      const isAuthenticated = await checkAuth();
+    const checkAuthentication = () => {
+      const isAuthenticated = checkAuth();
       setIsAuthenticated(isAuthenticated);
     };
 

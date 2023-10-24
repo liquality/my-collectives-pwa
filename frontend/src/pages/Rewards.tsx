@@ -7,13 +7,13 @@ import {
   IonToolbar,
 } from "@ionic/react";
 
-const Home: React.FC = () => {
+const Rewards: React.FC = () => {
   return (
     <IonPage className="page-padding">
       <Header />
-      <IonContent fullscreen>Home</IonContent>
+      <IonContent fullscreen>Rewards</IonContent>
     </IonPage>
   );
 };
 
-export default Home;
+export default Rewards;
