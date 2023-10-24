@@ -7,7 +7,7 @@ import {
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import Login from "./pages/Login";
-import Settings from "./pages/Pools";
+import Settings from "./pages/Settings";
 import Invite from "./pages/Invite";
 
 /* Core CSS required for Ionic components to work properly */
@@ -27,9 +27,10 @@ import React from "react";
 /* Theme variables */
 import "./theme/variables.css";
 import "./theme/main.css";
-import Menu from "./components/Menu";
+import SideBarMenu from "./components/SideBarMenu";
+import TabsMenu from "./components/TabsMenu";
 import Groups from "./pages/Groups";
-import Home from "./pages/Home";
+import Discover from "./pages/Discover";
 import Pools from "./pages/Pools";
 import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
 import { WagmiConfig } from "wagmi";
@@ -37,6 +38,8 @@ import { baseGoerli } from "wagmi/chains";
 import Messages from "./pages/Messages";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Pool from "./pages/Pool";
+import useWindowDimensions from "./hooks/userWindowsDimensions";
+import Rewards from "./pages/Rewards";
 
 setupIonicReact({
   mode: "ios",
@@ -57,49 +60,51 @@ const metadata = {
 
 const chains = [baseGoerli];
 const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
-
 // 3. Create modal
 createWeb3Modal({ wagmiConfig, projectId, chains });
-const App: React.FC = () => (
-  <WagmiConfig config={wagmiConfig}>
-    <IonApp>
-      <IonSplitPane when="sm" contentId="main-content">
-        <IonReactRouter>
-          <Menu />
-          <IonRouterOutlet id="main-content">
-            {/* Routes not requiring authentication */}
-            <Route path="/login" component={Login} exact />
-            <Route path="/messages/:groupId" component={Messages} />
-            <Route path="/invite/:inviteLink" component={Invite} />
+const App: React.FC = () => {
+  const { isDesktop } = useWindowDimensions();
+  const routerOutlet = (
+    <IonRouterOutlet id="main-content">
+      {/* Routes not requiring authentication */}
+      <Route path="/login" render={() => <Login />} exact />
+      <Route path="/messages/:groupId" render={() => <Messages />} />
+      <Route path="/invite/:inviteLink" render={() => <Invite />}  />
 
-            {/* Default route (not requiring authentication) */}
-            <Route exact path="/">
-              <Redirect to="/login" />
-            </Route>
+      {/* Default route (not requiring authentication) */}
+      <Route exact path="/">
+        <Redirect to="/login" />
+      </Route>
 
-            {/* Protected routes, needs auth */}
-            <ProtectedRoute>
-              <Route path="/home" exact>
-                <Home />
-              </Route>
-              <Route path="/groups" exact>
-                <Groups />
-              </Route>
-              <Route path="/pools" exact>
-                <Pools />
-              </Route>
-              <Route path="/pool">
-                <Pool />
-              </Route>
-              <Route path="/settings" exact>
-                <Settings />
-              </Route>
-            </ProtectedRoute>
-          </IonRouterOutlet>
-        </IonReactRouter>
-      </IonSplitPane>
-    </IonApp>
-  </WagmiConfig>
-);
+      {/* Protected routes, needs auth */}
+      <ProtectedRoute>
+        <Route path="/discover" render={() => <Discover />} exact/>
+        <Route path="/groups" render={() => <Groups />} exact/>
+        <Route path="/pools"  render={() => <Pools />} exact/>
+        <Route path="/pool"  render={() => <Pool />} exact/>
+        <Route path="/settings"  render={() => <Settings />} exact/>
+        <Route path="/rewards"  render={() => <Rewards />} exact/>
+      </ProtectedRoute>
+    </IonRouterOutlet>
+  );
+  return (
+    <WagmiConfig config={wagmiConfig}>
+      <IonApp>
+        {isDesktop ? (
+          <IonSplitPane when="md" contentId="main-content">
+            <IonReactRouter>
+              <SideBarMenu />
+              {routerOutlet}
+            </IonReactRouter>
+          </IonSplitPane>
+        ) : (
+          <IonReactRouter>
+            <TabsMenu>{routerOutlet}</TabsMenu>
+          </IonReactRouter>
+        )}
+      </IonApp>
+    </WagmiConfig>
+  );
+};
 
 export default App;

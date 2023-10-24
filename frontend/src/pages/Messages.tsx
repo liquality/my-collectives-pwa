@@ -4,9 +4,10 @@ import Header from "@/components/Header";
 import { IonContent, IonPage, IonTitle } from "@ionic/react";
 import { useParams } from "react-router-dom";
 
-const Messages = ({ match }: any) => {
-  console.log(match.params.groupId, "waaaaats gruppID?");
-  const { group, loading } = useGetGroupById(match.params.groupId);
+const Messages = () => {
+  let { groupId } = useParams<{ groupId: string }>();
+  console.log(groupId, "waaaaats gruppID?");
+  const { group, loading } = useGetGroupById(groupId);
 
   const handleGoToGroupMessages = async () => {};
   return (
