@@ -42,9 +42,15 @@ const ApiService = {
     return NetworkService.getResourceWithAuth("/v1/message/" + groupId);
   },
 
+  getUser: async function (address: string) {
+    return NetworkService.getResourceWithAuth(`/v1/user/${address}`);
+  },
 
-  loginUser: async function (userEmail: string) {
-    return NetworkService.getResourceWithAuth("/v1/user/login/" + userEmail);
+  loginUser: async function (publicAddress: string, signature: string) {
+    return NetworkService.postResourceWithAuth("/v1/user/login/wallet", {
+      publicAddress,
+      signature
+    });
   },
 };
 

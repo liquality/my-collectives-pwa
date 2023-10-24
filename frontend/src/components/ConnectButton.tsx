@@ -12,15 +12,20 @@ import {
   IonRow,
 } from "@ionic/react";
 import { logIn, logOut, wallet, key, copy, copyOutline } from "ionicons/icons";
-import React, { useEffect, useState } from "react";
-import { useWeb3Modal, useWeb3ModalState } from "@web3modal/wagmi/react";
-import { useAccount, useDisconnect } from "wagmi";
+import React, { useState } from "react";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
+import { useAccount, useDisconnect, useSignMessage } from "wagmi";
+import { useSignInWallet } from "@/hooks/useSignInWallet";
 
 const ConnectButton: React.FC = () => {
   const { open } = useWeb3Modal();
   const { address, isConnecting, isDisconnected } = useAccount();
   const { disconnect } = useDisconnect();
+  const { user } = useSignInWallet();
+
   const logout = () => {
+    localStorage.removeItem('groupMints.accessToken');
+    localStorage.removeItem('groupMints.user');
     disconnect();
   };
 
@@ -29,10 +34,9 @@ const ConnectButton: React.FC = () => {
       await open();
     } catch (error) {
       console.error(error);
+      // TODO: show error message to the users
     }
   };
-
-  const copyAddress = () => {};
 
   return (
     <>
@@ -51,7 +55,7 @@ const ConnectButton: React.FC = () => {
         <>
           <IonButton id="logout-options-triggger">
             <IonIcon slot="end" icon={wallet}></IonIcon>
-            {shortenAddress(address || '')}
+            {shortenAddress(address || "")}
           </IonButton>
           <IonPopover
             size="auto"

@@ -134,9 +134,7 @@ class Member {
                     [senderAddress]
                 );
 
-                if (results.length < 1) {
-                    return { id: null };
-                } else {
+                if (results.length > 0) {
                     const groups: Group[] = await Promise.all(results.map(async (row: RowDataPacket) => {
                         const nrOfMembersData = await this.getNumberOfGroupMembers(row.id);
                         const nrOfMembers = nrOfMembersData ? nrOfMembersData.member_count : 0;
@@ -155,11 +153,10 @@ class Member {
                 }
             } catch (err) {
                 console.log(err);
-                return { id: null };
             }
-        } else {
-            return { id: null };
-        }
+        } 
+
+        return [];
     };
 
 

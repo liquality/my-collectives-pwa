@@ -49,20 +49,35 @@ class Auth {
     return null;
   }
 
+  async findOrCreate(
+    publicAddress: string
+  ): Promise<UserModel | null> {
+    // TODO: clean not required fields from the query
+    //1: read the user
+    let _user = await this.find(publicAddress);
+
+    //2: create if not exists
+    if(!_user) {
+      _user = await this.createUser({
+        public_address: publicAddress,
+        email: '',
+        first_name: '',
+        last_name: '',
+        service_provider_name: 'wallet', 
+      });
+    }
+
+    return _user;
+  }
+
   async authenticatePublicAddress(
     publicAddress: string,
     signature: string
   ): Promise<string | null> {
-    // TODO: clean not required fields from the query
-    const results = await db.query(
-      "SELECT * FROM `user` WHERE public_address = ?",
-      [publicAddress]
-    );
-
-    if (results.length > 0) {
-      const _model = results[0] as UserModel;
+    let _user = await this.find(publicAddress);
+    if (_user) {
       const decodedAddress = ethers.utils.verifyMessage(
-        _model?.nonce.toString(),
+        _user?.nonce.toString(),
         signature
       );
 

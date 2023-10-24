@@ -9,7 +9,7 @@ const authHandler = {
     if (address) {
       const user = new User();
       try {
-        const userData = await user.find(address);
+        const userData = await user.findOrCreate(address);
         if (userData) {
           res.status(200).send(userData);
         } else {
@@ -73,16 +73,19 @@ const authHandler = {
   },
 
   loginUser: async (req: Request, res: Response) => {
-    const { publicAddress, signature, providerName } = req.params;
+    const { serviceProviderNname } = req.params;
+    const { publicAddress, signature } = req.body;
+
+  console.log(publicAddress, signature, serviceProviderNname, 'loginUser')
     const user = new User();
 
     try {
-      const result = await user.authenticatePublicAddress(
+      const accessToken = await user.authenticatePublicAddress(
         publicAddress,
         signature
       );
-      if (result) {
-        res.status(200).send(result);
+      if (accessToken) {
+        res.status(200).send({ accessToken });
       }
 
       res.status(401).send();
