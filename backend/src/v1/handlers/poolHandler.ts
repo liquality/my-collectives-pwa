@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import User from "../classes/Auth";
 import ApiError from "../classes/ApiError";
 import Pool from "../classes/Pool";
+import helper from "../helper";
+
 
 const poolHandler = {
     create: async (req: Request, res: Response) => {
@@ -9,6 +11,19 @@ const poolHandler = {
         pool.set(req.body);
         try {
             const result = await pool.create(req.body);
+            res.status(200).send(result);
+        } catch (err) {
+            console.log(err, 'error?')
+            res.status(400).send(new ApiError(400, 'Error' + err));
+        }
+    },
+
+    read: async (req: Request, res: Response) => {
+        const pool = new Pool();
+        try {
+            const result = await pool.read();
+            helper.getTokenMetadataFromZora([], [])
+
             res.status(200).send(result);
         } catch (err) {
             console.log(err, 'error?')
@@ -33,6 +48,8 @@ const poolHandler = {
             }
         }
     },
+
+
 
 
     delete: async (req: Request, res: Response) => {

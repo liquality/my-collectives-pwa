@@ -119,6 +119,14 @@ endpoints.createPool = {
   description: "create pool",
 };
 
+endpoints.readPool = {
+  url: "/v1/pool",
+  method: "get",
+  middleware: [],
+  handler: poolHandler.read,
+  description: "read all pools for discover",
+}
+
 
 
 endpoints.readAllPoolsForGroup = {

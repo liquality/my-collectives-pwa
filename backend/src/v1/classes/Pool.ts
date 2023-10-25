@@ -59,6 +59,19 @@ class Pool {
         return null;
     }
 
+    async read(): Promise<Pool[] | null> {
+        const pool = await db.query(
+            "SELECT * FROM `pool`",
+            []
+        );
+        if (pool.length > 0) {
+            return pool as Pool[];
+        }
+        else return null
+    }
+
+
+
 
 
 

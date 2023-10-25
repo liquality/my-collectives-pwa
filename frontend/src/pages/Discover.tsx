@@ -15,10 +15,6 @@ const Discover: React.FC = () => {
     <IonPage className="page-padding">
       <Header />
       <IonContent fullscreen>
-        <div>
-          Discover Pools/Mints width: {width} ~ height: {height} ~ isDesktop:{" "}
-          {`${isDesktop}`}
-        </div>
         <PoolRows />
       </IonContent>
     </IonPage>
