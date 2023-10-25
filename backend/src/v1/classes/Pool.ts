@@ -9,6 +9,7 @@ class Pool {
     minting_contract_address?: string;
     chain_id?: number;
     created_at?: Date;
+    token_id?: string;
 
     constructor(pool?: Pool) {
         if (pool) {
@@ -23,6 +24,7 @@ class Pool {
             this.minting_contract_address = pool.minting_contract_address;
             this.chain_id = pool.chain_id;
             this.created_at = pool.created_at;
+            this.token_id = pool.token_id;
         }
     }
 
@@ -38,12 +40,13 @@ class Pool {
             pool.group_id,
             pool.minting_contract_address,
             pool.chain_id,
-            pool.created_at,
+
+            pool.token_id,
         ]
 
 
         const results = await db.query(
-            "INSERT INTO `pool` (group_id, minting_contract_address, chain_id, created_at) VALUES (?, ?, ?, UTC_TIMESTAMP());",
+            "INSERT INTO `pool` (group_id, minting_contract_address,  chain_id, token_id, created_at) VALUES (?, ?, ?,  ?, UTC_TIMESTAMP());",
             params
         );
         if ("insertId" in results) {

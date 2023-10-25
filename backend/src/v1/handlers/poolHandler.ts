@@ -22,9 +22,14 @@ const poolHandler = {
         const pool = new Pool();
         try {
             const result = await pool.read();
-            helper.getTokenMetadataFromZora([], [])
+            if (result) {
+                const nftResult = await helper.getTokenMetadataFromZora(result)
+                res.status(200).send(nftResult)
+            }
+            else {
+                res.status(400).send(new ApiError(400, 'Error' + "No pool result"));
+            }
 
-            res.status(200).send(result);
         } catch (err) {
             console.log(err, 'error?')
             res.status(400).send(new ApiError(400, 'Error' + err));

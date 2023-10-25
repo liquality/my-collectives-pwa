@@ -47,6 +47,7 @@ CREATE TABLE member (
 CREATE TABLE pool (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `group_id` INT NOT NULL,
+  `token_id` VARCHAR(255) NOT NULL,
   `minting_contract_address` VARCHAR(255) NOT NULL, 
   `chain_id` INT NOT NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

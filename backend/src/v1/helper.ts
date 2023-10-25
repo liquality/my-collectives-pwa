@@ -1,12 +1,13 @@
 import { ZDK, TokensQueryInput, TokenInput } from "@zoralabs/zdk";
 import { Chain, Network } from '@zoralabs/zdk/dist/queries/queries-sdk';
+import Pool from "./classes/Pool";
 
 
 
 type Helper = {
   findByAddress: (address: string) => void;
   convertIpfsImageUrl: (url: string) => string;
-  getTokenMetadataFromZora: (tokenIds: string[], contractAddresses: string[]) => any
+  getTokenMetadataFromZora: (pools: Pool[]) => any
 };
 
 const helper: Helper = {
@@ -18,7 +19,7 @@ const helper: Helper = {
     return url.replace('ipfs://', 'https://ipfs.io/ipfs/')
   },
 
-  getTokenMetadataFromZora: async (tokenIds: string[], contractAddresses: string[]) => {
+  getTokenMetadataFromZora: async (pools: Pool[]) => {
     const API_ENDPOINT = "https://api.zora.co/graphql";
     const zdk = new ZDK({
       endpoint: API_ENDPOINT, networks: [
@@ -31,14 +32,14 @@ const helper: Helper = {
           network: Network.Zora,
         },
       ],
-    },); // Defaults to Ethereum Mainnet
+    },);
     const tokensWithData = await zdk.tokens({
       where: {
-        tokens: [{ tokenId: "1", address: "0x5aa959de99e0e49b8a85e0a630a74a7b757772b7" }]
+        tokens: pools.map((pool) => ({ tokenId: pool.token_id || "", address: pool.minting_contract_address || "" }))
       }
     })
     console.log(tokensWithData.tokens.nodes, 'tokenswith data')
-    return tokensWithData
+    return tokensWithData.tokens.nodes
   },
 
 };
