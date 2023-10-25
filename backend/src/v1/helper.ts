@@ -45,11 +45,10 @@ const helper: Helper = {
       name: token.token.name,
       imageUrl: token.token.image?.url ?? "",
       collectionAddress: token.token.collectionAddress,
-      token_id: token.token.tokenId,
+      tokenId: token.token.tokenId,
 
     }));
 
-    console.log(formattedData, 'formatted data');
     return formattedData;
   }
 

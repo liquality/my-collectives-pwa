@@ -2,14 +2,9 @@ import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
 import useGetPoolsMetadata from "@/hooks/Pools/useGetPoolsMetadata";
 import { convertIpfsImageUrl, shortenAddress } from "@/utils";
 import {
-  IonAvatar,
-  IonCol,
   IonContent,
   IonGrid,
   IonImg,
-  IonItem,
-  IonLabel,
-  IonList,
   IonRow,
   IonText,
   IonTitle,
@@ -41,9 +36,9 @@ const PoolRows: React.FC = () => {
               <IonImg
                 onClick={() =>
                   handlePoolClick(
-                    pool.token_id,
-                    pool.token_address,
-                    convertIpfsImageUrl(pool.normalized_metadata.image)
+                    pool.tokenId,
+                    pool.collectionAddress,
+                    convertIpfsImageUrl(pool.imageUrl)
                   )
                 }
                 key={index}
@@ -53,7 +48,7 @@ const PoolRows: React.FC = () => {
               ></IonImg>
 
               <IonRow>
-                <IonText className="smallText"> {pool.name} </IonText>
+                <IonText className="smallText"> {pool.tokenId}</IonText>
                 <IonText className="smallText">
                   {shortenAddress(pool.collectionAddress)}
                 </IonText>
