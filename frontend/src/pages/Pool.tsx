@@ -21,11 +21,11 @@ const Pool: React.FC = () => {
   return (
     <IonPage className="page-padding">
       <Header />
-      <IonContent fullscreen>
+      <IonContent>
         <IonTitle>#{tokenId}</IonTitle>
         <IonImg
           className=""
-          style={{ width: "500px", height: "500px" }}
+          style={{ width: "90%", height: "90%" }}
           src={imageUrl}
           alt="NFT Img"
         />

@@ -1,6 +1,6 @@
-import MySQL from "../../MySQL";
+import MySQL, { db } from "../../MySQL";
 import ApiError from "./ApiError";
-import { OkPacket, QueryError, RowDataPacket } from "mysql2"
+import { RowDataPacket } from "mysql2"
 
 
 class Pool {
@@ -9,6 +9,7 @@ class Pool {
     minting_contract_address?: string;
     chain_id?: number;
     created_at?: Date;
+    token_id?: string;
 
     constructor(pool?: Pool) {
         if (pool) {
@@ -23,6 +24,7 @@ class Pool {
             this.minting_contract_address = pool.minting_contract_address;
             this.chain_id = pool.chain_id;
             this.created_at = pool.created_at;
+            this.token_id = pool.token_id;
         }
     }
 
@@ -30,53 +32,43 @@ class Pool {
     /*                  */
     /* CRUD OPERATIONS  */
     /*                  */
-    create = async (): Promise<Pool> => {
-        const pool = this;
+    async create(
+        pool: Pool
+    ): Promise<Pool | null> {
+        const params = [
+            pool.group_id,
+            pool.minting_contract_address,
+            pool.chain_id,
+            pool.token_id,
+        ]
+        const results = await db.query(
+            "INSERT INTO `pool` (group_id, minting_contract_address,  chain_id, token_id, created_at) VALUES (?, ?, ?,  ?, UTC_TIMESTAMP());",
+            params
+        );
+        if ("insertId" in results) {
+            const pool = await db.query(
+                "SELECT * FROM `pool` WHERE id = ?",
+                [results.insertId]
+            );
+            if (pool.length > 0) {
+                return pool[0] as Pool;
+            }
+        }
+        return null;
+    }
 
-        return new Promise<Pool>((resolve, reject) => {
-            // Insert new row
-            MySQL.pool.getConnection((err, db) => {
-                if (err) {
-                    reject(new ApiError(500, err.toString()));
-                    return;
-                }
+    async read(): Promise<Pool[] | null> {
+        const pool = await db.query(
+            "SELECT * FROM `pool`",
+            []
+        );
+        if (pool.length > 0) {
+            return pool as Pool[];
+        }
+        else return null
+    }
 
-                db.query(
-                    "INSERT INTO `pool` (group_id, minting_contract_address, chain_id, created_at) VALUES (?, ?, ?, UTC_TIMESTAMP());",
-                    [pool.group_id, pool.minting_contract_address, pool.chain_id],
-                    (err, results: RowDataPacket[], fields) => {
-                        if (err) {
-                            db.release();
-                            reject(new ApiError(500, err.toString()));
-                            return;
-                        }
 
-                        if ("insertId" in results) {
-                            const poolId = results.insertId;
-                            // Create a query to select the newly inserted group
-                            db.query(
-                                "SELECT * FROM `pool` WHERE id = ?",
-                                [poolId],
-                                (err, results: RowDataPacket[], fields) => {
-                                    if (err) {
-                                        db.release();
-                                        reject(new ApiError(500, err.toString()));
-                                        return;
-                                    }
-
-                                    const newPool = new Pool(results[0] as Pool);
-                                    resolve(newPool);
-                                    db.release();
-                                }
-                            );
-                        } else {
-                            db.release();
-                        }
-                    }
-                );
-            });
-        });
-    };
 
 
 

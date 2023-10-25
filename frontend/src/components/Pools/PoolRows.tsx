@@ -2,11 +2,11 @@ import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
 import useGetPoolsMetadata from "@/hooks/Pools/useGetPoolsMetadata";
 import { convertIpfsImageUrl, shortenAddress } from "@/utils";
 import {
-  IonAvatar,
   IonContent,
-  IonItem,
-  IonLabel,
-  IonList,
+  IonGrid,
+  IonImg,
+  IonRow,
+  IonText,
   IonTitle,
   useIonRouter,
 } from "@ionic/react";
@@ -29,37 +29,38 @@ const PoolRows: React.FC = () => {
 
   return (
     <IonContent color="light">
-      <IonList inset={true}>
+      <IonGrid className="ion-grid">
         {tokenData ? (
-          tokenData.map((mintData: any, index: number) => (
-            <IonItem
-              onClick={() =>
-                handlePoolClick(
-                  mintData.token_id,
-                  mintData.token_address,
-                  convertIpfsImageUrl(mintData.normalized_metadata.image)
-                )
-              }
-              key={index}
-            >
-              <IonAvatar>
-                <img
-                  alt="NFT Image"
-                  src={convertIpfsImageUrl(mintData.normalized_metadata.image)}
-                />
-              </IonAvatar>
-              <IonTitle>
-                {mintData.normalized_metadata.name
-                  ? mintData.normalized_metadata.name
-                  : mintData.name + " #" + mintData.token_id}
-              </IonTitle>
-              <IonItem> {shortenAddress(mintData.token_address)}</IonItem>
-            </IonItem>
+          tokenData.map((pool: any, index: number) => (
+            <div className="grid-item">
+              <IonImg
+                onClick={() =>
+                  handlePoolClick(
+                    pool.tokenId,
+                    pool.collectionAddress,
+                    convertIpfsImageUrl(pool.imageUrl)
+                  )
+                }
+                key={index}
+                className="grid-image"
+                alt="NFT Image"
+                src={convertIpfsImageUrl(pool.imageUrl)}
+              ></IonImg>
+
+              <IonRow>
+                <IonText className="smallText"> {pool.tokenId}</IonText>
+                <IonText className="smallText">
+                  {shortenAddress(pool.collectionAddress)}
+                </IonText>
+                {/*                 <IonText> {mintData.normalized_metadata.name}</IonText>
+                 */}{" "}
+              </IonRow>
+            </div>
           ))
         ) : (
           <IonTitle>Loading...</IonTitle>
         )}
-      </IonList>
+      </IonGrid>
     </IonContent>
   );
 };

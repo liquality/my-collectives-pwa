@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import MoralisService from "@/services/MoralisService";
+import ApiService from "@/services/ApiService";
 
 export function useGetPoolsMetadata() {
   const [tokenData, setTokenData] = useState<any | null>(null);
@@ -10,7 +11,7 @@ export function useGetPoolsMetadata() {
       try {
         if (!tokenData) {
           setLoading(true);
-          const _tokenData = await MoralisService.fetchTokenMetaData();
+          const _tokenData = await ApiService.readPools();
           setTokenData(_tokenData);
           setLoading(false);
         }

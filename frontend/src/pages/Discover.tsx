@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import PoolRows from "@/components/Pools/PoolRows";
 import useWindowDimensions from "@/hooks/userWindowsDimensions";
 import {
   IonContent,
@@ -9,16 +10,13 @@ import {
 } from "@ionic/react";
 
 const Discover: React.FC = () => {
-
-  const { height, width, isDesktop} = useWindowDimensions();
+  const { height, width, isDesktop } = useWindowDimensions();
   return (
     <IonPage className="page-padding">
       <Header />
       <IonContent fullscreen>
-      <div>
-      width: {width} ~ height: {height} ~ isDesktop: {`${isDesktop}`}
-    </div>
-        Home</IonContent>
+        <PoolRows />
+      </IonContent>
     </IonPage>
   );
 };
