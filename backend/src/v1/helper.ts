@@ -18,11 +18,11 @@ const helper: Helper = {
   convertIpfsImageUrl: (url: string) => {
     return url.replace('ipfs://', 'https://ipfs.io/ipfs/')
   },
-
   getTokenMetadataFromZora: async (pools: Pool[]) => {
     const API_ENDPOINT = "https://api.zora.co/graphql";
     const zdk = new ZDK({
-      endpoint: API_ENDPOINT, networks: [
+      endpoint: API_ENDPOINT,
+      networks: [
         {
           chain: Chain.Mainnet,
           network: Network.Ethereum,
@@ -32,15 +32,27 @@ const helper: Helper = {
           network: Network.Zora,
         },
       ],
-    },);
+    });
+
     const tokensWithData = await zdk.tokens({
       where: {
         tokens: pools.map((pool) => ({ tokenId: pool.token_id || "", address: pool.minting_contract_address || "" }))
       }
-    })
-    console.log(tokensWithData.tokens.nodes, 'tokenswith data')
-    return tokensWithData.tokens.nodes
-  },
+    });
+
+
+    const formattedData = tokensWithData.tokens.nodes.map((token) => ({
+      name: token.token.name,
+      imageUrl: token.token.image?.url ?? "",
+      collectionAddress: token.token.collectionAddress,
+      token_id: token.token.tokenId,
+
+    }));
+
+    console.log(formattedData, 'formatted data');
+    return formattedData;
+  }
+
 
 };
 

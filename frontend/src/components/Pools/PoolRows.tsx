@@ -36,26 +36,26 @@ const PoolRows: React.FC = () => {
     <IonContent color="light">
       <IonGrid className="ion-grid">
         {tokenData ? (
-          tokenData.map((mintData: any, index: number) => (
+          tokenData.map((pool: any, index: number) => (
             <div className="grid-item">
               <IonImg
                 onClick={() =>
                   handlePoolClick(
-                    mintData.token_id,
-                    mintData.token_address,
-                    convertIpfsImageUrl(mintData.normalized_metadata.image)
+                    pool.token_id,
+                    pool.token_address,
+                    convertIpfsImageUrl(pool.normalized_metadata.image)
                   )
                 }
                 key={index}
                 className="grid-image"
                 alt="NFT Image"
-                src={convertIpfsImageUrl(mintData.normalized_metadata.image)}
+                src={convertIpfsImageUrl(pool.imageUrl)}
               ></IonImg>
 
               <IonRow>
-                <IonText className="smallText"> MINT NAME </IonText>
+                <IonText className="smallText"> {pool.name} </IonText>
                 <IonText className="smallText">
-                  {shortenAddress(mintData.token_address)}
+                  {shortenAddress(pool.collectionAddress)}
                 </IonText>
                 {/*                 <IonText> {mintData.normalized_metadata.name}</IonText>
                  */}{" "}

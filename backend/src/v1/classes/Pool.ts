@@ -35,16 +35,12 @@ class Pool {
     async create(
         pool: Pool
     ): Promise<Pool | null> {
-
         const params = [
             pool.group_id,
             pool.minting_contract_address,
             pool.chain_id,
-
             pool.token_id,
         ]
-
-
         const results = await db.query(
             "INSERT INTO `pool` (group_id, minting_contract_address,  chain_id, token_id, created_at) VALUES (?, ?, ?,  ?, UTC_TIMESTAMP());",
             params
@@ -58,7 +54,6 @@ class Pool {
                 return pool[0] as Pool;
             }
         }
-
         return null;
     }
 
