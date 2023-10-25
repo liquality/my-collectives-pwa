@@ -8,6 +8,7 @@ const ProtectedRoute = ({ children }: { children?: React.ReactNode }) => {
   //const snap = useSnapshot(globalState);
   const router = useIonRouter();
   const { address } = useAccount();
+  console.log(address, "Address?");
 
   //TODO: add check for authentication from backend here using stored JWT
   useEffect(() => {

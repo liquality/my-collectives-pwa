@@ -1,6 +1,6 @@
 import MySQL, { db } from "../../MySQL";
 import ApiError from "./ApiError";
-import { OkPacket, QueryError, RowDataPacket } from "mysql2"
+import { RowDataPacket } from "mysql2"
 
 
 class Pool {
@@ -47,12 +47,12 @@ class Pool {
             params
         );
         if ("insertId" in results) {
-            const users = await db.query(
+            const pool = await db.query(
                 "SELECT * FROM `pool` WHERE id = ?",
                 [results.insertId]
             );
-            if (users.length > 0) {
-                return users[0] as Pool;
+            if (pool.length > 0) {
+                return pool[0] as Pool;
             }
         }
 

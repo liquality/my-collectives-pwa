@@ -8,7 +8,7 @@ const poolHandler = {
         const pool = new Pool();
         pool.set(req.body);
         try {
-            const result = await pool.create();
+            const result = await pool.create(req.body);
             res.status(200).send(result);
         } catch (err) {
             console.log(err, 'error?')
