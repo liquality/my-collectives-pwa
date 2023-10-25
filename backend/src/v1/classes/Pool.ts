@@ -1,4 +1,4 @@
-import MySQL from "../../MySQL";
+import MySQL, { db } from "../../MySQL";
 import ApiError from "./ApiError";
 import { OkPacket, QueryError, RowDataPacket } from "mysql2"
 
@@ -30,53 +30,34 @@ class Pool {
     /*                  */
     /* CRUD OPERATIONS  */
     /*                  */
-    create = async (): Promise<Pool> => {
-        const pool = this;
+    async create(
+        pool: Pool
+    ): Promise<Pool | null> {
 
-        return new Promise<Pool>((resolve, reject) => {
-            // Insert new row
-            MySQL.pool.getConnection((err, db) => {
-                if (err) {
-                    reject(new ApiError(500, err.toString()));
-                    return;
-                }
+        const params = [
+            pool.group_id,
+            pool.minting_contract_address,
+            pool.chain_id,
+            pool.created_at,
+        ]
 
-                db.query(
-                    "INSERT INTO `pool` (group_id, minting_contract_address, chain_id, created_at) VALUES (?, ?, ?, UTC_TIMESTAMP());",
-                    [pool.group_id, pool.minting_contract_address, pool.chain_id],
-                    (err, results: RowDataPacket[], fields) => {
-                        if (err) {
-                            db.release();
-                            reject(new ApiError(500, err.toString()));
-                            return;
-                        }
 
-                        if ("insertId" in results) {
-                            const poolId = results.insertId;
-                            // Create a query to select the newly inserted group
-                            db.query(
-                                "SELECT * FROM `pool` WHERE id = ?",
-                                [poolId],
-                                (err, results: RowDataPacket[], fields) => {
-                                    if (err) {
-                                        db.release();
-                                        reject(new ApiError(500, err.toString()));
-                                        return;
-                                    }
+        const results = await db.query(
+            "INSERT INTO `pool` (group_id, minting_contract_address, chain_id, created_at) VALUES (?, ?, ?, UTC_TIMESTAMP());",
+            params
+        );
+        if ("insertId" in results) {
+            const users = await db.query(
+                "SELECT * FROM `pool` WHERE id = ?",
+                [results.insertId]
+            );
+            if (users.length > 0) {
+                return users[0] as Pool;
+            }
+        }
 
-                                    const newPool = new Pool(results[0] as Pool);
-                                    resolve(newPool);
-                                    db.release();
-                                }
-                            );
-                        } else {
-                            db.release();
-                        }
-                    }
-                );
-            });
-        });
-    };
+        return null;
+    }
 
 
 
