@@ -155,6 +155,18 @@ endpoints.getLeaderboard = {
 };
 
 
+/* SOUND ENDPOINTS  */
+
+endpoints.getLeaderboardForSound = {
+  url: "/v1/sound/leaderboard/:tokenId/:contractAddress",
+  method: "get",
+  middleware: [],
+  handler: moralisHandler.getLeaderboardForSound,
+  description: "get leaderboard of certain tokenid and mint nft contract address using Sound API",
+};
+
+
+
 
 
 
