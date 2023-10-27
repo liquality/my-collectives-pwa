@@ -9,14 +9,19 @@ import {
 import ConnectButton from "./ConnectButton";
 import React from "react";
 
-
-const Header: React.FC = () => {
+const Header = ({ title }: { title?: string }) => {
   return (
-    <IonHeader collapse="fade"> 
+    <IonHeader  className="ion-no-border">
       <IonToolbar>
-      <IonButtons slot="start">
-       <IonMenuButton></IonMenuButton>
-       </IonButtons>
+        {title ? (
+          <IonTitle
+          className="ion-padding"
+            style={{ textAlign: "left" }}
+            slot="start"
+          >
+            {title}
+          </IonTitle>
+        ) : null}
         <IonButtons slot="end">
           <ConnectButton />
         </IonButtons>

@@ -22,8 +22,10 @@ export default defineConfig({
     legacy(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ['favicon.ico', 'apple-touch-icon-180x180.png', 'maskable-icon-512x512'],
+      includeAssets: ['favicon.ico', 'apple-touch-icon-180x180.png', 'maskable-icon-512x512.png'],
       manifest: {
+        display: 'standalone',
+        scope: '/',
         name: 'Liquality Group Mints',
         short_name: 'Group Mints',
         description: 'Liquality Group Mints',

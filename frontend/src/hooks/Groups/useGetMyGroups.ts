@@ -9,6 +9,9 @@ export function useGetMyGroups() {
     const [loading, setLoading] = useState<boolean>(false);
 
     const { address } = useAccount();
+    const reload = () => {
+        setMyGroups(null);
+    }
 
     useEffect(() => {
         const fetchGroups = async () => {
@@ -28,7 +31,7 @@ export function useGetMyGroups() {
         };
         fetchGroups();
     }, [myGroups]);
-    return { myGroups, loading };
+    return { myGroups, loading, reload };
 }
 
 export default useGetMyGroups;

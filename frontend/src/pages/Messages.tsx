@@ -1,5 +1,5 @@
 import Chat from "@/components/Chat";
-import useGetGroupById from "@/components/Groups/useGetGroupById";
+import useGetGroupById from "@/hooks/Groups/useGetGroupById";
 import Header from "@/components/Header";
 import { IonContent, IonPage, IonTitle } from "@ionic/react";
 import { useParams } from "react-router-dom";
@@ -11,9 +11,9 @@ const Messages = () => {
 
   const handleGoToGroupMessages = async () => {};
   return (
-    <IonPage className="page-padding">
-      <Header />
-      <IonContent fullscreen>
+    <IonPage>
+      <Header title="Messages"/>
+      <IonContent className="ion-padding"  color="light">
         {!loading && group ? (
           <Chat group={group} />
         ) : (

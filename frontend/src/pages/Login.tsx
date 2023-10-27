@@ -12,9 +12,9 @@ import Header from "@/components/Header";
 
 const Settings: React.FC = () => {
   return (
-    <IonPage className="page-padding">
-      <Header />
-      <IonContent>
+    <IonPage>
+      <Header title="Settings"/>
+      <IonContent  className="ion-padding"  color="light">
         <IonTitle>Welcome to Group Mints</IonTitle>
       </IonContent>
     </IonPage>

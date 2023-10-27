@@ -7,9 +7,9 @@ const Pools: React.FC = () => {
   const { tokenData, loading } = useGetPoolsMetadata();
 
   return (
-    <IonPage className="page-padding">
-      <Header />
-      <IonContent fullscreen>
+    <IonPage>
+      <Header title="Pools"/>
+      <IonContent className="ion-padding" color="light">
         Pools
         <PoolRows />
       </IonContent>
