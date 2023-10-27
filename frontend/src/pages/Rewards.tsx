@@ -9,9 +9,9 @@ import {
 
 const Rewards: React.FC = () => {
   return (
-    <IonPage className="page-padding">
-      <Header />
-      <IonContent fullscreen>Rewards</IonContent>
+    <IonPage >
+      <Header title="Rewards"/>
+      <IonContent  className="ion-padding" color="light">Rewards</IonContent>
     </IonPage>
   );
 };

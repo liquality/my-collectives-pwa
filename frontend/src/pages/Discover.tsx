@@ -12,9 +12,9 @@ import {
 const Discover: React.FC = () => {
   const { height, width, isDesktop } = useWindowDimensions();
   return (
-    <IonPage className="page-padding">
-      <Header />
-      <IonContent fullscreen>
+    <IonPage>
+      <Header title="Discover"/>
+      <IonContent className="ion-padding" color="light">
         <PoolRows />
       </IonContent>
     </IonPage>

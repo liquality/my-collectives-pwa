@@ -5,27 +5,23 @@ import {
   IonPopover,
   IonIcon,
   IonSpinner,
-  IonCard,
-  IonCardContent,
-  IonCol,
-  IonGrid,
-  IonRow,
+  IonItem,
+  IonList,
+  IonLabel,
 } from "@ionic/react";
-import { logIn, logOut, wallet, key, copy, copyOutline } from "ionicons/icons";
-import React, { useState } from "react";
+import { logIn, logOut, wallet } from "ionicons/icons";
+import React from "react";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
-import { useAccount, useDisconnect, useSignMessage } from "wagmi";
-import { useSignInWallet } from "@/hooks/useSignInWallet";
+import { useAccount, useDisconnect } from "wagmi";
 
 const ConnectButton: React.FC = () => {
   const { open } = useWeb3Modal();
   const { address, isConnecting, isDisconnected } = useAccount();
   const { disconnect } = useDisconnect();
-  const { user } = useSignInWallet();
 
   const logout = () => {
-    localStorage.removeItem('groupMints.accessToken');
-    localStorage.removeItem('groupMints.user');
+    localStorage.removeItem("groupMints.accessToken");
+    localStorage.removeItem("groupMints.user");
     disconnect();
   };
 
@@ -47,7 +43,7 @@ const ConnectButton: React.FC = () => {
           ) : (
             <>
               <IonIcon slot="end" icon={logIn}></IonIcon>
-              Connect Wallet
+              Connect
             </>
           )}
         </IonButton>
@@ -59,37 +55,17 @@ const ConnectButton: React.FC = () => {
           </IonButton>
           <IonPopover
             size="auto"
-            className="dark-ion-popover"
             trigger="logout-options-triggger"
             dismissOnSelect={true}
             showBackdrop={false}
           >
-            <IonContent>
-              <IonCard color="primary">
-                <IonCardContent>
-                  <IonGrid>
-                    {/* <IonRow className="flex-flow-row">
-                      <IonCol className="align-items-center">
-                        <IonIcon icon={key}></IonIcon>
-                        {shortenAddress(address)}
-                      </IonCol>
-                      <IonCol>
-                      <IonButton onClick={copyAddress}>
-                          <IonIcon slot="icon-only" icon={copyOutline}></IonIcon>
-                        </IonButton>
-                      </IonCol>
-                    </IonRow> */}
-                    <IonRow>
-                      <IonCol>
-                        <IonButton onClick={logout}>
-                          <IonIcon slot="end" icon={logOut}></IonIcon>
-                          Logout
-                        </IonButton>
-                      </IonCol>
-                    </IonRow>
-                  </IonGrid>
-                </IonCardContent>
-              </IonCard>
+            <IonContent className="ion-padding">
+              <IonList lines="none">
+                <IonItem button={true} detail={false} onClick={logout}>
+                  <IonLabel>Logout</IonLabel>
+                  <IonIcon slot="end" icon={logOut}></IonIcon>
+                </IonItem>
+              </IonList>
             </IonContent>
           </IonPopover>
         </>

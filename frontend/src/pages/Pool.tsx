@@ -1,35 +1,81 @@
 import Header from "@/components/Header";
 import PoolLeaderboard from "@/components/Pools/PoolLeaderboard";
-import PoolRows from "@/components/Pools/PoolRows";
-import useGetLeaderboard from "@/hooks/Pools/useGetLeaderboard";
-import useGetPoolsMetadata from "@/hooks/Pools/useGetPoolsMetadata";
-import { IonContent, IonImg, IonPage, IonTitle } from "@ionic/react";
-import { useEffect } from "react";
+
+import {
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonImg,
+  IonPage,
+  IonRow,
+  IonSkeletonText,
+  useIonRouter,
+} from "@ionic/react";
+import { useEffect, useState } from "react";
 
 const Pool: React.FC = () => {
-  const queryParams = new URLSearchParams(location.search);
-  const contractAddress = queryParams.get("contractAddress");
-  const tokenId = queryParams.get("tokenId");
+  const { routeInfo } = useIonRouter();
+  console.log(routeInfo, "routeInfo");
+  const query = new URLSearchParams(routeInfo.search);
+  const [loadingImage, setLoadingImage] = useState(true);
+  const contractAddress = query.get("contractAddress");
+  const tokenId = routeInfo.id;
   const imageUrl =
-    queryParams.get("imageUrl") ??
+    query.get("imageUrl") ??
     "https://ionicframework.com/docs/img/demos/avatar.svg";
-
-  const { leaderboard, loading } = useGetLeaderboard();
-  console.log(leaderboard, "wats leaderboard?");
 
   useEffect(() => {}, []);
   return (
-    <IonPage className="page-padding">
-      <Header />
-      <IonContent>
-        <IonTitle>#{tokenId}</IonTitle>
-        <IonImg
-          className=""
-          style={{ width: "90%", height: "90%" }}
-          src={imageUrl}
-          alt="NFT Img"
-        />
-        <PoolLeaderboard />
+    <IonPage>
+      <Header title={`Pool #${tokenId}`} />
+      <IonContent className="ion-padding" color="light">
+        <IonGrid>
+          <IonRow className="ion-justify-content-center ion-align-items-start">
+            <IonCol size="12" sizeLg="6">
+              <IonCard>
+                <img
+                  className="pool-detail-img"
+                  alt="NFT Image"
+                  style={{ display: loadingImage ? "none" : "block" }}
+                  src={imageUrl}
+                  onLoad={() => setLoadingImage(false)}
+                  onError={() => setLoadingImage(false)}
+                />
+                {loadingImage ? (
+                  <IonSkeletonText
+                    className="pool-detail-img-skeleton"
+                    animated={true}
+                  ></IonSkeletonText>
+                ) : null}
+                <IonCardHeader>
+                  <IonCardTitle>
+                    {loadingImage ? (
+                      <IonSkeletonText animated={true}></IonSkeletonText>
+                    ) : (
+                      `Pool # ${tokenId}`
+                    )}
+                  </IonCardTitle>
+                  <IonCardSubtitle>
+                    {loadingImage ? (
+                      <IonSkeletonText animated={true}></IonSkeletonText>
+                    ) : (
+                      contractAddress
+                    )}
+                  </IonCardSubtitle>
+                </IonCardHeader>
+                <IonCardContent></IonCardContent>
+              </IonCard>
+            </IonCol>
+            <IonCol size="12" sizeLg="6">
+              <PoolLeaderboard />
+            </IonCol>
+          </IonRow>
+        </IonGrid>
       </IonContent>
     </IonPage>
   );
