@@ -7,6 +7,21 @@ import GenerateInvite from "./GenerateInvite";
 import { useChatHistory } from "@/hooks/useChatHistory";
 import socket from "../services/SocketService"; // Import the socket instance
 import { useAccount } from "wagmi";
+import {
+  IonAvatar,
+  IonButton,
+  IonCol,
+  IonGrid,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonListHeader,
+  IonNote,
+  IonRow,
+  IonTextarea,
+} from "@ionic/react";
+import { navigate } from "ionicons/icons";
 
 interface ChatProps {
   group: Group;
@@ -31,53 +46,77 @@ export const Chat = (props: ChatProps) => {
     };
   }, [chatHistory]);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (newMessage === "") return;
-    try {
-      const message = {
-        sender: address as string,
-        text: newMessage,
-        group_id: id as number,
-      };
-      const postMessage = await ApiService.createMessage(message);
-    } catch (error) {
-      console.error("Error sending message:", error);
+  const handleSendMessage = async () => {
+    if (newMessage) {
+      try {
+        const message = {
+          sender: address as string,
+          text: newMessage,
+          group_id: id as number,
+        };
+        const postMessage = await ApiService.createMessage(message);
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
+      setNewMessage("");
     }
-    setNewMessage("");
   };
 
   return (
-    <div className="chat">
-      <u>
-        Group Name:
-        <b> {group_name}</b>
-      </u>
-      <br></br>
-      <br></br>
-      Group messages:
-      <div>
-        {messages.map((message, index) => (
-          <div key={index}>
-            <span>
-              <b>{message.sender}</b>
-            </span>
-            <div>{message.text}</div>{" "}
-          </div>
-        ))}
-      </div>
-      <form onSubmit={handleSubmit} className="new-message-form">
-        <input
-          className="new-message-input"
-          placeholder="Type message.."
-          onChange={(e) => setNewMessage(e.target.value)}
-          value={newMessage}
-        ></input>
-        <button type="submit">Send</button>
-      </form>
-      <br></br> <br></br>
-      <GenerateInvite groupId={id as number} />
-    </div>
+    <IonGrid>
+      <IonRow>
+        <IonCol>
+          <IonList className="ion-padding" inset={true}>
+            <IonListHeader>
+              <IonLabel>Group: {group_name}</IonLabel>
+            </IonListHeader>
+            {messages.map((message, index) => (
+              <IonItem key={index}>
+                <IonAvatar aria-hidden="true" slot="start">
+                  <img
+                    alt=""
+                    src="https://ionicframework.com/docs/img/demos/avatar.svg"
+                  />
+                </IonAvatar>
+                <IonLabel>
+                  <h3>{message.sender}</h3>
+                  <p>{message.text}</p>
+                </IonLabel>
+              </IonItem>
+            ))}
+          </IonList>
+          <IonList className="ion-padding" inset={true}>
+            <IonItem lines="none">
+              <IonTextarea
+                onIonInput={(e) => setNewMessage(e.detail.value!)}
+                label="Message"
+                placeholder="Type a Message ..."
+                label-placement="floating"
+                value={newMessage}
+                autoGrow={true}
+                counter={true}
+                maxlength={150}
+                counterFormatter={(inputLength, maxLength) =>
+                  `${maxLength - inputLength} characters remaining`
+                }
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    handleSendMessage();
+                  }
+                }}
+              ></IonTextarea>
+              <IonButton slot="end">
+                <IonIcon
+                  slot="icon-only"
+                  onClick={handleSendMessage}
+                  icon={navigate}
+                ></IonIcon>
+              </IonButton>
+            </IonItem>
+          </IonList>
+        </IonCol>
+      </IonRow>
+    </IonGrid>
   );
 };
 

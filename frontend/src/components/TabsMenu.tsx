@@ -32,7 +32,7 @@ const TabsMenu = ({ children }: { children?: React.ReactNode }) => {
           <IonIcon icon={searchCircleOutline} />
           <IonLabel>Discover</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="mint" href="/groups">
+        <IonTabButton tab="mint" href="/mint">
           <IonIcon icon={peopleOutline} />
           <IonLabel>Mint</IonLabel>
         </IonTabButton>

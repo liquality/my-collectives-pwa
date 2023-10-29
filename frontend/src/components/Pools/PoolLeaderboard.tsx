@@ -1,10 +1,19 @@
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
+import useGetLeaderboard from "@/hooks/Pools/useGetLeaderboard";
 import useGetPoolsMetadata from "@/hooks/Pools/useGetPoolsMetadata";
 import { convertIpfsImageUrl, shortenAddress } from "@/utils";
 import {
+  IonAvatar,
+  IonBadge,
   IonCol,
   IonContent,
   IonGrid,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonListHeader,
+  IonNote,
+  IonProgressBar,
   IonRow,
   IonText,
   IonTitle,
@@ -16,57 +25,56 @@ import React from "react";
 const PoolLeaderboard: React.FC = () => {
   const { tokenData, loading } = useGetPoolsMetadata();
   const router = useIonRouter();
-
-  const handlePoolClick = (
-    token_id: string,
-    contract_address: string,
-    imageUrl: string
-  ) => {
-    router.push(
-      `/pool/?tokenId=${token_id}&contractAddress=${contract_address}&imageUrl=${imageUrl}`
-    );
-  };
+  const {
+    leaderboard,
+    loading: loadingLeaderboard,
+    error: errorLoadingLeaderboard,
+  } = useGetLeaderboard();
+  console.log(leaderboard, "wats leaderboard?", loadingLeaderboard);
 
   return (
-    <IonGrid class="IonText-center">
-      <IonRow class="ion-margin">
-        <IonCol>
-          <IonTitle>
-            <IonText color="default">LEADERBOARD</IonText>
-          </IonTitle>
-        </IonCol>
-      </IonRow>
-
-      <IonRow class="header-row">
-        <IonCol>
-          <IonText>
-            <b>Owner</b>
-          </IonText>
-        </IonCol>
-
-        <IonCol>
-          <IonText>
-            <b>Number of Mints</b>
-          </IonText>
-        </IonCol>
-      </IonRow>
-
+    <IonGrid>
       <IonRow>
         <IonCol>
-          <IonText>bedbuug.eth</IonText>
-        </IonCol>
-
-        <IonCol>
-          <IonText>5</IonText>
+          <IonText className="ion-text-center">
+            <h3>LEADERBOARD</h3>
+          </IonText>
         </IonCol>
       </IonRow>
       <IonRow>
         <IonCol>
-          <IonText>tommy.eth</IonText>
-        </IonCol>
-
-        <IonCol>
-          <IonText>10</IonText>
+          {loadingLeaderboard && !errorLoadingLeaderboard ? (
+            <IonProgressBar type="indeterminate"></IonProgressBar>
+          ) : (
+            <IonList className="ion-padding">
+              <IonListHeader style={{ paddingLeft: 0 }}>
+                <IonLabel className="ion-text-left">Owner</IonLabel>
+                <IonLabel className="ion-text-right ion-pr-2">
+                  Mints
+                </IonLabel>
+              </IonListHeader>
+              <IonItem>
+                <IonAvatar aria-hidden="true" slot="start">
+                  <img
+                    alt=""
+                    src="https://ionicframework.com/docs/img/demos/avatar.svg"
+                  />
+                </IonAvatar>
+                <IonLabel>bedbuug.eth</IonLabel>
+                <IonBadge slot="end">5</IonBadge>
+              </IonItem>
+              <IonItem>
+                <IonAvatar aria-hidden="true" slot="start">
+                  <img
+                    alt=""
+                    src="https://ionicframework.com/docs/img/demos/avatar.svg"
+                  />
+                </IonAvatar>
+                <IonLabel>tommy.eth</IonLabel>
+                <IonBadge slot="end">10</IonBadge>
+              </IonItem>
+            </IonList>
+          )}
         </IonCol>
       </IonRow>
     </IonGrid>

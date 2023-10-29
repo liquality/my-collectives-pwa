@@ -29,7 +29,7 @@ import "./theme/variables.css";
 import "./theme/main.css";
 import SideBarMenu from "./components/SideBarMenu";
 import TabsMenu from "./components/TabsMenu";
-import Groups from "./pages/Groups";
+import Mint from "./pages/Mint/Mint";
 import Discover from "./pages/Discover";
 import Pools from "./pages/Pools";
 import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
@@ -69,21 +69,21 @@ const App: React.FC = () => {
       {/* Routes not requiring authentication */}
       <Route path="/login" render={() => <Login />} exact />
       <Route path="/messages/:groupId" render={() => <Messages />} />
-      <Route path="/invite/:inviteLink" render={() => <Invite />}  />
-
+      <Route path="/invite/:inviteLink" render={() => <Invite />} />
+      <Route path="/discover" render={() => <Discover />} exact />
+      <Route path="/mint" render={() => <Mint />} exact />
+      <Route path="/pools" render={() => <Pools />} exact />
+      <Route path="/rewards" render={() => <Rewards />} exact />
+      
       {/* Default route (not requiring authentication) */}
       <Route exact path="/">
-        <Redirect to="/login" />
+        <Redirect to="/discover" />
       </Route>
 
       {/* Protected routes, needs auth */}
       <ProtectedRoute>
-        <Route path="/discover" render={() => <Discover />} exact/>
-        <Route path="/groups" render={() => <Groups />} exact/>
-        <Route path="/pools"  render={() => <Pools />} exact/>
-        <Route path="/pool"  render={() => <Pool />} exact/>
-        <Route path="/settings"  render={() => <Settings />} exact/>
-        <Route path="/rewards"  render={() => <Rewards />} exact/>
+        <Route path="/pools/:id" render={() => <Pool />} exact />
+        <Route path="/settings" render={() => <Settings />} exact />
       </ProtectedRoute>
     </IonRouterOutlet>
   );

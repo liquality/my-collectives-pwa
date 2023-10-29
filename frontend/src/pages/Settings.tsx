@@ -9,9 +9,9 @@ import {
 
 const Settings: React.FC = () => {
   return (
-    <IonPage className="page-padding">
-      <Header />
-      <IonContent fullscreen>Settings</IonContent>
+    <IonPage>
+      <Header title="Settings"/>
+      <IonContent  className="ion-padding" color="light">Settings</IonContent>
     </IonPage>
   );
 };

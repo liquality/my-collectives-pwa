@@ -8,6 +8,7 @@ export function useGetLeaderboard() {
 
   const [leaderboard, setLeaderboard] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,13 +22,14 @@ export function useGetLeaderboard() {
           setLeaderboard(_leaderboard);
           setLoading(false);
         }
-      } catch (error) {
-        console.log(error, "Error fetching leaderboard");
+      } catch (err) {
+        setError('Error fetching leaderboard')
+        console.log(err, error);
       }
     };
     fetchData();
   }, [leaderboard]);
-  return { leaderboard, loading };
+  return { leaderboard, loading, error };
 }
 
 export default useGetLeaderboard;

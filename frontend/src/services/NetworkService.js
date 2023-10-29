@@ -1,10 +1,4 @@
-/* const serverAddress = process.env.REACT_APP_SERVER_ADDRESS
-  ? process.env.REACT_APP_SERVER_ADDRESS
-  : "http://localhost:3000";
-
- */
-
-const serverAddress = "http://localhost:3000";
+const serverAddress = import.meta.env.VITE_SERVER_ADDRESS || 'http://localhost:3000';
 
 const NetworkService = {
   getResource: function (url) {
