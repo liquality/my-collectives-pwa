@@ -1,6 +1,8 @@
 import { ZDK, TokensQueryInput, TokenInput } from "@zoralabs/zdk";
 import { Chain, Network } from '@zoralabs/zdk/dist/queries/queries-sdk';
 import Pool from "./classes/Pool";
+import { Contract, ethers } from "ethers";
+import { ZORA_REWARDS_ABI, ZORA_REWARDS_CONTRACT_ADDRESS } from "./constants";
 
 
 
@@ -8,6 +10,7 @@ type Helper = {
   findByAddress: (address: string) => void;
   convertIpfsImageUrl: (url: string) => string;
   getTokenMetadataFromZora: (pools: Pool[]) => any
+  getPoolMintEvents: (startBlock: any, endBlock: any) => any
 };
 
 const helper: Helper = {
@@ -50,7 +53,33 @@ const helper: Helper = {
     }));
 
     return formattedData;
-  }
+  },
+
+  //https://coinsbench.com/fetching-historical-events-from-a-smart-contract-f1c974ccd24d
+  getPoolMintEvents: async (startBlock: any, endBlock: any) => {
+
+    startBlock = 2384107 //when contract was deployed
+    endBlock = 5945998 //last interacted balance update
+    const PROVIDER = new ethers.providers.JsonRpcProvider("https://rpc.zora.energy");
+
+    const zoraContract = new Contract(ZORA_REWARDS_CONTRACT_ADDRESS, ZORA_REWARDS_ABI, PROVIDER);
+
+    console.log(zoraContract, 'ZORA CONTRACT')
+    const rewardFilter = zoraContract.filters.RewardsDeposit();
+    console.log("Querying the Mint events...", rewardFilter);
+    const rewardEvent = await zoraContract.queryFilter(
+      rewardFilter,
+      startBlock,
+      endBlock
+    );
+    console.log(
+      `${rewardEvent.length} have been emitted by the pool with id ${ZORA_REWARDS_CONTRACT_ADDRESS} between blocks ${startBlock} & ${endBlock}`
+    );
+    return rewardEvent;
+  },
+
+
+
 
 
 };
