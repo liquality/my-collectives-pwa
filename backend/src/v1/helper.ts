@@ -55,12 +55,13 @@ const helper: Helper = {
     return formattedData;
   },
 
+  //zora contract on OP: https://zora.co/collect/oeth:0x31f88a359a045aba182a3e1d05ceaa5a5b0f5912/0
   //https://coinsbench.com/fetching-historical-events-from-a-smart-contract-f1c974ccd24d
   getPoolMintEvents: async (startBlock: any, endBlock: any) => {
-
     startBlock = 2384107 //when contract was deployed
-    endBlock = 5945998 //last interacted balance update
-    const PROVIDER = new ethers.providers.JsonRpcProvider("https://rpc.zora.energy");
+    endBlock = 5946998 //last interacted balance update
+    const PROVIDER = new ethers.providers.JsonRpcProvider("https://rpc.zora.energy"); //TODO: try with a base contract
+    console.log(PROVIDER.formatter.filter, 'PROVIDERS')
 
     const zoraContract = new Contract(ZORA_REWARDS_CONTRACT_ADDRESS, ZORA_REWARDS_ABI, PROVIDER);
 

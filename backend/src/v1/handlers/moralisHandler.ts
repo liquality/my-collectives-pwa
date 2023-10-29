@@ -78,7 +78,7 @@ const moralisHandler = {
 
         //1) First get the releaseId from collectionId
         try {
-            /* const query = `
+            const query = `
             query {
               releaseAffiliateTotalPurchases {
                 affiliate {
@@ -122,15 +122,25 @@ const moralisHandler = {
                 .catch((error) => {
                     console.error('Error:', error);
                     res.status(500).json({ error: 'An error occurred for Sound Leaderboard' });
-                }); */
-            const rewards = helper.getPoolMintEvents("", "")
-            res.status(200).json(rewards);
+                });
+
 
         } catch (err) {
             console.error(err, 'Error in sound leaderboard');
             res.status(500).json({ error: 'An error occurred for Sound Leaderboard' });
         }
-    }
+    },
+
+
+    getLeaderboardForZora: async (req: Request, res: Response) => {
+        try {
+            const rewards = await helper.getPoolMintEvents("", "")
+            res.status(200).json(rewards);
+        } catch (err) {
+            console.error(err, 'Error in moralis handler');
+            res.status(500).send({ error: 'An error occurred' });
+        }
+    },
 
 
 
