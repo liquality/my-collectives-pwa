@@ -155,6 +155,26 @@ endpoints.getLeaderboard = {
 };
 
 
+/* SOUND/ZORA ENDPOINTS  */
+
+endpoints.getLeaderboardForSound = {
+  url: "/v1/sound/leaderboard/:tokenId/:contractAddress",
+  method: "post",
+  middleware: [],
+  handler: moralisHandler.getLeaderboardForSound,
+  description: "get leaderboard of certain tokenid and mint nft contract address using Sound API",
+};
+
+endpoints.getLeaderboardForZora = {
+  url: "/v1/zora/leaderboard/:tokenId/:contractAddress",
+  method: "post",
+  middleware: [],
+  handler: moralisHandler.getLeaderboardForZora,
+  description: "get leaderboard of certain tokenid and mint nft contract address using zora contract address",
+};
+
+
+
 
 
 
