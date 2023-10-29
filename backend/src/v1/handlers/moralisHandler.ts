@@ -138,7 +138,8 @@ const moralisHandler = {
             res.status(200).json(rewards);
         } catch (err) {
             console.error(err, 'Error in moralis handler');
-            res.status(500).send({ error: 'An error occurred' });
+            res.status(200).json({ msg: "You reached the leaderboard for Zora, it is not live yet" });
+
         }
     },
 
