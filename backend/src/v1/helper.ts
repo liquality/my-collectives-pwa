@@ -70,7 +70,7 @@ const helper: Helper = {
     const transferFilter = zoraContract.filters.Transfer();
     const rewardEvent: Event[] = await zoraContract.queryFilter(transferFilter);
     console.log(
-      `${rewardEvent.length} have been emitted by the pool with id ${ZORA_REWARDS_CONTRACT_ADDRESS}`
+      `${rewardEvent.length} events have been emitted by the contract with address ${BASE_GOERLI_MINT_CONTRACT_ADDRESS}`
     );
     const processedEntries = await helper.processLogEntriesForZoraLeaderboard(rewardEvent);
     return processedEntries;
