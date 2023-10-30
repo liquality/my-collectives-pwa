@@ -65,6 +65,7 @@ const helper: Helper = {
   //zora contract on OP: https://zora.co/collect/oeth:0x31f88a359a045aba182a3e1d05ceaa5a5b0f5912/0
   //https://coinsbench.com/fetching-historical-events-from-a-smart-contract-f1c974ccd24d
   getZoraLeaderboardEvents: async () => {
+    console.log(BASE_GOERLI_RPC + process.env.ALCHEMY_API_KEY_RPC, 'RPC URL??')
     const PROVIDER = new ethers.providers.JsonRpcProvider(BASE_GOERLI_RPC + process.env.ALCHEMY_API_KEY_RPC); //TODO: try with a base contract
     const zoraContract = new Contract(BASE_GOERLI_MINT_CONTRACT_ADDRESS, BASE_GOERLI_MINT_ABI, PROVIDER);
     const transferFilter = zoraContract.filters.Transfer();
