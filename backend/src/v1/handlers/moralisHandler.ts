@@ -3,11 +3,11 @@
 import { EvmChain } from "@moralisweb3/common-evm-utils";
 import { Request, Response } from "express";
 import Moralis from "moralis";
-import dotenv from "dotenv"
+
 import { poolsDummyArray } from "../dummydata";
 import axios from "axios";
 import helper from "../helper";
-
+import dotenv from "dotenv"
 dotenv.config()
 
 const WAV_NFT_ADDRESS = "0x3611bB3DA6Fb531917ad3683FFDEa427dA5bA791"
@@ -134,12 +134,11 @@ const moralisHandler = {
 
     getLeaderboardForZora: async (req: Request, res: Response) => {
         try {
-            const rewards = await helper.getPoolMintEvents("", "")
+            const rewards = await helper.getZoraLeaderboardEvents()
             res.status(200).json(rewards);
         } catch (err) {
             console.error(err, 'Error in moralis handler');
-            res.status(200).json({ msg: "You reached the leaderboard for Zora, it is not live yet" });
-
+            res.status(500).json({ error: 'An error occurred for fetching Zora Leaderboard' });
         }
     },
 
