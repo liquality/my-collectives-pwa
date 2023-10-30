@@ -2,7 +2,7 @@ import { ZDK, TokensQueryInput, TokenInput } from "@zoralabs/zdk";
 import { Chain, Network } from '@zoralabs/zdk/dist/queries/queries-sdk';
 import Pool from "./classes/Pool";
 import { Contract, ethers, Event } from "ethers";
-import { BASE_GOERLI_MINT_ABI, BASE_GOERLI_MINT_CONTRACT_ADDRESS, ZORA_REWARDS_ABI, ZORA_REWARDS_CONTRACT_ADDRESS } from "./constants";
+import { BASE_GOERLI_MINT_ABI, BASE_GOERLI_MINT_CONTRACT_ADDRESS } from "./constants";
 import dotenv from "dotenv"
 dotenv.config()
 
