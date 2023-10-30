@@ -74,8 +74,6 @@ const moralisHandler = {
 
 
     getLeaderboardForSound: async (req: Request, res: Response) => {
-        //TK contract: 0x0000000000cf4558c36229ac0026ee16d3ae35cd
-
         //1) First get the releaseId from collectionId
         try {
             const query = `
