@@ -2,7 +2,7 @@ import { ZDK, TokensQueryInput, TokenInput } from "@zoralabs/zdk";
 import { Chain, Network } from '@zoralabs/zdk/dist/queries/queries-sdk';
 import Pool from "./classes/Pool";
 import { Contract, ethers, Event } from "ethers";
-import { THE_KEEPERS_ABI, SONG_CONTRACT } from "./constants";
+import { THE_KEEPERS_ABI, SONG_CONTRACT, ZORA_REWARDS_ABI, ZORA_REWARDS_CONTRACT_ADDRESS } from "./constants";
 import dotenv from "dotenv"
 dotenv.config()
 
@@ -68,10 +68,12 @@ const helper: Helper = {
   getZoraLeaderboardEvents: async () => {
     console.log(BASE_RPC + process.env.ALCHEMY_API_KEY_RPC, 'RPC URL??')
     const PROVIDER = new ethers.providers.JsonRpcProvider(BASE_RPC + process.env.ALCHEMY_API_KEY_RPC); //TODO: try with a base contract
-    const zoraContract = new Contract(SONG_CONTRACT.THE_KEEPERS, THE_KEEPERS_ABI, PROVIDER);
+    const zoraContract = new Contract(ZORA_REWARDS_CONTRACT_ADDRESS, ZORA_REWARDS_ABI, PROVIDER);
     const transferFilter = zoraContract.filters.RewardsDeposit();
     console.log(transferFilter, 'transferfilter')
-    const rewardEvent: Event[] = await zoraContract.queryFilter(transferFilter);
+    const fromBlock = 5970362
+    const toBlock = 5985367
+    const rewardEvent: Event[] = await zoraContract.queryFilter(transferFilter, fromBlock, fromBlock);
     console.log(
       `${rewardEvent.length} events have been emitted by the contract with address ${SONG_CONTRACT.THE_KEEPERS}`
     );
