@@ -159,7 +159,7 @@ endpoints.getLeaderboard = {
 
 endpoints.getLeaderboardForSound = {
   url: "/v1/sound/leaderboard/:contractAddress",
-  method: "post",
+  method: "get",
   middleware: [],
   handler: moralisHandler.getLeaderboardForSound,
   description: "get leaderboard of mint nft contract address using Sound API",
