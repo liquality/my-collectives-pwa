@@ -7,143 +7,133 @@ import Moralis from "moralis";
 import { poolsDummyArray } from "../dummydata";
 import axios from "axios";
 import helper from "../helper";
-import dotenv from "dotenv"
-dotenv.config()
+import { sendGraphQLQuery } from "./soundHelper";
 
-const WAV_NFT_ADDRESS = "0x3611bB3DA6Fb531917ad3683FFDEa427dA5bA791"
-const CHAIN_ID = 80001
-
-
-
-const SOUND_API_URL = 'https://api.sound.xyz/graphql';
-const SOUND_API_KEY = process.env.SOUND_API_KEY
-const soundHeaders = {
-    'Content-Type': 'application/json',
-    'X-Sound-Client-Key': SOUND_API_KEY,
-};
 
 const moralisHandler = {
 
-    getTokenMetadata: async (req: Request, res: Response) => {
-        console.log(req.body, 'req body in moralis');
+  getTokenMetadata: async (req: Request, res: Response) => {
+    console.log(req.body, 'req body in moralis');
 
-        try {
-            const chain = EvmChain.ETHEREUM;
-            const metadataPromises = poolsDummyArray.map(async (pool) => {
-                const response = await Moralis.EvmApi.nft.getNFTMetadata({
-                    "chain": chain,
-                    "format": "decimal",
-                    "normalizeMetadata": true,
-                    "mediaItems": false,
-                    "address": pool.contractAddress,
-                    "tokenId": pool.tokenId.toString(),
-                });
-                return response?.toJSON();
-            });
+    try {
+      const chain = EvmChain.ETHEREUM;
+      const metadataPromises = poolsDummyArray.map(async (pool) => {
+        const response = await Moralis.EvmApi.nft.getNFTMetadata({
+          "chain": chain,
+          "format": "decimal",
+          "normalizeMetadata": true,
+          "mediaItems": false,
+          "address": pool.contractAddress,
+          "tokenId": pool.tokenId.toString(),
+        });
+        return response?.toJSON();
+      });
 
-            const metadataResults = await Promise.all(metadataPromises);
-            console.log(metadataResults);
+      const metadataResults = await Promise.all(metadataPromises);
+      console.log(metadataResults);
 
-            res.status(200).send(metadataResults);
-        } catch (err) {
-            console.error(err, 'Error in moralis handler');
-            res.status(500).send({ error: 'An error occurred' });
-        }
-    },
-
-
-    getLeaderboard: async (req: Request, res: Response) => {
-
-        try {
-            const chain = EvmChain.ETHEREUM;
-
-            const response = await Moralis.EvmApi.nft.getNFTTokenIdOwners({
-                "chain": "0x1",
-                "format": "decimal",
-                "address": req.params.contractAddress,
-                "tokenId": req.params.tokenId,
-            });
-            console.log(response);
-
-            res.status(200).send(response.toJSON());
-        } catch (err) {
-            console.error(err, 'Error in moralis handler');
-            res.status(500).send({ error: 'An error occurred' });
-        }
-    },
+      res.status(200).send(metadataResults);
+    } catch (err) {
+      console.error(err, 'Error in moralis handler');
+      res.status(500).send({ error: 'An error occurred' });
+    }
+  },
 
 
-    getLeaderboardForSound: async (req: Request, res: Response) => {
-        //1) First get the releaseId from collectionId
-        try {
-            const query = `
-            query {
-              releaseAffiliateTotalPurchases {
-                affiliate {
-                  # Include fields for User type if needed
-                }
-                earningsETH
-                earningsWei
-                id
-                purchasesQuantity
-                referredCollectors(input: {
-                  pagination: { after: null, first: 20, sort: { blockNumber: ASC } }
-                }) {
-                  edges {
-                    node {
-                      # Include fields for ReferredUser (from ReleaseReferredCollectorConnection) if needed
-                    }
-                    cursor
-                  }
-                  pageInfo {
-                    endCursor
-                    hasNextPage
-                  }
-                }
-                release {
-                  # Include fields for Release type if needed
-                }
-              }
+  getLeaderboard: async (req: Request, res: Response) => {
+
+    try {
+      const chain = EvmChain.ETHEREUM;
+
+      const response = await Moralis.EvmApi.nft.getNFTTokenIdOwners({
+        "chain": "0x1",
+        "format": "decimal",
+        "address": req.params.contractAddress,
+        "tokenId": req.params.tokenId,
+      });
+      console.log(response);
+
+      res.status(200).send(response.toJSON());
+    } catch (err) {
+      console.error(err, 'Error in moralis handler');
+      res.status(500).send({ error: 'An error occurred' });
+    }
+  },
+
+
+  getLeaderboardForSound: async (req: Request, res: Response) => {
+    const contractAddress = req.params.contractAddress
+    try {
+      const getReleaseIdQuery = `query ApiExplorer {
+           releaseFromContract(contractAddress: "${contractAddress}") {
+             id
+           }
+         }`;
+
+      const releaseId = await sendGraphQLQuery(getReleaseIdQuery)
+      const { id } = releaseId?.data?.releaseFromContract;
+
+      const getMinterCountQuery = `query ApiExplorer {
+        release(id: "${id}") {
+        collectors {
+          pageInfo {
+            hasNextPage
+            startCursor
+            hasPreviousPage
+          }
+          edges {
+            node {
+              nftsCount
+             user{
+              publicAddress
             }
-          `;
-
-            const requestData = {
-                query,
-            };
-
-            axios
-                .post(SOUND_API_URL, requestData, { headers: soundHeaders })
-                .then((response) => {
-                    console.log('Response Data:', response.data.data);
-                    res.status(200).json(response.data.data); // Send the data field of the response
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    res.status(500).json({ error: 'An error occurred for Sound Leaderboard' });
-                });
-
-
-        } catch (err) {
-            console.error(err, 'Error in sound leaderboard');
-            res.status(500).json({ error: 'An error occurred for Sound Leaderboard' });
+            }
+          }
         }
-    },
+      }
+    }`;
+
+      const minterCount = await sendGraphQLQuery(getMinterCountQuery)
+      const { collectors } = minterCount?.data?.release;
+      const nodesArray = collectors.edges.map((edge: any) => edge.node);
+      const renamedArray = nodesArray.map((item: any) => ({
+        'minter': item.user.publicAddress,
+        'numberOfMints': item.nftsCount,
+        'topContributor': 'Coming soon'
+      }));
+
+      res.status(200).send(renamedArray);
+    } catch (err) {
+      console.error(err, 'Error in sound leaderboard');
+      res.status(500).json({ error: 'An error occurred for Sound Leaderboard' });
+    }
+  },
 
 
-    getLeaderboardForZora: async (req: Request, res: Response) => {
-        try {
-            const rewards = await helper.getZoraLeaderboardEvents()
-            res.status(200).json(rewards);
-        } catch (err) {
-            console.error(err, 'Error in moralis handler');
-            res.status(500).json({ error: 'An error occurred for fetching Zora Leaderboard' });
-        }
-    },
+  getLeaderboardForZora: async (req: Request, res: Response) => {
+    try {
+      const rewards = await helper.getZoraLeaderboardEvents()
+      res.status(200).json(rewards);
+    } catch (err) {
+      console.error(err, 'Error in moralis handler');
+      res.status(500).json({ error: 'An error occurred for fetching Zora Leaderboard' });
+    }
+  },
 
 
 
 
-
+  /* 
+  The Keepers - Base : // interested in mintReferal
+  https://basescan.org/address/0xbd87f4da73ff92a7bea31e2de20e14f9829f42fe
+  
+Honey - Optimism: 
+Song contract - https://optimistic.etherscan.io/address/0x9f3303e2c04e79387c3b5089b8a73e0b466e9076
+  
+  
+Breathe  - Optimism: 
+Song contract: https://optimistic.etherscan.io/address/0xfcf069b5876ab35107e44906933cf67110a60bcd
+  */
 };
 
 export default moralisHandler;
