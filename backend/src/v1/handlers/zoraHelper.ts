@@ -38,26 +38,21 @@ async function processLogEntriesForZoraLeaderboard(rewardEvents: Event[], contra
             }
         }
     }
-
-    const returnObject: Array<{ addressForTheOneWhoReferred: string, numberOfReferrals: number }> = [];
-
+    const referralObject: Array<{ addressForTheOneWhoReferred: string, numberOfReferrals: number }> = [];
     for (const minter in mintReferralCountMap) {
-        returnObject.push({
+        referralObject.push({
             addressForTheOneWhoReferred: minter,
             numberOfReferrals: mintReferralCountMap[minter],
         });
     }
-
     const nftOwners = await getMintersFromZora(contractAddress);
     const finalReturnObject: Array<{ minter: string, numberOfMints: number, referrals: number, score: number }> = [];
-
     // Create a map of addresses from nftOwners for efficient lookup
     const nftOwnersMap: { [key: string]: { minter: string, numberOfMints: number } } = {};
     for (const owner of nftOwners) {
         nftOwnersMap[owner.minter.toLowerCase()] = owner;
     }
-
-    for (const referral of returnObject) {
+    for (const referral of referralObject) {
         const minter = referral.addressForTheOneWhoReferred.toLowerCase();
         const nftOwner = nftOwnersMap[minter];
 
@@ -90,7 +85,6 @@ async function processLogEntriesForZoraLeaderboard(rewardEvents: Event[], contra
             score: (nftOwnersMap[minter].numberOfMints * 0.7) + (0 * 0.3),
         });
     }
-
     return finalReturnObject;
 }
 
@@ -109,7 +103,6 @@ export async function getMintersFromZora(nftContractAddress: string) {
             }
         ],
     });
-
     const tokensWithData = await zdk.ownersByCount({
         where: {
             collectionAddresses: [nftContractAddress]
@@ -117,19 +110,12 @@ export async function getMintersFromZora(nftContractAddress: string) {
         pagination: {
             limit: 100
         }
-
     });
-
     const pageInfo = tokensWithData.aggregateStat.ownersByCount.nodes;
-
-
     const formattedData = pageInfo.map((token) => ({
         minter: token.owner,
         numberOfMints: token.count
-
-
     }));
-
     return formattedData;
 }
 
