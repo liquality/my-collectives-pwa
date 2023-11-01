@@ -8,6 +8,7 @@ import { poolsDummyArray } from "../dummydata";
 import axios from "axios";
 import helper from "../helper";
 import { sendGraphQLQuery } from "./soundHelper";
+import { getZoraLeaderboardEvents } from "./zoraHelper";
 
 
 const moralisHandler = {
@@ -111,8 +112,10 @@ const moralisHandler = {
 
 
   getLeaderboardForZora: async (req: Request, res: Response) => {
+    const contractAddress = req.params.contractAddress
+
     try {
-      const rewards = await helper.getZoraLeaderboardEvents()
+      const rewards = await getZoraLeaderboardEvents(contractAddress)
       res.status(200).json(rewards);
     } catch (err) {
       console.error(err, 'Error in moralis handler');

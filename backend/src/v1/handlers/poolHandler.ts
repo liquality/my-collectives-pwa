@@ -3,6 +3,7 @@ import User from "../classes/Auth";
 import ApiError from "../classes/ApiError";
 import Pool from "../classes/Pool";
 import helper from "../helper";
+import { getTokenMetadataFromZora } from "./zoraHelper";
 
 
 const poolHandler = {
@@ -23,7 +24,7 @@ const poolHandler = {
         try {
             const result = await pool.read();
             if (result) {
-                const nftResult = await helper.getTokenMetadataFromZora(result)
+                const nftResult = await getTokenMetadataFromZora(result)
                 res.status(200).send(nftResult)
             }
             else {

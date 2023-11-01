@@ -166,7 +166,7 @@ endpoints.getLeaderboardForSound = {
 };
 
 endpoints.getLeaderboardForZora = {
-  url: "/v1/zora/leaderboard/",
+  url: "/v1/zora/leaderboard/:contractAddress",
   method: "get",
   middleware: [],
   handler: moralisHandler.getLeaderboardForZora,
