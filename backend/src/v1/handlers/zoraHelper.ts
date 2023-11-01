@@ -87,7 +87,8 @@ async function processLogEntriesForZoraLeaderboard(rewardEvents: Event[], contra
     }
 
 
-    return finalReturnObject.sort((a, b) => a.score - b.score);
+    return finalReturnObject.sort((a, b) => b.score - a.score);
+
 }
 
 
