@@ -85,7 +85,9 @@ async function processLogEntriesForZoraLeaderboard(rewardEvents: Event[], contra
             score: (nftOwnersMap[minter].numberOfMints * 0.7) + (0 * 0.3),
         });
     }
-    return finalReturnObject;
+
+
+    return finalReturnObject.sort((a, b) => a.score - b.score);
 }
 
 
