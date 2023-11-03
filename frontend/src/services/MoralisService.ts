@@ -8,7 +8,7 @@ import NetworkService from "./NetworkService";
 
 const MoralisService = {
     getLeaderboard: async function (tokenId: string, contractAddress: string) {
-        return NetworkService.getResourceWithAuth("/v1/moralis/leaderboard/" + tokenId + "/" + contractAddress);
+        return NetworkService.getResourceWithAuth("/v1/nfg/leaderboard/moralis/" + tokenId + "/" + contractAddress);
     },
 
     getLeaderboardOld: async function () {
