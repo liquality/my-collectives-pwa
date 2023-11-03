@@ -64,9 +64,7 @@ const Mint: React.FC = () => {
         </IonFab>
         {
           loadingGroups ?  (
-            <IonGrid>
-              <PageLoadingIndicator />
-            </IonGrid>
+            <PageLoadingIndicator />
           ) : <GroupRows groups={myGroups} loading={loadingGroups} />
         }
         <CreateGroupModal
