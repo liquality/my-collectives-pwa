@@ -7,6 +7,7 @@ import {
 } from "@ionic/react";
 import React from "react";
 import PoolItemCard from "./PoolItemCard";
+import { PageLoadingIndicator } from "../PageLoadingIndicator";
 
 const PoolRows: React.FC = () => {
   const { tokenData, loading } = useGetPoolsMetadata();
@@ -14,14 +15,7 @@ const PoolRows: React.FC = () => {
   return (
     <IonGrid>
       {loading || !tokenData ? (
-        <IonRow
-          className="ion-justify-content-center ion-align-items-center"
-          style={{ minHeight: "80vh" }}
-        >
-          <IonCol>
-            <IonProgressBar type="indeterminate"></IonProgressBar>
-          </IonCol>
-        </IonRow>
+        <PageLoadingIndicator />
       ) : (
         <IonRow style={{ margin: "1rem" }}>
           {tokenData.map((pool: any, index: number) => (

@@ -17,6 +17,7 @@ import { add, peopleOutline, layersOutline } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
 import CreateGroupModal from "./CreateGroupModal";
+import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 
 const Mint: React.FC = () => {
   const page = useRef(undefined);
@@ -64,14 +65,7 @@ const Mint: React.FC = () => {
         {
           loadingGroups ?  (
             <IonGrid>
-              <IonRow
-              className="ion-justify-content-center ion-align-items-center"
-              style={{ minHeight: "80vh" }}
-            >
-              <IonCol>
-                <IonProgressBar type="indeterminate"></IonProgressBar>
-              </IonCol>
-            </IonRow>
+              <PageLoadingIndicator />
             </IonGrid>
           ) : <GroupRows groups={myGroups} loading={loadingGroups} />
         }

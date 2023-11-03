@@ -38,9 +38,9 @@ import { baseGoerli } from "wagmi/chains";
 import Messages from "./pages/Messages";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Pool from "./pages/Pool";
-import useWindowDimensions from "./hooks/userWindowsDimensions";
 import Rewards from "./pages/Rewards";
 import { useSignInWallet } from "./hooks/useSignInWallet";
+import { isPlatform } from '@ionic/react';
 
 setupIonicReact({
   mode: "ios",
@@ -64,7 +64,6 @@ const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
 // 3. Create modal
 createWeb3Modal({ wagmiConfig, projectId, chains });
 const App: React.FC = () => {
-  const { isDesktop } = useWindowDimensions();
   const routerOutlet = (
     <IonRouterOutlet id="main-content">
       {/* Routes not requiring authentication */}
@@ -75,7 +74,7 @@ const App: React.FC = () => {
       <Route path="/mint" render={() => <Mint />} exact />
       <Route path="/pools" render={() => <Pools />} exact />
       <Route path="/rewards" render={() => <Rewards />} exact />
-      
+      <Route path="/pools/:id" render={() => <Pool />} exact />
       {/* Default route (not requiring authentication) */}
       <Route exact path="/">
         <Redirect to="/discover" />
@@ -83,16 +82,16 @@ const App: React.FC = () => {
 
       {/* Protected routes, needs auth */}
       <ProtectedRoute>
-        <Route path="/pools/:id" render={() => <Pool />} exact />
         <Route path="/settings" render={() => <Settings />} exact />
       </ProtectedRoute>
     </IonRouterOutlet>
   );
 
   const Main = () => {
+    
     useSignInWallet();
       return (<IonApp>
-        {isDesktop ? (
+        {isPlatform('desktop') ? (
           <IonSplitPane when="md" contentId="main-content">
             <IonReactRouter>
               <SideBarMenu />
@@ -109,7 +108,6 @@ const App: React.FC = () => {
   return (
     <WagmiConfig config={wagmiConfig}>
       <Main />
-      
     </WagmiConfig>
   );
 };
