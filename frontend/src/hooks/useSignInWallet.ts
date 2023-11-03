@@ -29,7 +29,7 @@ export function useSignInWallet() {
   // sign message if we need it
   useEffect(() => {
     if (user && !isLoading && walletClient) {
-      let authToken = localStorage.getItem("groupMints.accessToken");
+      const authToken = localStorage.getItem("groupMints.accessToken");
       if (!authToken) {
         // 3: sign the message if the user is not authenticated
         signMessage({ message: user.nonce.toString() });

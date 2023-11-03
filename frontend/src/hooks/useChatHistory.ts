@@ -5,7 +5,7 @@ interface ChatHistoryHookResult {
     chatHistory: Message[] | null;
     loading: boolean
 }
-export function useChatHistory(groupId: number): ChatHistoryHookResult {
+export function useChatHistory(groupId: string): ChatHistoryHookResult {
     const [chatHistory, setChatHistory] = useState<Message[] | null>(null);
     const [loading, setLoading] = useState(false);
 

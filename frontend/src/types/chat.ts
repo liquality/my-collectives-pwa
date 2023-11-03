@@ -1,23 +1,24 @@
 export interface Message {
     id?: number;
-    sender: string;
-    text: string;
-    created_at?: string;
-    group_id: number;
+    userId: string;
+    userAddress: string;
+    content: string;
+    createdAt?: string;
+    groupId: string;
 }
 
 export interface Group {
-    id: number;
-    group_name?: string;
-    created_at?: string;
-    number_of_members?: number,
+    id: string;
+    name?: string;
+    createdAt?: string;
+    members?: number,
     rewards?: number;
-    public_address: string
+    publicAddress: string
 }
 
 export interface GroupCreation {
-    group_name?: string;
-    public_address: string
+    name?: string;
+    publicAddress: string
 }
 
 export interface Invite {

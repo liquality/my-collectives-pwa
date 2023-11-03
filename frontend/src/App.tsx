@@ -40,6 +40,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Pool from "./pages/Pool";
 import useWindowDimensions from "./hooks/userWindowsDimensions";
 import Rewards from "./pages/Rewards";
+import { useSignInWallet } from "./hooks/useSignInWallet";
 
 setupIonicReact({
   mode: "ios",
@@ -87,9 +88,10 @@ const App: React.FC = () => {
       </ProtectedRoute>
     </IonRouterOutlet>
   );
-  return (
-    <WagmiConfig config={wagmiConfig}>
-      <IonApp>
+
+  const Main = () => {
+    useSignInWallet();
+      return (<IonApp>
         {isDesktop ? (
           <IonSplitPane when="md" contentId="main-content">
             <IonReactRouter>
@@ -102,7 +104,12 @@ const App: React.FC = () => {
             <TabsMenu>{routerOutlet}</TabsMenu>
           </IonReactRouter>
         )}
-      </IonApp>
+      </IonApp>)
+  }
+  return (
+    <WagmiConfig config={wagmiConfig}>
+      <Main />
+      
     </WagmiConfig>
   );
 };

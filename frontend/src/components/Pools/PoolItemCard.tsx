@@ -13,15 +13,13 @@ import React, { useState } from "react";
 
 export interface PoolItemCardProps {
   tokenId: string;
-  contractAddress: string;
-  collectionAddress: string;
+  mintingContractAddress: string;
   imageUrl: string;
 }
 
 const PoolItemCard: React.FC<PoolItemCardProps> = ({
   tokenId,
-  contractAddress,
-  collectionAddress,
+  mintingContractAddress,
   imageUrl,
 }: PoolItemCardProps) => {
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
@@ -31,7 +29,7 @@ const PoolItemCard: React.FC<PoolItemCardProps> = ({
   const handleClick = () => {
     if (!loading) {
       router.push(
-        `/pools/${tokenId}?&contractAddress=${contractAddress}&imageUrl=${ipfsImageUrl}`
+        `/pools/${tokenId}?&contractAddress=${mintingContractAddress}&imageUrl=${ipfsImageUrl}`
       );
     }
   };
@@ -64,7 +62,7 @@ const PoolItemCard: React.FC<PoolItemCardProps> = ({
           {loading ? (
             <IonSkeletonText animated={true}></IonSkeletonText>
           ) : (
-            shortenAddress(collectionAddress)
+            shortenAddress(mintingContractAddress)
           )}
         </IonCardSubtitle>
       </IonCardHeader>
