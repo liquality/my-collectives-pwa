@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run dev",
+    "start": "ts-node-dev ./src/index.ts",
     "dev": "./db.sh && ts-node-dev ./src/index.ts",
     "build": "tsc",
     "migrate:make": "knex migrate:make --knexfile src/config/database.ts -x ts",
