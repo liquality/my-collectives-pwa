@@ -40,10 +40,23 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Pool from "./pages/Pool";
 import Rewards from "./pages/Rewards";
 import { useSignInWallet } from "./hooks/useSignInWallet";
-import { isPlatform } from '@ionic/react';
+import { isPlatform } from "@ionic/react";
+import OnboardingModal from "./components/OnboardingModal";
 
 setupIonicReact({
   mode: "ios",
+  platform: {
+    /** The default `desktop` function returns false for devices with a touchscreen.
+     * This is not always wanted, so this function tests the User Agent instead.
+     **/
+    desktop: (win) => {
+      const isMobile =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          win.navigator.userAgent
+        );
+      return !isMobile;
+    },
+  },
 });
 
 // 1. Get projectId
@@ -87,24 +100,34 @@ const App: React.FC = () => {
     </IonRouterOutlet>
   );
 
-  const Main = () => {
-    
-    useSignInWallet();
-      return (<IonApp>
-        {isPlatform('desktop') ? (
-          <IonSplitPane when="md" contentId="main-content">
-            <IonReactRouter>
-              <SideBarMenu />
-              {routerOutlet}
-            </IonReactRouter>
-          </IonSplitPane>
-        ) : (
+  const AppContent = () => {
+
+    if (isPlatform("desktop")) {
+      return (
+        <IonSplitPane when="md" contentId="main-content">
           <IonReactRouter>
-            <TabsMenu>{routerOutlet}</TabsMenu>
+            <SideBarMenu />
+            {routerOutlet}
           </IonReactRouter>
-        )}
-      </IonApp>)
-  }
+        </IonSplitPane>
+      );
+    }
+    return (
+      <IonReactRouter>
+        <TabsMenu>{routerOutlet}</TabsMenu>
+      </IonReactRouter>
+    );
+  };
+  const Main = () => {
+    useSignInWallet();
+    return (
+      <IonApp>
+        <AppContent />
+        <OnboardingModal />
+      </IonApp>
+    );
+  };
+
   return (
     <WagmiConfig config={wagmiConfig}>
       <Main />
