@@ -74,4 +74,24 @@ export class GroupsService {
         "createdAt"
       );
   }
+
+  public static async addMember(
+    id: string,
+    data: any,
+    createdBy: string
+  ): Promise<boolean> {
+    try {
+      const { id: userId } = await dbClient("users")
+        .where("publicAddress", "=", data.publicAddress)
+        .first("id");
+      await dbClient("user_groups").insert({
+        groupId: id,
+        userId,
+        createdBy, // first user is admin by default
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }
