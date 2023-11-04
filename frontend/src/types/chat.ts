@@ -23,9 +23,9 @@ export interface GroupCreation {
 
 export interface Invite {
     id: number;
-    group_id: number;
-    invite_link: string;
-    is_used: boolean;
-    expire_date: string;
+    groupId: string;
+    code?: string;
+    usedAt?: Date;
+    expireAt?: Date;
 }
 

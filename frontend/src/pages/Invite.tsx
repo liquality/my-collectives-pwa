@@ -15,13 +15,12 @@ const Invite = () => {
   console.log(invite, "INVITE??");
   const handleJoinGroup = async () => {
     //TODO implement join group logic to db here
-    if (address) {
+    if (address && invite) {
       try {
-        ApiService.createMember({
-          group_id: invite?.group_id,
-          sender: address,
+        ApiService.createMember(invite.groupId, {
+          publicAddress: address,
         });
-        router.push(`/messages/${invite?.group_id}`);
+        router.push(`/messages/${invite.groupId}`);
       } catch (error) {
         console.log(error, "Error adding member");
       }

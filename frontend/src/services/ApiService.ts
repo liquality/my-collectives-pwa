@@ -4,12 +4,12 @@ import NetworkService from "./NetworkService";
 
 const ApiService = {
   createGroup: async function (groupObject: GroupCreation) {
-    return NetworkService.postResourceWithAuth("/v1/group/", groupObject);
+    return NetworkService.postResourceWithAuth("/v1/groups/", groupObject);
   },
 
   //Includes groupId and public address
-  createMember: async function (member: any) {
-    return NetworkService.postResourceWithAuth("/v1/member/", member);
+  createMember: async function (id: string, member: any) {
+    return NetworkService.postResourceWithAuth(`/v1/groups/${id}/members`, member);
   },
 
   readGroup: async function (groupId: string) {

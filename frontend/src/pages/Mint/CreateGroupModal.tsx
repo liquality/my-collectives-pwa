@@ -40,16 +40,12 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
 
   const handleCreateGroup = async () => {
     const groupObject: GroupCreation = {
-      group_name: groupName,
-      public_address: "0x0232u326483848787ndas7298bda7289da", //TODO: hardcoded for now but will have to create the contract address from our factory
+      name: groupName,
+      publicAddress: "0x0232u326483848787ndas7298bda7289da", //TODO: hardcoded for now but will have to create the contract address from our factory
     };
     try {
       const result = await ApiService.createGroup(groupObject);
       setGroupId(result.id);
-      await ApiService.createMember({
-        group_id: result.id,
-        sender: address,
-      });
       onSuccess(result.id);
     } catch (error) {
       console.log(error, "error posting group");
@@ -166,7 +162,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
               shape="round"
               fill="solid"
             >
-              Create Pool
+              Create Group
             </IonButton>
           </IonButtons>
         </IonToolbar>
