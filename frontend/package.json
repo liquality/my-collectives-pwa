@@ -4,8 +4,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "dev:host": "vite --host",
+    "start": "npm run dev",
+    "dev": "vite --host",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test.e2e": "cypress run",
@@ -26,6 +26,7 @@
     "react-router": "^5.3.4",
     "react-router-dom": "^5.3.4",
     "socket.io-client": "^4.7.2",
+    "swiper": "^11.0.3",
     "universal-cookie": "^6.1.1",
     "valtio": "^1.11.2",
     "viem": "^1.16.2",

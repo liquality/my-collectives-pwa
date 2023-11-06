@@ -27,10 +27,10 @@ interface ChatProps {
   group: Group;
 }
 export const Chat = (props: ChatProps) => {
-  const { group_name, id, rewards } = props.group;
+  const { name, id: groupId, rewards } = props.group;
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
-  const { chatHistory, loading } = useChatHistory(id as number);
+  const { chatHistory, loading } = useChatHistory(groupId);
   const { address } = useAccount();
 
   useEffect(() => {
@@ -47,14 +47,15 @@ export const Chat = (props: ChatProps) => {
   }, [chatHistory]);
 
   const handleSendMessage = async () => {
+    console.log(newMessage)
     if (newMessage) {
       try {
         const message = {
-          sender: address as string,
-          text: newMessage,
-          group_id: id as number,
+          content: newMessage,
+          groupId,
         };
         const postMessage = await ApiService.createMessage(message);
+        console.log(postMessage)
       } catch (error) {
         console.error("Error sending message:", error);
       }
@@ -68,7 +69,7 @@ export const Chat = (props: ChatProps) => {
         <IonCol>
           <IonList className="ion-padding" inset={true}>
             <IonListHeader>
-              <IonLabel>Group: {group_name}</IonLabel>
+              <IonLabel>Group: {name}</IonLabel>
             </IonListHeader>
             {messages.map((message, index) => (
               <IonItem key={index}>
@@ -79,8 +80,8 @@ export const Chat = (props: ChatProps) => {
                   />
                 </IonAvatar>
                 <IonLabel>
-                  <h3>{message.sender}</h3>
-                  <p>{message.text}</p>
+                  <h3>{message.userAddress}</h3>
+                  <p>{message.content}</p>
                 </IonLabel>
               </IonItem>
             ))}

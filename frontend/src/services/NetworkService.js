@@ -34,7 +34,10 @@ const NetworkService = {
           "Content-Type": "application/json",
         },
       };
-
+      const accessToken = localStorage.getItem("groupMints.accessToken");
+      if (accessToken) {
+        request.headers["Authorization"] = "Bearer " + accessToken;
+      }
       fetch(serverAddress + url, request)
         .then((response) => {
           return NetworkService.handleJsonResponse(response);
@@ -54,9 +57,9 @@ const NetworkService = {
         Accept: "application/json",
         "Content-Type": "application/json",
       };
-
-      if (jwt) {
-        headers["Authorization"] = "Bearer " + jwt;
+      const accessToken = localStorage.getItem("groupMints.accessToken");
+      if (accessToken) {
+        headers["Authorization"] = "Bearer " + accessToken;
       }
 
       let request = {
@@ -86,8 +89,9 @@ const NetworkService = {
         "Content-Type": "application/json",
       };
 
-      if (jwt) {
-        headers["Authorization"] = "Bearer " + jwt;
+      const accessToken = localStorage.getItem("groupMints.accessToken");
+      if (accessToken) {
+        headers["Authorization"] = "Bearer " + accessToken;
       }
 
       let request = {

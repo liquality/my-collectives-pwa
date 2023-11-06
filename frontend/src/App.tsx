@@ -38,11 +38,25 @@ import { baseGoerli } from "wagmi/chains";
 import Messages from "./pages/Messages";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Pool from "./pages/Pool";
-import useWindowDimensions from "./hooks/userWindowsDimensions";
 import Rewards from "./pages/Rewards";
+import { useSignInWallet } from "./hooks/useSignInWallet";
+import { isPlatform } from "@ionic/react";
+import OnboardingModal from "./components/OnboardingModal";
 
 setupIonicReact({
   mode: "ios",
+  platform: {
+    /** The default `desktop` function returns false for devices with a touchscreen.
+     * This is not always wanted, so this function tests the User Agent instead.
+     **/
+    desktop: (win) => {
+      const isMobile =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          win.navigator.userAgent
+        );
+      return !isMobile;
+    },
+  },
 });
 
 // 1. Get projectId
@@ -63,7 +77,6 @@ const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
 // 3. Create modal
 createWeb3Modal({ wagmiConfig, projectId, chains });
 const App: React.FC = () => {
-  const { isDesktop } = useWindowDimensions();
   const routerOutlet = (
     <IonRouterOutlet id="main-content">
       {/* Routes not requiring authentication */}
@@ -74,7 +87,7 @@ const App: React.FC = () => {
       <Route path="/mint" render={() => <Mint />} exact />
       <Route path="/pools" render={() => <Pools />} exact />
       <Route path="/rewards" render={() => <Rewards />} exact />
-      
+      <Route path="/pools/:id" render={() => <Pool />} exact />
       {/* Default route (not requiring authentication) */}
       <Route exact path="/">
         <Redirect to="/discover" />
@@ -82,27 +95,42 @@ const App: React.FC = () => {
 
       {/* Protected routes, needs auth */}
       <ProtectedRoute>
-        <Route path="/pools/:id" render={() => <Pool />} exact />
         <Route path="/settings" render={() => <Settings />} exact />
       </ProtectedRoute>
     </IonRouterOutlet>
   );
+
+  const AppContent = () => {
+
+    if (isPlatform("desktop")) {
+      return (
+        <IonSplitPane when="md" contentId="main-content">
+          <IonReactRouter>
+            <SideBarMenu />
+            {routerOutlet}
+          </IonReactRouter>
+        </IonSplitPane>
+      );
+    }
+    return (
+      <IonReactRouter>
+        <TabsMenu>{routerOutlet}</TabsMenu>
+      </IonReactRouter>
+    );
+  };
+  const Main = () => {
+    useSignInWallet();
+    return (
+      <IonApp>
+        <AppContent />
+        <OnboardingModal />
+      </IonApp>
+    );
+  };
+
   return (
     <WagmiConfig config={wagmiConfig}>
-      <IonApp>
-        {isDesktop ? (
-          <IonSplitPane when="md" contentId="main-content">
-            <IonReactRouter>
-              <SideBarMenu />
-              {routerOutlet}
-            </IonReactRouter>
-          </IonSplitPane>
-        ) : (
-          <IonReactRouter>
-            <TabsMenu>{routerOutlet}</TabsMenu>
-          </IonReactRouter>
-        )}
-      </IonApp>
+      <Main />
     </WagmiConfig>
   );
 };

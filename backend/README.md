@@ -1,30 +1,41 @@
-# Express Typescript Starter
+# Group Mints Backend
 
-Starter kit to build with Express and thirdweb without additional initial configuration.
+## Database
+### Initialization
 
-## Installation
+1. Using Docker (Recommended)
+- just need to start docker and then run the local script `./db.sh`, it will create the container and all db setup with local access
 
-Install the template with [thirdweb create](https://portal.thirdweb.com/cli/create)
+2. Local installation
 
-```bash
-  npx thirdweb create app --express --typescript --evm
+- [https://www.postgresql.org/download/macosx/](https://www.postgresql.org/download/macosx/)
+
+- you can run this sql before start
+
+```
+CREATE USER group_mints WITH PASSWORD '1q2w3e';
+
+CREATE DATABASE group_mints OWNER group_mints TABLESPACE groupmintsspace;
+
+USE group_mints;
+
 ```
 
-## Docker database
-- run `docker run --detach -p 3306:3306 --name group_mints --env MARIADB_USER=group_mints --env MARIADB_PASSWORD=1q2w3e --env MARIADB_ROOT_PASSWORD=1q2w3e  mariadb:latest`
-## Run Locally
+### Migrations
 
-Install dependencies:
+- Add a new migration, run: `npm run migrate:make [migration_name]`
+
+### Model Changes
+
+-- TODO
+
+### Database Seed
+
+- To seed the database with test data, run: `npm run seed:run`
+
 
 ```bash
-  yarn
-```
-
-Start the server:
-
-```bash
-  yarn build
-  yarn start
+  npm ci && npm start
 ```
 
 ## Environment Variables
@@ -35,24 +46,3 @@ To run this project, you will need to add the following environment variables to
 WALLET_PRIVATE_KEY=paste_your_private_key_here
 THIRDWEB_SECRET_KEY=paste_your_secret_key_here
 ```
-
-- Generate your `THIRDWEB_SECRET_KEY` via thirdweb's [dashboard](https://thirdweb.com/create-api-key).
-
-- For `WALLET_PRIVATE_KEY` export your wallet private key from your wallet.
-
-## Additional Resources
-
-- [Documentation](https://portal.thirdweb.com)
-- [Templates](https://thirdweb.com/templates)
-- [Video Tutorials](https://youtube.com/thirdweb_)
-- [Blog](https://blog.thirdweb.com)
-
-## Contributing
-
-Contributions and [feedback](https://feedback.thirdweb.com) are always welcome!
-
-Please visit our [open source page](https://thirdweb.com/open-source) for more information.
-
-## Need help?
-
-For help, join the [discord](https://discord.gg/thirdweb) or visit our [support page](https://support.thirdweb.com).

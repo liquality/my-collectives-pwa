@@ -1,8 +1,9 @@
 import Chat from "@/components/Chat";
 import useGetGroupById from "@/hooks/Groups/useGetGroupById";
 import Header from "@/components/Header";
-import { IonContent, IonPage, IonTitle } from "@ionic/react";
+import { IonContent, IonGrid, IonPage, IonTitle } from "@ionic/react";
 import { useParams } from "react-router-dom";
+import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 
 const Messages = () => {
   let { groupId } = useParams<{ groupId: string }>();
@@ -17,7 +18,9 @@ const Messages = () => {
         {!loading && group ? (
           <Chat group={group} />
         ) : (
-          <IonTitle>Loading..</IonTitle>
+          <IonGrid>
+            <PageLoadingIndicator />
+          </IonGrid>
         )}
       </IonContent>
     </IonPage>

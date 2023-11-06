@@ -29,7 +29,6 @@ const Pool: React.FC = () => {
     query.get("imageUrl") ??
     "https://ionicframework.com/docs/img/demos/avatar.svg";
 
-  useEffect(() => {}, []);
   return (
     <IonPage>
       <Header title={`Pool #${tokenId}`} />

@@ -35,7 +35,7 @@ const GroupRows = ({ groups, loading }: GroupsRowsProps) => {
         groups.map((group, index) => (
           <IonItem
             button
-            onClick={() => handleGroupClick(group.id?.toString())}
+            onClick={() => handleGroupClick(group.id)}
             key={index}
             detail={true}
           >
@@ -47,13 +47,13 @@ const GroupRows = ({ groups, loading }: GroupsRowsProps) => {
             </IonAvatar>
             <IonLabel>
               <h3>
-                {group.group_name}
+                {group.name}
                 {group.id}
               </h3>
-              <p>Members: {group.number_of_members}</p>
+              <p>Members: {group.members}</p>
             </IonLabel>
             <IonNote color="medium" slot="end">
-              {shortenAddress(group.public_address)}
+              {shortenAddress(group.publicAddress)}
             </IonNote>
           </IonItem>
         ))
