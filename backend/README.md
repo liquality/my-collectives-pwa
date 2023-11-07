@@ -1,25 +1,26 @@
 # Group Mints Backend
 
 ## Database
+
 ### Initialization
 
 1. Using Docker (Recommended)
-- just need to start docker and then run the local script `./db.sh`, it will create the container and all db setup with local access
+
+- just need to start docker and then run the local script `./docker-db.sh`, it will create the container and all db setup with local access
 
 2. Local installation
 
-- [https://www.postgresql.org/download/macosx/](https://www.postgresql.org/download/macosx/)
+   2.1 Install it using homebrowe `brew install postgresql@16`
+   2.2 Run it `brew services run postgresql@16` (use `start` if you want to start the service at login)
+   2.3 Go to the install folder `cd /usr/local/opt/postgresql@16`
+   2.3 Copy the config file to enable the inital user `cp pg_hba.conf.sample pg_hba.conf`
+   2.5 run `psql postgres` then you can go to the step 3 and create
 
-- you can run this sql before start
+3. Run the following to create a new user and databse
 
-```
-CREATE USER group_mints WITH PASSWORD '1q2w3e';
+- `postgres=# CREATE USER group_mints WITH PASSWORD '1q2w3e';`
 
-CREATE DATABASE group_mints OWNER group_mints TABLESPACE groupmintsspace;
-
-USE group_mints;
-
-```
+- `postgres=# CREATE DATABASE group_mints OWNER group_mints;`
 
 ### Migrations
 
@@ -31,8 +32,9 @@ USE group_mints;
 
 ### Database Seed
 
-- To seed the database with test data, run: `npm run seed:run`
+- To seed the database with all the tables and relations, run: `npm run seed:latest`
 
+- To seed the database with test data, run: `npm run seed:run`
 
 ```bash
   npm ci && npm start
@@ -43,6 +45,12 @@ USE group_mints;
 To run this project, you will need to add the following environment variables to your .env file:
 
 ```bash
-WALLET_PRIVATE_KEY=paste_your_private_key_here
-THIRDWEB_SECRET_KEY=paste_your_secret_key_here
+MYSQLHOST=
+MYSQLUSER=
+MYSQLDATABASE=
+MYSQLPASSWORD=
+MYSQLPORT=
+MORALIS_API_KEY=
+SOUND_API_KEY=
+ALCHEMY_API_KEY_RPC=
 ```
