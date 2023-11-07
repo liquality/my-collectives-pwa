@@ -19,12 +19,12 @@ const config: { [key: string]: Knex.Config } = {
     }
   },
   test: {
-    client: "mysql2",
+    client: "pg",
     connection: {
       user: process.env.CI_DB_USERNAME,
       password: process.env.CI_DB_PASSWORD,
       database: process.env.CI_DB_NAME,
-      host: "127.0.0.1",
+      host: process.env.CI_DB_HOSTNAME || "127.0.0.1",
       port: 3306,
     },
     migrations: {
@@ -32,7 +32,7 @@ const config: { [key: string]: Knex.Config } = {
     }
   },
   production: {
-    client: "mysql2",
+    client: "pg",
     connection: {
       user: process.env.PROD_DB_USERNAME,
       password: process.env.PROD_DB_PASSWORD,
