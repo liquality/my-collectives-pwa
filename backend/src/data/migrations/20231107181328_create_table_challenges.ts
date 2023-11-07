@@ -8,6 +8,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string("mintingContractAddress").nullable();
         table.integer("chainId").nullable();
         table.string("tokenId").nullable();
+        table.string("imageUrl").nullable();
         table.foreign("poolId").references("pools.id").onDelete("CASCADE");
         table.timestamps({ useCamelCase: true });
     });
