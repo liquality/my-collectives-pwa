@@ -1,14 +1,14 @@
 import Header from "@/components/Header";
 import PoolRows from "@/components/Pools/PoolRows";
-import useGetPoolsMetadata from "@/hooks/Pools/useGetPoolsMetadata";
+import useGetChallenges from "@/hooks/Pools/useGetChallenges";
 import { IonContent, IonPage } from "@ionic/react";
 
 const Pools: React.FC = () => {
-  const { tokenData, loading } = useGetPoolsMetadata();
+  const { tokenData, loading } = useGetChallenges();
 
   return (
     <IonPage>
-      <Header title="Pools"/>
+      <Header title="Pools" />
       <IonContent className="ion-padding" color="light">
         Pools
         <PoolRows />

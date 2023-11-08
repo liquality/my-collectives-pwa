@@ -31,7 +31,7 @@ const Pool: React.FC = () => {
 
   return (
     <IonPage>
-      <Header title={`Pool #${tokenId}`} />
+      <Header title={`Challenge #${tokenId}`} />
       <IonContent className="ion-padding" color="light">
         <IonGrid>
           <IonRow className="ion-justify-content-center ion-align-items-start">
@@ -56,7 +56,7 @@ const Pool: React.FC = () => {
                     {loadingImage ? (
                       <IonSkeletonText animated={true}></IonSkeletonText>
                     ) : (
-                      `Pool # ${tokenId}`
+                      `Challenge # ${tokenId}`
                     )}
                   </IonCardTitle>
                   <IonCardSubtitle>

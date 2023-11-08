@@ -152,6 +152,7 @@ export async function getTokenMetadataFromZora(challenges: Challenge[]) {
         ],
     });
 
+    console.log(challenges, 'all the challenges')
     const tokensWithData = await zdk.tokens({
         where: {
             tokens: challenges.map((challenge) => ({

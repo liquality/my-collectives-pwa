@@ -1,4 +1,5 @@
 import { dbClient } from "../data";
+import { ChallengeWithMeta } from "../models/challenges";
 import { Pool, CreatePoolRequest, PoolWithMeta } from "../models/pool";
 import { getTokenMetadataFromZora } from "../utils";
 
@@ -41,60 +42,65 @@ export class PoolsService {
       );
   }
 
-  public static async findAll(): Promise<PoolWithMeta[]> {
-    const pools = await dbClient("pools").select<Pool[]>(
-      "id",
-      "groupId",
-      "mintingContractAddress",
-      "chainId",
-      "tokenId",
-      "createdAt"
-    );
-    const meta = await getTokenMetadataFromZora(pools);
-    if (meta && meta.length > 0) {
-      return pools.map((pool) => {
-        const poolMeta = meta.find(
-          (meta) =>
-            meta.tokenId === pool.tokenId &&
-            meta.collectionAddress === pool.mintingContractAddress
-        );
-        const { imageUrl, name } = poolMeta || {};
-        return {
-          ...pool,
-          imageUrl: imageUrl || "",
-          name,
-        };
-      });
-    }
-
-    return pools as PoolWithMeta[];
+  //TODO: rewrite this function completly 
+  public static async findAll(): Promise<any[]> {
+    /*
+     
+        const pools = await dbClient("pools").select<Pool[]>(
+         "id",
+         "groupId",
+         "mintingContractAddress",
+         "chainId",
+         "tokenId",
+         "createdAt"
+       );
+       const meta = await getTokenMetadataFromZora(pools);
+       if (meta && meta.length > 0) {
+         return pools.map((pool) => {
+           const poolMeta = meta.find(
+             (meta) =>
+               meta.tokenId === pool.tokenId &&
+               meta.collectionAddress === pool.mintingContractAddress
+           );
+           const { imageUrl, name } = poolMeta || {};
+           return {
+             ...pool,
+             imageUrl: imageUrl || "",
+             name,
+           };
+         });
+       }
+   
+       return pools as PoolWithMeta[]; */
+    return []
   }
 
+  //TODO: rewrite this function
   public static async find(id: string): Promise<PoolWithMeta | null> {
-    const pool = await dbClient("pools")
-      .where("id", "=", id)
-      .first<Pool>(
-        "id",
-        "groupId",
-        "mintingContractAddress",
-        "chainId",
-        "tokenId",
-        "createdAt"
-      );
-
-    if (pool) {
-      const meta = await getTokenMetadataFromZora([pool]);
-      if (meta && meta.length > 0) {
-        const { imageUrl, name } = meta[0];
-        return {
-          ...pool,
-          imageUrl,
-          name,
-        };
-      }
-
-      return pool as PoolWithMeta;
-    }
+    /*  const pool = await dbClient("pools")
+       .where("id", "=", id)
+       .first<Pool>(
+         "id",
+         "groupId",
+         "mintingContractAddress",
+         "chainId",
+         "tokenId",
+         "createdAt"
+       );
+ 
+     if (pool) {
+       const meta = await getTokenMetadataFromZora([pool]);
+       if (meta && meta.length > 0) {
+         const { imageUrl, name } = meta[0];
+         return {
+           ...pool,
+           imageUrl,
+           name,
+         };
+       }
+ 
+       return pool as PoolWithMeta;
+     } */
     return null;
   }
 }

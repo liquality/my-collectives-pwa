@@ -55,7 +55,7 @@ const PoolItemCard: React.FC<PoolItemCardProps> = ({
           {loading ? (
             <IonSkeletonText animated={true}></IonSkeletonText>
           ) : (
-            `Pool # ${tokenId}`
+            `Challenge # ${tokenId}`
           )}
         </IonCardTitle>
         <IonCardSubtitle>

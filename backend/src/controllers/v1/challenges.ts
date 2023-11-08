@@ -7,9 +7,9 @@ export class ChallengesController {
 
     public findAll: RequestHandler = async (req, res) => {
         try {
-            const pools = await ChallengesService.findAll();
+            const challenges = await ChallengesService.findAll();
 
-            res.status(200).send(pools);
+            res.status(200).send(challenges);
         } catch (err: any) {
             res.status(500).send({ error: err.message });
         }
@@ -21,12 +21,12 @@ export class ChallengesController {
             res.status(400).send({ error: "id is required" });
         } else {
             try {
-                const pool = await ChallengesService.find(id);
+                const challenges = await ChallengesService.find(id);
 
-                if (!pool) {
-                    res.status(404).send({ error: "Pool not found" });
+                if (!challenges) {
+                    res.status(404).send({ error: "Challenge not found" });
                 } else {
-                    res.status(200).send(pool);
+                    res.status(200).send(challenges);
                 }
             } catch (err: any) {
                 res.status(500).send({ error: err.message });
@@ -41,15 +41,15 @@ export class ChallengesController {
             res.status(400).send({ error: "please provide all required fields" });
         } else {
             try {
-                const pool = await ChallengesService.create(
+                const challenge = await ChallengesService.create(
                     { groupId, mintingContractAddress, chainId, tokenId },
                     user.id
                 );
 
-                if (!pool) {
-                    throw new Error("Pool not created");
+                if (!challenge) {
+                    throw new Error("Challenge not created");
                 }
-                res.status(200).send(pool);
+                res.status(200).send(challenge);
             } catch (err: any) {
                 res.status(500).send({ error: err.message });
             }
