@@ -15,4 +15,4 @@ v1Router.use("/challenges", challengesRouter);
 v1Router.use("/pools", poolsRouter);
 v1Router.use("/nft", nftRouter);
 v1Router.use("/chat", chatRouter);
-v1Router.use("/invites", inviteRouter);
+v1Router.use("/invites", inviteRouter); 

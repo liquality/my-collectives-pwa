@@ -11,17 +11,17 @@ import {
 } from "@ionic/react";
 import React, { useState } from "react";
 
-export interface PoolItemCardProps {
+export interface ChallengeItemCardProps {
   tokenId: string;
   mintingContractAddress: string;
   imageUrl: string;
 }
 
-const PoolItemCard: React.FC<PoolItemCardProps> = ({
+const ChallengeItemCard: React.FC<ChallengeItemCardProps> = ({
   tokenId,
   mintingContractAddress,
   imageUrl,
-}: PoolItemCardProps) => {
+}: ChallengeItemCardProps) => {
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loading, setLoading] = useState(true);
   const router = useIonRouter();
@@ -29,7 +29,7 @@ const PoolItemCard: React.FC<PoolItemCardProps> = ({
   const handleClick = () => {
     if (!loading) {
       router.push(
-        `/pools/${tokenId}?&contractAddress=${mintingContractAddress}&imageUrl=${ipfsImageUrl}`
+        `/challenges/${tokenId}?&contractAddress=${mintingContractAddress}&imageUrl=${ipfsImageUrl}`
       );
     }
   };
@@ -71,4 +71,4 @@ const PoolItemCard: React.FC<PoolItemCardProps> = ({
   );
 };
 
-export default PoolItemCard;
+export default ChallengeItemCard;

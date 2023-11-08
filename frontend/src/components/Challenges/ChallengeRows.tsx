@@ -1,21 +1,21 @@
-import useGetChallenges from "@/hooks/Pools/useGetChallenges";
+import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
 import { IonGrid, IonRow, IonCol, IonProgressBar } from "@ionic/react";
 import React from "react";
-import PoolItemCard from "./PoolItemCard";
+import ChallengeItemCard from "./ChallengeItemCard";
 import { PageLoadingIndicator } from "../PageLoadingIndicator";
 
-const PoolRows: React.FC = () => {
-  const { tokenData, loading } = useGetChallenges();
+const ChallengeRows: React.FC = () => {
+  const { challenges, loading } = useGetChallenges();
 
   return (
     <IonGrid>
-      {loading || !tokenData ? (
+      {loading || !challenges ? (
         <PageLoadingIndicator />
       ) : (
         <IonRow style={{ margin: "1rem" }}>
-          {tokenData.map((pool: any, index: number) => (
+          {challenges.map((challenge: any, index: number) => (
             <IonCol key={index} size="12" sizeSm="6" sizeMd="4" sizeLg="3">
-              <PoolItemCard {...pool} />
+              <ChallengeItemCard {...challenge} />
             </IonCol>
           ))}
         </IonRow>
@@ -24,4 +24,4 @@ const PoolRows: React.FC = () => {
   );
 };
 
-export default PoolRows;
+export default ChallengeRows;

@@ -1,6 +1,6 @@
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
-import useGetLeaderboard from "@/hooks/Pools/useGetLeaderboard";
-import useGetChallenges from "@/hooks/Pools/useGetChallenges";
+import useGetLeaderboard from "@/hooks/Challenges/useGetLeaderboard";
+import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
 import { convertIpfsImageUrl, shortenAddress } from "@/utils";
 import {
   IonAvatar,
@@ -23,7 +23,7 @@ import {
 import React from "react";
 
 const PoolLeaderboard: React.FC = () => {
-  const { tokenData, loading } = useGetChallenges();
+  const { challenges, loading } = useGetChallenges();
   const router = useIonRouter();
   const {
     leaderboard,

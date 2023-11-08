@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import PoolLeaderboard from "@/components/Pools/PoolLeaderboard";
+import PoolLeaderboard from "@/components/Challenges/PoolLeaderboard";
 
 import {
   IonCard,
@@ -18,7 +18,7 @@ import {
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 
-const Pool: React.FC = () => {
+const Challenge: React.FC = () => {
   const { routeInfo } = useIonRouter();
   console.log(routeInfo, "routeInfo");
   const query = new URLSearchParams(routeInfo.search);
@@ -80,4 +80,4 @@ const Pool: React.FC = () => {
   );
 };
 
-export default Pool;
+export default Challenge;

@@ -31,13 +31,13 @@ import SideBarMenu from "./components/SideBarMenu";
 import TabsMenu from "./components/TabsMenu";
 import Mint from "./pages/Mint/Mint";
 import Discover from "./pages/Discover";
-import Pools from "./pages/Pools";
+import Challenges from "./pages/Challenges";
 import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
 import { WagmiConfig } from "wagmi";
 import { baseGoerli } from "wagmi/chains";
 import Messages from "./pages/Messages";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Pool from "./pages/Pool";
+import Challenge from "./pages/Challenge";
 import Rewards from "./pages/Rewards";
 import { useSignInWallet } from "./hooks/useSignInWallet";
 import { isPlatform } from "@ionic/react";
@@ -85,9 +85,9 @@ const App: React.FC = () => {
       <Route path="/invite/:inviteLink" render={() => <Invite />} />
       <Route path="/discover" render={() => <Discover />} exact />
       <Route path="/mint" render={() => <Mint />} exact />
-      <Route path="/pools" render={() => <Pools />} exact />
+      <Route path="/challenges" render={() => <Challenges />} exact />
       <Route path="/rewards" render={() => <Rewards />} exact />
-      <Route path="/pools/:id" render={() => <Pool />} exact />
+      <Route path="/challenge/:id" render={() => <Challenge />} exact />
       {/* Default route (not requiring authentication) */}
       <Route exact path="/">
         <Redirect to="/discover" />
@@ -101,7 +101,6 @@ const App: React.FC = () => {
   );
 
   const AppContent = () => {
-
     if (isPlatform("desktop")) {
       return (
         <IonSplitPane when="md" contentId="main-content">

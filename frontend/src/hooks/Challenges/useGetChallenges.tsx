@@ -2,16 +2,16 @@ import { useState, useEffect } from "react";
 import ApiService from "@/services/ApiService";
 
 export function useGetChallenges() {
-  const [tokenData, setTokenData] = useState<any | null>(null);
+  const [challenges, setChallenges] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (!tokenData) {
+        if (!challenges) {
           setLoading(true);
-          const _tokenData = await ApiService.readChallenges();
-          setTokenData(_tokenData);
+          const _challenges = await ApiService.readChallenges();
+          setChallenges(_challenges);
           setLoading(false);
         }
       } catch (error) {
@@ -19,8 +19,8 @@ export function useGetChallenges() {
       }
     };
     fetchData();
-  }, [tokenData]);
-  return { tokenData, loading };
+  }, [challenges]);
+  return { challenges, loading };
 }
 
 export default useGetChallenges;
