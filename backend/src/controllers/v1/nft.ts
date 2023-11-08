@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { NFTService } from "../../services/nft";
 import { getZoraLeaderboardEvents, sendGraphQLQuery } from "../../utils";
+import { ethers } from "ethers";
 
 export class NFTController {
   public getTokenMetadata: RequestHandler = async (req, res) => {
@@ -51,6 +52,7 @@ export class NFTController {
           }
           edges {
             node {
+              volumeSpent
               nftsCount
              user{
               publicAddress
@@ -67,6 +69,7 @@ export class NFTController {
       const renamedArray = nodesArray.map((item: any) => ({
         'minter': item.user.publicAddress,
         'numberOfMints': item.nftsCount,
+        'volume': ethers.utils.formatEther(item.volumeSpent).slice(0, 6),
         'topContributor': 'Coming soon'
       }));
 
@@ -78,7 +81,7 @@ export class NFTController {
   };
 
 
-  public getLeaderboardForZora: RequestHandler =async (req, res) => {
+  public getLeaderboardForZora: RequestHandler = async (req, res) => {
     const contractAddress = req.params.contractAddress
 
     try {
