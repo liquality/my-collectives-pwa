@@ -27,9 +27,10 @@ const ChallengeItemCard: React.FC<ChallengeItemCardProps> = ({
   const router = useIonRouter();
 
   const handleClick = () => {
+    console.log(tokenId, mintingContractAddress, ipfsImageUrl, "all of these?");
     if (!loading) {
       router.push(
-        `/challenges/${tokenId}?&contractAddress=${mintingContractAddress}&imageUrl=${ipfsImageUrl}`
+        `/challenge/${tokenId}?&contractAddress=${mintingContractAddress}&imageUrl=${ipfsImageUrl}`
       );
     }
   };
