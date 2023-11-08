@@ -4,9 +4,9 @@ import {
     ZORA_REWARDS_ABI,
     ZORA_REWARDS_CONTRACT_ADDRESS,
 } from "./constants";
-import { Pool } from "../models/pool";
 import { ZDK } from "@zoralabs/zdk";
 import { Chain, Network } from "@zoralabs/zdk/dist/queries/queries-sdk";
+import { Challenge } from "../models/challenges";
 const BASE_RPC = "https://base-mainnet.g.alchemy.com/v2/";
 
 //zora contract on OP: https://zora.co/collect/oeth:0x31f88a359a045aba182a3e1d05ceaa5a5b0f5912/0
@@ -136,7 +136,7 @@ export async function getMintersFromZora(nftContractAddress: string) {
     return formattedData;
 }
 
-export async function getTokenMetadataFromZora(pools: Pool[]) {
+export async function getTokenMetadataFromZora(challenges: Challenge[]) {
     const API_ENDPOINT = "https://api.zora.co/graphql";
     const zdk = new ZDK({
         endpoint: API_ENDPOINT,
@@ -152,11 +152,12 @@ export async function getTokenMetadataFromZora(pools: Pool[]) {
         ],
     });
 
+    console.log(challenges, 'all the challenges')
     const tokensWithData = await zdk.tokens({
         where: {
-            tokens: pools.map((pool) => ({
-                tokenId: pool.tokenId || "",
-                address: pool.mintingContractAddress || "",
+            tokens: challenges.map((challenge) => ({
+                tokenId: challenge.tokenId || "",
+                address: challenge.mintingContractAddress || "",
             })),
         },
     });

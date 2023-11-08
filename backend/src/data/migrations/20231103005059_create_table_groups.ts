@@ -10,12 +10,12 @@ export async function up(knex: Knex): Promise<void> {
         table.integer('rewards').defaultTo(0).notNullable();
         table.uuid("createdBy").notNullable();
         table.foreign("createdBy").references("users.id").onDelete("CASCADE");
-        table.timestamps({useCamelCase: true});
+        table.timestamps({ useCamelCase: true });
     });
 }
 
 
 export async function down({ schema }: Knex): Promise<void> {
-    return schema.dropTable("groups");
+    return schema.dropTableIfExists("groups");
 }
 

@@ -1,6 +1,6 @@
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
-import useGetLeaderboard from "@/hooks/Pools/useGetLeaderboard";
-import useGetPoolsMetadata from "@/hooks/Pools/useGetPoolsMetadata";
+import useGetLeaderboard from "@/hooks/Challenges/useGetLeaderboard";
+import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
 import { convertIpfsImageUrl, shortenAddress } from "@/utils";
 import {
   IonAvatar,
@@ -23,7 +23,7 @@ import {
 import React from "react";
 
 const PoolLeaderboard: React.FC = () => {
-  const { tokenData, loading } = useGetPoolsMetadata();
+  const { challenges, loading } = useGetChallenges();
   const router = useIonRouter();
   const {
     leaderboard,
@@ -49,9 +49,7 @@ const PoolLeaderboard: React.FC = () => {
             <IonList className="ion-padding">
               <IonListHeader style={{ paddingLeft: 0 }}>
                 <IonLabel className="ion-text-left">Owner</IonLabel>
-                <IonLabel className="ion-text-right ion-pr-2">
-                  Mints
-                </IonLabel>
+                <IonLabel className="ion-text-right ion-pr-2">Mints</IonLabel>
               </IonListHeader>
               <IonItem>
                 <IonAvatar aria-hidden="true" slot="start">

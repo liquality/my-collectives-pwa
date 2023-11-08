@@ -14,5 +14,5 @@ export async function up({ schema }: Knex): Promise<void> {
 }
 
 export async function down({ schema }: Knex): Promise<void> {
-  return schema.dropTable("user_groups");
+  return schema.dropTableIfExists("user_groups");
 }
