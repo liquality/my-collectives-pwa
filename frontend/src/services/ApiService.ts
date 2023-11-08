@@ -28,6 +28,10 @@ const ApiService = {
     return NetworkService.getResourceWithAuth("/v1/pools");
   },
 
+  readChallenges: async function () {
+    return NetworkService.getResourceWithAuth("/v1/challenges");
+  },
+
   getNumberOfMembersInGroup: async function (groupAddress: string) {
     return NetworkService.getResourceWithAuth("/v1/members/" + groupAddress);
   },
@@ -38,7 +42,7 @@ const ApiService = {
   },
 
   createInvite: async function (groupId: Partial<Group>) {
-    return NetworkService.postResourceWithAuth("/v1/invites/", {groupId});
+    return NetworkService.postResourceWithAuth("/v1/invites/", { groupId });
   },
 
   readInvite: async function (id: string) {
