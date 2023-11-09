@@ -70,7 +70,7 @@ export class NFTController {
         'minter': item.user.publicAddress,
         'numberOfMints': item.nftsCount,
         'volume': ethers.utils.formatEther(item.volumeSpent).slice(0, 6),
-        'topContributor': 'Coming soon'
+        'score': (item.volumeSpent * 0.7).toString().slice(0, 3)
       }));
 
       res.status(200).send(renamedArray);
