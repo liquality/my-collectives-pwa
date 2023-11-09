@@ -29,7 +29,7 @@ const ChallengeItemCard: React.FC<ChallengeItemCardProps> = ({
     console.log(tokenId, mintingContractAddress, ipfsImageUrl, "all of these?");
     if (!loading) {
       router.push(
-        `/mint/1111/challenge/${tokenId}?&contractAddress=${mintingContractAddress}&imageUrl=${ipfsImageUrl}`
+        `/challenge/${tokenId}?&contractAddress=${mintingContractAddress}&imageUrl=${ipfsImageUrl}`
       );
     }
   };

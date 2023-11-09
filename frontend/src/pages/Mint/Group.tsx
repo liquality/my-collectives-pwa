@@ -46,7 +46,7 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
             <IonRouterOutlet>
               <Route
                 path={`/mint/:groupId/challenges`}
-                render={() => <Challenges group={group} loading={loading} />}
+                render={() => <Challenges/>}
                 exact
               />
               <Route

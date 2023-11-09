@@ -41,7 +41,7 @@ import { isPlatform } from "@ionic/react";
 import OnboardingModal from "./components/OnboardingModal";
 import Mint from "./pages/Mint/Mint";
 import Challenges from "./pages/Mint/Challenges";
-import Messages from "./pages/Mint/Messages";
+
 import Group from "./pages/Mint/Group";
 
 setupIonicReact({
@@ -87,7 +87,9 @@ const App: React.FC = () => {
       <Route path="/rewards" render={() => <Rewards />} exact />
 
       <Route path="/mint" component={Mint} />
-      <Route path="/mint/:groupId/" component={Group} />
+      <Route path="/mint/:groupId" component={Group} />
+      <Route path="/challenges" render={() => <Challenges />} exact /> 
+      <Route path="/challenge/:id" render={() => <Challenge />} exact />
 
       {/* Default route (not requiring authentication) */}
       <Route exact path="/">
