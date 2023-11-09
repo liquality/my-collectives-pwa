@@ -4,7 +4,7 @@ import { AuthService } from "../../services/auth";
 export async function seed(knex: Knex): Promise<void> {
   return knex.transaction(async (trx) => {
     // Deletes ALL existing entries
-    await trx("pools").del();
+    await trx("challenges").del();
     await trx("groups").del();
     await trx("users").del();
 

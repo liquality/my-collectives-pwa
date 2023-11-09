@@ -29,19 +29,20 @@ import "./theme/variables.css";
 import "./theme/main.css";
 import SideBarMenu from "./components/SideBarMenu";
 import TabsMenu from "./components/TabsMenu";
-import Mint from "./pages/Mint/Mint";
 import Discover from "./pages/Discover";
-import Challenges from "./pages/Challenges";
 import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
 import { WagmiConfig } from "wagmi";
 import { baseGoerli } from "wagmi/chains";
-import Messages from "./pages/Messages";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Challenge from "./pages/Challenge";
+import Challenge from "./pages/Mint/Challenge";
 import Rewards from "./pages/Rewards";
 import { useSignInWallet } from "./hooks/useSignInWallet";
 import { isPlatform } from "@ionic/react";
 import OnboardingModal from "./components/OnboardingModal";
+import Mint from "./pages/Mint/Mint";
+import Challenges from "./pages/Mint/Challenges";
+import Messages from "./pages/Mint/Messages";
+import Group from "./pages/Mint/Group";
 
 setupIonicReact({
   mode: "ios",
@@ -81,13 +82,13 @@ const App: React.FC = () => {
     <IonRouterOutlet id="main-content">
       {/* Routes not requiring authentication */}
       <Route path="/login" render={() => <Login />} exact />
-      <Route path="/messages/:groupId" render={() => <Messages />} />
       <Route path="/invite/:inviteLink" render={() => <Invite />} />
       <Route path="/discover" render={() => <Discover />} exact />
-      <Route path="/mint" render={() => <Mint />} exact />
-      <Route path="/challenges" render={() => <Challenges />} exact />
       <Route path="/rewards" render={() => <Rewards />} exact />
-      <Route path="/challenge/:id" render={() => <Challenge />} exact />
+
+      <Route path="/mint" component={Mint} />
+      <Route path="/mint/:groupId/" component={Group} />
+
       {/* Default route (not requiring authentication) */}
       <Route exact path="/">
         <Redirect to="/discover" />

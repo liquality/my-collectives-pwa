@@ -1,4 +1,3 @@
-import GroupRows from "@/pages/Mint/GroupRows";
 import Header from "@/components/Header";
 import {
   IonContent,
@@ -7,28 +6,33 @@ import {
   IonFabButton,
   IonIcon,
   IonFabList,
-  IonGrid,
-  IonCol,
-  IonProgressBar,
-  IonRow,
-  useIonRouter,
+  IonAvatar,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonListHeader,
+  IonNote,
 } from "@ionic/react";
 import { add, peopleOutline, layersOutline } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
 import CreateGroupModal from "./CreateGroupModal";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
+import { RouteComponentProps } from "react-router";
+import { shortenAddress } from "@/utils";
 
-const Mint: React.FC = () => {
+const Mint: React.FC<RouteComponentProps> = ({ match }) => {
   const page = useRef(undefined);
   const createGroupModal = useRef<HTMLIonModalElement>(null);
   const createPoolModal = useRef<HTMLIonModalElement>(null);
   const [presentingElement, setPresentingElement] = useState<
     HTMLElement | undefined
   >(undefined);
-  const { myGroups, loading: loadingGroups, reload: reloadGroups } = useGetMyGroups();
-  const router = useIonRouter();
-  
+  const {
+    myGroups,
+    loading: loadingGroups,
+    reload: reloadGroups,
+  } = useGetMyGroups();
   useEffect(() => {
     setPresentingElement(page.current);
   }, []);
@@ -51,22 +55,47 @@ const Mint: React.FC = () => {
       <IonContent className="ion-padding" color="light">
         <IonFab slot="fixed" vertical="bottom" horizontal="end">
           <IonFabButton>
-            <IonIcon icon={add}></IonIcon>
+            <IonFabButton id="open-create-group-modal">
+              <IonIcon icon={add}></IonIcon>
+            </IonFabButton>
           </IonFabButton>
-          <IonFabList side="top">
-            <IonFabButton id="open-create-group-modal" color="tertiary">
-              <IonIcon icon={peopleOutline}></IonIcon>
-            </IonFabButton>
-            <IonFabButton color="secondary" id="open-create-pool-modal">
-              <IonIcon icon={layersOutline}></IonIcon>
-            </IonFabButton>
-          </IonFabList>
         </IonFab>
-        {
-          loadingGroups ?  (
-            <PageLoadingIndicator />
-          ) : <GroupRows groups={myGroups} loading={loadingGroups} />
-        }
+        {loadingGroups ? (
+          <PageLoadingIndicator />
+        ) : (
+          <IonList inset={true}>
+            <IonListHeader>
+              <IonLabel>My Groups</IonLabel>
+            </IonListHeader>
+            {myGroups
+              ? myGroups.map((group, index) => (
+                  <IonItem
+                    button
+                    href={`${match.url}/${group.id}/challenges`}
+                    key={index}
+                    detail={true}
+                  >
+                    <IonAvatar aria-hidden="true" slot="start">
+                      <img
+                        alt=""
+                        src="https://ionicframework.com/docs/img/demos/avatar.svg"
+                      />
+                    </IonAvatar>
+                    <IonLabel>
+                      <h3>
+                        {group.name}
+                        {group.id}
+                      </h3>
+                      <p>Members: {group.members}</p>
+                    </IonLabel>
+                    <IonNote color="medium" slot="end">
+                      {shortenAddress(group.publicAddress)}
+                    </IonNote>
+                  </IonItem>
+                ))
+              : null}
+          </IonList>
+        )}
         <CreateGroupModal
           trigger="open-create-group-modal"
           ref={createGroupModal}

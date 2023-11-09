@@ -8,6 +8,7 @@ import {
   IonItem,
   IonList,
   IonLabel,
+  isPlatform,
 } from "@ionic/react";
 import { logIn, logOut, wallet } from "ionicons/icons";
 import React from "react";
@@ -51,7 +52,9 @@ const ConnectButton: React.FC = () => {
         <>
           <IonButton id="logout-options-triggger">
             <IonIcon slot="end" icon={wallet}></IonIcon>
-            {shortenAddress(address || "")}
+            {isPlatform("desktop") ? (
+              shortenAddress(address || "")
+            ) : null}
           </IonButton>
           <IonPopover
             size="auto"
