@@ -73,7 +73,7 @@ export class NFTController {
         'score': (item.volumeSpent * 0.7).toString().slice(0, 3)
       }));
 
-      res.status(200).send(renamedArray);
+      res.status(200).send(renamedArray.sort((a: any, b: any) => b.score - a.score));
     } catch (err) {
       console.error(err, 'Error in sound leaderboard');
       res.status(500).json({ error: 'An error occurred for Sound Leaderboard' });
