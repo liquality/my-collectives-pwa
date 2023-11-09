@@ -58,6 +58,28 @@ ion-card {
   margin-left: 2px;
 }
 
+.custom-header{
+  box-shadow: 0 4px 16px 0 rgba(90, 90, 90, 0.1), 0 6px 30px 0 rgba(90, 90, 90, 0.1);
+  background-color: white !important;
+}
+
+.header-title{
+  text-align: left;
+  background-color: white;
+}
+
+.page-header-title{
+  text-align: left;
+  background-color: white;
+  font-size: 50px;
+}
+
+.flexDirectionCol{
+  display: flex;
+  flex-direction: column;
+}
+
+
 @media (min-width: 768px) {
   .ion-show-md-up {
     display: block !important;

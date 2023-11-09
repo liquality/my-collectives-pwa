@@ -11,7 +11,7 @@ import {
 const Discover: React.FC = () => {
   return (
     <IonPage>
-      <Header title="Discover" />
+      <Header title="Discover" size={"big"} />
       <IonContent className="ion-padding" color="light">
         <ChallengeRows />
       </IonContent>
