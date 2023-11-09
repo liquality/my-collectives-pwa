@@ -59,6 +59,7 @@ export class AuthService {
   }
 
   public static getNonce(publicAddress: string) {
+
     return dbClient("users")
       .where("publicAddress", "=", publicAddress)
       .first("nonce");

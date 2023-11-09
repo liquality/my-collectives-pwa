@@ -10,14 +10,22 @@ import {
   IonLabel,
 } from "@ionic/react";
 import { logIn, logOut, wallet } from "ionicons/icons";
-import React from "react";
+import React, { useEffect } from "react";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
-import { useAccount, useDisconnect } from "wagmi";
+import { useAccount, useDisconnect, useSignMessage } from "wagmi";
+import ApiService from "@/services/ApiService";
 
 const ConnectButton: React.FC = () => {
   const { open } = useWeb3Modal();
   const { address, isConnecting, isDisconnected } = useAccount();
   const { disconnect } = useDisconnect();
+  const {
+    data: signMessageData,
+    error,
+    isLoading,
+    signMessage,
+    variables,
+  } = useSignMessage();
 
   const logout = () => {
     localStorage.removeItem("groupMints.accessToken");
@@ -25,6 +33,29 @@ const ConnectButton: React.FC = () => {
     disconnect();
   };
 
+  useEffect(() => {
+    const handleAuthCheck = async () => {
+      if (address) {
+        const user = await ApiService.getUser(address);
+        console.log(user, "");
+        if (user.address) {
+          const signature = signMessage({ message: "Sign message to login" });
+          console.log(
+            signature,
+            "wats this?",
+            signMessageData,
+            "or this",
+            isLoading
+          );
+
+          //await ApiService.loginUser(address, signMessageData);
+        } else {
+          const createdUser = await ApiService.createUser(address);
+        }
+      }
+    };
+    handleAuthCheck();
+  }, [address]);
   const login = async () => {
     try {
       await open();

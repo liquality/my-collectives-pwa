@@ -33,12 +33,12 @@ export class AuthController {
     }
     try {
       const account = await AuthService.getNonce(address);
+      console.log(account, 'wats acc?')
       if (account) {
         res.status(200).send(account);
       } else {
-        res
-          .status(404)
-          .send({ error: `Account not found for address: ${address}` });
+        console.log('should get here')
+        res.status(200).send({ user: null });
       }
     } catch (err: any) {
       res.status(500).send({ error: err.message });

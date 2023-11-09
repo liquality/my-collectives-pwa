@@ -39,19 +39,21 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
   const { address } = useAccount();
 
   const handleCreateGroup = async () => {
-    const groupObject: GroupCreation = {
-      name: groupName,
-      publicAddress: "0x0232u326483848787ndas7298bda7289da", //TODO: hardcoded for now but will have to create the contract address from our factory
-    };
-    try {
-      const result = await ApiService.createGroup(groupObject);
-      setGroupId(result.id);
-      onSuccess(result.id);
-    } catch (error) {
-      console.log(error, "error posting group");
+    if (address) {
+      const groupObject: GroupCreation = {
+        name: groupName,
+        publicAddress: address, //TODO: hardcoded for now but will have to create the contract address from our factory
+      };
+      try {
+        const result = await ApiService.createGroup(groupObject);
+        setGroupId(result.id);
+        onSuccess(result.id);
+      } catch (error) {
+        console.log(error, "error posting group");
+      }
     }
   };
-  
+
   return (
     <IonModal
       ref={ref}
@@ -78,7 +80,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
               label="Name"
               label-placement="floating"
               placeholder="Enter the name"
-              onIonInput={(e) => setGroupName(e.detail.value!)} 
+              onIonInput={(e) => setGroupName(e.detail.value!)}
             ></IonInput>
           </IonItem>
           <IonItem>
