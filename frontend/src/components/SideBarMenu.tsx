@@ -15,11 +15,11 @@ import {
 } from "@ionic/react";
 import React from "react";
 
-import { searchCircleOutline, settingsOutline, peopleOutline, medalOutline } from "ionicons/icons";
+import { searchCircleOutline, peopleOutline, medalOutline } from "ionicons/icons";
 
 const SideBarMenu: React.FC = () => {
   const { routeInfo } = useIonRouter();
-  console.log(routeInfo, "routeInfo");
+
   const isActive = (path: string) => routeInfo.pathname.startsWith(`/${path}`);
   return (
     <IonMenu type="push" contentId="main-content">
@@ -62,14 +62,6 @@ const SideBarMenu: React.FC = () => {
           color={isActive("rewards") ? "light" : ""}>
           <IonIcon icon={medalOutline} slot="start"/>
             <IonLabel>Rewards</IonLabel>
-          </IonItem>
-
-          <IonItem button detail={false} 
-          routerLink="/settings"
-          routerDirection="root"
-          color={isActive("settings") ? "light" : ""}>
-          <IonIcon icon={settingsOutline} slot="start"/>
-            <IonLabel>Settings</IonLabel>
           </IonItem>
         </IonList>
         <IonMenuToggle>

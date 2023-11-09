@@ -25,7 +25,6 @@ const ChallengeItemCard: React.FC<ChallengeItemCardProps> = ({
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loading, setLoading] = useState(true);
   const router = useIonRouter();
-
   const handleClick = () => {
     console.log(tokenId, mintingContractAddress, ipfsImageUrl, "all of these?");
     if (!loading) {

@@ -5,23 +5,28 @@ import {
   IonButtons,
   IonProgressBar,
   IonMenuButton,
+  IonBackButton,
 } from "@ionic/react";
 import ConnectButton from "./ConnectButton";
 import React from "react";
 
-const Header = ({ title }: { title?: string }) => {
+export interface HeaderProps {
+  title?: string;
+  children?: React.ReactNode;
+}
+const Header = ({ title, children }: HeaderProps) => {
   return (
     <IonHeader  className="ion-no-border">
       <IonToolbar>
         {title ? (
           <IonTitle
           className="ion-padding"
-            style={{ textAlign: "left" }}
             slot="start"
           >
             {title}
           </IonTitle>
         ) : null}
+       { children }
         <IonButtons slot="end">
           <ConnectButton />
         </IonButtons>

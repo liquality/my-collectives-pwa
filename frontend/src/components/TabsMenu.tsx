@@ -1,15 +1,5 @@
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonButton,
-  IonContent,
-  IonMenu,
-  IonMenuToggle,
-  IonList,
-  IonItem,
   IonLabel,
-  IonListHeader,
   IonIcon,
   IonTabBar,
   IonTabButton,
@@ -18,7 +8,6 @@ import {
 import React from "react";
 import {
   searchCircleOutline,
-  settingsOutline,
   peopleOutline,
   medalOutline,
 } from "ionicons/icons";
@@ -39,10 +28,6 @@ const TabsMenu = ({ children }: { children?: React.ReactNode }) => {
         <IonTabButton tab="rewards" href="/rewards">
           <IonIcon icon={medalOutline} />
           <IonLabel>Rewards</IonLabel>
-        </IonTabButton>
-        <IonTabButton tab="settings" href="/settings">
-          <IonIcon icon={settingsOutline} />
-          <IonLabel>Settings</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

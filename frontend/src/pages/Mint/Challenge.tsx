@@ -20,7 +20,6 @@ import { useEffect, useState } from "react";
 
 const Challenge: React.FC = () => {
   const { routeInfo } = useIonRouter();
-  console.log(routeInfo, "routeInfo");
   const query = new URLSearchParams(routeInfo.search);
   const [loadingImage, setLoadingImage] = useState(true);
   const contractAddress = query.get("contractAddress");
