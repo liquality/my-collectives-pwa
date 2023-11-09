@@ -62,22 +62,27 @@ export class NFTController {
         }
       }
     }`;
-
-      const minterCount = await sendGraphQLQuery(getMinterCountQuery)
+      const minterCount = await sendGraphQLQuery(getMinterCountQuery);
       const { collectors } = minterCount?.data?.release;
       const nodesArray = collectors.edges.map((edge: any) => edge.node);
-      const renamedArray = nodesArray.map((item: any) => ({
-        'minter': item.user.publicAddress,
-        'numberOfMints': item.nftsCount,
-        'volume': ethers.utils.formatEther(item.volumeSpent).slice(0, 6),
-        'score': (item.volumeSpent * 0.7).toString().slice(0, 3)
-      }));
+      const renamedArray = nodesArray.map((item: any) => {
+        const formattedVolume = ethers.utils.formatEther(item.volumeSpent).slice(0, 6);
+        const score = (parseFloat(formattedVolume) * 0.7).toFixed(3);
+
+        return {
+          'minter': item.user.publicAddress,
+          'numberOfMints': item.nftsCount,
+          'volume': formattedVolume,
+          'score': score
+        };
+      });
 
       res.status(200).send(renamedArray.sort((a: any, b: any) => b.score - a.score));
     } catch (err) {
       console.error(err, 'Error in sound leaderboard');
       res.status(500).json({ error: 'An error occurred for Sound Leaderboard' });
     }
+
   };
 
 
