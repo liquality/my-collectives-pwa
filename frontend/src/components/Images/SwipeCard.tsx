@@ -29,7 +29,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
   };
 
   return (
-    <div className="card-img-swiper">
+    <div className="card-img-swiper" onClick={handleClick}>
       {" "}
       <img
         className="swiper-item-img"
@@ -39,6 +39,9 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
         onLoad={() => setLoading(false)}
         onError={() => setLoading(false)}
       />
+      <div className="flexDirectionCol">
+        <p style={{ color: "black" }}>BRÄÄÄ</p>
+      </div>
     </div>
   );
 };

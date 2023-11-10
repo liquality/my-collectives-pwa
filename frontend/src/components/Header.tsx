@@ -26,7 +26,7 @@ const Header = ({ title, size, children }: HeaderProps) => {
       style={headerStyle}
     >
       <IonToolbar>
-        <h5 className="header-title">My collective</h5>
+        <h5 className="">My collective</h5>
         {children}
 
         <IonButtons slot="end">
