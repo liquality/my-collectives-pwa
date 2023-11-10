@@ -40,7 +40,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
         onError={() => setLoading(false)}
       />
       <div className="flexDirectionCol">
-        <p style={{ color: "black" }}>BRÄÄÄ</p>
+        <p style={{ color: "black" }}>TODO: Title, creator etc goes here</p>
       </div>
     </div>
   );
