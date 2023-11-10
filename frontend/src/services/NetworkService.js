@@ -115,21 +115,19 @@ const NetworkService = {
   },
 
   handleJsonResponse: function (response) {
-    var promise = new Promise((resolve, reject) => {
-      response
-        .json()
-        .then((responseJson) => {
-          if (response.ok) {
-            resolve(responseJson);
-          } else {
-            reject(responseJson);
-          }
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-    return promise;
+    try {
+      if (response.ok) {
+        return response.json();
+      } else if(response.status === 401) {
+        localStorage.removeItem("groupMints.accessToken");
+        localStorage.removeItem("groupMints.user");
+      }
+
+      return null;
+    } catch (error) {
+      return error
+    }
+
   },
   handleEmptyResponse: function (response) {
     var promise = new Promise((resolve, reject) => {

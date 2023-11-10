@@ -19,7 +19,7 @@ export class AuthService {
     if (user) {
       const decodedAddress = ethers.utils.verifyMessage(user.nonce, signature);
 
-      //TODO: improve validation and secret env var
+      //TODO: improve validation
       if (publicAddress.toLowerCase() === decodedAddress.toLowerCase()) {
         const token = jwt.sign(
           {
@@ -40,20 +40,33 @@ export class AuthService {
   }
 
   public static async createUser({ publicAddress }: { publicAddress: string }) {
+    const user = await dbClient("users")
+      .where("publicAddress", "=", publicAddress)
+      .first("id", "nonce");
+
     const nonce = this.createNonce();
-    const result = await dbClient("users").insert(
-      {
-        publicAddress,
-        nonce,
-      },
-      ["id"]
-    );
-    if (result.length > 0) {
+    if (user) {
+      await dbClient("users").where("id", "=", user.id).update({ nonce });
       return {
-        id: result[0].id,
+        id: user.id,
         publicAddress,
         nonce,
       };
+    } else {
+      const result = await dbClient("users").insert(
+        {
+          publicAddress,
+          nonce,
+        },
+        ["id"]
+      );
+      if (result.length > 0) {
+        return {
+          id: result[0].id,
+          publicAddress,
+          nonce,
+        };
+      }
     }
     return null;
   }
