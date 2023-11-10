@@ -127,14 +127,6 @@ ion-toolbar {
 .swiper {
   width: 100%;
   height: 30%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.swiper-container {
-  height: 400px;
-  width: 60px;
-  background-color: #7700d5;
 }
 
 .swiper-slide {
@@ -157,4 +149,10 @@ ion-toolbar {
 
   object-fit: cover !important;
   border-radius: 20px;
+}
+
+.spaced-on-sides {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
 }

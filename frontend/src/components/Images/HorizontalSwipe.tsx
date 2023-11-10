@@ -5,16 +5,20 @@ import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
 import SwipeCard from "./SwipeCard";
 import { PageLoadingIndicator } from "../PageLoadingIndicator";
 
-export default function HorizontalSwipe() {
-  const { challenges, loading } = useGetChallenges();
+interface HorizontalSwipeProps {
+  imageData: any; //TODO decide what types of object more than challenges can be here
+  loading: boolean;
+}
+export default function HorizontalSwipe(props: HorizontalSwipeProps) {
+  const { imageData, loading } = props;
 
   return (
     <>
-      {loading || !challenges ? (
+      {loading || !imageData ? (
         <PageLoadingIndicator />
       ) : (
         <Swiper
-          slidesPerView={3}
+          slidesPerView={2.3}
           spaceBetween={10}
           loop={true}
           pagination={{
@@ -25,7 +29,7 @@ export default function HorizontalSwipe() {
           className="mySwiper"
         >
           <div className="swiper-container">
-            {challenges.map((challenge: any, index: number) => (
+            {imageData.map((challenge: any, index: number) => (
               <SwiperSlide key={index}>
                 <SwipeCard {...challenge} />
               </SwiperSlide>
