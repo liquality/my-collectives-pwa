@@ -73,7 +73,7 @@ export class NFTController {
           'minter': item.user.publicAddress,
           'numberOfMints': item.nftsCount,
           'volume': formattedVolume,
-          'score': (Number(score) * 100).toString()
+          'score': (Number(score) * 100).toString().slice(0, 4)
         };
       });
 
