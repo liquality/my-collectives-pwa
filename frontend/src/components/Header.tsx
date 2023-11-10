@@ -18,7 +18,7 @@ export interface HeaderProps {
 }
 const Header = ({ title, size, children }: HeaderProps) => {
   const headerStyle = {
-    height: size === "big" || !size ? "25%" : "20%", //default to big size if no size specified
+    height: size === "big" || !size ? "23%" : "20%", //default to big size if no size specified
   };
   return (
     <IonHeader
@@ -26,7 +26,7 @@ const Header = ({ title, size, children }: HeaderProps) => {
       style={headerStyle}
     >
       <IonToolbar>
-        {title ? <h5 className="header-title">My collective</h5> : null}
+        <h5 className="header-title">My collective</h5>
         {children}
 
         <IonButtons slot="end">
@@ -34,7 +34,9 @@ const Header = ({ title, size, children }: HeaderProps) => {
         </IonButtons>
       </IonToolbar>
       <div className="header-title-container">
-        <h2 className="ion-padding-no-border page-header-title">Discover</h2>
+        <h2 className="ion-padding-no-border page-header-title">
+          {title ? <h5 className="header-title">{title}</h5> : null}
+        </h2>
       </div>
     </IonHeader>
   );
