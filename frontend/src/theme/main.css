@@ -53,6 +53,10 @@ ion-card {
 
 }
 
+ion-toolbar {
+  --background: transparent;
+}
+
 .smallText {
   font-size: 11px;
   margin-left: 2px;
@@ -64,19 +68,39 @@ ion-card {
 }
 
 .header-title{
-  text-align: left;
+  
   background-color: white;
 }
 
-.page-header-title{
-  text-align: left;
-  background-color: white;
-  font-size: 50px;
-}
 
 .flexDirectionCol{
   display: flex;
   flex-direction: column;
+} 
+
+
+
+.header-title-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 80%; /* Ensure the container takes the full height of its parent */
+}
+
+.page-header-title {
+  margin-top: auto; 
+  font-size: 40px;
+}
+
+.login-button {
+  --background: #f8f0ff;
+}
+
+.logged-in-button{
+  background: white;
+  border: 2px solid #7700d5;
+  border-radius: 20px;
+
 }
 
 
