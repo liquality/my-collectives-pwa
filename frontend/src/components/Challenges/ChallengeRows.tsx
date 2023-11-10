@@ -15,7 +15,6 @@ const ChallengeRows: React.FC = () => {
         <IonRow style={{ margin: "1rem" }}>
           {challenges.map((challenge: any, index: number) => (
             <IonCol key={index} size="12" sizeSm="6" sizeMd="4" sizeLg="3">
-              <>{console.log(challenge)}</>
               <ChallengeItemCard {...challenge} />
             </IonCol>
           ))}

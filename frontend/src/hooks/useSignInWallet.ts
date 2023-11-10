@@ -8,13 +8,22 @@ export function useSignInWallet() {
   const { data, isError, isLoading, isSuccess, signMessage } = useSignMessage();
   const { data: walletClient } = useWalletClient();
   // user data
-  useEffect(() => {
-    const getUserData = async () => {
-      const _user = await ApiService.getUser(address!);
+  const getUserData = async () => {
+    let _user = await ApiService.getUser(address!);
+    if (!_user) {
+      // TODO: will need to show a modal / popup
+      // to ask for user details for now we are using only the address
+      _user = await ApiService.createUser({
+        publicAddress: address!,
+      });
+    }
+
+    if (_user) {
       localStorage.setItem("groupMints.user", JSON.stringify(_user));
       setUser(_user);
-    };
-
+    }
+  };
+  useEffect(() => {
     if (address && !user) {
       let userData = localStorage.getItem("groupMints.user");
       if (userData) {
@@ -41,7 +50,11 @@ export function useSignInWallet() {
   useEffect(() => {
     const login = async () => {
       const authResult = await ApiService.loginUser(address!, data!);
-      localStorage.setItem("groupMints.accessToken", authResult.accessToken);
+      if (authResult?.accessToken) {
+        localStorage.setItem("groupMints.accessToken", authResult.accessToken);
+      } else {
+        getUserData();
+      }
     };
 
     if (data && address) {

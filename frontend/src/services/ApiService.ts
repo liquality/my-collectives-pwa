@@ -9,7 +9,10 @@ const ApiService = {
 
   //Includes groupId and public address
   createMember: async function (id: string, member: any) {
-    return NetworkService.postResourceWithAuth(`/v1/groups/${id}/members`, member);
+    return NetworkService.postResourceWithAuth(
+      `/v1/groups/${id}/members`,
+      member
+    );
   },
 
   readGroup: async function (groupId: string) {
@@ -38,7 +41,11 @@ const ApiService = {
 
   createMessage: async function (messageObject: any) {
     const accessToken = localStorage.getItem("groupMints.accessToken");
-    return NetworkService.postResourceWithAuth("/v1/chat/message", messageObject, accessToken);
+    return NetworkService.postResourceWithAuth(
+      "/v1/chat/message",
+      messageObject,
+      accessToken
+    );
   },
 
   createInvite: async function (groupId: Partial<Group>) {
@@ -54,7 +61,16 @@ const ApiService = {
   },
 
   getUser: async function (address: string) {
-    return NetworkService.getResourceWithAuth(`/v1/auth/user/${address}`);
+    try {
+      const result = await NetworkService.getResourceWithAuth(
+        `/v1/auth/user/${address}`
+      );
+      console.log(result, "getUser result");
+      return result;
+    } catch (error) {
+      console.log(error, "getUser error");
+      return null;
+    }
   },
 
   loginUser: async function (publicAddress: string, signature: string) {
@@ -63,7 +79,7 @@ const ApiService = {
       signature,
     });
   },
-  createUser: async function (publicAddress: string) {
+  createUser: async function ({ publicAddress }: { publicAddress: string }) {
     return NetworkService.postResourceWithAuth("/v1/auth/user", {
       publicAddress,
     });
