@@ -88,7 +88,7 @@ const App: React.FC = () => {
 
       <Route path="/mint" component={Mint} />
       <Route path="/mint/:groupId" component={Group} />
-      <Route path="/challenges" render={() => <Challenges />} exact /> 
+      <Route path="/challenges" render={() => <Challenges />} exact />
       <Route path="/challenge/:id" render={() => <Challenge />} exact />
 
       {/* Default route (not requiring authentication) */}
@@ -121,8 +121,8 @@ const App: React.FC = () => {
     );
   };
   const Main = () => {
-    useSignInWallet();
-    return (
+    /*     useSignInWallet();
+     */ return (
       <IonApp>
         <AppContent />
         <OnboardingModal />

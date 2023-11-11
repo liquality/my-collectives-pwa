@@ -7,13 +7,33 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
+import HorizontalSwipe from "@/components/Images/HorizontalSwipe";
+import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
 
 const Discover: React.FC = () => {
+  const { challenges, loading } = useGetChallenges();
   return (
     <IonPage>
-      <Header title="Discover" />
+      <Header title="Discover" size={"big"} />
       <IonContent className="ion-padding" color="light">
-        <ChallengeRows />
+        <div className="spaced-on-sides">
+          <p>Art | {challenges?.length}</p>
+          <p>See All</p>
+        </div>
+
+        <HorizontalSwipe
+          imageData={challenges}
+          loading={loading}
+        ></HorizontalSwipe>
+
+        <div className="spaced-on-sides">
+          <p>Music | {challenges?.length}</p>
+          <p>See All</p>
+        </div>
+        <HorizontalSwipe
+          imageData={challenges}
+          loading={loading}
+        ></HorizontalSwipe>
       </IonContent>
     </IonPage>
   );
