@@ -45,6 +45,10 @@ export function useSignInWallet() {
     const handleConnectorUpdate = ({ account, chain }: ConnectorData) => {
       if (account) {
         console.log("new account", account);
+        localStorage.removeItem("groupMints.accessToken");
+        localStorage.removeItem("groupMints.user");
+        setIsAuthenticated(false);
+        setUser(null);
       } else if (chain) {
         // TODO: will need to validate if we want to use a single chain or not
         console.log("new chain", chain);
@@ -62,10 +66,6 @@ export function useSignInWallet() {
 
   useEffect(() => {
     if (address) {
-      localStorage.removeItem("groupMints.accessToken");
-      localStorage.removeItem("groupMints.user");
-      setIsAuthenticated(false);
-      setUser(null);
       getUser();
     } else {
       setUser(null);

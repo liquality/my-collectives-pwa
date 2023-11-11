@@ -72,3 +72,8 @@ ion-card {
   margin-bottom: 10px  !important;
   margin-top: 10px  !important;
 }
+
+/* customs from design */
+.pencil-fab {
+  border-radius: 16px;
+}

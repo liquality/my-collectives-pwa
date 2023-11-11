@@ -41,7 +41,6 @@ import { isPlatform } from "@ionic/react";
 import OnboardingModal from "./components/OnboardingModal";
 import Mint from "./pages/Mint/Mint";
 import Challenges from "./pages/Mint/Challenges";
-
 import Group from "./pages/Mint/Group";
 
 setupIonicReact({
