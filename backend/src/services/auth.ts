@@ -74,7 +74,7 @@ export class AuthService {
   public static getNonce(publicAddress: string) {
     return dbClient("users")
       .where("publicAddress", "=", publicAddress)
-      .first("nonce");
+      .first("id", "nonce", "publicAddress");
   }
 
   public static find(id: string): Promise<UserRecord> {
