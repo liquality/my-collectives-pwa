@@ -74,6 +74,24 @@ ion-card {
 }
 
 /* customs from design */
-.pencil-fab {
-  border-radius: 16px;
+.create-fab-button {
+  --border-radius: 1rem !important;
+  transition: width 0.5s ease;
+}
+.create-fab-button ion-label {
+  transition: display 0.5s ease;
+  padding-left: 0.5rem;
+  display: none;
+}
+
+.create-fab-button ion-icon {
+  width: 1.125rem !important;
+}
+
+.create-fab-button:hover {
+  width: 10rem;
+}
+
+.create-fab-button:hover ion-label {
+  display: block;
 }

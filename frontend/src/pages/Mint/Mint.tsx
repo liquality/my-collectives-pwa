@@ -54,8 +54,9 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
       <Header title="Mint" />
       <IonContent className="ion-padding" color="light">
         <IonFab slot="fixed" vertical="bottom" horizontal="end">
-        <IonFabButton id="open-create-group-modal" className="pencil-fab">
+        <IonFabButton id="open-create-group-modal" className="create-fab-button">
               <IonIcon src="/assets/icons/pencil.svg"></IonIcon>
+              <IonLabel>Create Group</IonLabel>
             </IonFabButton>
         </IonFab>
         {loadingGroups ? (
