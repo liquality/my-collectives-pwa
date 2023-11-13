@@ -1,14 +1,30 @@
 import ApiService from "@/services/ApiService";
 import { useState, useEffect } from "react";
-import { useAccount, useSignMessage, useWalletClient } from "wagmi";
+import {
+  ConnectorData,
+  useAccount,
+  useDisconnect,
+  useSignMessage,
+  useWalletClient,
+} from "wagmi";
 
 export function useSignInWallet() {
-  const { address } = useAccount();
+  const { address, connector: activeConnector } = useAccount();
+
   const [user, setUser] = useState<any>(null);
-  const { data, isError, isLoading, isSuccess, signMessage } = useSignMessage();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const {
+    data: signedMessage,
+    isLoading,
+    isSuccess,
+    isError,
+    signMessage,
+  } = useSignMessage();
   const { data: walletClient } = useWalletClient();
+  const { disconnect } = useDisconnect();
+
   // user data
-  const getUserData = async () => {
+  const getUser = async () => {
     let _user = await ApiService.getUser(address!);
     if (!_user) {
       // TODO: will need to show a modal / popup
@@ -23,44 +39,75 @@ export function useSignInWallet() {
       setUser(_user);
     }
   };
+
+  // TODO: check if we need this handler
   useEffect(() => {
-    if (address && !user) {
-      let userData = localStorage.getItem("groupMints.user");
-      if (userData) {
-        const _user = JSON.parse(userData!);
-        setUser(_user);
-      } else {
-        getUserData();
+    const handleConnectorUpdate = ({ account, chain }: ConnectorData) => {
+      if (account) {
+        console.log("new account", account);
+        localStorage.removeItem("groupMints.accessToken");
+        localStorage.removeItem("groupMints.user");
+        setIsAuthenticated(false);
+        setUser(null);
+      } else if (chain) {
+        // TODO: will need to validate if we want to use a single chain or not
+        console.log("new chain", chain);
       }
+    };
+
+    if (activeConnector) {
+      activeConnector.on("change", handleConnectorUpdate);
     }
-  }, [address, user]);
+
+    return () => {
+      activeConnector?.off("change", handleConnectorUpdate);
+    };
+  }, [activeConnector]);
+
+  useEffect(() => {
+    if (address) {
+      getUser();
+    } else {
+      setUser(null);
+    }
+  }, [address]);
 
   // sign message if we need it
   useEffect(() => {
-    if (user && !isLoading && walletClient) {
-      const authToken = localStorage.getItem("groupMints.accessToken");
-      if (!authToken) {
-        // 3: sign the message if the user is not authenticated
-        signMessage({ message: user.nonce.toString() });
-      }
+    const token = localStorage.getItem("groupMints.accessToken");
+    if (!token && user && !isAuthenticated && !isLoading && walletClient) {
+      signMessage({ message: user.nonce });
     }
   }, [user, isLoading, walletClient]);
 
   // auth call
   useEffect(() => {
     const login = async () => {
-      const authResult = await ApiService.loginUser(address!, data!);
-      if (authResult?.accessToken) {
-        localStorage.setItem("groupMints.accessToken", authResult.accessToken);
+      const token = localStorage.getItem("groupMints.accessToken");
+      if (token) {
+        setIsAuthenticated(true);
       } else {
-        getUserData();
+        const authResult = await ApiService.loginUser(address!, signedMessage!);
+        if (authResult?.accessToken) {
+          localStorage.setItem(
+            "groupMints.accessToken",
+            authResult.accessToken
+          );
+          setIsAuthenticated(true);
+        } else {
+          getUser();
+        }
       }
     };
 
-    if (data && address) {
+    if (signedMessage && isSuccess) {
       login();
+    } else if (isError) {
+      disconnect();
+      setIsAuthenticated(false);
+      setUser(null);
     }
-  }, [data]);
+  }, [signedMessage, isSuccess, isError]);
 
   return { user };
 }

@@ -18,6 +18,8 @@ import {
   IonTabs,
   IonBackButton,
   IonButtons,
+  IonSearchbar,
+  IonToolbar,
 } from "@ionic/react";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 import { Route, RouteComponentProps } from "react-router";
@@ -39,6 +41,10 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
         </IonButtons>
       </Header>
       <IonContent className="ion-padding" color="light">
+      <IonToolbar>
+        <IonSearchbar showClearButton="focus" value="Show on Focus"></IonSearchbar>
+      </IonToolbar>
+      
         {loading ? (
           <PageLoadingIndicator />
         ) : (
@@ -65,7 +71,7 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
                 render={() => <Info group={group} loading={loading} />}
               />
             </IonRouterOutlet>
-            <IonTabBar slot="top">
+            <IonTabBar slot="top" style={{ marginTop: '100px' }}>
               <IonTabButton tab="challenges" href={`${match.url}/challenges`}>
                 <IonLabel>Challenges</IonLabel>
               </IonTabButton>

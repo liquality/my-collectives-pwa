@@ -65,10 +65,9 @@ const ApiService = {
       const result = await NetworkService.getResourceWithAuth(
         `/v1/auth/user/${address}`
       );
-      console.log(result, "getUser result");
       return result;
     } catch (error) {
-      console.log(error, "getUser error");
+      console.error(error, "getUser error");
       return null;
     }
   },
