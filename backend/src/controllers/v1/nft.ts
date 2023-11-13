@@ -93,9 +93,11 @@ export class NFTController {
       `;
 
       const minterCount = await sendGraphQLQuery(getMinterCountQuery);
+
       const { collectors, affiliates } = minterCount?.data?.release;
       const collectorsArray = collectors.edges.map((edge: any) => edge.node);
       const affiliatesArray = affiliates.edges.map((edge: any) => edge.node);
+
 
       const renamedCollectorsArray = collectorsArray.map((item: any) => {
         const volumeInEth = Number(ethers.utils.formatEther(item.volumeSpent).slice(0, 6));
@@ -104,13 +106,14 @@ export class NFTController {
 
         // Calculate referrals based on whether affiliate entry is found
         const referrals = affiliateEntry ? affiliateEntry.nftQuantityDriven : 0;
-        const score = (volumeInEth * 0.7) + (referrals * 0.3);
+
+        const score = (volumeInEth * 100 * 0.7) + (referrals * 0.3);
         return {
           'minter': item.user.publicAddress,
           'numberOfMints': item.nftsCount,
           'referrals': referrals,
           'volume': volumeInEth,
-          'score': (score * 100).toString().slice(0, 4)
+          'score': (score).toString().slice(0, 4)
         };
       });
 
@@ -125,8 +128,8 @@ export class NFTController {
             'minter': affiliate.affiliateUser.publicAddress,
             'numberOfMints': 0,
             'referrals': affiliate.nftQuantityDriven,
-            'volume': score,
-            'score': (Number(score) * 100).toString().slice(0, 4)
+            'volume': 0,
+            'score': (Number(score)).toString().slice(0, 4)
           });
         }
       });
