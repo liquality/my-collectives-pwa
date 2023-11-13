@@ -53,5 +53,5 @@
     "vite-plugin-pwa": "^0.16.5",
     "vitest": "^0.32.2"
   },
-  "description": "Group Mints App"
+  "description": "MyCollective App"
 }

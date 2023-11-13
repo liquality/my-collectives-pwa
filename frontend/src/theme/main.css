@@ -75,9 +75,18 @@ ion-toolbar {
   background-color: white !important;
 }
 
-.header-title {
+.app-title-text {
+  color: var(--ion-app-color);
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 2.375rem;
+  letter-spacing: 0.016rem;
+}
+.header-title-text {
   background-color: white;
-  font-size: 30px;
+  color: var(--ion-title-color);
+  font-size: 1.875rem;
 }
 
 .flexDirectionCol {
@@ -89,12 +98,12 @@ ion-toolbar {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  height: 80%; /* Ensure the container takes the full height of its parent */
+  height: 65%; /* Ensure the container takes the full height of its parent */
 }
 
 .page-header-title {
   margin-top: auto;
-  font-size: 40px;
+  font-size: 2.5rem;
 }
 
 .login-button {
@@ -104,7 +113,7 @@ ion-toolbar {
 .logged-in-button {
   background: white;
   border: 2px solid #7700d5;
-  border-radius: 20px;
+  border-radius: 1.25rem;
 }
 
 @media (min-width: 768px) {
@@ -157,13 +166,12 @@ ion-toolbar {
   margin-top: 15px;
 }
 
-
-
 /* customs from design */
 .create-fab-button {
   --border-radius: 1rem !important;
   transition: width 0.5s ease;
 }
+
 .create-fab-button ion-label {
   transition: display 0.5s ease;
   padding-left: 0.5rem;
@@ -174,10 +182,38 @@ ion-toolbar {
   width: 1.125rem !important;
 }
 
-.create-fab-button:hover {
+.create-fab-button:hover,
+.create-fab-button:active {
   width: 10rem;
 }
 
-.create-fab-button:hover ion-label {
+.create-fab-button:hover ion-label,
+.create-fab-button:active ion-label {
   display: block;
+}
+
+.app-tab-bar {
+  height: 5.313rem;
+}
+
+.app-tab-bar,
+.app-side-menu {
+  --background: #ffffff !important;
+}
+
+.app-side-menu ion-item,
+.app-tab-bar ion-tab-button {
+  text-transform: uppercase;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.app-side-menu ion-item {
+  font-size: 1rem;
+  letter-spacing: 0.002rem;
+}
+
+.app-tab-bar ion-tab-button {
+  font-size: 0.656rem;
+  letter-spacing: 0.002rem;
 }

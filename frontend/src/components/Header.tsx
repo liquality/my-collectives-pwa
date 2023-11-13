@@ -7,6 +7,8 @@ import {
   IonMenuButton,
   IonBackButton,
   IonItem,
+  isPlatform,
+  IonLabel,
 } from "@ionic/react";
 import ConnectButton from "./ConnectButton";
 import React from "react";
@@ -26,18 +28,25 @@ const Header = ({ title, size, children }: HeaderProps) => {
       style={headerStyle}
     >
       <IonToolbar>
-        <h5 className="">My collective</h5>
-        {children}
-
+        {isPlatform("desktop") ? (
+          <IonLabel className="header-title-text">{title}</IonLabel>
+        ) : (
+          <IonLabel className="app-title-text">MyCollective</IonLabel>
+        )}
         <IonButtons slot="end">
           <ConnectButton />
         </IonButtons>
       </IonToolbar>
-      <div className="header-title-container">
-        <h2 className="ion-padding-no-border page-header-title">
-          {title ? <h5 className="header-title">{title}</h5> : null}
-        </h2>
-      </div>
+      {!isPlatform("desktop") && (
+        <div className="header-title-container">
+          <div className="ion-padding-no-border page-header-title">
+            {title ? (
+              <IonLabel className="header-title-text">{title}</IonLabel>
+            ) : null}
+          </div>
+        </div>
+      )}
+      {children}
     </IonHeader>
   );
 };

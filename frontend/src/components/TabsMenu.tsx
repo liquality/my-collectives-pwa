@@ -6,27 +6,22 @@ import {
   IonTabs,
 } from "@ionic/react";
 import React from "react";
-import {
-  searchCircleOutline,
-  peopleOutline,
-  medalOutline,
-} from "ionicons/icons";
 
 const TabsMenu = ({ children }: { children?: React.ReactNode }) => {
   return (
     <IonTabs>
       {children}
-      <IonTabBar slot="bottom">
+      <IonTabBar slot="bottom" className="app-tab-bar">
         <IonTabButton tab="discover" href="/discover">
-          <IonIcon icon={searchCircleOutline} />
+        <IonIcon src="./assets/icons/discover.svg" />
           <IonLabel>Discover</IonLabel>
         </IonTabButton>
         <IonTabButton tab="mint" href="/mint">
-          <IonIcon icon={peopleOutline} />
+        <IonIcon src="./assets/icons/mint.svg" />
           <IonLabel>Mint</IonLabel>
         </IonTabButton>
         <IonTabButton tab="rewards" href="/rewards">
-          <IonIcon icon={medalOutline} />
+        <IonIcon src="./assets/icons/rewards.svg" />
           <IonLabel>Rewards</IonLabel>
         </IonTabButton>
       </IonTabBar>
