@@ -9,6 +9,7 @@ import {
 } from "@ionic/react";
 import HorizontalSwipe from "@/components/Images/HorizontalSwipe";
 import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
+import About from "./About";
 
 const Discover: React.FC = () => {
   const { challenges, loading } = useGetChallenges();
@@ -34,6 +35,7 @@ const Discover: React.FC = () => {
           imageData={challenges}
           loading={loading}
         ></HorizontalSwipe>
+        <About />
       </IonContent>
     </IonPage>
   );
