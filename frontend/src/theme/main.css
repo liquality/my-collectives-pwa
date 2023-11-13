@@ -1,10 +1,19 @@
 .dark-ion-popover {
-  --background: var(--ion-color-primary) --color: white;
+  --background: var(--ion-color-primary);
+  --color: white;
   --box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.6);
+}
+.ion-color-light {
+  --ion-color-base: #ffffff !important;
+}
+
+:host(.ion-color) .inner-scroll {
+  --ion-background-color: white !important;
+  --ion-background: white !important;
 }
 
 .dark-ion-popover ion-content {
-  --background: var(--ion-color-primary)
+  --background: var(--ion-color-primary);
 }
 
 ion-split-pane {
@@ -12,16 +21,15 @@ ion-split-pane {
   --side-max-width: 350px;
 }
 
-
 ion-card {
   border-radius: 1rem;
 }
 
 .pool-item-card {
-  -webkit-transition: transform .4s ease-in;
-  -moz-transition: transform .4s ease-in;
-  -ms-transition: transform .4s ease-in;
-  transition: transform .4s ease-in;
+  -webkit-transition: transform 0.4s ease-in;
+  -moz-transition: transform 0.4s ease-in;
+  -ms-transition: transform 0.4s ease-in;
+  transition: transform 0.4s ease-in;
   cursor: pointer;
 }
 
@@ -50,7 +58,10 @@ ion-card {
   border-top-right-radius: 1rem;
   border-top-left-radius: 1rem;
   margin-top: 0;
+}
 
+ion-toolbar {
+  --background: transparent;
 }
 
 .smallText {
@@ -58,20 +69,95 @@ ion-card {
   margin-left: 2px;
 }
 
+.custom-header {
+  box-shadow: 0 4px 16px 0 rgba(90, 90, 90, 0.1),
+    0 6px 30px 0 rgba(90, 90, 90, 0.1);
+  background-color: white !important;
+}
+
+.header-title {
+  background-color: white;
+  font-size: 30px;
+}
+
+.flexDirectionCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-title-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 80%; /* Ensure the container takes the full height of its parent */
+}
+
+.page-header-title {
+  margin-top: auto;
+  font-size: 40px;
+}
+
+.login-button {
+  --background: #f8f0ff;
+}
+
+.logged-in-button {
+  background: white;
+  border: 2px solid #7700d5;
+  border-radius: 20px;
+}
+
 @media (min-width: 768px) {
   .ion-show-md-up {
     display: block !important;
-}
+  }
 }
 
 .footer-button {
-  --padding-top: 10px  !important;
-  --padding-bottom: 10px  !important;
+  --padding-top: 10px !important;
+  --padding-bottom: 10px !important;
   --padding-start: 15px !important;
   --padding-end: 15px !important;
-  margin-bottom: 10px  !important;
-  margin-top: 10px  !important;
+  margin-bottom: 10px !important;
+  margin-top: 10px !important;
 }
+
+/* Images/Swiper */
+
+.swiper {
+  width: 100%;
+  height: 30%;
+}
+
+.swiper-slide {
+  width: 70px;
+  font-size: 18px;
+  background: #f8f8f8;
+  border-radius: 20px;
+  position: relative;
+}
+
+.card-img-swiper {
+  width: 100% !important;
+}
+
+.swiper-item-img {
+  position: absolute;
+  top: 0;
+  width: 100% !important;
+  height: 60% !important;
+
+  object-fit: cover !important;
+  border-radius: 20px;
+}
+
+.spaced-on-sides {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+
 
 /* customs from design */
 .create-fab-button {

@@ -42,42 +42,101 @@ export class NFTController {
       const releaseId = await sendGraphQLQuery(getReleaseIdQuery)
       const { id } = releaseId?.data?.releaseFromContract;
 
-      const getMinterCountQuery = `query ApiExplorer {
+      const getMinterCountQuery = `query {
         release(id: "${id}") {
-        collectors {
-          pageInfo {
-            hasNextPage
-            startCursor
-            hasPreviousPage
-          }
-          edges {
-            node {
-              volumeSpent
-              nftsCount
-             user{
-              publicAddress
+          id
+          affiliates(pagination: { first: 10, after: "MjB8MGZlYzkwMGUtZWE4NS00MzEzLWEwNTYtMjJjZTlmYmQ3ZGRk" }) {
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
+              endCursor
+              startCursor
             }
+            edges {
+              node {
+                id
+                affiliateAddress
+                affiliateUser {
+                  id
+                  publicAddress
+                }
+                grossSalesDriven
+                grossSalesDrivenUsd
+                affiliateFeeEarned
+                nftQuantityDriven
+              }
+              cursor
+            }
+          }
+          collectors {
+            pageInfo {
+              hasNextPage
+              startCursor
+              hasPreviousPage
+            }
+            edges {
+              node {
+                volumeSpent
+                nftsCount
+                user {
+                  publicAddress
+                }
+                affiliateUser {
+                  id
+                  publicAddress
+                }
+              }
             }
           }
         }
       }
-    }`;
-      const minterCount = await sendGraphQLQuery(getMinterCountQuery);
-      const { collectors } = minterCount?.data?.release;
-      const nodesArray = collectors.edges.map((edge: any) => edge.node);
-      const renamedArray = nodesArray.map((item: any) => {
-        const formattedVolume = ethers.utils.formatEther(item.volumeSpent).slice(0, 6);
-        const score = (parseFloat(formattedVolume) * 0.7).toFixed(3);
+      `;
 
+      const minterCount = await sendGraphQLQuery(getMinterCountQuery);
+
+      const { collectors, affiliates } = minterCount?.data?.release;
+      const collectorsArray = collectors.edges.map((edge: any) => edge.node);
+      const affiliatesArray = affiliates.edges.map((edge: any) => edge.node);
+
+
+      const renamedCollectorsArray = collectorsArray.map((item: any) => {
+        const volumeInEth = Number(ethers.utils.formatEther(item.volumeSpent).slice(0, 6));
+        // Find corresponding affiliate entry, if it exists
+        const affiliateEntry = affiliatesArray.find((affiliate: any) => affiliate.affiliateUser.publicAddress === item.user.publicAddress);
+
+        // Calculate referrals based on whether affiliate entry is found
+        const referrals = affiliateEntry ? affiliateEntry.nftQuantityDriven : 0;
+
+        const score = (volumeInEth * 100 * 0.7) + (referrals * 0.3);
         return {
           'minter': item.user.publicAddress,
           'numberOfMints': item.nftsCount,
-          'volume': formattedVolume,
-          'score': score
+          'referrals': referrals,
+          'volume': volumeInEth,
+          'score': (score).toString().slice(0, 4)
         };
       });
 
-      res.status(200).send(renamedArray.sort((a: any, b: any) => b.score - a.score));
+      // Add new entries for affiliates not found in collectorsArray
+      affiliatesArray.forEach((affiliate: any) => {
+        const isFound = renamedCollectorsArray.some((collector: any) => collector.minter === affiliate.affiliateUser.publicAddress);
+        if (!isFound) {
+          const score = (affiliate.nftQuantityDriven * 0.3).toFixed(3);
+
+
+          renamedCollectorsArray.push({
+            'minter': affiliate.affiliateUser.publicAddress,
+            'numberOfMints': 0,
+            'referrals': affiliate.nftQuantityDriven,
+            'volume': 0,
+            'score': (Number(score)).toString().slice(0, 4)
+          });
+        }
+      });
+
+
+
+      res.status(200).send(renamedCollectorsArray.sort((a: any, b: any) => b.score - a.score));
     } catch (err) {
       console.error(err, 'Error in sound leaderboard');
       res.status(500).json({ error: 'An error occurred for Sound Leaderboard' });

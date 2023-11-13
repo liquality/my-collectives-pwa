@@ -37,9 +37,7 @@ export class ChallengesService {
             "tokenId",
             "createdAt"
         );
-        console.log(challenges, 'CHALLENGES?')
         const meta = await getTokenMetadataFromZora(challenges);
-        console.log(meta, 'wats metA??')
         if (meta && meta.length > 0) {
             return challenges.map((challenge) => {
                 const challengeMeta = meta.find(
