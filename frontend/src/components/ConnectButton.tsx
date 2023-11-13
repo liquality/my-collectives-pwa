@@ -38,23 +38,13 @@ const ConnectButton: React.FC = () => {
   return (
     <>
       {isDisconnected ? (
-        <IonButton onClick={login}>
-          {isConnecting ? (
-            <IonSpinner name="circular" />
-          ) : (
-            <>
-              <IonIcon slot="end" icon={logIn}></IonIcon>
-              Connect
-            </>
-          )}
+        <IonButton className="login-button" onClick={login}>
+          {isConnecting ? <IonSpinner name="circular" /> : <>Connect</>}
         </IonButton>
       ) : (
         <>
-          <IonButton id="logout-options-triggger">
-            <IonIcon slot="end" icon={wallet}></IonIcon>
-            {isPlatform("desktop") ? (
-              shortenAddress(address || "")
-            ) : null}
+          <IonButton className="logged-in-button" id="logout-options-triggger">
+            {shortenAddress(address || "")}
           </IonButton>
           <IonPopover
             size="auto"
