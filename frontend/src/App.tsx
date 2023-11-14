@@ -29,7 +29,7 @@ import "./theme/variables.css";
 import "./theme/main.css";
 import SideBarMenu from "./components/SideBarMenu";
 import TabsMenu from "./components/TabsMenu";
-import Discover from "./pages/Discover";
+import Discover from "./pages/Discover/Discover";
 import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
 import { WagmiConfig } from "wagmi";
 import { baseGoerli } from "wagmi/chains";
@@ -64,8 +64,8 @@ const projectId = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID;
 
 // 2. Create wagmiConfig
 const metadata = {
-  name: "Group Mints",
-  description: "Liquality Group Mints",
+  name: "MyCollective",
+  description: "Liquality MyCollective",
   url: "https://liquality.io",
   icons: [
     "https://uploads-ssl.webflow.com/63e610c62d73bd54e8ee8455/63e610c62d73bd46ffee8583_Liquality_logo.svg",
@@ -82,7 +82,7 @@ const App: React.FC = () => {
       {/* Routes not requiring authentication */}
       <Route path="/login" render={() => <Login />} exact />
       <Route path="/invite/:inviteLink" render={() => <Invite />} />
-      <Route path="/discover" render={() => <Discover />} exact />
+      <Route path="/discover" component={Discover} />
       <Route path="/rewards" render={() => <Rewards />} exact />
 
       <Route path="/mint" component={Mint} />
@@ -92,7 +92,7 @@ const App: React.FC = () => {
 
       {/* Default route (not requiring authentication) */}
       <Route exact path="/">
-        <Redirect to="/discover" />
+        <Redirect to="/discover/new" />
       </Route>
 
       {/* Protected routes, needs auth */}

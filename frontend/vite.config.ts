@@ -26,9 +26,9 @@ export default defineConfig({
       manifest: {
         display: 'standalone',
         scope: '/',
-        name: 'Liquality Group Mints',
-        short_name: 'Group Mints',
-        description: 'Liquality Group Mints',
+        name: 'Liquality MyCollective',
+        short_name: 'MyCollective',
+        description: 'Liquality MyCollective',
         theme_color: '#ffffff',
         icons: [
           {

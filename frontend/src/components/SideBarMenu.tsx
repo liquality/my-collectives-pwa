@@ -11,57 +11,67 @@ import {
   IonLabel,
   IonListHeader,
   IonIcon,
-  useIonRouter
+  useIonRouter,
 } from "@ionic/react";
 import React from "react";
-
-import { searchCircleOutline, peopleOutline, medalOutline } from "ionicons/icons";
+import useIsActiveRoute from "@/hooks/useIsActiveRoute";
 
 const SideBarMenu: React.FC = () => {
-  const { routeInfo } = useIonRouter();
-
-  const isActive = (path: string) => routeInfo.pathname.startsWith(`/${path}`);
+  const isActive = useIsActiveRoute();
   return (
     <IonMenu type="push" contentId="main-content">
-      <IonHeader  className="ion-no-border">
+      <IonHeader className="ion-no-border">
         <IonToolbar>
-          {" "}
           <IonTitle>
-            <img
-              src="/logo.svg"
-              alt=""
-              height={35}
-              width={35}
-              style={{ verticalAlign: "middle" }}
-            />
+            <IonLabel className="app-title-text">MyCollective</IonLabel>
           </IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <IonList lines="none">
-          <IonListHeader>
-            <IonLabel>Group Mints</IonLabel>
-          </IonListHeader>
-          <IonItem button detail={false} 
-          routerLink="/discover" 
-          routerDirection="root"
-          color={isActive("discover") ? "light" : ""}>
-            <IonIcon icon={searchCircleOutline} slot="start"/>
-            <IonLabel>Discover</IonLabel>
+        <IonList lines="none" className="app-side-menu">
+          <IonItem
+            button
+            detail={false}
+            routerLink="/discover/new"
+            routerDirection="root"
+            color={isActive("/discover") ? "light" : ""}
+          >
+            <IonIcon
+              color={isActive("/discover") ? "primary" : ""}
+              src="/assets/icons/discover.svg"
+              slot="start"
+            />
+            <IonLabel color={isActive("/discover") ? "primary" : ""}>
+              Discover
+            </IonLabel>
           </IonItem>
-          <IonItem button detail={false} 
-          routerLink="/mint"
-          routerDirection="root"
-          color={isActive("mint") ? "light" : ""}>
-            <IonIcon icon={peopleOutline} slot="start"/>
-            <IonLabel>Mint</IonLabel>
+          <IonItem
+            button
+            detail={false}
+            routerLink="/mint"
+            routerDirection="root"
+          >
+            <IonIcon
+              color={isActive("/mint") ? "primary" : ""}
+              src="/assets/icons/mint.svg"
+              slot="start"
+            />
+            <IonLabel color={isActive("/mint") ? "primary" : ""}>Mint</IonLabel>
           </IonItem>
-          <IonItem button detail={false} 
-          routerLink="/rewards"
-          routerDirection="root"
-          color={isActive("rewards") ? "light" : ""}>
-          <IonIcon icon={medalOutline} slot="start"/>
-            <IonLabel>Rewards</IonLabel>
+          <IonItem
+            button
+            detail={false}
+            routerLink="/rewards"
+            routerDirection="root"
+          >
+            <IonIcon
+              color={isActive("/rewards") ? "primary" : ""}
+              src="/assets/icons/rewards.svg"
+              slot="start"
+            />
+            <IonLabel color={isActive("/rewards") ? "primary" : ""}>
+              Rewards
+            </IonLabel>
           </IonItem>
         </IonList>
         <IonMenuToggle>
