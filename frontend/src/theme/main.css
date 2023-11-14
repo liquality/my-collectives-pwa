@@ -3,6 +3,55 @@
   font-family: "Anek Kannada", sans-serif;
 }
 
+/* Custom colors from Figma Design/Mobile wallet */
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --primary-purple: #7700d5;
+  --light-white: #f6f6f6;
+  --medium-white: #f4f4f4;
+  --white-grey: #eeeeee;
+  --light-grey: #d9dfe5;
+  --medium-grey: #bfc3c7;
+  --orange-grey: #f9f9f9;
+  --grey: #a8aeb7;
+  --grey-meta: #646f85;
+  --dark-grey: #3d4767;
+  --header-background: #313747;
+  --main-background: #282e3f;
+  --grey-black: #000d35;
+  --button-inactive: #eeeeee;
+  --active: #9742fb;
+  --button-disabled: #ba62fe;
+  --gradient-start-color: #c87ff2;
+  --gradient-middle-color: #853de0;
+  --gradient-end-color: #4483b0;
+  --transparent: transparent;
+  --semi-transparent-white: rgba(255, 255, 255, 0.8);
+  --semi-transparent-dark: rgba(0, 0, 0, 0.8);
+  --light-background: #ffffff;
+  --dark-background: #3d4767;
+  --light-text: #3d4767;
+  --dark-text: #eeeeee;
+  --red: #e40000;
+  --switch-active-color: #9d4dfa;
+  --switch-inactive-color: #e7e7e7;
+  --switch-inactive-border-color: #94939b;
+  --yellow: #fbff4a;
+  --grey-background: #f9f9f9;
+  --link-text-color: #8835e7;
+  --trans-grey: #f9f9f9;
+  --error: #ef0505;
+  --slow: #ff740f;
+  --average: #4f67e4;
+  --fast: #3ab24d;
+  --light-purple-background: #f8f0ff;
+  --semi-transparent-grey: rgba(61, 71, 103, 0.8);
+  --warning-button: #dbaeff;
+  --light-input-active-color: #f8f0ff;
+  --white-light-grey: #e0e0e0;
+}
+
 .ion-color-light {
   --ion-color-base: #ffffff !important;
 }
@@ -285,4 +334,34 @@ ion-toolbar {
 }
 .app-page-top-search-bar ion-searchbar ion-icon {
   margin-left: 0.6rem !important;
+}
+
+.purple-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--light-purple-background);
+  width: 90%;
+  height: 40%;
+  margin: 0 auto;
+  border-radius: 20px;
+}
+
+.purple-container > * {
+  margin: 0 auto;
+}
+
+.purple-container {
+  color: var(--primary-purple);
+  text-align: center;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 17px;
+  letter-spacing: 0.5px;
+}
+
+ion-button {
+  width: 50% !important;
 }
