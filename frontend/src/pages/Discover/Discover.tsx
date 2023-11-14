@@ -2,19 +2,11 @@ import Header from "@/components/Header";
 import {
   IonContent,
   IonPage,
-  IonRouterOutlet,
-  IonLabel,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  IonToolbar,
-  IonButtons,
-  IonButton,
+  IonRouterOutlet
 } from "@ionic/react";
 import { Redirect, Route, RouteComponentProps } from "react-router";
 import New from "./New";
 import About from "./About";
-import PageTopBar from "@/components/PageTopBar";
 
 const Discover: React.FC<RouteComponentProps> = ({ match }) => {
   return (

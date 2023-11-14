@@ -64,7 +64,7 @@ const projectId = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID;
 
 // 2. Create wagmiConfig
 const metadata = {
-  name: "MyCollective",
+  name: "MyCollective.tech",
   description: "Liquality MyCollective",
   url: "https://liquality.io",
   icons: [

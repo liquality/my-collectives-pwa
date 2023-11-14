@@ -1,7 +1,6 @@
 import { IonContent, IonPage } from "@ionic/react";
 import HorizontalSwipe from "@/components/Images/HorizontalSwipe";
 import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
-import PageTopBar from "@/components/PageTopBar";
 import { RouteComponentProps } from "react-router";
 import PageSearchBar from "@/components/PageSearchBar";
 import DiscoverTopBar from "./DiscoverTopBar";

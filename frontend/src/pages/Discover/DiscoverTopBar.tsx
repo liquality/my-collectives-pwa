@@ -1,9 +1,9 @@
 import PageTopBar from "@/components/PageTopBar";
 import { RouteComponentProps } from "react-router";
-export interface DiscoverTopBarProps extends RouteComponentProps {
+export interface DiscoverTopBarProps {
   children?: React.ReactNode;
 }
-const DiscoverTopBar: React.FC<DiscoverTopBarProps> = ({ match, children }) => {
+const DiscoverTopBar: React.FC<DiscoverTopBarProps> = ({ children }) => {
   return (
     <PageTopBar
       tabs={[
