@@ -269,13 +269,3 @@ ion-toolbar {
 .app-page-top-search-bar ion-searchbar ion-icon {
   margin-left: 0.6rem !important;
 }
-
-.custom-button {
-  text-align: center;
-  width: 50%;
-  border-radius: 30px;
-}
-
-ion-button {
-  --background: none;
-}

@@ -1,3 +1,20 @@
+
+/* 
+
+This file is serves as a helper file to quickly pick up different colors and buttons when implementing design 
+Cancel button:
+
+<IonButton shape="round" disabled={true} color="medium">
+
+Primary purple button:
+<IonButton shape="round"  color="primary">
+
+Cancel Button:
+<IonButton shape="round"  fill="clear" color="primary">
+
+
+ */
+
 export const colorPalette = {
     black: '#000000',
     white: '#ffffff',
