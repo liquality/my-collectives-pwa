@@ -25,6 +25,10 @@ ion-card {
   border-radius: 1rem;
 }
 
+/* ion-button {
+  --border-radius: 30px;
+} */
+
 .pool-item-card {
   -webkit-transition: transform 0.4s ease-in;
   -moz-transition: transform 0.4s ease-in;
@@ -244,7 +248,6 @@ ion-toolbar {
   width: 100% !important;
 }
 
-
 .app-page-top-tab-button:hover,
 .app-page-top-tab-button.ion-color-primary {
   border-bottom: 1px solid #7700d5;
@@ -265,4 +268,15 @@ ion-toolbar {
 }
 .app-page-top-search-bar ion-searchbar ion-icon {
   margin-left: 0.6rem !important;
+}
+
+.custom-button ion-button {
+  background-color: #7700d5;
+  color: white;
+  text-align: center;
+  width: 50%;
+}
+
+ion-button {
+  --border-radius: 30px !important;
 }

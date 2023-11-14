@@ -4,6 +4,7 @@ import { Pagination, Navigation } from "swiper/modules";
 import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
 import SwipeCard from "./SwipeCard";
 import { PageLoadingIndicator } from "../PageLoadingIndicator";
+import { isPlatform } from "@ionic/react";
 
 interface HorizontalSwipeProps {
   imageData: any; //TODO decide what types of object more than challenges can be here
@@ -18,7 +19,7 @@ export default function HorizontalSwipe(props: HorizontalSwipeProps) {
         <PageLoadingIndicator />
       ) : (
         <Swiper
-          slidesPerView={2.3}
+          slidesPerView={isPlatform("desktop") ? 4.3 : 2.3}
           spaceBetween={10}
           loop={true}
           pagination={{

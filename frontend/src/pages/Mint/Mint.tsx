@@ -12,6 +12,7 @@ import {
   IonList,
   IonListHeader,
   IonNote,
+  IonButton,
 } from "@ionic/react";
 import { add, peopleOutline, layersOutline } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
@@ -28,6 +29,7 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
   const [presentingElement, setPresentingElement] = useState<
     HTMLElement | undefined
   >(undefined);
+
   const {
     myGroups,
     loading: loadingGroups,
@@ -37,6 +39,7 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
     setPresentingElement(page.current);
   }, []);
 
+  console.log(myGroups, "myg grouups");
   function hideCreateGroupModal() {
     createGroupModal.current?.dismiss();
   }
@@ -54,10 +57,13 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
       <Header title="Mint" />
       <IonContent className="ion-padding" color="light">
         <IonFab slot="fixed" vertical="bottom" horizontal="end">
-        <IonFabButton id="open-create-group-modal" className="create-fab-button">
-              <IonIcon src="/assets/icons/pencil.svg"></IonIcon>
-              <IonLabel>Create Group</IonLabel>
-            </IonFabButton>
+          <IonFabButton
+            id="open-create-group-modal"
+            className="create-fab-button"
+          >
+            <IonIcon src="/assets/icons/pencil.svg"></IonIcon>
+            <IonLabel>Create Group</IonLabel>
+          </IonFabButton>
         </IonFab>
         {loadingGroups ? (
           <PageLoadingIndicator />
@@ -102,6 +108,8 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
           dismiss={hideCreateGroupModal}
           onSuccess={handleCreateGroup}
         />
+
+        <IonButton className="custom-button">Create group</IonButton>
       </IonContent>
     </IonPage>
   );
