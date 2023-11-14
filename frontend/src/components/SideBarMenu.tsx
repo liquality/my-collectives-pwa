@@ -14,17 +14,10 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import React from "react";
-
-import {
-  searchCircleOutline,
-  peopleOutline,
-  medalOutline,
-} from "ionicons/icons";
+import useIsActiveRoute from "@/hooks/useIsActiveRoute";
 
 const SideBarMenu: React.FC = () => {
-  const { routeInfo } = useIonRouter();
-
-  const isActive = (path: string) => routeInfo.pathname.startsWith(`/${path}`);
+  const isActive = useIsActiveRoute();
   return (
     <IonMenu type="push" contentId="main-content">
       <IonHeader className="ion-no-border">
@@ -41,14 +34,14 @@ const SideBarMenu: React.FC = () => {
             detail={false}
             routerLink="/discover"
             routerDirection="root"
-            color={isActive("discover") ? "light" : ""}
+            color={isActive("/discover") ? "light" : ""}
           >
             <IonIcon
-              color={isActive("discover") ? "primary" : ""}
+              color={isActive("/discover") ? "primary" : ""}
               src="/assets/icons/discover.svg"
               slot="start"
             />
-            <IonLabel color={isActive("discover") ? "primary" : ""}>
+            <IonLabel color={isActive("/discover") ? "primary" : ""}>
               Discover
             </IonLabel>
           </IonItem>
@@ -59,11 +52,11 @@ const SideBarMenu: React.FC = () => {
             routerDirection="root"
           >
             <IonIcon
-              color={isActive("mint") ? "primary" : ""}
+              color={isActive("/mint") ? "primary" : ""}
               src="/assets/icons/mint.svg"
               slot="start"
             />
-            <IonLabel color={isActive("mint") ? "primary" : ""}>Mint</IonLabel>
+            <IonLabel color={isActive("/mint") ? "primary" : ""}>Mint</IonLabel>
           </IonItem>
           <IonItem
             button
@@ -72,11 +65,11 @@ const SideBarMenu: React.FC = () => {
             routerDirection="root"
           >
             <IonIcon
-              color={isActive("rewards") ? "primary" : ""}
+              color={isActive("/rewards") ? "primary" : ""}
               src="/assets/icons/rewards.svg"
               slot="start"
             />
-            <IonLabel color={isActive("rewards") ? "primary" : ""}>
+            <IonLabel color={isActive("/rewards") ? "primary" : ""}>
               Rewards
             </IonLabel>
           </IonItem>

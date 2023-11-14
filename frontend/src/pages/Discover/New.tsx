@@ -1,20 +1,24 @@
 import Header from "@/components/Header";
 import ChallengeRows from "@/components/Challenges/ChallengeRows";
 import {
+  IonButton,
+  IonButtons,
   IonContent,
   IonHeader,
+  IonIcon,
   IonPage,
+  IonSearchbar,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import HorizontalSwipe from "@/components/Images/HorizontalSwipe";
 import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
+import PageTopBar from "@/components/PageTopBar";
 
-const Discover: React.FC = () => {
+const New: React.FC = () => {
   const { challenges, loading } = useGetChallenges();
   return (
     <IonPage>
-      <Header title="Discover" size={"big"} />
       <IonContent className="ion-padding" color="light">
         <div className="spaced-on-sides">
           <p>Art | {challenges?.length}</p>
@@ -39,4 +43,4 @@ const Discover: React.FC = () => {
   );
 };
 
-export default Discover;
+export default New;
