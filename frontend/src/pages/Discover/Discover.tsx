@@ -24,6 +24,10 @@ const Discover: React.FC<RouteComponentProps> = ({ match }) => {
         <IonRouterOutlet className="app-page-router-outlet">
           <Route path={`/discover/new`} component={New} exact />
           <Route path={`/discover/about`} component={About} exact />
+
+          <Route exact path="/discover">
+            <Redirect to="/discover/new" />
+          </Route>
         </IonRouterOutlet>
       </IonContent>
     </IonPage>
