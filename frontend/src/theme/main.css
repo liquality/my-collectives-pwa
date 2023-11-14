@@ -270,13 +270,12 @@ ion-toolbar {
   margin-left: 0.6rem !important;
 }
 
-.custom-button ion-button {
-  background-color: #7700d5;
-  color: white;
+.custom-button {
   text-align: center;
   width: 50%;
+  border-radius: 30px;
 }
 
 ion-button {
-  --border-radius: 30px !important;
+  --background: none;
 }

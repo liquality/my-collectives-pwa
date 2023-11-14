@@ -1,5 +1,6 @@
+import { colorPalette } from "@/theme/palette";
+import { IonButton } from "@ionic/react";
 import React from "react";
-import "./CustomButton.css"; // Import or define your styles
 
 interface CustomButtonProps {
   style: "primary" | "disabled" | "cancel";
@@ -11,18 +12,18 @@ const CustomButton: React.FC<CustomButtonProps> = ({ style, text }) => {
     switch (style) {
       case "primary":
         return {
-          backgroundColor: "purple",
+          backgroundColor: colorPalette.primaryPurple,
           color: "white",
         };
       case "disabled":
         return {
-          backgroundColor: "grey",
-          color: "darkgrey",
+          backgroundColor: colorPalette.lightGrey,
+          color: colorPalette.darkGrey,
         };
       case "cancel":
         return {
           backgroundColor: "white",
-          color: "purple",
+          color: colorPalette.primaryPurple,
         };
       default:
         return {}; // Default to an empty object or another fallback style
@@ -31,16 +32,18 @@ const CustomButton: React.FC<CustomButtonProps> = ({ style, text }) => {
 
   const buttonStyle: React.CSSProperties = {
     ...getButtonStyle(),
-    textAlign: "center",
-    borderRadius: "25px",
-    padding: "15px",
-    width: "50%",
   };
 
+  console.log(getButtonStyle(), "btn style?", style);
+
   return (
-    <button className="custom-button" style={buttonStyle}>
+    <IonButton
+      disabled={style === "disabled"}
+      className="custom-button"
+      style={buttonStyle}
+    >
       {text}
-    </button>
+    </IonButton>
   );
 };
 
