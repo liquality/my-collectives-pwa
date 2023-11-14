@@ -24,11 +24,11 @@ import { useAccount } from "wagmi";
 
 export interface CreateGroupModalProps {
   presentingElement?: HTMLElement;
-  dismiss: () => void;
-  onSuccess: (groupId: number) => void;
+  dismiss?: () => void;
+  onSuccess?: (groupId: number) => void;
   trigger: string;
 }
-
+//TODO: Make this a page, not a modal
 const CreateGroupModal = forwardRef(function CreateGroupModal(
   { presentingElement, dismiss, onSuccess, trigger }: CreateGroupModalProps,
   ref: Ref<HTMLIonModalElement>
@@ -46,12 +46,12 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     try {
       const result = await ApiService.createGroup(groupObject);
       setGroupId(result.id);
-      onSuccess(result.id);
+      //onSuccess(result.id);
     } catch (error) {
       console.log(error, "error posting group");
     }
   };
-  
+
   return (
     <IonModal
       ref={ref}
@@ -78,7 +78,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
               label="Name"
               label-placement="floating"
               placeholder="Enter the name"
-              onIonInput={(e) => setGroupName(e.detail.value!)} 
+              onIonInput={(e) => setGroupName(e.detail.value!)}
             ></IonInput>
           </IonItem>
           <IonItem>

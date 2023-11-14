@@ -1,4 +1,5 @@
-const serverAddress = import.meta.env.VITE_SERVER_ADDRESS || 'http://localhost:3000';
+const serverAddress =
+  import.meta.env.VITE_SERVER_ADDRESS || "http://localhost:3000";
 
 const NetworkService = {
   getResource: function (url) {
@@ -118,16 +119,15 @@ const NetworkService = {
     try {
       if (response.ok) {
         return response.json();
-      } else if(response.status === 401) {
+      } else if (response.status === 401) {
         localStorage.removeItem("groupMints.accessToken");
         localStorage.removeItem("groupMints.user");
       }
 
       return null;
     } catch (error) {
-      return error
+      return error;
     }
-
   },
   handleEmptyResponse: function (response) {
     var promise = new Promise((resolve, reject) => {

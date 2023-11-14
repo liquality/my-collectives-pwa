@@ -120,8 +120,8 @@ const App: React.FC = () => {
     );
   };
   const Main = () => {
-    /*     useSignInWallet();
-     */ return (
+    useSignInWallet();
+    return (
       <IonApp>
         <AppContent />
         <OnboardingModal />

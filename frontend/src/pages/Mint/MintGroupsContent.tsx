@@ -41,16 +41,7 @@ const MintGroupsContent = ({
     // router.push(`messages/${groupId}`);
   }
   return (
-    <IonItem>
-      <IonFab slot="fixed" vertical="bottom" horizontal="end">
-        <IonFabButton
-          id="open-create-group-modal"
-          className="create-fab-button"
-        >
-          <IonIcon src="/assets/icons/pencil.svg"></IonIcon>
-          <IonLabel>Create Group</IonLabel>
-        </IonFabButton>
-      </IonFab>
+    <IonContent>
       {loadingGroups ? (
         <PageLoadingIndicator />
       ) : (
@@ -87,14 +78,23 @@ const MintGroupsContent = ({
             : null}
         </IonList>
       )}
-      {/*       <CreateGroupModal
-          trigger="open-create-group-modal"
-          ref={createGroupModal}
-          presentingElement={presentingElement}
-          dismiss={hideCreateGroupModal}
-          onSuccess={handleCreateGroup}
-        /> */}
-    </IonItem>
+      {/* TODO: make this a page that is routed to, not a modal */}
+      <CreateGroupModal
+        trigger="open-create-group-modal"
+        ref={createGroupModal}
+        onSuccess={handleCreateGroup}
+      />
+
+      <IonFab slot="fixed" vertical="bottom" horizontal="end">
+        <IonFabButton
+          id="open-create-group-modal"
+          className="create-fab-button"
+        >
+          <IonIcon src="/assets/icons/pencil.svg"></IonIcon>
+          <IonLabel>Create Group</IonLabel>
+        </IonFabButton>
+      </IonFab>
+    </IonContent>
   );
 };
 

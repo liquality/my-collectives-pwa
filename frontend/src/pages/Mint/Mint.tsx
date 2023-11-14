@@ -41,10 +41,6 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
         ) : (
           <NoGroups />
         )}
-
-        <IonButton shape="round" disabled={true} color="medium">
-          Create Group
-        </IonButton>
       </IonContent>
     </IonPage>
   );

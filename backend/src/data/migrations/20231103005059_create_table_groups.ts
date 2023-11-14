@@ -19,3 +19,4 @@ export async function down({ schema }: Knex): Promise<void> {
     return schema.dropTableIfExists("groups");
 }
 
+

@@ -26,6 +26,7 @@ export function useSignInWallet() {
   // user data
   const getUser = async () => {
     let _user = await ApiService.getUser(address!);
+    console.log(_user, 'wats user???')
     if (!_user) {
       // TODO: will need to show a modal / popup
       // to ask for user details for now we are using only the address
@@ -66,6 +67,7 @@ export function useSignInWallet() {
 
   useEffect(() => {
     if (address) {
+      console.log('getting here for getting user?')
       getUser();
     } else {
       setUser(null);
