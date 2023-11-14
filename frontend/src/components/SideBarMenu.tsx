@@ -32,7 +32,7 @@ const SideBarMenu: React.FC = () => {
           <IonItem
             button
             detail={false}
-            routerLink="/discover"
+            routerLink="/discover/new"
             routerDirection="root"
             color={isActive("/discover") ? "light" : ""}
           >

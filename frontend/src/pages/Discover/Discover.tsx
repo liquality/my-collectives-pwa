@@ -21,29 +21,9 @@ const Discover: React.FC<RouteComponentProps> = ({ match }) => {
     <IonPage>
       <Header title="Discover" />
       <IonContent className="ion-padding" color="light">
-        {/* <IonTabs className="app-page-tabs">
-          <IonRouterOutlet>
-            <Route path={`/discover/new`} render={() => <New />} exact />
-            <Route path={`/discover/info`} render={() => <Info />} exact />
-          </IonRouterOutlet>
-          <IonTabBar slot="top" className="app-page-top-tab-bar">
-            <IonTabButton tab="disconver.new" href={`${match.url}/new`}>
-              <IonLabel>New</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="disconver.info" href={`${match.url}/info`}>
-              <IonLabel>Info</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs> */}
-        <PageTopBar
-          tabs={[
-            { label: "New", href: `${match.url}/new` },
-            { label: "About", href: `${match.url}/about` },
-          ]}
-        />
         <IonRouterOutlet className="app-page-router-outlet">
-          <Route path={`/discover/new`} render={() => <New />} exact />
-          <Route path={`/discover/about`} render={() => <About />} exact />
+          <Route path={`/discover/new`} component={New} exact />
+          <Route path={`/discover/about`} component={About} exact />
         </IonRouterOutlet>
       </IonContent>
     </IonPage>

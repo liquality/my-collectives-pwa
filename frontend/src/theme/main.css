@@ -94,6 +94,26 @@ ion-toolbar {
   flex-direction: column;
 }
 
+.pink-line {
+  border-bottom: 1px solid #7700d5;
+}
+
+.bullet-points {
+  margin-top: 1px;
+}
+
+.minimal-line-height {
+  line-height: 1px;
+}
+
+.mb-3 {
+  margin-bottom: 30px;
+}
+
+.mb-1 {
+  margin-bottom: 10px;
+}
+
 .header-title-container {
   display: flex;
   flex-direction: column;
@@ -219,17 +239,9 @@ ion-toolbar {
 }
 
 .app-page-top-bar {
-  --padding-start: 0 !important;
-  --padding-end: 0 !important;
-}
-
-.app-page-top-tab-button {
-  font-size: 1.063rem;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 1rem;
-  letter-spacing: 0.047rem;
-  text-transform: capitalize;
+  --padding-start: 0rem !important;
+  --padding-end: 0rem !important;
+  width: 100% !important;
 }
 
 .app-page-top-tab-button:hover,
@@ -243,17 +255,13 @@ ion-toolbar {
   text-align: left;
   position: absolute;
   top: 0;
-  left: 0;
   z-index: 999;
-  transition: width .5s ease-in;
+  left: 0;
+  transition: all 0.3s ease-in-out;
 }
 .app-page-top-search-bar.active {
   width: 100%;
 }
 .app-page-top-search-bar ion-searchbar ion-icon {
-  margin-left: 0.3rem !important;
-}
-
-.app-page-router-outlet {
-  margin-top: 2.5rem;
+  margin-left: 0.6rem !important;
 }

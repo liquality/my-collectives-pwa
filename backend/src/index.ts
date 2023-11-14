@@ -15,7 +15,7 @@ app.use(cors(), json({ limit: "5mb" }), urlencoded({ extended: true }));
 app.use("/v1", v1Router);
 
 console.log(
-  "\n\nIF THIS THROWS AN ERROR -\nMAKE SURE YOU ARE ALLOWED TO OPEN PORT 3000!\n\n"
+  `\n\nIF THIS THROWS AN ERROR -\nMAKE SURE YOU ARE ALLOWED TO OPEN PORT ${appPort}\n\n`
 );
 const server = app.listen(appPort);
 initializeWs(server);
