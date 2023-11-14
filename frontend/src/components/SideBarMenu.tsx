@@ -20,10 +20,10 @@ const SideBarMenu: React.FC = () => {
   const isActive = useIsActiveRoute();
   return (
     <IonMenu type="push" contentId="main-content">
-      <IonHeader className="ion-no-border">
+      <IonHeader className="ion-padding ion-no-border">
         <IonToolbar>
           <IonTitle>
-            <IonLabel className="app-title-text">MyCollective</IonLabel>
+            <IonLabel className="app-title-text">MyCollective.tech</IonLabel>
           </IonTitle>
         </IonToolbar>
       </IonHeader>

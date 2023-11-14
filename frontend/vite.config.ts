@@ -26,9 +26,9 @@ export default defineConfig({
       manifest: {
         display: 'standalone',
         scope: '/',
-        name: 'Liquality MyCollective',
-        short_name: 'MyCollective',
-        description: 'Liquality MyCollective',
+        name: 'Liquality MyCollective.tech',
+        short_name: 'MyCollective.tech',
+        description: 'Liquality MyCollective.tech',
         theme_color: '#ffffff',
         icons: [
           {
