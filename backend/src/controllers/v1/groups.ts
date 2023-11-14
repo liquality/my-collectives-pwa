@@ -5,14 +5,12 @@ import { AuthService } from "../../services/auth";
 export class GroupsController {
   public findByUserAddress: RequestHandler = async (req, res) => {
     const { address } = req.params;
-    console.log(address, 'address?')
 
     if (!address) {
       res.status(400).send({ error: "address is required" });
     } else {
       try {
         const groups = await GroupsService.findByUserAddress(address);
-        console.log(groups, 'got here!')
 
         res.status(200).send(groups);
       } catch (err: any) {
