@@ -23,6 +23,15 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
           imageData={challenges}
           loading={loading}
         ></HorizontalSwipe>
+
+        <div className="spaced-on-sides">
+          <p>Music | {challenges?.length}</p>
+          <p>See All</p>
+        </div>
+        <HorizontalSwipe
+          imageData={challenges}
+          loading={loading}
+        ></HorizontalSwipe>
       </IonContent>
     </IonPage>
   );
