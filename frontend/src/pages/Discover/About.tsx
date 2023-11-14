@@ -1,7 +1,6 @@
 import { IonContent, IonPage } from "@ionic/react";
 
 import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
-import PageTopBar from "@/components/PageTopBar";
 import { RouteComponentProps } from "react-router";
 import DiscoverTopBar from "./DiscoverTopBar";
 
@@ -11,7 +10,7 @@ const About: React.FC<RouteComponentProps> = (routerProps) => {
   return (
     <IonPage>
       <IonContent className="ion-padding" color="light">
-        <DiscoverTopBar {...routerProps} />
+        <DiscoverTopBar />
         <h4 className="mb-3">A Guide to How it Works</h4>
         <div className="pink-line mb-1"></div>
 

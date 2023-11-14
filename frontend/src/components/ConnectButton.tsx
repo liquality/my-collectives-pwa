@@ -9,6 +9,7 @@ import {
   IonList,
   IonLabel,
   isPlatform,
+  IonChip,
 } from "@ionic/react";
 import { logIn, logOut, wallet } from "ionicons/icons";
 import React from "react";
@@ -38,14 +39,16 @@ const ConnectButton: React.FC = () => {
   return (
     <>
       {isDisconnected ? (
-        <IonButton className="login-button" onClick={login}>
+        <IonChip color="primary" onClick={login}>
           {isConnecting ? <IonSpinner name="circular" /> : <>Connect</>}
-        </IonButton>
+        </IonChip>
       ) : (
         <>
-          <IonButton className="logged-in-button" id="logout-options-triggger">
-            {shortenAddress(address || "")}
-          </IonButton>
+          <IonChip  color="primary" className="logged-in-button" outline={true} id="logout-options-triggger">
+            <IonLabel className="address">{shortenAddress(address || "")}</IonLabel>
+            <div className="divider"></div>
+            <IonLabel className="balance">100 ETH</IonLabel>
+          </IonChip>
           <IonPopover
             size="auto"
             trigger="logout-options-triggger"

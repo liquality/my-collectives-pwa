@@ -24,7 +24,7 @@ const Header = ({ title, children }: HeaderProps) => {
         {isPlatform("desktop") ? (
           <IonLabel className="header-title-text">{title}</IonLabel>
         ) : (
-          <IonLabel className="app-title-text">MyCollective</IonLabel>
+          <IonLabel className="app-title-text">MyCollective.tech</IonLabel>
         )}
         <IonButtons slot="end">
           <ConnectButton />
