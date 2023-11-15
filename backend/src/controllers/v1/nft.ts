@@ -156,4 +156,21 @@ export class NFTController {
       res.status(500).json({ error: 'An error occurred for fetching Zora Leaderboard' });
     }
   };
+
+  public getNumberOfMintsAcrossThreeProhobition: RequestHandler = async (req, res) => {
+    const contractAddress = req.params.contractAddress
+
+    try {
+      //Gets the number of mints per each address minted between 15th Nov - Present date
+      const leaderboard = await NFTService.getNumberOfMintsAcrossThreeProhobition(contractAddress)
+      res.status(200).json(leaderboard);
+    } catch (err) {
+      console.error(err, 'Error getting prohobition leaderboard');
+      res.status(500).json({ error: 'Error getting prohobition leaderboard' });
+    }
+  };
 }
+
+
+
+
