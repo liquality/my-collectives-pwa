@@ -90,7 +90,19 @@ export class NFTService {
     );
     let homageMintersArray = await this.getHomageForLifeMinters()
     let mergedMintersArray = await this.mergeHomageMintersWith15thNovemberMinters(homageMintersArray, filterForTokenPrefixes)
-    return mergedMintersArray
+
+    const sortedArr = mergedMintersArray.sort((a, b) => {
+      // First, sort based on "homageMinter" (true comes first)
+      if (a.homageMinter && !b.homageMinter) {
+        return -1;
+      } else if (!a.homageMinter && b.homageMinter) {
+        return 1;
+      } else {
+        // If "homageMinter" is the same, sort based on "numberOfMintsFrom15"
+        return b.numberOfMintsFrom15 - a.numberOfMintsFrom15;
+      }
+    });
+    return sortedArr
 
   }
 
