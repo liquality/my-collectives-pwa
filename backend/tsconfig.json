@@ -6,13 +6,12 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "lib": [
-      "es5",
-      "es6"
-   ],
-   "target": "es5",
-   "module": "commonjs",
-   "moduleResolution": "node",
-   "sourceMap": true
+    "lib": ["es5", "es6"],
+    "target": "es5",
+    "module": "commonjs",
+    "downlevelIteration": true,
+
+    "moduleResolution": "node",
+    "sourceMap": true
   }
 }

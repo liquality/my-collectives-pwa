@@ -9,7 +9,7 @@ interface ProhobitionReturn {
   minter: string;
   numberOfMintsFrom15: number;
   homageMinter: boolean;
-  tokenId: number;
+  tokenId: string[];
   block: number;
   txHash: string;
 }
@@ -69,8 +69,8 @@ export class NFTService {
     const tokenIdPrefixes = ['231000', '246000', '186000'];
     const { prohobitionContract } = await this.getProhobitionContract()
     const transferFilter = prohobitionContract.filters.Transfer("0x0000000000000000000000000000000000000000", null, null)
-    let fromBlockFirstIteration = 150533228 //Block as of 15th November 2023
-    //let fromBlockFirstIteration = 147568711 //testingBlock
+    //let fromBlockFirstIteration = 150533228 //Block as of 15th November 2023
+    let fromBlockFirstIteration = 147568711 //testingBlock
     const transferEvents: Event[] = await prohobitionContract.queryFilter(transferFilter, fromBlockFirstIteration);
     console.log(`${transferEvents.length} events have been emitted by the contract ${PROHOBITION_ADDRESS}`);
 
@@ -88,10 +88,9 @@ export class NFTService {
         entry.tokenId.toString().startsWith(prefix)
       )
     );
-    let hej = await this.getHomageForLifeMinters()
-    console.log('Homage length:', hej.length, '15th november mints length:', filterForTokenPrefixes.length)
-    let bu = await this.mergeHomageMintersWith15thNovemberMinters(hej, filterForTokenPrefixes)
-    return bu
+    let homageMintersArray = await this.getHomageForLifeMinters()
+    let mergedMintersArray = await this.mergeHomageMintersWith15thNovemberMinters(homageMintersArray, filterForTokenPrefixes)
+    return mergedMintersArray
 
   }
 
@@ -115,6 +114,7 @@ export class NFTService {
         txHash: transfer.transactionHash
       };
     }));
+
     const tokenIdPrefixes = ['246000'];//in this case only filter for Homage tokenids
 
     const filteredForHomage = destructMap.filter((entry) =>
@@ -128,40 +128,57 @@ export class NFTService {
   }
 
   public static async mergeHomageMintersWith15thNovemberMinters(homageArray: any[], mintersFrom15November: any[]) {
+    const mintersMap: Map<string, ProhobitionReturn> = new Map();
     const returnArray: ProhobitionReturn[] = [];
 
-    homageArray.forEach((item) => {
-      const minterExistsIn15 = mintersFrom15November.some((minterItem) => minterItem.minter === item.minter);
-      const numberOfMintsFrom15 = mintersFrom15November.filter((minterItem) => minterItem.minter === item.minter).length;
+    // Process mintersFrom15November array
+    mintersFrom15November.forEach((item) => {
+      const minter = item.minter;
 
-      returnArray.push({
-        minter: item.minter,
-        numberOfMintsFrom15,
-        homageMinter: minterExistsIn15,
-        tokenId: item.tokenId,
-        block: item.block,
-        txHash: item.txHash,
-      });
+      if (!mintersMap.has(minter)) {
+        mintersMap.set(minter, {
+          minter,
+          numberOfMintsFrom15: 1, // Initialize with 1 as the minter is found in mintersFrom15November
+          homageMinter: false,
+          tokenId: [item.tokenId],
+          block: item.block,
+          txHash: item.txHash,
+        });
+      } else {
+        // Update the existing entry
+        const existingEntry = mintersMap.get(minter)!;
+        existingEntry.numberOfMintsFrom15++;
+        existingEntry.tokenId.push(item.tokenId);
+      }
     });
 
-    // If there are minters in mintersFrom15November that are not in homageArray, add them to returnArray with numberOfMintsFrom15 = 0 and homageMinter = false
-    mintersFrom15November.forEach((minterItem) => {
-      const minterExistsInReturnArray = returnArray.some((returnItem) => returnItem.minter === minterItem.minter);
-      if (!minterExistsInReturnArray) {
-        returnArray.push({
-          minter: minterItem.minter,
+    // Process homageArray
+    homageArray.forEach((item) => {
+      const minter = item.minter;
+
+      if (mintersMap.has(minter)) {
+        mintersMap.get(minter)!.homageMinter = true;
+        mintersMap.get(minter)!.tokenId.push(item.tokenId); // Add tokenId when updating the entry
+      } else {
+        mintersMap.set(minter, {
+          minter,
           numberOfMintsFrom15: 0,
-          homageMinter: false,
-          tokenId: minterItem.tokenId,
-          block: minterItem.block,
-          txHash: minterItem.txHash,
+          homageMinter: true,
+          tokenId: [item.tokenId],
+          block: item.block,
+          txHash: item.txHash,
         });
       }
     });
-    console.log(returnArray.length, 'Return array length')
-    return returnArray
 
+    returnArray.push(...Array.from(mintersMap.values()));
+    return returnArray;
   }
+
+
+
+
+
 
 }
 
