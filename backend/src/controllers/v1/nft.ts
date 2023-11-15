@@ -162,7 +162,7 @@ export class NFTController {
 
     try {
       //Gets the number of mints per each address minted between 15th Nov - Present date
-      const leaderboard = await NFTService.getNumberOfMintsAcrossThreeProhobition(contractAddress)
+      const leaderboard = await NFTService.getNumberOfMintsAcrossThreeProhobition()
       res.status(200).json(leaderboard);
     } catch (err) {
       console.error(err, 'Error getting prohobition leaderboard');
