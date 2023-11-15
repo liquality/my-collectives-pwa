@@ -69,8 +69,8 @@ export class NFTService {
     const tokenIdPrefixes = ['231000', '246000', '186000'];
     const { prohobitionContract } = await this.getProhobitionContract()
     const transferFilter = prohobitionContract.filters.Transfer("0x0000000000000000000000000000000000000000", null, null)
-    //let fromBlockFirstIteration = 150533228 //Block as of 15th November 2023
-    let fromBlockFirstIteration = 147568711 //testingBlock
+    let fromBlockFirstIteration = 150533228 //Block as of 15th November 2023
+    //let fromBlockFirstIteration = 147568711 //testingBlock
     const transferEvents: Event[] = await prohobitionContract.queryFilter(transferFilter, fromBlockFirstIteration);
     console.log(`${transferEvents.length} events have been emitted by the contract ${PROHOBITION_ADDRESS}`);
 
