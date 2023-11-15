@@ -146,6 +146,7 @@ export class NFTController {
 
 
   public getLeaderboardForZora: RequestHandler = async (req, res) => {
+
     const contractAddress = req.params.contractAddress
 
     try {

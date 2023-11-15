@@ -13,7 +13,7 @@ const BASE_RPC = "https://base-mainnet.g.alchemy.com/v2/";
 //https://coinsbench.com/fetching-historical-events-from-a-smart-contract-f1c974ccd24d
 
 export async function getZoraLeaderboardEvents(nftContractAddress: string): Promise<any[]> {
-    const PROVIDER = new ethers.providers.JsonRpcProvider(BASE_RPC + process.env.ALCHEMY_API_KEY_RPC); //TODO: try with a base contract
+    const PROVIDER = new ethers.providers.JsonRpcProvider(BASE_RPC + process.env.ALCHEMY_API_KEY_ARB); //TODO: try with a base contract
     const zoraContract = new Contract(ZORA_REWARDS_CONTRACT_ADDRESS, ZORA_REWARDS_ABI, PROVIDER);
     const transferFilter = zoraContract.filters.RewardsDeposit();
     const fromBlock = 5970362
