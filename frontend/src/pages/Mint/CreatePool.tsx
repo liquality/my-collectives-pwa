@@ -17,7 +17,6 @@ import {
   IonSelectOption,
   IonFooter,
   IonPage,
-  IonIcon,
 } from "@ionic/react";
 import ApiService from "@/services/ApiService";
 import { GroupCreation } from "@/types/chat";
@@ -25,14 +24,14 @@ import { useAccount } from "wagmi";
 import { RouteComponentProps, useHistory } from "react-router";
 import Header from "@/components/Header";
 
-export interface CreateCollectiveProps {
+export interface CreatePoolProps {
   presentingElement?: HTMLElement;
   dismiss?: () => void;
   onSuccess?: (groupId: number) => void;
   trigger: string;
 }
 //TODO: Make this a page, not a modal
-const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
+const CreatePool: React.FC<RouteComponentProps> = ({ match }) => {
   const [groupName, setGroupName] = useState("");
 
   const [groupId, setGroupId] = useState<number | null>(null);
@@ -81,7 +80,6 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
               }
             ></IonInput>
           </IonItem>
-
           <IonItem>
             <IonInput
               label="Description"
@@ -95,31 +93,65 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
               }
             ></IonInput>
           </IonItem>
-          <IonItem></IonItem>
         </IonList>
 
         <IonList inset={true}>
-          <div className="grey-container ">
-            <div className="flexDirectionRow space-between">
-              <p>POOL 1</p>
-              <p onClick={() => console.log("Click edit")}>Edit</p>
-            </div>
-            <p>NFT NAME</p>
-            <IonLabel>Details</IonLabel>
-          </div>
-
-          <div className="grey-container">
-            <div className="flexDirectionRow space-between">
-              <p>POOL 1</p>
-              <p onClick={() => console.log("Click edit")}>Edit</p>
-            </div>
-            <p>NFT NAME</p>
-            <IonLabel>Details</IonLabel>
-          </div>
+          <IonListHeader>
+            <IonLabel>First Pool</IonLabel>
+          </IonListHeader>
+          <IonItem>
+            <IonInput
+              label="Chain Id"
+              label-placement="floating"
+              placeholder="Enter the chain id"
+            ></IonInput>
+          </IonItem>
+          <IonItem>
+            <IonInput
+              label="Platform Url"
+              label-placement="floating"
+              placeholder="Enter the Platform Url"
+            ></IonInput>
+          </IonItem>
+          <IonItem>
+            <IonInput
+              label="Token Id"
+              label-placement="floating"
+              placeholder="Enter the Token Id"
+            ></IonInput>
+          </IonItem>
+          <IonItem>
+            <IonInput
+              label="Minting Contract Address"
+              label-placement="floating"
+              placeholder="Enter the Minting Contract Address"
+            ></IonInput>
+          </IonItem>
+          <IonItem>
+            <IonSelect label="Type of Pool" placeholder="Type of Pool">
+              <IonSelectOption value="type1">Type 1</IonSelectOption>
+              <IonSelectOption value="type2">Type 2</IonSelectOption>
+              <IonSelectOption value="type3">Type 3</IonSelectOption>
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonInput
+              label="Length (Days)"
+              type="number"
+              placeholder="Length (Days)"
+            ></IonInput>
+          </IonItem>
+          <IonItem>
+            <IonTextarea
+              label="Terms"
+              label-placement="floating"
+              placeholder="Enter the Terms"
+            ></IonTextarea>
+          </IonItem>
         </IonList>
       </IonContent>
     </IonPage>
   );
 };
 
-export default CreateCollective;
+export default CreatePool;

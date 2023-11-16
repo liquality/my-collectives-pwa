@@ -13,7 +13,7 @@
   --white-grey: #eeeeee;
   --light-grey: #d9dfe5;
   --medium-grey: #bfc3c7;
-  --orange-grey: #f9f9f9;
+  --container-grey: #f9f9f9;
   --grey: #a8aeb7;
   --grey-meta: #646f85;
   --dark-grey: #3d4767;
@@ -147,6 +147,11 @@ ion-toolbar {
   flex-direction: column;
 }
 
+.flexDirectionRow {
+  display: flex;
+  flex-direction: row;
+}
+
 .pink-line {
   border-bottom: 1px solid #7700d5;
 }
@@ -186,6 +191,10 @@ ion-toolbar {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
   border-color: var(--ion-color-primary);
+}
+
+.space-between {
+  justify-content: space-between;
 }
 .logged-in-button .divider {
   background-color: var(--ion-color-primary);
@@ -364,4 +373,17 @@ ion-toolbar {
 
 ion-button {
   width: 50% !important;
+}
+
+.grey-container {
+  background-color: var(--container-grey);
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  height: 100px;
+  margin: 0 auto;
+  padding: 12px;
+  line-height: 0px;
+  border-radius: 12px;
+  margin-bottom: 10px;
 }
