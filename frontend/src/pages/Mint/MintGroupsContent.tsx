@@ -1,100 +1,86 @@
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 import {
-  IonContent,
   IonPage,
   IonFab,
   IonFabButton,
   IonIcon,
-  IonFabList,
   IonAvatar,
   IonItem,
   IonLabel,
   IonList,
   IonListHeader,
   IonNote,
-  IonButton,
+  useIonRouter,
+  IonContent,
 } from "@ionic/react";
-
-import CreateGroupModal from "./CreateGroupModal";
 import { shortenAddress } from "@/utils";
-import { useRef } from "react";
-import { Group } from "@/types/chat";
+
 import { RouteComponentProps } from "react-router";
-export interface MintGroupsContentProps {
-  myGroups: Group[];
-  loadingGroups: boolean;
-  reloadGroups: () => void;
-  match: any;
-}
+import Header from "@/components/Header";
+import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
+import MintTopBar from "@/components/Mint/MintTopBar";
+import { routes } from "@/utils/routeNames";
 
-const MintGroupsContent = ({
-  myGroups,
-  reloadGroups,
-  loadingGroups,
-  match,
-}: MintGroupsContentProps) => {
-  const createGroupModal = useRef<HTMLIonModalElement>(null);
-  const createPoolModal = useRef<HTMLIonModalElement>(null);
+const MintGroupsContent: React.FC<RouteComponentProps> = ({ match }) => {
+  const { myGroups, loading } = useGetMyGroups();
+  const router = useIonRouter();
 
-  function handleCreateGroup(groupId: number) {
-    reloadGroups();
-    // router.push(`messages/${groupId}`);
-  }
+  const handleNavigateToCreateCollective = () => {
+    router.push(routes.mintPage.createCollective);
+  };
+
   return (
-    <IonContent>
-      {loadingGroups ? (
-        <PageLoadingIndicator />
-      ) : (
-        <IonList inset={true}>
-          <IonListHeader>
-            <IonLabel>My Groups</IonLabel>
-          </IonListHeader>
-          {myGroups
-            ? myGroups.map((group: any, index: number) => (
-                <IonItem
-                  button
-                  href={`${match.url}/${group.id}/challenges`}
-                  key={index}
-                  detail={true}
-                >
-                  <IonAvatar aria-hidden="true" slot="start">
-                    <img
-                      alt=""
-                      src="https://ionicframework.com/docs/img/demos/avatar.svg"
-                    />
-                  </IonAvatar>
-                  <IonLabel>
-                    <h3>
-                      {group.name}
-                      {group.id}
-                    </h3>
-                    <p>Members: {group.members}</p>
-                  </IonLabel>
-                  <IonNote color="medium" slot="end">
-                    {shortenAddress(group.publicAddress)}
-                  </IonNote>
-                </IonItem>
-              ))
-            : null}
-        </IonList>
-      )}
-      {/* TODO: make this a page that is routed to, not a modal */}
-      <CreateGroupModal
-        trigger="open-create-group-modal"
-        ref={createGroupModal}
-        onSuccess={handleCreateGroup}
-      />
+    <IonPage>
+      <Header title="Mint" />
 
-      <IonFab slot="fixed" vertical="bottom" horizontal="end">
-        <IonFabButton
-          id="open-create-group-modal"
-          className="create-fab-button"
-        >
-          <IonIcon src="/assets/icons/pencil.svg"></IonIcon>
-          <IonLabel>Create Group</IonLabel>
-        </IonFabButton>
-      </IonFab>
-    </IonContent>
+      <IonContent className="ion-padding">
+        <MintTopBar />
+        {loading ? (
+          <PageLoadingIndicator />
+        ) : (
+          <IonList inset={true}>
+            {myGroups
+              ? myGroups.map((group: any, index: number) => (
+                  <IonItem
+                    button
+                    href={`${match.url}/${group.id}/challenges`}
+                    key={index}
+                    detail={true}
+                  >
+                    <IonAvatar aria-hidden="true" slot="start">
+                      <img
+                        alt=""
+                        src="https://ionicframework.com/docs/img/demos/avatar.svg"
+                      />
+                    </IonAvatar>
+                    <IonLabel>
+                      <h3>
+                        {group.name}
+                        {group.id}
+                      </h3>
+                      <p>Members: {group.members}</p>
+                    </IonLabel>
+                    <IonNote color="medium" slot="end">
+                      {shortenAddress(group.publicAddress)}
+                    </IonNote>
+                  </IonItem>
+                ))
+              : null}
+          </IonList>
+        )}
+
+        <IonFab slot="fixed" vertical="bottom" horizontal="end">
+          <IonFabButton
+            id="open-create-group-modal"
+            className="create-fab-button"
+            onClick={handleNavigateToCreateCollective}
+          >
+            <IonIcon src="/assets/icons/pencil.svg"></IonIcon>
+            <IonLabel>Create Group</IonLabel>
+          </IonFabButton>
+        </IonFab>
+      </IonContent>
+    </IonPage>
   );
 };
 

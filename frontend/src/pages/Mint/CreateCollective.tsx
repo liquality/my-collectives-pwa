@@ -1,0 +1,140 @@
+import { useState } from "react";
+import {
+  IonItem,
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonList,
+  IonModal,
+  IonTitle,
+  IonToolbar,
+  IonInput,
+  IonTextarea,
+  IonLabel,
+  IonListHeader,
+  IonSelect,
+  IonSelectOption,
+  IonFooter,
+  IonPage,
+} from "@ionic/react";
+import ApiService from "@/services/ApiService";
+import { GroupCreation } from "@/types/chat";
+import { useAccount } from "wagmi";
+import { RouteComponentProps, useHistory } from "react-router";
+import Header from "@/components/Header";
+
+export interface CreateCollectiveProps {
+  presentingElement?: HTMLElement;
+  dismiss?: () => void;
+  onSuccess?: (groupId: number) => void;
+  trigger: string;
+}
+//TODO: Make this a page, not a modal
+const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
+  const [groupName, setGroupName] = useState("");
+  const [groupId, setGroupId] = useState<number | null>(null);
+  const { address } = useAccount();
+  const history = useHistory();
+
+  const cancel = () => {
+    history.goBack();
+  };
+
+  const handleCreateGroup = async () => {
+    const groupObject: GroupCreation = {
+      name: groupName,
+      publicAddress: "0x0232u326483848787ndas7298bda7289da", //TODO: hardcoded for now but will have to create the contract address from our factory
+    };
+    try {
+      const result = await ApiService.createGroup(groupObject);
+      setGroupId(result.id);
+      //onSuccess(result.id);
+    } catch (error) {
+      console.log(error, "error posting group");
+    }
+  };
+
+  return (
+    <IonPage>
+      <Header title="Create Collective" />
+
+      <IonContent color="light">
+        <IonList className="ion-padding" inset={true}>
+          <IonItem>
+            <IonInput
+              label="Name"
+              label-placement="floating"
+              placeholder="Enter the name"
+              onIonInput={(e) => setGroupName(e.detail.value!)}
+            ></IonInput>
+          </IonItem>
+          <IonItem>
+            <IonTextarea
+              label="Description"
+              label-placement="floating"
+              placeholder="Enter the description"
+            ></IonTextarea>
+          </IonItem>
+        </IonList>
+
+        <IonList className="ion-padding" inset={true}>
+          <IonListHeader>
+            <IonLabel>First Pool</IonLabel>
+          </IonListHeader>
+          <IonItem>
+            <IonInput
+              label="Chain Id"
+              label-placement="floating"
+              placeholder="Enter the chain id"
+            ></IonInput>
+          </IonItem>
+          <IonItem>
+            <IonInput
+              label="Platform Url"
+              label-placement="floating"
+              placeholder="Enter the Platform Url"
+            ></IonInput>
+          </IonItem>
+          <IonItem>
+            <IonInput
+              label="Token Id"
+              label-placement="floating"
+              placeholder="Enter the Token Id"
+            ></IonInput>
+          </IonItem>
+          <IonItem>
+            <IonInput
+              label="Minting Contract Address"
+              label-placement="floating"
+              placeholder="Enter the Minting Contract Address"
+            ></IonInput>
+          </IonItem>
+          <IonItem>
+            <IonSelect label="Type of Pool" placeholder="Type of Pool">
+              <IonSelectOption value="type1">Type 1</IonSelectOption>
+              <IonSelectOption value="type2">Type 2</IonSelectOption>
+              <IonSelectOption value="type3">Type 3</IonSelectOption>
+            </IonSelect>
+          </IonItem>
+          <IonItem>
+            <IonInput
+              label="Length (Days)"
+              type="number"
+              placeholder="Length (Days)"
+            ></IonInput>
+          </IonItem>
+          <IonItem>
+            <IonTextarea
+              label="Terms"
+              label-placement="floating"
+              placeholder="Enter the Terms"
+            ></IonTextarea>
+          </IonItem>
+        </IonList>
+      </IonContent>
+    </IonPage>
+  );
+};
+
+export default CreateCollective;

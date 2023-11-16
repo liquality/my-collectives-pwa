@@ -1,45 +1,70 @@
-import Header from "@/components/Header";
-import { IonButton, IonContent, IonPage } from "@ionic/react";
-import { useEffect, useRef, useState } from "react";
+import {
+  IonContent,
+  IonPage,
+  IonRouterOutlet,
+  useIonRouter,
+} from "@ionic/react";
+import { useEffect } from "react";
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
-import CreateGroupModal from "./CreateGroupModal";
-import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
-import { RouteComponentProps } from "react-router";
-import { shortenAddress } from "@/utils";
+import { Route, RouteComponentProps } from "react-router";
 import MintGroupsContent from "./MintGroupsContent";
 import NoGroups from "./NoGroups";
+import CreateCollective from "./CreateCollective";
+import ManageCollective from "./ManageCollective";
+import { routes } from "@/utils/routeNames";
+import CollectiveInvites from "./CollectiveInvites";
+import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 
 const Mint: React.FC<RouteComponentProps> = ({ match }) => {
-  const page = useRef(undefined);
+  const { myGroups, loading, reload } = useGetMyGroups();
 
-  const [presentingElement, setPresentingElement] = useState<
-    HTMLElement | undefined
-  >(undefined);
-
-  const {
-    myGroups,
-    loading: loadingGroups,
-    reload: reloadGroups,
-  } = useGetMyGroups();
-  useEffect(() => {
-    setPresentingElement(page.current);
-  }, []);
-
+  const router = useIonRouter();
   console.log(myGroups, "myg grouups");
 
+  //TODO: make the logic for this more bug-proof
+  useEffect(() => {
+    if (!loading) {
+      if (myGroups && myGroups.length > 0) {
+        router.push(routes.mintPage.myCollectives);
+      } else if (myGroups && !myGroups.length) {
+        router.push(routes.mintPage.noCollectives);
+      }
+    }
+  }, [myGroups]);
+
   return (
-    <IonPage ref={page}>
-      <Header title="Mint" />
+    <IonPage>
       <IonContent className="ion-padding" color="light">
-        {myGroups && myGroups.length > 0 ? (
-          <MintGroupsContent
-            myGroups={myGroups}
-            loadingGroups={loadingGroups}
-            reloadGroups={reloadGroups}
-            match={match}
-          />
+        {loading ? (
+          <PageLoadingIndicator />
         ) : (
-          <NoGroups />
+          <IonRouterOutlet className="app-page-router-outlet">
+            <Route
+              path={routes.mintPage.createCollective}
+              component={CreateCollective}
+              exact
+            />
+            <Route
+              path={routes.mintPage.manageCollective}
+              component={ManageCollective}
+              exact
+            />
+            <Route
+              path={routes.mintPage.myCollectives}
+              component={MintGroupsContent}
+              exact
+            />
+            <Route
+              path={routes.mintPage.noCollectives}
+              component={NoGroups}
+              exact
+            />
+            <Route
+              path={routes.mintPage.collectiveInvites}
+              component={CollectiveInvites}
+              exact
+            />
+          </IonRouterOutlet>
         )}
       </IonContent>
     </IonPage>
