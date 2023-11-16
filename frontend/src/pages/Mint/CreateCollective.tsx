@@ -102,7 +102,12 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
           <div className="grey-container ">
             <div className="flexDirectionRow space-between">
               <p>POOL 1</p>
-              <p onClick={() => console.log("Click edit")}>Edit</p>
+              <p
+                className="small-purple-text "
+                onClick={() => console.log("Click edit")}
+              >
+                Edit
+              </p>
             </div>
             <p>NFT NAME</p>
             <IonLabel>Details</IonLabel>
@@ -110,13 +115,35 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
 
           <div className="grey-container">
             <div className="flexDirectionRow space-between">
-              <p>POOL 1</p>
-              <p onClick={() => console.log("Click edit")}>Edit</p>
+              <p>POOL 2</p>
+              <p
+                className="small-purple-text "
+                onClick={() => console.log("Click edit")}
+              >
+                Edit
+              </p>
             </div>
             <p>NFT NAME</p>
             <IonLabel>Details</IonLabel>
           </div>
+          <p className="small-purple-text align-to-grey-container">
+            + Add Pool
+          </p>
         </IonList>
+
+        <div className="button-container">
+          <IonButton onClick={handleCreateGroup} shape="round" color="primary">
+            Create Collective
+          </IonButton>
+          <IonButton
+            onClick={cancel}
+            shape="round"
+            fill="clear"
+            color="primary"
+          >
+            Cancel
+          </IonButton>
+        </div>
       </IonContent>
     </IonPage>
   );
