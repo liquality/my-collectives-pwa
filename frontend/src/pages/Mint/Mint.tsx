@@ -1,11 +1,14 @@
 import Header from "@/components/Header";
-import { IonButton, IonContent, IonPage, IonRouterOutlet } from "@ionic/react";
-import { useEffect, useRef, useState } from "react";
+import {
+  IonContent,
+  IonPage,
+  IonRouterOutlet,
+  useIonRouter,
+} from "@ionic/react";
+import { useEffect } from "react";
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
-import CreateGroupModal from "./CreateGroupModal";
-import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
-import { Redirect, Route, RouteComponentProps } from "react-router";
-import { shortenAddress } from "@/utils";
+
+import { Route, RouteComponentProps } from "react-router";
 import MintGroupsContent from "./MintGroupsContent";
 import NoGroups from "./NoGroups";
 import CreateCollective from "./CreateCollective";
@@ -13,26 +16,21 @@ import Messages from "./Messages";
 import ManageCollective from "./ManageCollective";
 
 const Mint: React.FC<RouteComponentProps> = ({ match }) => {
-  const page = useRef(undefined);
+  const { myGroups, loading, reload } = useGetMyGroups();
 
-  const [presentingElement, setPresentingElement] = useState<
-    HTMLElement | undefined
-  >(undefined);
-
-  const {
-    myGroups,
-    loading: loadingGroups,
-    reload: reloadGroups,
-  } = useGetMyGroups();
-  useEffect(() => {
-    setPresentingElement(page.current);
-  }, []);
-
+  const router = useIonRouter();
   console.log(myGroups, "myg grouups");
 
+  useEffect(() => {
+    if (myGroups && myGroups.length > 0) {
+      router.push("/mint/collectiveContent");
+    } else {
+      router.push("/mint/collectiveContent");
+    }
+  }, []);
+
   return (
-    <IonPage ref={page}>
-      <Header title="Mint" />
+    <IonPage>
       <IonContent className="ion-padding" color="light">
         <IonRouterOutlet className="app-page-router-outlet">
           <Route
@@ -45,21 +43,13 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
             component={ManageCollective}
             exact
           />
-
-          <Route exact path="/discover">
-            <Redirect to="/discover/new" />
-          </Route>
-        </IonRouterOutlet>
-        {myGroups && myGroups.length > 0 ? (
-          <MintGroupsContent
-            myGroups={myGroups}
-            loadingGroups={loadingGroups}
-            reloadGroups={reloadGroups}
-            match={match}
+          <Route
+            path={`/mint/collectiveContent`}
+            component={MintGroupsContent}
+            exact
           />
-        ) : (
-          <NoGroups />
-        )}
+          <Route path={`/mint/noCollectives`} component={NoGroups} exact />
+        </IonRouterOutlet>
       </IonContent>
     </IonPage>
   );

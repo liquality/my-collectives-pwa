@@ -16,11 +16,13 @@ import {
   IonSelect,
   IonSelectOption,
   IonFooter,
+  IonPage,
 } from "@ionic/react";
 import ApiService from "@/services/ApiService";
 import { GroupCreation } from "@/types/chat";
 import { useAccount } from "wagmi";
 import { RouteComponentProps, useHistory } from "react-router";
+import Header from "@/components/Header";
 
 export interface CreateCollectiveProps {
   presentingElement?: HTMLElement;
@@ -54,20 +56,9 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
   };
 
   return (
-    <IonContent>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Create New Group</IonTitle>
-          <IonButtons slot="start" className="ion-hide-md-up">
-            <IonButton color="secondary" onClick={cancel}>
-              Cancel
-            </IonButton>
-          </IonButtons>
-          <IonButtons slot="end" className="ion-hide-md-up">
-            <IonButton onClick={handleCreateGroup}>Create</IonButton>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
+    <IonPage>
+      <Header title="Create Collective" />
+
       <IonContent color="light">
         <IonList className="ion-padding" inset={true}>
           <IonItem>
@@ -142,29 +133,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
           </IonItem>
         </IonList>
       </IonContent>
-      <IonFooter className="ion-hide ion-show-md-up">
-        <IonToolbar>
-          <IonButtons slot="end">
-            <IonButton
-              className="footer-button"
-              onClick={cancel}
-              shape="round"
-              fill="outline"
-            >
-              Cancel
-            </IonButton>
-            <IonButton
-              className="footer-button"
-              onClick={handleCreateGroup}
-              shape="round"
-              fill="solid"
-            >
-              Create Group
-            </IonButton>
-          </IonButtons>
-        </IonToolbar>
-      </IonFooter>
-    </IonContent>
+    </IonPage>
   );
 };
 

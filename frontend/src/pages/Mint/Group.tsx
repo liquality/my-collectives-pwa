@@ -25,10 +25,13 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
     <IonPage>
       <Header title={group?.name} />
       <IonContent className="ion-padding" color="light">
-      <IonToolbar>
-        <IonSearchbar showClearButton="focus" value="Show on Focus"></IonSearchbar>
-      </IonToolbar>
-      
+        <IonToolbar>
+          <IonSearchbar
+            showClearButton="focus"
+            value="Show on Focus"
+          ></IonSearchbar>
+        </IonToolbar>
+
         {loading ? (
           <PageLoadingIndicator />
         ) : (
@@ -36,7 +39,7 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
             <IonRouterOutlet>
               <Route
                 path={`/mint/:groupId/challenges`}
-                render={() => <Challenges/>}
+                render={() => <Challenges />}
                 exact
               />
               <Route
@@ -55,7 +58,7 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
                 render={() => <Info group={group} loading={loading} />}
               />
             </IonRouterOutlet>
-            <IonTabBar slot="top" style={{ marginTop: '100px' }}>
+            <IonTabBar slot="top" style={{ marginTop: "100px" }}>
               <IonTabButton tab="challenges" href={`${match.url}/challenges`}>
                 <IonLabel>Challenges</IonLabel>
               </IonTabButton>
