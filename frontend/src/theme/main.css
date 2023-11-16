@@ -436,6 +436,11 @@ ion-button {
   height: 95px;
 }
 
+.parent-hover:hover .collective-card,
+.parent-hover:hover .collective-card-right {
+  background-color: var(--light-purple-background);
+}
+
 .collective-card-name {
   color: var(--primary-purple);
   font-feature-settings: "clig" off, "liga" off;

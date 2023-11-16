@@ -36,10 +36,10 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
   console.log(user?.id, "user id?");
 
   return (
-    <div>
+    <div className="">
       {myGroups
         ? myGroups.map((group: any, index: number) => (
-            <div key={index} className="flexDirectionRow">
+            <div key={index} className="flexDirectionRow parent-hover">
               <div
                 className="collective-card generic-grey-card"
                 onClick={() => handleClick(group)}
