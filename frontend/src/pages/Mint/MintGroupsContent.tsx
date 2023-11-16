@@ -20,6 +20,7 @@ import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
 import MintTopBar from "@/components/Mint/MintTopBar";
 import { routes } from "@/utils/routeNames";
 import { useEffect } from "react";
+import CollectiveList from "@/components/Mint/CollectiveList";
 
 const MintGroupsContent: React.FC<RouteComponentProps> = ({ match }) => {
   const { myGroups, loading, setMyGroups } = useGetMyGroups();
@@ -29,6 +30,7 @@ const MintGroupsContent: React.FC<RouteComponentProps> = ({ match }) => {
   const groupAddress = queryParams.get("groupAddress");
   const groupId = queryParams.get("groupId");
   const createdBy = queryParams.get("createdBy");
+  const isNewlyCreatedGroup = groupName && groupAddress && groupId && createdBy;
 
   const handleNavigateToCreateCollective = () => {
     router.push(routes.mintPage.createCollective);
@@ -36,7 +38,7 @@ const MintGroupsContent: React.FC<RouteComponentProps> = ({ match }) => {
 
   //If a new group has been created, push into exisitng groups array state to avoid re-fetching of groups
   useEffect(() => {
-    if (groupName && groupAddress && groupId && createdBy) {
+    if (isNewlyCreatedGroup) {
       const newGroup = {
         name: groupName,
         publicAddress: groupAddress,
@@ -53,38 +55,14 @@ const MintGroupsContent: React.FC<RouteComponentProps> = ({ match }) => {
 
       <IonContent className="ion-padding">
         <MintTopBar />
+        <div className="space-between">
+          <p className="collective-card-titles">NAME</p>
+          <p className="collective-card-titles">ACTIVE</p>
+        </div>
         {loading ? (
           <PageLoadingIndicator />
         ) : (
-          <IonList inset={true}>
-            {myGroups
-              ? myGroups.map((group: any, index: number) => (
-                  <IonItem
-                    button
-                    href={`${match.url}/${group.id}/challenges`}
-                    key={index}
-                    detail={true}
-                  >
-                    <IonAvatar aria-hidden="true" slot="start">
-                      <img
-                        alt=""
-                        src="https://ionicframework.com/docs/img/demos/avatar.svg"
-                      />
-                    </IonAvatar>
-                    <IonLabel>
-                      <h3>
-                        {group.name}
-                        {group.id}
-                      </h3>
-                      <p>Members: {group.members}</p>
-                    </IonLabel>
-                    <IonNote color="medium" slot="end">
-                      {shortenAddress(group.publicAddress)}
-                    </IonNote>
-                  </IonItem>
-                ))
-              : null}
-          </IonList>
+          <CollectiveList myGroups={myGroups} />
         )}
 
         <IonFab slot="fixed" vertical="bottom" horizontal="end">
