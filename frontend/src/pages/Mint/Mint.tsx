@@ -14,6 +14,8 @@ import NoGroups from "./NoGroups";
 import CreateCollective from "./CreateCollective";
 import Messages from "./Messages";
 import ManageCollective from "./ManageCollective";
+import { routes } from "@/utils/routeNames";
+import CollectiveInvites from "./CollectiveInvites";
 
 const Mint: React.FC<RouteComponentProps> = ({ match }) => {
   const { myGroups, loading, reload } = useGetMyGroups();
@@ -21,34 +23,44 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
   const router = useIonRouter();
   console.log(myGroups, "myg grouups");
 
-  useEffect(() => {
-    if (myGroups && myGroups.length > 0) {
-      router.push("/mint/collectiveContent");
+  //TODO: make the logic for this more bug-proof
+  /*   useEffect(() => {
+    if (myGroups && myGroups.length > 0 && !loading) {
+      router.push(routes.mintPage.myCollectives);
     } else {
-      router.push("/mint/collectiveContent");
+      router.push(routes.mintPage.noCollectives);
     }
-  }, []);
+  }, [myGroups]); */
 
   return (
     <IonPage>
       <IonContent className="ion-padding" color="light">
         <IonRouterOutlet className="app-page-router-outlet">
           <Route
-            path={`/mint/createCollective`}
+            path={routes.mintPage.createCollective}
             component={CreateCollective}
             exact
           />
           <Route
-            path={`/mint/manageCollective`}
+            path={routes.mintPage.manageCollective}
             component={ManageCollective}
             exact
           />
           <Route
-            path={`/mint/collectiveContent`}
+            path={routes.mintPage.myCollectives}
             component={MintGroupsContent}
             exact
           />
-          <Route path={`/mint/noCollectives`} component={NoGroups} exact />
+          <Route
+            path={routes.mintPage.noCollectives}
+            component={NoGroups}
+            exact
+          />
+          <Route
+            path={routes.mintPage.collectiveInvites}
+            component={CollectiveInvites}
+            exact
+          />
         </IonRouterOutlet>
       </IonContent>
     </IonPage>

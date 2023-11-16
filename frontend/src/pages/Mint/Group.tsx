@@ -23,7 +23,7 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
   const { group, loading } = useGetGroupById(groupId);
   return (
     <IonPage>
-      <Header title={group?.name} />
+      {/*       <Header title={group?.name} />
       <IonContent className="ion-padding" color="light">
         <IonToolbar>
           <IonSearchbar
@@ -71,7 +71,7 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
             </IonTabBar>
           </IonTabs>
         )}
-      </IonContent>
+      </IonContent> */}
     </IonPage>
   );
 };

@@ -25,20 +25,22 @@ const NoGroups: React.FC<RouteComponentProps> = ({ match }) => {
   return (
     <IonPage>
       <Header title="Mint" />
-      <div className="purple-container">
-        <p className="purple-container-text mb-1">
-          To find previous collected content and Collective connect the same
-          wallet.
-        </p>
-        <br></br>
-        <IonButton
-          onClick={handleCreateCollective}
-          shape="round"
-          color="primary"
-        >
-          {address ? "Create Collective" : "Connect"}
-        </IonButton>
-      </div>
+      <IonContent className="ion-padding">
+        <div className="purple-container">
+          <p className="purple-container-text mb-1">
+            To find previous collected content and Collective connect the same
+            wallet.
+          </p>
+          <br></br>
+          <IonButton
+            onClick={handleCreateCollective}
+            shape="round"
+            color="primary"
+          >
+            {address ? "Create Collective" : "Connect"}
+          </IonButton>
+        </div>
+      </IonContent>
     </IonPage>
   );
 };

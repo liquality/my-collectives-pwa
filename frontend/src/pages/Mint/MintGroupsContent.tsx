@@ -18,6 +18,7 @@ import { shortenAddress } from "@/utils";
 import { RouteComponentProps } from "react-router";
 import Header from "@/components/Header";
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
+import MintTopBar from "@/components/Mint/MintTopBar";
 
 const MintGroupsContent: React.FC<RouteComponentProps> = ({ match }) => {
   const { myGroups, loading } = useGetMyGroups();
@@ -30,14 +31,13 @@ const MintGroupsContent: React.FC<RouteComponentProps> = ({ match }) => {
   return (
     <IonPage>
       <Header title="Mint" />
-      <IonContent>
+
+      <IonContent className="ion-padding">
+        <MintTopBar />
         {loading ? (
           <PageLoadingIndicator />
         ) : (
           <IonList inset={true}>
-            <IonListHeader>
-              <IonLabel>My Groups</IonLabel>
-            </IonListHeader>
             {myGroups
               ? myGroups.map((group: any, index: number) => (
                   <IonItem
