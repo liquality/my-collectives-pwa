@@ -1,17 +1,7 @@
 import { useSignInWallet } from "@/hooks/useSignInWallet";
 import { Group } from "@/types/chat";
-import { convertIpfsImageUrl, shortenAddress } from "@/utils";
-import {
-  IonImg,
-  useIonRouter,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonSkeletonText,
-  IonAvatar,
-} from "@ionic/react";
+import { shortenAddress } from "@/utils";
+import { useIonRouter, IonAvatar } from "@ionic/react";
 import React, { useState } from "react";
 
 export interface ChallengeItemCardProps {

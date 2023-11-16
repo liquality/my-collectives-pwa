@@ -4,12 +4,7 @@ import {
   IonFab,
   IonFabButton,
   IonIcon,
-  IonAvatar,
-  IonItem,
   IonLabel,
-  IonList,
-  IonListHeader,
-  IonNote,
   useIonRouter,
   IonContent,
 } from "@ionic/react";
