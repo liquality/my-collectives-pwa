@@ -19,13 +19,14 @@ import { RouteComponentProps } from "react-router";
 import Header from "@/components/Header";
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
 import MintTopBar from "@/components/Mint/MintTopBar";
+import { routes } from "@/utils/routeNames";
 
 const MintGroupsContent: React.FC<RouteComponentProps> = ({ match }) => {
   const { myGroups, loading } = useGetMyGroups();
   const router = useIonRouter();
 
   const handleNavigateToCreateCollective = () => {
-    router.push("/mint/createCollective");
+    router.push(routes.mintPage.createCollective);
   };
 
   return (
