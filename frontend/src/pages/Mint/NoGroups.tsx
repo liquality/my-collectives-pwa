@@ -1,14 +1,29 @@
+import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
 import { IonButton, IonContent, IonItem, IonPage } from "@ionic/react";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
+import { useEffect } from "react";
 import { useAccount } from "wagmi";
 
 export interface NoGroupsProps {}
 
 const NoGroups = ({}: NoGroupsProps) => {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
+  const { open } = useWeb3Modal();
+  const { fetchUserGroups } = useGetMyGroups();
 
-  const handleCreateCollective = () => {
-    //TODO: handle routing and/or connect wallet here
-    //route.push(/createCollective)
+  useEffect(() => {
+    if (isConnected) {
+      fetchUserGroups();
+    }
+  }, [isConnected]);
+
+  const handleCreateCollective = async () => {
+    //TODO: handle routing and
+    if (address) {
+      //route.push(/createCollective)
+    } else {
+      await open();
+    }
   };
 
   return (

@@ -13,25 +13,31 @@ export function useGetMyGroups() {
         setMyGroups(null);
     }
 
-    useEffect(() => {
-        const fetchGroups = async () => {
+    const fetchUserGroups = async () => {
+        setLoading(true)
+        try {
+            if (address && !myGroups) {
+                const _myGroups: Group[] = await ApiService.readGroupByMemberAddress(address)
+                setMyGroups(_myGroups)
+            } else if (!address) {
+                setMyGroups(null)
 
-            try {
-                if (address && !myGroups) {
-                    setLoading(true)
-                    const _myGroups: Group[] = await ApiService.readGroupByMemberAddress(address)
-                    setMyGroups(_myGroups)
-                    setLoading(false)
-
-                }
-            } catch (error) {
-                console.log(error, 'Error fetching my groups')
             }
+        } catch (error) {
+            console.log(error, 'Error fetching my groups')
+        }
+        setLoading(false)
+    };
 
-        };
-        fetchGroups();
-    }, [myGroups]);
-    return { myGroups, loading, reload };
+
+    useEffect(() => {
+        // Fetch groups on component mount and whenever the address changes
+        fetchUserGroups();
+    }, [address, myGroups]);
+
+
+    return { myGroups, loading, reload, fetchUserGroups };
+
 }
 
 export default useGetMyGroups;

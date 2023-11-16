@@ -13,6 +13,7 @@ import {
   IonListHeader,
   IonNote,
   IonButton,
+  useIonRouter,
 } from "@ionic/react";
 
 import CreateGroupModal from "./CreateGroupModal";
@@ -33,13 +34,12 @@ const MintGroupsContent = ({
   loadingGroups,
   match,
 }: MintGroupsContentProps) => {
-  const createGroupModal = useRef<HTMLIonModalElement>(null);
-  const createPoolModal = useRef<HTMLIonModalElement>(null);
+  const router = useIonRouter();
 
-  function handleCreateGroup(groupId: number) {
-    reloadGroups();
-    // router.push(`messages/${groupId}`);
-  }
+  const handleNavigateToCreateCollective = () => {
+    router.push("/mint/createCollective");
+  };
+
   return (
     <IonContent>
       {loadingGroups ? (
@@ -78,17 +78,12 @@ const MintGroupsContent = ({
             : null}
         </IonList>
       )}
-      {/* TODO: make this a page that is routed to, not a modal */}
-      <CreateGroupModal
-        trigger="open-create-group-modal"
-        ref={createGroupModal}
-        onSuccess={handleCreateGroup}
-      />
 
       <IonFab slot="fixed" vertical="bottom" horizontal="end">
         <IonFabButton
           id="open-create-group-modal"
           className="create-fab-button"
+          onClick={handleNavigateToCreateCollective}
         >
           <IonIcon src="/assets/icons/pencil.svg"></IonIcon>
           <IonLabel>Create Group</IonLabel>
