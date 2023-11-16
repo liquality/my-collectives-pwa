@@ -18,12 +18,15 @@ import {
   IonFooter,
   IonPage,
   IonIcon,
+  useIonRouter,
 } from "@ionic/react";
 import ApiService from "@/services/ApiService";
 import { GroupCreation } from "@/types/chat";
 import { useAccount } from "wagmi";
 import { RouteComponentProps, useHistory } from "react-router";
 import Header from "@/components/Header";
+import { useSignInWallet } from "@/hooks/useSignInWallet";
+import { routes } from "@/utils/routeNames";
 
 export interface CreateCollectiveProps {
   presentingElement?: HTMLElement;
@@ -33,24 +36,33 @@ export interface CreateCollectiveProps {
 }
 //TODO: Make this a page, not a modal
 const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
-  const [groupName, setGroupName] = useState("");
-
-  const [groupId, setGroupId] = useState<number | null>(null);
-  const { address } = useAccount();
-  const history = useHistory();
+  const { goBack } = useIonRouter();
+  const { user } = useSignInWallet();
+  const router = useIonRouter();
+  console.log(user?.id, "wats user?");
 
   const cancel = () => {
-    history.goBack();
+    goBack();
   };
 
   const handleCreateGroup = async () => {
+    console.log(user, "user when click?");
     const groupObject: GroupCreation = {
-      name: groupName,
+      createdBy: user?.id,
+      name: createGroup.name,
+      description: createGroup.description,
       publicAddress: "0x0232u326483848787ndas7298bda7289da", //TODO: hardcoded for now but will have to create the contract address from our factory
     };
+
+    console.log(user?.id, "USER IDD*ÄÄÄÄ");
     try {
       const result = await ApiService.createGroup(groupObject);
-      setGroupId(result.id);
+      const { name, publicAddress, id, createdBy } = result;
+      router.push(
+        `${routes.mintPage.myCollectives}/?groupName=${name}&groupAddress=${publicAddress}&groupId=${id}&createdBy=${createdBy}`
+      );
+      //setGroupId(result, '');
+      console.log(result, "wats reeees?");
       //onSuccess(result.id);
     } catch (error) {
       console.log(error, "error posting group");
@@ -62,6 +74,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     description: "",
   });
 
+  const isButtonDisabled = !createGroup.description || !createGroup.name;
   return (
     <IonPage>
       <Header title="Create Collective" />
@@ -132,7 +145,12 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         </IonList>
 
         <div className="button-container">
-          <IonButton onClick={handleCreateGroup} shape="round" color="primary">
+          <IonButton
+            onClick={handleCreateGroup}
+            shape="round"
+            disabled={isButtonDisabled}
+            color={isButtonDisabled ? "medium" : "primary"}
+          >
             Create Collective
           </IonButton>
           <IonButton

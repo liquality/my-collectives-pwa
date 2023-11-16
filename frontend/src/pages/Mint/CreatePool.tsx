@@ -17,6 +17,7 @@ import {
   IonSelectOption,
   IonFooter,
   IonPage,
+  useIonRouter,
 } from "@ionic/react";
 import ApiService from "@/services/ApiService";
 import { GroupCreation } from "@/types/chat";
@@ -36,10 +37,10 @@ const CreatePool: React.FC<RouteComponentProps> = ({ match }) => {
 
   const [groupId, setGroupId] = useState<number | null>(null);
   const { address } = useAccount();
-  const history = useHistory();
+  const { goBack } = useIonRouter();
 
   const cancel = () => {
-    history.goBack();
+    goBack();
   };
 
   const handleCreateGroup = async () => {

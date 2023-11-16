@@ -14,20 +14,38 @@ import {
   IonContent,
 } from "@ionic/react";
 import { shortenAddress } from "@/utils";
-
 import { RouteComponentProps } from "react-router";
 import Header from "@/components/Header";
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
 import MintTopBar from "@/components/Mint/MintTopBar";
 import { routes } from "@/utils/routeNames";
+import { useEffect } from "react";
 
 const MintGroupsContent: React.FC<RouteComponentProps> = ({ match }) => {
-  const { myGroups, loading } = useGetMyGroups();
+  const { myGroups, loading, setMyGroups } = useGetMyGroups();
   const router = useIonRouter();
+  const queryParams = new URLSearchParams(location.search);
+  const groupName = queryParams.get("groupName");
+  const groupAddress = queryParams.get("groupAddress");
+  const groupId = queryParams.get("groupId");
+  const createdBy = queryParams.get("createdBy");
 
   const handleNavigateToCreateCollective = () => {
     router.push(routes.mintPage.createCollective);
   };
+
+  //If a new group has been created, push into exisitng groups array state to avoid re-fetching of groups
+  useEffect(() => {
+    if (groupName && groupAddress && groupId && createdBy) {
+      const newGroup = {
+        name: groupName,
+        publicAddress: groupAddress,
+        id: groupId,
+        createdBy: createdBy,
+      };
+      setMyGroups((prevGroups) => [...(prevGroups || []), newGroup]);
+    }
+  }, [groupName, groupAddress, groupId, createdBy]);
 
   return (
     <IonPage>
