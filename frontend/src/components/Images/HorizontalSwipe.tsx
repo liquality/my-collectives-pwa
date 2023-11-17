@@ -19,7 +19,7 @@ export default function HorizontalSwipe(props: HorizontalSwipeProps) {
         <PageLoadingIndicator />
       ) : (
         <Swiper
-          slidesPerView={isPlatform("desktop") ? 4.3 : 2.3}
+          slidesPerView={isPlatform("desktop") ? 10 : 2.3}
           spaceBetween={10}
           loop={true}
           pagination={{

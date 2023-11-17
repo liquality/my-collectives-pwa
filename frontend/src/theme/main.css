@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Anek+Kannada:wght@100;300;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Anek+Kannada:wght@100;300;400;500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;300;500&display=swap");
 
 * {
@@ -155,11 +155,19 @@ ion-toolbar {
 }
 
 .pink-line {
-  border-bottom: 1px solid #7700d5;
+  border-bottom: 1px solid #fd84ea;
 }
 
 .bullet-points {
   margin-top: 1px;
+  padding-left: 1rem !important;
+  font-weight: 400;
+  line-height: 17px; /* 121.429% */
+  letter-spacing: 0.5px;
+}
+
+.bullet-points li::marker {
+  font-size: 0.2em;
 }
 
 .minimal-line-height {
@@ -205,17 +213,17 @@ ion-toolbar {
 }
 
 .logged-in-button .address {
-  padding-top: 0.375rem;
-  padding-bottom: 0.375rem;
+  padding-top: 0.33rem;
+  padding-bottom: 0.2rem;
   padding-right: 0.5rem;
   color: var(--ion-color-primary);
 }
 
 .logged-in-button .balance {
   padding-left: 0.5rem;
-  padding-top: 0.375rem;
-  padding-bottom: 0.375rem;
-  color: #3d4767;
+  padding-top: 0.33rem;
+  padding-bottom: 0.2rem;
+  color: var(--light-text);
 }
 
 @media (min-width: 768px) {
@@ -237,35 +245,82 @@ ion-toolbar {
 
 .swiper {
   width: 100%;
-  height: 30%;
+  height: 14.563rem !important;
 }
 
 .swiper-slide {
-  width: 70px;
-  font-size: 18px;
-  background: #f8f8f8;
-  border-radius: 20px;
-  position: relative;
+  width: 9.438rem !important;
+  border-radius: 0.938rem;
 }
 
 .card-img-swiper {
+  margin: 0 !important;
   width: 100% !important;
+  margin-inline: 0 !important;
+  background-color: #f8f8f8 !important;
+  border-radius: 0.938rem;
+  height: 14.563rem !important;
+  box-shadow: none !important;
 }
 
-.swiper-item-img {
-  position: absolute;
-  top: 0;
-  width: 100% !important;
-  height: 60% !important;
+.card-img-swiper ion-card-header {
+  padding: 0.3rem 0.3rem 0 0.5rem;
+}
 
-  object-fit: cover !important;
-  border-radius: 20px;
+.card-img-swiper ion-card-title {
+  color: #4f4f4f;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  text-transform: none;
+  text-align: left;
+  padding: 0;
+}
+.card-img-swiper ion-card-content {
+  padding: 0 !important;
+  font-size: 0.688rem;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.card-img-swiper ion-card-content ion-label {
+  margin-left: 0.3rem !important;
+}
+.card-img-swiper ion-card-content ion-col {
+  display: flex;
+  align-items: flex-start;
+}
+
+.card-img-swiper ion-card-subtitle {
+  color: #000;
+  text-align: left;
+  width: 100%;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 600;
+  padding: 0 !important;
+  text-transform: none;
+}
+.swiper-item-img {
+  object-fit: cover;
+}
+
+.swiper-item-img,
+.swiper-item-img-skeleton {
+  height: 9.438rem !important;
+  width: 100% !important;
+  border-radius: 0.938rem;
+}
+
+.swiper-item-img-skeleton {
+  margin-top: 0;
 }
 
 .spaced-on-sides {
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 /* customs from design */
@@ -281,7 +336,7 @@ ion-toolbar {
 }
 
 .create-fab-button ion-icon {
-  width: 1.125rem !important;
+  width: 1.5rem !important;
 }
 
 .create-fab-button:hover,
@@ -347,7 +402,9 @@ ion-toolbar {
 .app-page-top-search-bar ion-searchbar ion-icon {
   margin-left: 0.6rem !important;
 }
-
+.app-page-top-search-buttons ion-button {
+  min-width: 2rem;
+}
 .purple-container {
   display: flex;
   flex-direction: column;
