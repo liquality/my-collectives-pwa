@@ -4,6 +4,7 @@ import NetworkService from "./NetworkService";
 
 const ApiService = {
   createGroup: async function (groupObject: GroupCreation) {
+    console.log(groupObject, 'groupObkect?')
     return NetworkService.postResourceWithAuth("/v1/groups/", groupObject);
   },
 

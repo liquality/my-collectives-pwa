@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Anek+Kannada:wght@100;300;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;300;500&display=swap");
+
 * {
   font-family: "Anek Kannada", sans-serif;
 }
@@ -13,7 +15,7 @@
   --white-grey: #eeeeee;
   --light-grey: #d9dfe5;
   --medium-grey: #bfc3c7;
-  --orange-grey: #f9f9f9;
+  --container-grey: #f9f9f9;
   --grey: #a8aeb7;
   --grey-meta: #646f85;
   --dark-grey: #3d4767;
@@ -147,6 +149,11 @@ ion-toolbar {
   flex-direction: column;
 }
 
+.flexDirectionRow {
+  display: flex;
+  flex-direction: row;
+}
+
 .pink-line {
   border-bottom: 1px solid #7700d5;
 }
@@ -186,6 +193,11 @@ ion-toolbar {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
   border-color: var(--ion-color-primary);
+}
+
+.space-between {
+  display: flex;
+  justify-content: space-between;
 }
 .logged-in-button .divider {
   background-color: var(--ion-color-primary);
@@ -364,4 +376,114 @@ ion-toolbar {
 
 ion-button {
   width: 50% !important;
+}
+
+.grey-container {
+  background-color: var(--container-grey);
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  height: 100px;
+  margin: 0 auto;
+  padding: 12px;
+  line-height: 0px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.small-purple-text {
+  color: var(--primary-purple);
+
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 153.846% */
+  letter-spacing: 0.75px;
+}
+.align-to-grey-container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.collective-card {
+  background-color: var(--container-grey);
+  padding-right: 10px;
+  padding-top: 10px;
+  width: 75%;
+  height: 95px;
+}
+
+.generic-grey-card {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  line-height: 0px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.collective-card-right {
+  background-color: var(--container-grey);
+  margin-left: 7px;
+  width: 20%;
+  height: 95px;
+}
+
+.parent-hover:hover .collective-card,
+.parent-hover:hover .collective-card-right {
+  background-color: var(--light-purple-background);
+}
+
+.collective-card-name {
+  color: var(--primary-purple);
+  font-feature-settings: "clig" off, "liga" off;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  margin-left: 20px;
+  margin-bottom: 5px;
+}
+
+.collective-data-container {
+  position: relative;
+}
+
+.public-address {
+  color: #646f85;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 0px;
+  letter-spacing: 0.75px;
+  word-wrap: break-word;
+  margin-left: 20px;
+}
+
+.admin-tag {
+  border-radius: 2px;
+  background: var(--yellow);
+  color: #000;
+  text-align: center;
+  font-family: "JetBrains Mono" sans-serif;
+  font-size: 10px;
+
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.5px;
+  margin-top: 10px;
+}
+
+.collective-card-titles {
+  color: var(--dark-grey);
+  font-family: "JetBrains Mono" sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  padding-right: 5%;
 }

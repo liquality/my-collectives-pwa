@@ -6,7 +6,7 @@ import {
 } from "@ionic/react";
 import { useEffect } from "react";
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
-import { Route, RouteComponentProps } from "react-router";
+import { Redirect, Route, RouteComponentProps } from "react-router";
 import MintGroupsContent from "./MintGroupsContent";
 import NoGroups from "./NoGroups";
 import CreateCollective from "./CreateCollective";
@@ -16,10 +16,8 @@ import CollectiveInvites from "./CollectiveInvites";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 
 const Mint: React.FC<RouteComponentProps> = ({ match }) => {
-  const { myGroups, loading, reload } = useGetMyGroups();
-
+  const { myGroups, loading } = useGetMyGroups();
   const router = useIonRouter();
-  console.log(myGroups, "myg grouups");
 
   //TODO: make the logic for this more bug-proof
   useEffect(() => {
@@ -64,6 +62,16 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
               component={CollectiveInvites}
               exact
             />
+
+            <Route exact path={routes.mintPage.mint}>
+              <Redirect
+                to={
+                  myGroups
+                    ? routes.mintPage.myCollectives
+                    : routes.mintPage.noCollectives
+                }
+              />
+            </Route>
           </IonRouterOutlet>
         )}
       </IonContent>

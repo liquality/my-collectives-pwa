@@ -36,7 +36,7 @@ export function useGetMyGroups() {
     }, [address, myGroups]);
 
 
-    return { myGroups, loading, reload, fetchUserGroups };
+    return { myGroups, loading, reload, fetchUserGroups, setMyGroups };
 
 }
 
