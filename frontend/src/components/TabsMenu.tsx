@@ -13,7 +13,7 @@ const TabsMenu = ({ children }: { children?: React.ReactNode }) => {
     <IonTabs>
       {children}
       <IonTabBar slot="bottom" className="app-tab-bar">
-        <IonTabButton tab="discover" href={routes.discover.new}>
+        <IonTabButton tab="discover" href={routes.discover.discover}>
           <IonIcon src="./assets/icons/discover.svg" />
           <IonLabel>Discover</IonLabel>
         </IonTabButton>
@@ -21,7 +21,7 @@ const TabsMenu = ({ children }: { children?: React.ReactNode }) => {
           <IonIcon src="./assets/icons/mint.svg" />
           <IonLabel>Mint</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="rewards" href={routes.rewards.index}>
+        <IonTabButton tab="rewards" href="/rewards">
           <IonIcon src="./assets/icons/rewards.svg" />
           <IonLabel>Rewards</IonLabel>
         </IonTabButton>

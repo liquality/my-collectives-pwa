@@ -78,6 +78,7 @@ createWeb3Modal({ wagmiConfig, projectId, chains });
 const App: React.FC = () => {
   const routerOutlet = (
     <IonRouterOutlet id="main-content">
+      <Redirect exact path="/" to="/discover" />
       {/* Routes not requiring authentication */}
       <Route path="/login" render={() => <Login />} exact />
       <Route path="/invite/:inviteLink" render={() => <Invite />} />
@@ -90,7 +91,7 @@ const App: React.FC = () => {
 
       {/* Default route (not requiring authentication) */}
       <Route exact path="/">
-        <Redirect to="/discover/new" />
+        <Redirect to="/discover" />
       </Route>
 
       {/* Protected routes, needs auth */}
