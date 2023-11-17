@@ -1,4 +1,4 @@
-import { IonContent, IonPage } from "@ionic/react";
+import { IonContent, IonLabel, IonPage } from "@ionic/react";
 import HorizontalSwipe from "@/components/Images/HorizontalSwipe";
 import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
 import { RouteComponentProps } from "react-router";
@@ -14,8 +14,8 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
           <PageSearchBar />
         </DiscoverTopBar>
         <div className="spaced-on-sides">
-          <p>Art | {challenges?.length}</p>
-          <p>See All</p>
+          <IonLabel>Art | {challenges?.length}</IonLabel>
+          <IonLabel color="primary">See All</IonLabel>
         </div>
 
         <HorizontalSwipe
@@ -24,8 +24,8 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
         ></HorizontalSwipe>
 
         <div className="spaced-on-sides">
-          <p>Music | {challenges?.length}</p>
-          <p>See All</p>
+          <IonLabel>Music | {challenges?.length}</IonLabel>
+          <IonLabel color="primary">See All</IonLabel>
         </div>
         <HorizontalSwipe
           imageData={challenges}

@@ -9,19 +9,30 @@ export interface PageSearchBarProps {
   searchPlaceholder?: string;
   onClickSearch?: () => void;
   onClearSearch?: () => void;
+  onClickReload?: () => void;
   onSearchChange?: (value?: string | null) => void;
+  searchEnabled?: boolean;
+  reloadEnabled?: boolean;
 }
 const PageSearchBar: React.FC<PageSearchBarProps> = ({
   onClickSearch,
   onClearSearch,
   onSearchChange,
+  onClickReload,
   searchPlaceholder = "Search",
+  searchEnabled = true,
+  reloadEnabled = true,
 }: PageSearchBarProps) => {
   const [searchBarOpen, setSearchBarOpen] = useState(false);
   const handleSearchIconClick = () => {
     setSearchBarOpen(true);
     if (onClickSearch) {
       onClickSearch();
+    }
+  };
+  const handleReloadIconClick = () => {
+    if (onClickReload) {
+      onClickReload();
     }
   };
   const handleClearSearch = () => {
@@ -56,13 +67,17 @@ const PageSearchBar: React.FC<PageSearchBarProps> = ({
           searchIcon="./assets/icons/search-bar-icon.svg"
         ></IonSearchbar>
       </div>
-      <IonButtons slot="end">
-        <IonButton onClick={handleSearchIconClick}>
-          <IonIcon src="./assets/icons/search.svg" />
-        </IonButton>
-        <IonButton>
-          <IonIcon src="./assets/icons/reload.svg" />
-        </IonButton>
+      <IonButtons slot="end" className="app-page-top-search-buttons">
+        {searchEnabled ? (
+          <IonButton onClick={handleSearchIconClick}>
+            <IonIcon src="./assets/icons/search-bar-icon.svg" />
+          </IonButton>
+        ) : null}
+        {reloadEnabled ? (
+          <IonButton onClick={handleReloadIconClick}>
+            <IonIcon src="./assets/icons/reload.svg" />
+          </IonButton>
+        ) : null}
       </IonButtons>
     </>
   );
