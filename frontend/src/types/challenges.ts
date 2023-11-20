@@ -9,6 +9,7 @@ export interface ChallengeCreation {
 
 export interface Challenge {
     id: string;
+    name: string,
     mintingContractAddress: string;
     chainId: string;
     tokenId?: string,
@@ -18,5 +19,6 @@ export interface Challenge {
     platform: string
     expiration: string
     expired: boolean
+    creatorOfMint: string,
 }
 

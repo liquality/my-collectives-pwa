@@ -3,28 +3,32 @@ import {
   IonItem,
   IonButton,
   IonContent,
-  IonHeader,
   IonList,
   IonModal,
   IonInput,
   IonSelect,
   IonSelectOption,
-  IonFooter,
-  useIonRouter,
 } from "@ionic/react";
 import ApiService from "@/services/ApiService";
-
-import { useAccount } from "wagmi";
+import { Challenge } from "@/types/challenges";
 
 export interface CreateChallengeModalProps {
   presentingElement?: HTMLElement;
-  dismiss?: () => void;
+  dismiss: () => void;
   onSuccess?: (groupId: number) => void;
   trigger: string;
+  resultChallenge: Challenge | null;
+  setResultChallenge: (challenge: Challenge) => void;
 }
-//TODO: Make this a page, not a modal
 const CreateGroupModal = forwardRef(function CreateGroupModal(
-  { presentingElement, dismiss, onSuccess, trigger }: CreateChallengeModalProps,
+  {
+    presentingElement,
+    dismiss,
+    onSuccess,
+    trigger,
+    resultChallenge,
+    setResultChallenge,
+  }: CreateChallengeModalProps,
   ref: Ref<HTMLIonModalElement>
 ) {
   const [createdChallenge, setCreatedChallenge] = useState({
@@ -35,7 +39,6 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     platform: "", // zora, sound or prohobition
     expiration: "",
   });
-  const [resultChallenge, setResultChallenge] = useState({}); //TODO: this should come in as props instead
   const { mintingContractAddress, chainId, category, platform, expiration } =
     createdChallenge;
   let isButtonDisabled =
@@ -45,15 +48,15 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     !platform ||
     !expiration;
 
-  console.log(isButtonDisabled, "buttn disabled?");
-  const { address } = useAccount();
-
   const handleCreateChallenge = async () => {
     try {
       const result = await ApiService.createChallenges(createdChallenge);
       setResultChallenge(result);
-      console.log(result, "SUCCESS result for insert");
-      //onSuccess(result.id);
+      if (result.id) {
+        dismiss();
+      } else {
+        //TODO: setError
+      }
     } catch (error) {
       console.log(error, "error posting group");
     }
@@ -125,9 +128,9 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
               label="Category"
               placeholder="Category"
             >
-              <IonSelectOption value="type1">Art</IonSelectOption>
-              <IonSelectOption value="type2">Music</IonSelectOption>
-              <IonSelectOption value="type3">Other</IonSelectOption>
+              <IonSelectOption value="art">Art</IonSelectOption>
+              <IonSelectOption value="music">Music</IonSelectOption>
+              <IonSelectOption value="other">Other</IonSelectOption>
             </IonSelect>
           </IonItem>
 
@@ -143,9 +146,9 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
               label="Platform"
               placeholder="Platform"
             >
-              <IonSelectOption value="type1">Zora</IonSelectOption>
-              <IonSelectOption value="type2">Sound</IonSelectOption>
-              <IonSelectOption value="type3">Prohobition</IonSelectOption>
+              <IonSelectOption value="zora">Zora</IonSelectOption>
+              <IonSelectOption value="sound">Sound</IonSelectOption>
+              <IonSelectOption value="prohobition">Prohobition</IonSelectOption>
             </IonSelect>
           </IonItem>
 

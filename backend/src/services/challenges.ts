@@ -43,12 +43,13 @@ export class ChallengesService {
                 "chainId",
                 "tokenId",
                 "category",
+                "name",
                 "platform",
                 "expiration",
                 "expired",
                 "totalMints",
-                "imageUrl"
-                // "creatorOfMint"
+                "imageUrl",
+                "creatorOfMint"
             ]
         );
         if (result.length > 0) {
@@ -65,25 +66,15 @@ export class ChallengesService {
             "mintingContractAddress",
             "chainId",
             "tokenId",
-            "createdAt"
+            "category",
+            "name",
+            "platform",
+            "expiration",
+            "expired",
+            "totalMints",
+            "imageUrl",
+            "creatorOfMint"
         );
-        const meta = await getTokenMetadataFromZora(challenges);
-        if (meta && meta.length > 0) {
-            return challenges.map((challenge) => {
-                const challengeMeta = meta.find(
-                    (meta) =>
-                        meta.tokenId === challenge.tokenId &&
-                        meta.collectionAddress === challenge.mintingContractAddress
-                );
-                const { imageUrl, name } = challengeMeta || {};
-                return {
-                    ...challenge,
-                    imageUrl: imageUrl || "",
-                    name,
-                };
-            });
-        }
-
         return challenges as any[];
     }
 

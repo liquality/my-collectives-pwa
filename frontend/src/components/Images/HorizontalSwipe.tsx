@@ -32,7 +32,7 @@ export default function HorizontalSwipe(props: HorizontalSwipeProps) {
           <div className="swiper-container">
             {imageData.map((challenge: any, index: number) => (
               <SwiperSlide key={index}>
-                <SwipeCard {...challenge} />
+                <SwipeCard challenge={challenge} {...challenge} />
               </SwiperSlide>
             ))}
           </div>

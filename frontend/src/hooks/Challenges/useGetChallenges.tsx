@@ -20,7 +20,7 @@ export function useGetChallenges() {
     };
     fetchData();
   }, [challenges]);
-  return { challenges, loading };
+  return { challenges, setChallenges, loading };
 }
 
 export default useGetChallenges;

@@ -2,7 +2,11 @@ import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
 import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
-import { convertIpfsImageUrl, shortenAddress } from "@/utils";
+import {
+  convertIpfsImageUrl,
+  cutOffTooLongString,
+  shortenAddress,
+} from "@/utils";
 import {
   IonCard,
   IonCardContent,
@@ -17,18 +21,26 @@ import {
   IonSkeletonText,
   useIonRouter,
 } from "@ionic/react";
+import { Challenge } from "@/types/challenges";
 
 export interface SwipeCardProps {
-  tokenId: string;
-  mintingContractAddress: string;
-  imageUrl: string;
+  challenge: Challenge;
 }
 
-const SwipeCard: React.FC<SwipeCardProps> = ({
-  tokenId,
-  mintingContractAddress,
-  imageUrl,
-}: SwipeCardProps) => {
+const SwipeCard: React.FC<SwipeCardProps> = ({ challenge }: SwipeCardProps) => {
+  const {
+    id,
+    mintingContractAddress,
+    chainId,
+    tokenId,
+    category,
+    name,
+    expiration,
+    expired,
+    totalMints,
+    imageUrl,
+    creatorOfMint,
+  } = challenge;
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loading, setLoading] = useState(true);
   const router = useIonRouter();
@@ -40,6 +52,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
     }
   };
 
+  console.log(challenge, "challenge?");
   return (
     <IonCard className="card-img-swiper" onClick={handleClick}>
       {" "}
@@ -65,13 +78,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
             `Creator.eth`
           )}
         </IonCardTitle>
-        <IonCardSubtitle>
-          {loading ? (
-            <IonSkeletonText animated={true}></IonSkeletonText>
-          ) : (
-            `Title Get Elipess...`
-          )}
-        </IonCardSubtitle>
+        <IonCardSubtitle>{cutOffTooLongString(name, 20)}</IonCardSubtitle>
       </IonCardHeader>
       <IonCardContent>
         <IonGrid>

@@ -13,18 +13,29 @@ import PageSearchBar from "@/components/PageSearchBar";
 import DiscoverTopBar from "./DiscoverTopBar";
 import { useEffect, useRef, useState } from "react";
 import CreateGroupModal from "./CreateChallengeModal";
+import { Challenge } from "@/types/challenges";
 
 const New: React.FC<RouteComponentProps> = (routerProps) => {
-  const { challenges, loading } = useGetChallenges();
+  const { challenges, loading, setChallenges } = useGetChallenges();
   const page = useRef(undefined);
   const createChallengeModal = useRef<HTMLIonModalElement>(null);
   const [presentingElement, setPresentingElement] = useState<
     HTMLElement | undefined
   >(undefined);
+  const [resultChallenge, setResultChallenge] = useState<Challenge | null>(
+    null
+  );
 
   useEffect(() => {
+    //If a new challenge has been created, push into exisitng challenge array state to avoid re-fetching of challenges
+    if (resultChallenge) {
+      setChallenges((prevGroups: Challenge[]) => [
+        ...(prevGroups || []),
+        resultChallenge,
+      ]);
+    }
     setPresentingElement(page.current);
-  }, []);
+  }, [resultChallenge]);
 
   function hideCreateChallengeModal() {
     createChallengeModal.current?.dismiss();
@@ -32,8 +43,6 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
 
   function handleCreateChallenge(groupId: number) {
     hideCreateChallengeModal();
-    //reloadChallenges();
-    // router.push(`messages/${groupId}`);
   }
   return (
     <IonPage>
@@ -50,6 +59,16 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
         >
           CREATE CHALLENGE
         </IonButton>
+
+        <CreateGroupModal
+          trigger="open-create-challenge-modal"
+          ref={createChallengeModal}
+          presentingElement={presentingElement}
+          dismiss={hideCreateChallengeModal}
+          onSuccess={handleCreateChallenge}
+          resultChallenge={resultChallenge}
+          setResultChallenge={setResultChallenge}
+        />
 
         <div className="spaced-on-sides">
           <IonLabel>Art | {challenges?.length}</IonLabel>
@@ -69,14 +88,6 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
           imageData={challenges}
           loading={loading}
         ></HorizontalSwipe>
-
-        <CreateGroupModal
-          trigger="open-create-challenge-modal"
-          ref={createChallengeModal}
-          presentingElement={presentingElement}
-          dismiss={hideCreateChallengeModal}
-          onSuccess={handleCreateChallenge}
-        />
       </IonContent>
     </IonPage>
   );

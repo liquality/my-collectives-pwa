@@ -163,6 +163,7 @@ export async function getTokenMetadataFromZora(challenges: Challenge[]) {
 
 
 
+
     console.log(tokensWithData.tokens.nodes, 'all info?')
 
     return tokensWithData.tokens.nodes.map(({ token }) => ({
@@ -215,12 +216,15 @@ export async function getTokenMetadataFromZoraWhenCreatingChallenge(challenge: a
 
             },
         });
+
+        console.log(tokensWithData.tokens.nodes, 'Tokens')
+
         const result = tokensWithData.tokens.nodes.map(({ token }) => ({
             ...challenge,
             name: token.name,
             imageUrl: token.image?.url ?? "",
             totalMints: 0,
-
+            creatorOfMint: "creator.eth"
 
         }));
         return result[0]
