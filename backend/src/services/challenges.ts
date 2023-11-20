@@ -1,6 +1,6 @@
 import { dbClient } from "../data";
 import { Challenge, ChallengeWithMeta } from "../models/challenges";
-import { getTokenMetadataFromZora } from "../utils";
+import { convertToDate, getTokenMetadataFromZora, getTokenMetadataFromZoraWhenCreatingChallenge } from "../utils";
 
 export class ChallengesService {
 
@@ -22,20 +22,33 @@ export class ChallengesService {
     */
     public static async create(
         data: any,
-        userId: string
+
     ): Promise<Challenge | null> {
         //TODO: change this to challenges data insert
+        console.log(data, 'this is data')
+
+        //TODO based on data.platform we have to have diff scenarios not only Zora
+        const meta = await getTokenMetadataFromZoraWhenCreatingChallenge(data)
+        meta.expiration = convertToDate(meta.expiration)
+
+
         const result = await dbClient("challenges").insert(
             {
-                ...data,
-                createdBy: userId,
+                ...meta,
+                //createdBy: userId,
             },
             [
                 "id",
                 "mintingContractAddress",
                 "chainId",
                 "tokenId",
-                "createdAt",
+                "category",
+                "platform",
+                "expiration",
+                "expired",
+                "totalMints",
+                "imageUrl"
+                // "creatorOfMint"
             ]
         );
         if (result.length > 0) {
@@ -46,7 +59,7 @@ export class ChallengesService {
     }
 
 
-    public static async findAll(): Promise<ChallengeWithMeta[]> {
+    public static async findAll(): Promise<any[]> {
         const challenges = await dbClient("challenges").select<Challenge[]>(
             "id",
             "mintingContractAddress",
@@ -71,10 +84,10 @@ export class ChallengesService {
             });
         }
 
-        return challenges as ChallengeWithMeta[];
+        return challenges as any[];
     }
 
-    public static async find(id: string): Promise<ChallengeWithMeta | null> {
+    public static async find(id: string): Promise<any | null> {
         const challenge = await dbClient("challenges")
             .where("id", "=", id)
             .first<Challenge>(
@@ -96,7 +109,7 @@ export class ChallengesService {
                 };
             }
 
-            return challenge as ChallengeWithMeta;
+            return challenge as any;
         }
         return null;
     }

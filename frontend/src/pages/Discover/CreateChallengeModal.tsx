@@ -35,6 +35,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     platform: "", // zora, sound or prohobition
     expiration: "",
   });
+  const [resultChallenge, setResultChallenge] = useState({}); //TODO: this should come in as props instead
   const { mintingContractAddress, chainId, category, platform, expiration } =
     createdChallenge;
   let isButtonDisabled =
@@ -47,18 +48,15 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
   console.log(isButtonDisabled, "buttn disabled?");
   const { address } = useAccount();
 
-  const handleCreateGroup = async () => {
-    /*    const groupObject: GroupCreation = {
-      name: groupName,
-      publicAddress: "0x0232u326483848787ndas7298bda7289da", //TODO: hardcoded for now but will have to create the contract address from our factory
-    };
+  const handleCreateChallenge = async () => {
     try {
-      const result = await ApiService.createGroup(groupObject);
-      setGroupId(result.id);
+      const result = await ApiService.createChallenges(createdChallenge);
+      setResultChallenge(result);
+      console.log(result, "SUCCESS result for insert");
       //onSuccess(result.id);
     } catch (error) {
       console.log(error, "error posting group");
-    } */
+    }
   };
 
   return (
@@ -169,7 +167,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
 
         <div className="button-container">
           <IonButton
-            onClick={handleCreateGroup}
+            onClick={handleCreateChallenge}
             shape="round"
             disabled={isButtonDisabled}
             color={isButtonDisabled ? "medium" : "primary"}

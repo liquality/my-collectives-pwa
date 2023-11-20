@@ -1,6 +1,7 @@
 import { Message, Group, GroupCreation } from "@/types/chat";
 //@ts-ignore
 import NetworkService from "./NetworkService";
+import { ChallengeCreation } from "@/types/challenges";
 
 const ApiService = {
   createGroup: async function (groupObject: GroupCreation) {
@@ -34,6 +35,11 @@ const ApiService = {
 
   readChallenges: async function () {
     return NetworkService.getResourceWithAuth("/v1/challenges");
+  },
+
+
+  createChallenges: async function (challengeObject: ChallengeCreation) {
+    return NetworkService.postResourceWithAuth("/v1/challenges", challengeObject);
   },
 
   getNumberOfMembersInGroup: async function (groupAddress: string) {

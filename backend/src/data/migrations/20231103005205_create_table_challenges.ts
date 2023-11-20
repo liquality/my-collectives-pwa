@@ -4,6 +4,8 @@ import { Knex } from "knex";
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable("challenges", (table) => {
         table.uuid('id').primary().defaultTo(knex.fn.uuid());
+        table.string("name").nullable();
+        table.string("creatorOfMint").nullable();
         table.string("mintingContractAddress").nullable();
         table.integer("chainId").nullable();
         table.string("tokenId").nullable();

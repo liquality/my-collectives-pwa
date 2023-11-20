@@ -1,3 +1,12 @@
+export interface ChallengeCreation {
+    mintingContractAddress: string;
+    chainId: string;
+    tokenId?: string,
+    category: string;
+    platform: string
+    expiration: string
+}
+
 export interface Challenge {
     id: string;
     mintingContractAddress: string;
@@ -9,16 +18,5 @@ export interface Challenge {
     platform: string
     expiration: string
     expired: boolean
-}
-
-
-export interface ChallengeWithMeta {
-    id: string;
-    mintingContractAddress?: string;
-    chainId?: number;
-    createdAt: Date;
-    tokenId: string;
-    imageUrl: string;
-    name?: string | null;
 }
 
