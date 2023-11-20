@@ -1,3 +1,4 @@
+import { routes } from "@/utils/routeNames";
 import {
   IonLabel,
   IonIcon,
@@ -12,16 +13,16 @@ const TabsMenu = ({ children }: { children?: React.ReactNode }) => {
     <IonTabs>
       {children}
       <IonTabBar slot="bottom" className="app-tab-bar">
-        <IonTabButton tab="discover" href="/discover">
-        <IonIcon src="./assets/icons/discover.svg" />
+        <IonTabButton tab="discover" href={routes.discover.discover}>
+          <IonIcon src="./assets/icons/discover.svg" />
           <IonLabel>Discover</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="mint" href="/mint">
-        <IonIcon src="./assets/icons/mint.svg" />
+        <IonTabButton tab="mint" href={routes.mintPage.mint}>
+          <IonIcon src="./assets/icons/mint.svg" />
           <IonLabel>Mint</IonLabel>
         </IonTabButton>
         <IonTabButton tab="rewards" href="/rewards">
-        <IonIcon src="./assets/icons/rewards.svg" />
+          <IonIcon src="./assets/icons/rewards.svg" />
           <IonLabel>Rewards</IonLabel>
         </IonTabButton>
       </IonTabBar>

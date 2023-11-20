@@ -50,7 +50,8 @@ export class GroupsService {
         "groups.description",
         "groups.publicAddress",
         "groups.rewards",
-        "groups.createdAt"
+        "groups.createdAt",
+        "groups.createdBy"
       );
   }
 

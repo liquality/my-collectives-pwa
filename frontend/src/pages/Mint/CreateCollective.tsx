@@ -17,12 +17,16 @@ import {
   IonSelectOption,
   IonFooter,
   IonPage,
+  IonIcon,
+  useIonRouter,
 } from "@ionic/react";
 import ApiService from "@/services/ApiService";
 import { GroupCreation } from "@/types/chat";
 import { useAccount } from "wagmi";
 import { RouteComponentProps, useHistory } from "react-router";
 import Header from "@/components/Header";
+import { useSignInWallet } from "@/hooks/useSignInWallet";
+import { routes } from "@/utils/routeNames";
 
 export interface CreateCollectiveProps {
   presentingElement?: HTMLElement;
@@ -32,106 +36,132 @@ export interface CreateCollectiveProps {
 }
 //TODO: Make this a page, not a modal
 const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
-  const [groupName, setGroupName] = useState("");
-  const [groupId, setGroupId] = useState<number | null>(null);
-  const { address } = useAccount();
-  const history = useHistory();
+  const { goBack } = useIonRouter();
+  const { user } = useSignInWallet();
+  const router = useIonRouter();
+  console.log(user?.id, "wats user?");
 
   const cancel = () => {
-    history.goBack();
+    goBack();
   };
 
   const handleCreateGroup = async () => {
+    console.log(user, "user when click?");
     const groupObject: GroupCreation = {
-      name: groupName,
+      createdBy: user?.id,
+      name: createGroup.name,
+      description: createGroup.description,
       publicAddress: "0x0232u326483848787ndas7298bda7289da", //TODO: hardcoded for now but will have to create the contract address from our factory
     };
+
+    console.log(user?.id, "USER IDD*ÄÄÄÄ");
     try {
       const result = await ApiService.createGroup(groupObject);
-      setGroupId(result.id);
+      const { name, publicAddress, id, createdBy } = result;
+      router.push(
+        `${routes.mintPage.myCollectives}/?groupName=${name}&groupAddress=${publicAddress}&groupId=${id}&createdBy=${createdBy}`
+      );
+      //setGroupId(result, '');
+      console.log(result, "wats reeees?");
       //onSuccess(result.id);
     } catch (error) {
       console.log(error, "error posting group");
     }
   };
 
+  const [createGroup, setCreatedGroup] = useState({
+    name: "",
+    description: "",
+  });
+
+  const isButtonDisabled = !createGroup.description || !createGroup.name;
   return (
     <IonPage>
       <Header title="Create Collective" />
 
-      <IonContent color="light">
-        <IonList className="ion-padding" inset={true}>
+      <IonContent>
+        <IonList inset={true}>
           <IonItem>
             <IonInput
-              label="Name"
+              label="Collective Name"
               label-placement="floating"
               placeholder="Enter the name"
-              onIonInput={(e) => setGroupName(e.detail.value!)}
+              onIonInput={(e) =>
+                setCreatedGroup((prevGroup) => ({
+                  ...prevGroup,
+                  name: e.detail.value!,
+                }))
+              }
             ></IonInput>
           </IonItem>
+
           <IonItem>
-            <IonTextarea
+            <IonInput
               label="Description"
               label-placement="floating"
               placeholder="Enter the description"
-            ></IonTextarea>
+              onIonInput={(e) =>
+                setCreatedGroup((prevGroup) => ({
+                  ...prevGroup,
+                  description: e.detail.value!,
+                }))
+              }
+            ></IonInput>
           </IonItem>
+          <IonItem></IonItem>
         </IonList>
 
-        <IonList className="ion-padding" inset={true}>
-          <IonListHeader>
-            <IonLabel>First Pool</IonLabel>
-          </IonListHeader>
-          <IonItem>
-            <IonInput
-              label="Chain Id"
-              label-placement="floating"
-              placeholder="Enter the chain id"
-            ></IonInput>
-          </IonItem>
-          <IonItem>
-            <IonInput
-              label="Platform Url"
-              label-placement="floating"
-              placeholder="Enter the Platform Url"
-            ></IonInput>
-          </IonItem>
-          <IonItem>
-            <IonInput
-              label="Token Id"
-              label-placement="floating"
-              placeholder="Enter the Token Id"
-            ></IonInput>
-          </IonItem>
-          <IonItem>
-            <IonInput
-              label="Minting Contract Address"
-              label-placement="floating"
-              placeholder="Enter the Minting Contract Address"
-            ></IonInput>
-          </IonItem>
-          <IonItem>
-            <IonSelect label="Type of Pool" placeholder="Type of Pool">
-              <IonSelectOption value="type1">Type 1</IonSelectOption>
-              <IonSelectOption value="type2">Type 2</IonSelectOption>
-              <IonSelectOption value="type3">Type 3</IonSelectOption>
-            </IonSelect>
-          </IonItem>
-          <IonItem>
-            <IonInput
-              label="Length (Days)"
-              type="number"
-              placeholder="Length (Days)"
-            ></IonInput>
-          </IonItem>
-          <IonItem>
-            <IonTextarea
-              label="Terms"
-              label-placement="floating"
-              placeholder="Enter the Terms"
-            ></IonTextarea>
-          </IonItem>
+        <IonList inset={true}>
+          <div className="grey-container ">
+            <div className="flexDirectionRow space-between">
+              <p>POOL 1</p>
+              <p
+                className="small-purple-text "
+                onClick={() => console.log("Click edit")}
+              >
+                Edit
+              </p>
+            </div>
+            <p>NFT NAME</p>
+            <IonLabel>Details</IonLabel>
+          </div>
+
+          <div className="grey-container">
+            <div className="flexDirectionRow space-between">
+              <p>POOL 2</p>
+              <p
+                className="small-purple-text "
+                onClick={() => console.log("Click edit")}
+              >
+                Edit
+              </p>
+            </div>
+            <p>NFT NAME</p>
+            <IonLabel>Details</IonLabel>
+          </div>
+          <p className="small-purple-text align-to-grey-container">
+            + Add Pool
+          </p>
         </IonList>
+
+        <div className="button-container">
+          <IonButton
+            onClick={handleCreateGroup}
+            shape="round"
+            disabled={isButtonDisabled}
+            color={isButtonDisabled ? "medium" : "primary"}
+          >
+            Create Collective
+          </IonButton>
+          <IonButton
+            onClick={cancel}
+            shape="round"
+            fill="clear"
+            color="primary"
+          >
+            Cancel
+          </IonButton>
+        </div>
       </IonContent>
     </IonPage>
   );

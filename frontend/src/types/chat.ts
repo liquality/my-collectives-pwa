@@ -18,6 +18,8 @@ export interface Group {
 
 export interface GroupCreation {
     name?: string;
+    createdBy: string
+    description: string
     publicAddress: string
 }
 
