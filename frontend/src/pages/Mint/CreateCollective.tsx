@@ -2,27 +2,15 @@ import { useState } from "react";
 import {
   IonItem,
   IonButton,
-  IonButtons,
   IonContent,
-  IonHeader,
   IonList,
-  IonModal,
-  IonTitle,
-  IonToolbar,
   IonInput,
-  IonTextarea,
   IonLabel,
-  IonListHeader,
-  IonSelect,
-  IonSelectOption,
-  IonFooter,
   IonPage,
-  IonIcon,
   useIonRouter,
 } from "@ionic/react";
 import ApiService from "@/services/ApiService";
 import { GroupCreation } from "@/types/chat";
-import { useAccount } from "wagmi";
 import { RouteComponentProps, useHistory } from "react-router";
 import Header from "@/components/Header";
 import { useSignInWallet } from "@/hooks/useSignInWallet";
@@ -39,6 +27,10 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
   const { goBack } = useIonRouter();
   const { user } = useSignInWallet();
   const router = useIonRouter();
+  const [createGroup, setCreatedGroup] = useState({
+    name: "",
+    description: "",
+  });
   console.log(user?.id, "wats user?");
 
   const cancel = () => {
@@ -68,11 +60,6 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       console.log(error, "error posting group");
     }
   };
-
-  const [createGroup, setCreatedGroup] = useState({
-    name: "",
-    description: "",
-  });
 
   const isButtonDisabled = !createGroup.description || !createGroup.name;
   return (
