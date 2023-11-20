@@ -8,6 +8,11 @@ export async function up(knex: Knex): Promise<void> {
         table.integer("chainId").nullable();
         table.string("tokenId").nullable();
         table.string("imageUrl").nullable();
+        table.string("category").nullable(); //music, art, or other type
+        table.string("platform").nullable(); //sound, zora or prohobition
+        table.timestamp("expiration").nullable(); //example: 7 days from creation //expiration: new Date("2023-12-01T12:00:00Z")
+        table.boolean("expired").nullable();
+
         table.timestamps({ useCamelCase: true });
     });
 }
