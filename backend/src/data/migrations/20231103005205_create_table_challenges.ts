@@ -11,8 +11,8 @@ export async function up(knex: Knex): Promise<void> {
         table.string("category").nullable(); //music, art, or other type
         table.string("platform").nullable(); //sound, zora or prohobition
         table.timestamp("expiration").nullable(); //example: 7 days from creation //expiration: new Date("2023-12-01T12:00:00Z")
+        table.integer("totalMints").nullable()
         table.boolean("expired").nullable();
-
         table.timestamps({ useCamelCase: true });
     });
 }
