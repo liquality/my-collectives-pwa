@@ -17,9 +17,9 @@ export function convertIpfsImageUrl(url: string) {
 
 
 export const cutOffTooLongString = (name: string, maxLength: number) => {
-  if (name.length <= maxLength) {
+  if (name && name?.length <= maxLength) {
     return name;
   } else {
-    return name.slice(0, maxLength) + ' ...';
+    return name?.slice(0, maxLength) + ' ...';
   }
 };

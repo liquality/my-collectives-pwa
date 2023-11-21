@@ -40,7 +40,7 @@ export class ChallengesController {
         //TODO: add back auth (it did not work)
         try {
             const challenge = await ChallengesService.create(
-                req.body,
+                req.body
                 //user.id
             );
 
