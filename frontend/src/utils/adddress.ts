@@ -5,8 +5,8 @@ export function shortenAddress(address: string) {
   return `${prefix}${_address
     .replace("0x", "")
     .substring(0, prefix ? 2 : 3)}...${_address.substring(
-    isTerra ? _address.length - 6 : _address.length - 4
-  )}`;
+      isTerra ? _address.length - 6 : _address.length - 4
+    )}`;
 }
 
 export function convertIpfsImageUrl(url: string) {
@@ -14,3 +14,12 @@ export function convertIpfsImageUrl(url: string) {
     return url.replace("ipfs://", "https://ipfs.io/ipfs/");
   } else return "https://ionicframework.com/docs/img/demos/avatar.svg";
 }
+
+
+export const cutOffTooLongString = (name: string, maxLength: number) => {
+  if (name && name?.length <= maxLength) {
+    return name;
+  } else {
+    return name?.slice(0, maxLength) + ' ...';
+  }
+};

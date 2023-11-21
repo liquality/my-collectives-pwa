@@ -1,9 +1,11 @@
 import { dbClient } from "../data";
+import { Challenge } from "../models/challenges";
 import { Group, CreateGroupRequest } from "../models/group";
 
 export class GroupsService {
   public static create(
     data: CreateGroupRequest,
+    pools: Challenge[],
     userId: string
   ): Promise<Group | null> {
     return new Promise((resolve, reject) => {
@@ -19,18 +21,24 @@ export class GroupsService {
               "name",
               "description",
               "publicAddress",
-              "rewards",
+              "createdBy",
+              "mintCount",
               "createdAt",
             ]
           );
-
           await trx("user_groups").insert({
             groupId: result.id,
             userId,
             admin: true, // first user is admin by default
           });
-          // TODO: emit EVENT
-          // io.emit("groupCreation", "EMITTED CREATION EVENT");
+          if (pools.length > 0) {
+            const poolInsertData = pools.map((pool) => ({
+              groupId: result.id,
+              createdBy: userId,
+              challengeId: pool.id,
+            }));
+            await trx("pools").insert(poolInsertData);
+          }
           resolve(result);
         } catch (error) {
           reject(error);
@@ -49,7 +57,6 @@ export class GroupsService {
         "groups.name",
         "groups.description",
         "groups.publicAddress",
-        "groups.rewards",
         "groups.createdAt",
         "groups.createdBy"
       );
@@ -71,7 +78,6 @@ export class GroupsService {
         "name",
         "description",
         "publicAddress",
-        "rewards",
         "createdAt"
       );
   }

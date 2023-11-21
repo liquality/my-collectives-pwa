@@ -5,7 +5,7 @@ import {
     ZORA_REWARDS_CONTRACT_ADDRESS,
 } from "./constants";
 import { ZDK } from "@zoralabs/zdk";
-import { Chain, Network } from "@zoralabs/zdk/dist/queries/queries-sdk";
+import { Chain, Network, SaleSortKey, SortDirection } from "@zoralabs/zdk/dist/queries/queries-sdk";
 import { Challenge } from "../models/challenges";
 const BASE_RPC = "https://base-mainnet.g.alchemy.com/v2/";
 
@@ -152,7 +152,6 @@ export async function getTokenMetadataFromZora(challenges: Challenge[]) {
         ],
     });
 
-    console.log(challenges, 'all the challenges')
     const tokensWithData = await zdk.tokens({
         where: {
             tokens: challenges.map((challenge) => ({
@@ -168,5 +167,70 @@ export async function getTokenMetadataFromZora(challenges: Challenge[]) {
         collectionAddress: token.collectionAddress,
         tokenId: token.tokenId,
     }));
+
+
 }
+
+export async function getTokenMetadataFromZoraWhenCreatingChallenge(challenge: any) {
+    const API_ENDPOINT = "https://api.zora.co/graphql";
+    const zdk = new ZDK({
+        endpoint: API_ENDPOINT,
+        networks: [
+            {
+                chain: Chain.Mainnet,
+                network: Network.Ethereum,
+            },
+            {
+                chain: Chain.ZoraMainnet,
+                network: Network.Zora,
+            },
+        ],
+    });
+
+
+    try {
+        const ownerCount = await zdk.ownerCount({
+            where: {
+                collectionAddresses: [challenge.mintingContractAddress]
+
+            }
+        })
+
+        //THIS SHOULD WORK BUT SEEMS LIKE BUG IN ZDK; always return null
+        /*  const tokenData = await zdk.token({
+            token: {
+                address: challenge.mintingContractAddress,
+                tokenId: challenge.tokenId
+            },
+            includeFullDetails: true
+        }) */
+
+        const tokensWithData = await zdk.tokens({
+            where: {
+                tokens: [{ tokenId: challenge.tokenId, address: challenge.mintingContractAddress }]
+
+            },
+        });
+
+        console.log(tokensWithData.tokens.nodes, 'Tokens')
+
+        const result = tokensWithData.tokens.nodes.map(({ token }) => ({
+            ...challenge,
+            name: token.name,
+            imageUrl: token.image?.url ?? "",
+            totalMints: 0,
+            creatorOfMint: "creator.eth"
+
+        }));
+        return result[0]
+
+    } catch (error) {
+        console.log(error, 'Error fetching token data for creating challenge')
+
+        return null
+    }
+
+
+}
+
 

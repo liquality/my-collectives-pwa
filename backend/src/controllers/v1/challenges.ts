@@ -35,24 +35,22 @@ export class ChallengesController {
     };
 
     public create: RequestHandler = async (req, res) => {
-        const { groupId, mintingContractAddress, chainId, tokenId } = req.body;
-        const user = await AuthService.find((req as any).auth?.sub);
-        if (!groupId || !mintingContractAddress || !chainId || !tokenId) {
-            res.status(400).send({ error: "please provide all required fields" });
-        } else {
-            try {
-                const challenge = await ChallengesService.create(
-                    { groupId, mintingContractAddress, chainId, tokenId },
-                    user.id
-                );
+        //const user = await AuthService.find((req as any).auth?.sub);
 
-                if (!challenge) {
-                    throw new Error("Challenge not created");
-                }
-                res.status(200).send(challenge);
-            } catch (err: any) {
-                res.status(500).send({ error: err.message });
+        //TODO: add back auth (it did not work)
+        try {
+            const challenge = await ChallengesService.create(
+                req.body
+                //user.id
+            );
+
+            if (!challenge) {
+                throw new Error("Challenge not created");
             }
+            res.status(200).send(challenge);
+        } catch (err: any) {
+            res.status(500).send({ error: err.message });
         }
-    };
-}
+    }
+};
+

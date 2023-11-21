@@ -1,8 +1,6 @@
-import React, { useRef, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper/modules";
-import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
-import { convertIpfsImageUrl, shortenAddress } from "@/utils";
+import React, { useState } from "react";
+
+import { convertIpfsImageUrl, cutOffTooLongString } from "@/utils";
 import {
   IonCard,
   IonCardContent,
@@ -17,26 +15,51 @@ import {
   IonSkeletonText,
   useIonRouter,
 } from "@ionic/react";
+import { Challenge } from "@/types/challenges";
+import { routes } from "@/utils/routeNames";
+import { useLocation } from "react-router";
 
 export interface SwipeCardProps {
-  tokenId: string;
-  mintingContractAddress: string;
-  imageUrl: string;
+  challenge: Challenge;
+  setSelectedChallenge?: (challenge: Challenge) => void;
+  selectedChallenge?: Challenge;
 }
 
 const SwipeCard: React.FC<SwipeCardProps> = ({
-  tokenId,
-  mintingContractAddress,
-  imageUrl,
+  challenge,
+  setSelectedChallenge,
+  selectedChallenge,
 }: SwipeCardProps) => {
+  const {
+    id,
+    mintingContractAddress,
+    chainId,
+    tokenId,
+    category,
+    name,
+    expiration,
+    expired,
+    totalMints,
+    imageUrl,
+    creatorOfMint,
+  } = challenge;
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loading, setLoading] = useState(true);
   const router = useIonRouter();
+  const location = useLocation();
+
   const handleClick = () => {
     if (!loading) {
-      router.push(
-        `/challenge/${tokenId}?&contractAddress=${mintingContractAddress}&imageUrl=${ipfsImageUrl}`
-      );
+      if (
+        routes.mintPage.createCollective === location.pathname &&
+        typeof setSelectedChallenge === "function"
+      ) {
+        setSelectedChallenge(challenge as Challenge); // type assertion here
+      } else {
+        router.push(
+          `/challenge/${tokenId}?&contractAddress=${mintingContractAddress}&imageUrl=${ipfsImageUrl}`
+        );
+      }
     }
   };
 
@@ -65,13 +88,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
             `Creator.eth`
           )}
         </IonCardTitle>
-        <IonCardSubtitle>
-          {loading ? (
-            <IonSkeletonText animated={true}></IonSkeletonText>
-          ) : (
-            `Title Get Elipess...`
-          )}
-        </IonCardSubtitle>
+        <IonCardSubtitle>{cutOffTooLongString(name, 20)}</IonCardSubtitle>
       </IonCardHeader>
       <IonCardContent>
         <IonGrid>
@@ -84,10 +101,12 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
               <IonIcon src="/assets/icons/people-tile.svg"></IonIcon>
               <IonLabel>80</IonLabel>
             </IonCol>
-            <IonCol size="auto">
-              <IonIcon src="/assets/icons/message-tile.svg"></IonIcon>
-              <IonLabel>80</IonLabel>
-            </IonCol>
+
+            {selectedChallenge?.id === challenge?.id ? (
+              <IonCol size="auto">
+                <IonLabel>SELECTED</IonLabel>
+              </IonCol>
+            ) : null}
           </IonRow>
         </IonGrid>
       </IonCardContent>
