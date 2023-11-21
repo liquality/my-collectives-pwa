@@ -161,11 +161,6 @@ export async function getTokenMetadataFromZora(challenges: Challenge[]) {
         },
     });
 
-
-
-
-    console.log(tokensWithData.tokens.nodes, 'all info?')
-
     return tokensWithData.tokens.nodes.map(({ token }) => ({
         name: token.name,
         imageUrl: token.image?.url ?? "",

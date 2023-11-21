@@ -5,7 +5,6 @@ import { Challenge, ChallengeCreation } from "@/types/challenges";
 
 const ApiService = {
   createGroup: async function (groupObject: any) {
-    console.log(groupObject, 'groupObkect?',)
     return NetworkService.postResourceWithAuth("/v1/groups/", groupObject,);
   },
 

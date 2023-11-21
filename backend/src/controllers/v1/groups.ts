@@ -39,9 +39,7 @@ export class GroupsController {
   };
 
   public create: RequestHandler = async (req, res) => {
-
     const { group, pools } = req.body;
-    console.log(group, 'wats group?', 'pool:::', pools)
     const user = await AuthService.find((req as any).auth?.sub);
     if (!group.name) {
       res.status(400).send({ error: "name is required" });

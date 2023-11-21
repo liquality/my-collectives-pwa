@@ -8,7 +8,6 @@ export class ChallengesController {
     public findAll: RequestHandler = async (req, res) => {
         try {
             const challenges = await ChallengesService.findAll();
-            //console.log(challenges, 'all the challenges')
 
             res.status(200).send(challenges);
         } catch (err: any) {
