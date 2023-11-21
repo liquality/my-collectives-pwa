@@ -1,17 +1,18 @@
-import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
-import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
 import SwipeCard from "./SwipeCard";
 import { PageLoadingIndicator } from "../PageLoadingIndicator";
 import { isPlatform } from "@ionic/react";
+import { Challenge } from "@/types/challenges";
 
 interface HorizontalSwipeProps {
   imageData: any; //TODO decide what types of object more than challenges can be here
   loading: boolean;
+  setSelectedChallenge?: (challenge: Challenge) => void;
+  selectedChallenge?: Challenge;
 }
 export default function HorizontalSwipe(props: HorizontalSwipeProps) {
-  const { imageData, loading } = props;
+  const { imageData, loading, setSelectedChallenge, selectedChallenge } = props;
 
   return (
     <>
@@ -32,7 +33,12 @@ export default function HorizontalSwipe(props: HorizontalSwipeProps) {
           <div className="swiper-container">
             {imageData.map((challenge: any, index: number) => (
               <SwiperSlide key={index}>
-                <SwipeCard challenge={challenge} {...challenge} />
+                <SwipeCard
+                  selectedChallenge={selectedChallenge}
+                  setSelectedChallenge={setSelectedChallenge}
+                  {...challenge}
+                  challenge={challenge}
+                />
               </SwiperSlide>
             ))}
           </div>

@@ -69,7 +69,7 @@ const MintGroupsContent: React.FC<RouteComponentProps> = (routerProps) => {
             onClick={handleNavigateToCreateCollective}
           >
             <IonIcon src="/assets/icons/add.svg"></IonIcon>
-            <IonLabel>Create Group</IonLabel>
+            <IonLabel>Create Collective</IonLabel>
           </IonFabButton>
         </IonFab>
       </IonContent>

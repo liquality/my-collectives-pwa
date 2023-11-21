@@ -1,12 +1,11 @@
 import { Message, Group, GroupCreation } from "@/types/chat";
 //@ts-ignore
 import NetworkService from "./NetworkService";
-import { ChallengeCreation } from "@/types/challenges";
+import { Challenge, ChallengeCreation } from "@/types/challenges";
 
 const ApiService = {
-  createGroup: async function (groupObject: GroupCreation) {
-    console.log(groupObject, 'groupObkect?')
-    return NetworkService.postResourceWithAuth("/v1/groups/", groupObject);
+  createGroup: async function (groupObject: any) {
+    return NetworkService.postResourceWithAuth("/v1/groups/", groupObject,);
   },
 
   //Includes groupId and public address

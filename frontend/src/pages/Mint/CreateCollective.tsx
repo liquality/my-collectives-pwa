@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   IonItem,
   IonButton,
@@ -15,6 +15,8 @@ import { RouteComponentProps, useHistory } from "react-router";
 import Header from "@/components/Header";
 import { useSignInWallet } from "@/hooks/useSignInWallet";
 import { routes } from "@/utils/routeNames";
+import { Challenge } from "@/types/challenges";
+import SelectPoolModal from "./SelectPoolModal";
 
 export interface CreateCollectiveProps {
   presentingElement?: HTMLElement;
@@ -31,42 +33,87 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     name: "",
     description: "",
   });
-  console.log(user?.id, "wats user?");
+  const [selectedPool, setSelectedPool] = useState<Challenge | undefined>(
+    undefined
+  );
+  const [allSelectedPools, setAllSelectedPools] = useState<
+    Challenge[] | undefined
+  >(undefined);
+  const page = useRef(undefined);
+  const selectPoolModal = useRef<HTMLIonModalElement>(null);
+  const [presentingElement, setPresentingElement] = useState<
+    HTMLElement | undefined
+  >(undefined);
+  const isButtonDisabled = !createGroup.description || !createGroup.name;
+
+  function hideSelectPoolModal() {
+    selectPoolModal.current?.dismiss();
+  }
+
+  useEffect(() => {
+    //TODO: refine this logic, if we refactor to having our own HorizontalSwipeForSelection
+    //component we can have much better logic than this that will be more bug-free
+    if (selectedPool) {
+      const alreadyExists = allSelectedPools?.find(
+        (pool) => selectedPool.id === pool.id
+      );
+      if (alreadyExists) {
+        //TODO: handle error already picked this
+        console.log("ERROR, you already picked this pool!");
+      } else {
+        setAllSelectedPools((prevGroups: Challenge[] | undefined) => [
+          ...(prevGroups || []),
+          selectedPool as Challenge,
+        ]);
+      }
+    }
+    setPresentingElement(page.current);
+  }, [selectedPool]);
 
   const cancel = () => {
     goBack();
   };
 
+  const handleRemoval = (poolToRemove: Challenge) => {
+    setAllSelectedPools((prevGroups) =>
+      prevGroups?.filter((pool) => pool !== poolToRemove)
+    );
+  };
+
   const handleCreateGroup = async () => {
-    console.log(user, "user when click?");
     const groupObject: GroupCreation = {
       createdBy: user?.id,
       name: createGroup.name,
       description: createGroup.description,
       publicAddress: "0x0232u326483848787ndas7298bda7289da", //TODO: hardcoded for now but will have to create the contract address from our factory
     };
-
-    console.log(user?.id, "USER IDD*ÄÄÄÄ");
     try {
-      const result = await ApiService.createGroup(groupObject);
+      const result = await ApiService.createGroup({
+        group: groupObject,
+        pools: allSelectedPools,
+      });
       const { name, publicAddress, id, createdBy } = result;
       router.push(
         `${routes.mintPage.myCollectives}/?groupName=${name}&groupAddress=${publicAddress}&groupId=${id}&createdBy=${createdBy}`
       );
-      //setGroupId(result, '');
-      console.log(result, "wats reeees?");
-      //onSuccess(result.id);
     } catch (error) {
       console.log(error, "error posting group");
     }
   };
 
-  const isButtonDisabled = !createGroup.description || !createGroup.name;
   return (
     <IonPage>
       <Header title="Create Collective" />
 
       <IonContent>
+        <SelectPoolModal
+          trigger="open-create-challenge-modal"
+          ref={selectPoolModal}
+          presentingElement={presentingElement}
+          dismiss={hideSelectPoolModal}
+          selectedPool={selectedPool}
+          setSelectedPool={setSelectedPool}
+        />
         <IonList inset={true}>
           <IonItem>
             <IonInput
@@ -99,36 +146,32 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         </IonList>
 
         <IonList inset={true}>
-          <div className="grey-container ">
-            <div className="flexDirectionRow space-between">
-              <p>POOL 1</p>
-              <p
-                className="small-purple-text "
-                onClick={() => console.log("Click edit")}
-              >
-                Edit
-              </p>
-            </div>
-            <p>NFT NAME</p>
-            <IonLabel>Details</IonLabel>
-          </div>
+          {typeof allSelectedPools !== "undefined"
+            ? allSelectedPools?.map((pool, index) => (
+                <div className="grey-container" key={index}>
+                  <div className="flexDirectionRow space-between">
+                    <p> {pool?.tokenId}</p>
+                    <p
+                      className="small-purple-text"
+                      onClick={() => handleRemoval(pool)}
+                    >
+                      Remove
+                    </p>
+                  </div>
+                  <p>{pool?.name}</p>
+                  <IonLabel>Creator: {pool?.creatorOfMint}</IonLabel>
+                </div>
+              ))
+            : null}
 
-          <div className="grey-container">
-            <div className="flexDirectionRow space-between">
-              <p>POOL 2</p>
-              <p
-                className="small-purple-text "
-                onClick={() => console.log("Click edit")}
-              >
-                Edit
-              </p>
-            </div>
-            <p>NFT NAME</p>
-            <IonLabel>Details</IonLabel>
-          </div>
-          <p className="small-purple-text align-to-grey-container">
+          <IonButton
+            id="open-create-challenge-modal"
+            fill="clear"
+            color="primary"
+            expand="block"
+          >
             + Add Pool
-          </p>
+          </IonButton>
         </IonList>
 
         <div className="button-container">

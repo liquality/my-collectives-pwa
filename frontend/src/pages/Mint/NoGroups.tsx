@@ -1,6 +1,13 @@
 import Header from "@/components/Header";
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
-import { IonButton, IonContent, IonItem, IonPage } from "@ionic/react";
+import { routes } from "@/utils/routeNames";
+import {
+  IonButton,
+  IonContent,
+  IonItem,
+  IonPage,
+  useIonRouter,
+} from "@ionic/react";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { useEffect } from "react";
 import { RouteComponentProps } from "react-router";
@@ -12,11 +19,11 @@ const NoGroups: React.FC<RouteComponentProps> = ({ match }) => {
   const { address, isConnected } = useAccount();
   const { open } = useWeb3Modal();
   const { fetchUserGroups } = useGetMyGroups();
+  const router = useIonRouter();
 
   const handleCreateCollective = async () => {
-    //TODO: handle routing and
     if (address) {
-      //route.push(/createCollective)
+      router.push(routes.mintPage.createCollective);
     } else {
       await open();
     }
