@@ -1,11 +1,11 @@
 import { Message, Group, GroupCreation } from "@/types/chat";
 //@ts-ignore
 import NetworkService from "./NetworkService";
+import { Challenge, ChallengeCreation } from "@/types/challenges";
 
 const ApiService = {
-  createGroup: async function (groupObject: GroupCreation) {
-    console.log(groupObject, 'groupObkect?')
-    return NetworkService.postResourceWithAuth("/v1/groups/", groupObject);
+  createGroup: async function (groupObject: any) {
+    return NetworkService.postResourceWithAuth("/v1/groups/", groupObject,);
   },
 
   //Includes groupId and public address
@@ -34,6 +34,11 @@ const ApiService = {
 
   readChallenges: async function () {
     return NetworkService.getResourceWithAuth("/v1/challenges");
+  },
+
+
+  createChallenges: async function (challengeObject: ChallengeCreation) {
+    return NetworkService.postResourceWithAuth("/v1/challenges", challengeObject);
   },
 
   getNumberOfMembersInGroup: async function (groupAddress: string) {

@@ -15,15 +15,11 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
   const router = useIonRouter();
   const { user } = useSignInWallet();
 
-  const renderCollectiveListItem = () => {};
-
   const handleClick = (group: any) => {
-    console.log(group.createdBy, "group id createdby", group);
     if (!loading) {
       router.push(`/challenge/${""}?&contractAddress=${""}&imageUrl=${""}`);
     }
   };
-  console.log(user?.id, "user id?");
 
   return (
     <div className="">

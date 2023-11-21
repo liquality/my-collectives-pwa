@@ -32,12 +32,15 @@ export async function seed(knex: Knex): Promise<void> {
     });
     console.log({ groupId });
     // Inserts seed entries
+
+
     await trx("challenges").insert([
       {
         mintingContractAddress: "0x5aa959de99e0e49b8a85e0a630a74a7b757772b7",
         tokenId: 1,
         chainId: 7777777,
         imageUrl: ""
+
       },
       {
         mintingContractAddress: "0xf604c8204c4ca417635080c45f4ace8d0a7cf3ca",
