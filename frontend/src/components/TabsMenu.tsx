@@ -1,3 +1,4 @@
+import useIsActiveRoute from "@/hooks/useIsActiveRoute";
 import { routes } from "@/utils/routeNames";
 import {
   IonLabel,
@@ -7,8 +8,15 @@ import {
   IonTabs,
 } from "@ionic/react";
 import React from "react";
-
-const TabsMenu = ({ children }: { children?: React.ReactNode }) => {
+export interface TabBarMenuProps {
+  hideOn?: [string];
+  children?: React.ReactNode;
+}
+const TabsMenu: React.FC<TabBarMenuProps> = ({ children, hideOn }: TabBarMenuProps) => {
+  const isActive = useIsActiveRoute();
+  if (hideOn?.some((path) => isActive(path))) {
+    return children;
+  }
   return (
     <IonTabs>
       {children}

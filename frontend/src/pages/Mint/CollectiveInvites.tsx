@@ -7,7 +7,7 @@ import PageSearchBar from "@/components/PageSearchBar";
 const CollectiveInvites: React.FC<RouteComponentProps> = (routerProps) => {
   return (
     <IonPage>
-      <Header title="Manage Collective" />
+      <Header title="Invites" />
 
       <IonContent className="ion-padding" color="light">
         <MintTopBar {...routerProps}>
