@@ -44,6 +44,8 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
           <IonLabel color="primary">See All</IonLabel>
         </div>
         <div className="mb-3">
+          {/* TODO: maybe refactor this to its own component specifically for SELECT
+          as having optional Props is not the best */}
           <HorizontalSwipe
             imageData={challenges}
             loading={loading}

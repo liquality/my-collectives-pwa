@@ -51,6 +51,8 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
   }
 
   useEffect(() => {
+    //TODO: refine this logic, if we refactor to having our own HorizontalSwipeForSelection
+    //component we can have much better logic than this that will be more bug-free
     if (selectedPool) {
       const alreadyExists = allSelectedPools?.find(
         (pool) => selectedPool.id === pool.id
