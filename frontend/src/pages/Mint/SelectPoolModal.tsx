@@ -20,7 +20,7 @@ export interface SelectPoolModal {
   onSuccess?: (groupId: number) => void;
   trigger: string;
   selectedPool: Challenge | undefined;
-  setSelectedPool: (challenge: Challenge) => void;
+  setSelectedPool: (challenge: Challenge | undefined) => void;
 }
 const SelectPoolModal = forwardRef(function CreateGroupModal(
   {
@@ -39,17 +39,8 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
   const handleOnImageClick = () => {};
 
   const handleCreateChallenge = async () => {
-    /*    try {
-      const result = await ApiService.createChallenges(createdChallenge);
-      setResultChallenge(result);
-      if (result.id) {
-        dismiss();
-      } else {
-        //TODO: setError
-      }
-    } catch (error) {
-      console.log(error, "error posting group");
-    } */
+    setSelectedPool(undefined);
+    dismiss();
   };
 
   return (
@@ -60,7 +51,6 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
       presentingElement={presentingElement!}
     >
       <IonContent className="ion-padding" color="light">
-        SELEECT POOOL
         <div className="spaced-on-sides">
           <IonLabel>Music | {challenges?.length}</IonLabel>
           <IonLabel color="primary">See All</IonLabel>

@@ -50,13 +50,9 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     createChallengeModal.current?.dismiss();
   }
 
-  function handleCreateChallenge(groupId: number) {
-    hideCreateChallengeModal();
-  }
-
   useEffect(() => {
     // If a new pool has been selected and it's not null, push it into the existing pools array
-    if (selectedPool !== null) {
+    if (selectedPool) {
       setAllSelectedPools((prevGroups: Challenge[] | undefined) => [
         ...(prevGroups || []),
         selectedPool as Challenge,
@@ -67,6 +63,12 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
 
   const cancel = () => {
     goBack();
+  };
+
+  const handleRemoval = (poolToRemove: Challenge) => {
+    setAllSelectedPools((prevGroups) =>
+      prevGroups?.filter((pool) => pool !== poolToRemove)
+    );
   };
 
   const handleCreateGroup = async () => {
@@ -95,21 +97,11 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       <Header title="Create Collective" />
 
       <IonContent>
-        <IonButton
-          id="open-create-challenge-modal"
-          color="primary"
-          shape="round"
-          expand="block"
-        >
-          Add Pool
-        </IonButton>
-
         <SelectPoolModal
           trigger="open-create-challenge-modal"
           ref={createChallengeModal}
           presentingElement={presentingElement}
           dismiss={hideCreateChallengeModal}
-          onSuccess={handleCreateChallenge}
           selectedPool={selectedPool}
           setSelectedPool={setSelectedPool}
         />
@@ -149,23 +141,28 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
             ? allSelectedPools?.map((pool, index) => (
                 <div className="grey-container" key={index}>
                   <div className="flexDirectionRow space-between">
-                    <p>{`POOL ${index + 1}`}</p>
+                    <p> {pool?.tokenId}</p>
                     <p
                       className="small-purple-text"
-                      onClick={() => console.log("Click remove")}
+                      onClick={() => handleRemoval(pool)}
                     >
                       Remove
                     </p>
                   </div>
-                  <p>NFT NAME: {pool?.name}</p>
-                  <IonLabel>Details: {pool?.creatorOfMint}</IonLabel>
+                  <p>{pool?.name}</p>
+                  <IonLabel>Creator: {pool?.creatorOfMint}</IonLabel>
                 </div>
               ))
             : null}
 
-          <p className="small-purple-text align-to-grey-container">
+          <IonButton
+            id="open-create-challenge-modal"
+            fill="clear"
+            color="primary"
+            expand="block"
+          >
             + Add Pool
-          </p>
+          </IonButton>
         </IonList>
 
         <div className="button-container">
