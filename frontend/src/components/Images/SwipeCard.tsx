@@ -22,12 +22,20 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import { Challenge } from "@/types/challenges";
+import { routes } from "@/utils/routeNames";
+import { useLocation } from "react-router";
 
 export interface SwipeCardProps {
   challenge: Challenge;
+  setSelectedChallenge?: (challenge: Challenge) => void;
+  selectedChallenge?: Challenge;
 }
 
-const SwipeCard: React.FC<SwipeCardProps> = ({ challenge }: SwipeCardProps) => {
+const SwipeCard: React.FC<SwipeCardProps> = ({
+  challenge,
+  setSelectedChallenge,
+  selectedChallenge,
+}: SwipeCardProps) => {
   const {
     id,
     mintingContractAddress,
@@ -44,15 +52,29 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ challenge }: SwipeCardProps) => {
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loading, setLoading] = useState(true);
   const router = useIonRouter();
+  const location = useLocation();
+
   const handleClick = () => {
     if (!loading) {
-      router.push(
-        `/challenge/${tokenId}?&contractAddress=${mintingContractAddress}&imageUrl=${ipfsImageUrl}`
-      );
+      if (
+        routes.mintPage.createCollective === location.pathname &&
+        typeof setSelectedChallenge === "function"
+      ) {
+        setSelectedChallenge(challenge as Challenge); // type assertion here
+      } else {
+        router.push(
+          `/challenge/${tokenId}?&contractAddress=${mintingContractAddress}&imageUrl=${ipfsImageUrl}`
+        );
+      }
     }
   };
 
-  console.log(challenge, "challenge?");
+  console.log(
+    selectedChallenge?.mintingContractAddress ===
+      challenge?.mintingContractAddress,
+    "SELECTED?????",
+    selectedChallenge
+  );
   return (
     <IonCard className="card-img-swiper" onClick={handleClick}>
       {" "}
@@ -91,10 +113,13 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ challenge }: SwipeCardProps) => {
               <IonIcon src="/assets/icons/people-tile.svg"></IonIcon>
               <IonLabel>80</IonLabel>
             </IonCol>
-            <IonCol size="auto">
-              <IonIcon src="/assets/icons/message-tile.svg"></IonIcon>
-              <IonLabel>80</IonLabel>
-            </IonCol>
+
+            {selectedChallenge?.mintingContractAddress ===
+            challenge?.mintingContractAddress ? (
+              <IonCol size="auto">
+                <IonLabel>SELECTED</IonLabel>
+              </IonCol>
+            ) : null}
           </IonRow>
         </IonGrid>
       </IonCardContent>
