@@ -10,6 +10,7 @@ const Discover: React.FC<RouteComponentProps> = ({ match }) => {
   return (
     <IonPage>
       <Header title="Discover" />
+
       <IonContent className="ion-padding" color="light">
         <IonRouterOutlet className="app-page-router-outlet">
           <Route path={routes.discover.new} component={New} exact />
