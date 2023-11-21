@@ -1,15 +1,5 @@
 import { useState, forwardRef, Ref } from "react";
-import {
-  IonItem,
-  IonButton,
-  IonContent,
-  IonList,
-  IonModal,
-  IonInput,
-  IonSelect,
-  IonSelectOption,
-  IonLabel,
-} from "@ionic/react";
+import { IonButton, IonContent, IonModal, IonLabel } from "@ionic/react";
 import { Challenge } from "@/types/challenges";
 import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
 import HorizontalSwipe from "@/components/Images/HorizontalSwipe";
@@ -36,9 +26,7 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
   const { challenges, loading } = useGetChallenges();
   let isButtonDisabled = !selectedPool?.mintingContractAddress;
 
-  const handleOnImageClick = () => {};
-
-  const handleCreateChallenge = async () => {
+  const handleSelectPool = async () => {
     setSelectedPool(undefined);
     dismiss();
   };
@@ -65,7 +53,7 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
         </div>
         <div className="button-container">
           <IonButton
-            onClick={handleCreateChallenge}
+            onClick={handleSelectPool}
             shape="round"
             disabled={isButtonDisabled}
             color={isButtonDisabled ? "medium" : "primary"}

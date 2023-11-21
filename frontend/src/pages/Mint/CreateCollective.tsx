@@ -33,7 +33,6 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     name: "",
     description: "",
   });
-
   const [selectedPool, setSelectedPool] = useState<Challenge | undefined>(
     undefined
   );
@@ -41,22 +40,30 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     Challenge[] | undefined
   >(undefined);
   const page = useRef(undefined);
-  const createChallengeModal = useRef<HTMLIonModalElement>(null);
+  const selectPoolModal = useRef<HTMLIonModalElement>(null);
   const [presentingElement, setPresentingElement] = useState<
     HTMLElement | undefined
   >(undefined);
+  const isButtonDisabled = !createGroup.description || !createGroup.name;
 
-  function hideCreateChallengeModal() {
-    createChallengeModal.current?.dismiss();
+  function hideSelectPoolModal() {
+    selectPoolModal.current?.dismiss();
   }
 
   useEffect(() => {
-    // If a new pool has been selected and it's not null, push it into the existing pools array
     if (selectedPool) {
-      setAllSelectedPools((prevGroups: Challenge[] | undefined) => [
-        ...(prevGroups || []),
-        selectedPool as Challenge,
-      ]);
+      const alreadyExists = allSelectedPools?.find(
+        (pool) => selectedPool.id === pool.id
+      );
+      if (alreadyExists) {
+        //TODO: handle error already picked this
+        console.log("ERROR, you already picked this pool!");
+      } else {
+        setAllSelectedPools((prevGroups: Challenge[] | undefined) => [
+          ...(prevGroups || []),
+          selectedPool as Challenge,
+        ]);
+      }
     }
     setPresentingElement(page.current);
   }, [selectedPool]);
@@ -79,7 +86,10 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       publicAddress: "0x0232u326483848787ndas7298bda7289da", //TODO: hardcoded for now but will have to create the contract address from our factory
     };
     try {
-      const result = await ApiService.createGroup(groupObject);
+      const result = await ApiService.createGroup({
+        group: groupObject,
+        pools: allSelectedPools,
+      });
       const { name, publicAddress, id, createdBy } = result;
       router.push(
         `${routes.mintPage.myCollectives}/?groupName=${name}&groupAddress=${publicAddress}&groupId=${id}&createdBy=${createdBy}`
@@ -89,9 +99,6 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     }
   };
 
-  const isButtonDisabled = !createGroup.description || !createGroup.name;
-
-  console.log(allSelectedPools, "all selected pools");
   return (
     <IonPage>
       <Header title="Create Collective" />
@@ -99,9 +106,9 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       <IonContent>
         <SelectPoolModal
           trigger="open-create-challenge-modal"
-          ref={createChallengeModal}
+          ref={selectPoolModal}
           presentingElement={presentingElement}
-          dismiss={hideCreateChallengeModal}
+          dismiss={hideSelectPoolModal}
           selectedPool={selectedPool}
           setSelectedPool={setSelectedPool}
         />

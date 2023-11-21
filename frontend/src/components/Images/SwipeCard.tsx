@@ -1,12 +1,6 @@
-import React, { useRef, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper/modules";
-import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
-import {
-  convertIpfsImageUrl,
-  cutOffTooLongString,
-  shortenAddress,
-} from "@/utils";
+import React, { useState } from "react";
+
+import { convertIpfsImageUrl, cutOffTooLongString } from "@/utils";
 import {
   IonCard,
   IonCardContent,
@@ -69,12 +63,6 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
     }
   };
 
-  console.log(
-    selectedChallenge?.mintingContractAddress ===
-      challenge?.mintingContractAddress,
-    "SELECTED?????",
-    selectedChallenge
-  );
   return (
     <IonCard className="card-img-swiper" onClick={handleClick}>
       {" "}
@@ -114,8 +102,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
               <IonLabel>80</IonLabel>
             </IonCol>
 
-            {selectedChallenge?.mintingContractAddress ===
-            challenge?.mintingContractAddress ? (
+            {selectedChallenge?.id === challenge?.id ? (
               <IonCol size="auto">
                 <IonLabel>SELECTED</IonLabel>
               </IonCol>

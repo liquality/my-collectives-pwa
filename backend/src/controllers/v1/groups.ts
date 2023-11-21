@@ -39,26 +39,23 @@ export class GroupsController {
   };
 
   public create: RequestHandler = async (req, res) => {
-    const { name, description, publicAddress } = req.body;
+
+    const { group, pools } = req.body;
+    console.log(group, 'wats group?', 'pool:::', pools)
     const user = await AuthService.find((req as any).auth?.sub);
-    if (!name) {
+    if (!group.name) {
       res.status(400).send({ error: "name is required" });
     } else {
       try {
-        const group = await GroupsService.create(
-          {
-            name,
-            description,
-            publicAddress,
-          },
-          user.id
+        const createdGroup = await GroupsService.create(
+          group, pools, user.id
         );
 
-        if (!group) {
+        if (!createdGroup) {
           throw new Error("Group not created");
         }
 
-        res.status(200).send(group);
+        res.status(200).send(createdGroup);
       } catch (err: any) {
         res.status(500).send({ error: err.message });
       }

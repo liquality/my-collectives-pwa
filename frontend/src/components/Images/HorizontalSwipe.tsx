@@ -1,7 +1,5 @@
-import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
-import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
 import SwipeCard from "./SwipeCard";
 import { PageLoadingIndicator } from "../PageLoadingIndicator";
 import { isPlatform } from "@ionic/react";
