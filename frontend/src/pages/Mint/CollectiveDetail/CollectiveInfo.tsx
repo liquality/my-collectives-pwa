@@ -4,7 +4,7 @@ import { RouteComponentProps } from "react-router";
 import MintTopBar from "@/components/TopBars/MintTopBar";
 import PageSearchBar from "@/components/PageSearchBar";
 
-const CollectiveInvites: React.FC<RouteComponentProps> = (routerProps) => {
+const CollectiveInfo: React.FC<RouteComponentProps> = (routerProps) => {
   return (
     <IonPage>
       <Header title="Manage Collective" />
@@ -13,10 +13,10 @@ const CollectiveInvites: React.FC<RouteComponentProps> = (routerProps) => {
         <MintTopBar {...routerProps}>
           <PageSearchBar />
         </MintTopBar>
-        <p>Put all the users current collective invites here</p>
+        <p>Put all the INFOO HERE</p>
       </IonContent>
     </IonPage>
   );
 };
 
-export default CollectiveInvites;
+export default CollectiveInfo;

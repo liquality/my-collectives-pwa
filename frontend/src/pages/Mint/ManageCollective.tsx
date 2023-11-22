@@ -2,7 +2,7 @@ import { IonContent, IonPage } from "@ionic/react";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 import Header from "@/components/Header";
 import { RouteComponentProps } from "react-router";
-import MintTopBar from "@/components/Mint/MintTopBar";
+import MintTopBar from "@/components/TopBars/MintTopBar";
 import PageSearchBar from "@/components/PageSearchBar";
 
 export interface ManageCollectiveProps {

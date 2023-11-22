@@ -41,6 +41,7 @@ import { isPlatform } from "@ionic/react";
 import OnboardingModal from "./components/OnboardingModal";
 import Challenges from "./pages/Mint/Challenges";
 import Mint from "./pages/Mint/Mint";
+import CollectiveDetail from "./pages/Mint/CollectiveDetail/CollectiveDetail";
 
 setupIonicReact({
   mode: "ios",
@@ -84,6 +85,11 @@ const App: React.FC = () => {
       <Route path="/invite/:inviteLink" render={() => <Invite />} />
       <Route path="/discover" component={Discover} />
       <Route path="/rewards" render={() => <Rewards />} exact />
+      <Route
+        path="/collectiveDetail/:groupId"
+        component={CollectiveDetail}
+        exact
+      />
 
       <Route path="/mint" component={Mint} />
       <Route path="/challenges" render={() => <Challenges />} exact />

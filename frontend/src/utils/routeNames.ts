@@ -14,5 +14,13 @@ export const routes = {
     },
     rewards: {
         index: "/rewards"
+    },
+    //NOTE: groupId should be attached towards the end of all of these routes
+    collectiveDetail: {
+        collectiveDetail: "/collectiveDetail/",
+        mints: "/collectiveDetail/mints/",
+        chat: "/collectiveDetail/chat/",
+        info: "/collectiveDetail/info/",
+
     }
 }
