@@ -8,7 +8,7 @@ const MintTopBar: React.FC<DiscoverTopBarProps> = ({ children }) => {
   return (
     <PageTopBar
       tabs={[
-        { label: "Collectives", href: routes.mintPage.myCollectives },
+        { label: "My Collectives", href: routes.mintPage.myCollectives },
         { label: "Invites", href: routes.mintPage.collectiveInvites },
       ]}
     >

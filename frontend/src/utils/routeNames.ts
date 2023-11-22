@@ -14,5 +14,8 @@ export const routes = {
     },
     rewards: {
         index: "/rewards"
+    },
+    invite: {
+        index: "/invite"
     }
 }

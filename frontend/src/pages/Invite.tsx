@@ -1,54 +1,44 @@
-import Chat from "@/components/Chat";
-import Header from "@/components/Header";
-import useValidateInvite from "@/hooks/useValidateInvite";
-import ApiService from "@/services/ApiService";
-import { IonButton, useIonRouter } from "@ionic/react";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useAccount } from "wagmi";
+import { IonCol, IonContent, IonGrid, IonPage, IonRow, useIonRouter } from "@ionic/react";
+import { Redirect, Route, RouteComponentProps } from "react-router";
+import { routes } from "@/utils/routeNames";
 
-const Invite = () => {
-  const { invitationStatus, inviteLink, loading, invite } = useValidateInvite();
-  const { address } = useAccount();
-  const [error, setError] = useState("");
+const Invite: React.FC<RouteComponentProps> = ({ location }) => {
+
   const router = useIonRouter();
-  console.log(invite, "INVITE??");
-  const handleJoinGroup = async () => {
-    //TODO implement join group logic to db here
-    if (address && invite) {
-      try {
-        ApiService.createMember(invite.groupId, {
-          publicAddress: address,
-        });
-        router.push(`/messages/${invite.groupId}`);
-      } catch (error) {
-        console.log(error, "Error adding member");
-      }
-    } else {
-      setError("Login before you can join the group!");
-    }
+  const query = new URLSearchParams(location.search);
+
+  const code = query.has("code") ? query.get("code") : null;
+  const id = query.has("id") ? query.get("id") : null;
+
+  
+  const ValidCode = () => {
+
   };
+
+  const NotFoundNotVallidd = () => {
+    // TODO: Add error message
+  };
+
+  const SuccessResult = () => {
+
+  };
+
+  const ErrorResult = () => {
+
+  };
+  const pageClassName = !!id ? 'ion-padding invite-page-link' : 'ion-padding invite-page-code';
   return (
-    <div>
-      <Header />
-      <h1>Invite Confirmation</h1>
-      {loading ? (
-        <p>Validating your invitation...</p>
-      ) : (
-        <div>
-          {" "}
-          {invitationStatus ? (
-            <div>
-              Congrats, you have been invited!{" "}
-              <IonButton onClick={handleJoinGroup}>Join Group</IonButton>
-            </div>
-          ) : (
-            <p>Could not find group invite...</p>
-          )}
-        </div>
-      )}
-      {error ?? ""}
-    </div>
+    <IonPage>
+      <IonContent fullscreen={true} className={pageClassName}>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="12">
+              <h1>Invite</h1>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonContent>
+    </IonPage>
   );
 };
 
