@@ -31,7 +31,7 @@ export class GroupsService {
             userId,
             admin: true, // first user is admin by default
           });
-          if (pools.length > 0) {
+          if (pools && pools.length > 0) {
             const poolInsertData = pools.map((pool) => ({
               groupId: result.id,
               createdBy: userId,
