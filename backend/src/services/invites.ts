@@ -1,10 +1,7 @@
 import { dbClient } from "../data";
-import { Invite, InviteCreateRequest } from "../models/invite";
-import { generateInviteCode } from "../utils";
+import { Invite } from "../models/invite";
 
 export class InvitesService {
-
-
   public static async claim(id: string, userId: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       dbClient.transaction(async (trx) => {
@@ -23,7 +20,7 @@ export class InvitesService {
           if (result && result.id) {
             await trx("user_groups").insert({
               groupId: result.groupId,
-              userId
+              userId,
             });
             resolve(result);
           } else {
@@ -36,7 +33,10 @@ export class InvitesService {
     });
   }
 
-  public static async claimByCode(code: string, userId: string): Promise<boolean> {
+  public static async claimByCode(
+    code: string,
+    userId: string
+  ): Promise<boolean> {
     return new Promise((resolve, reject) => {
       dbClient.transaction(async (trx) => {
         try {
@@ -48,13 +48,13 @@ export class InvitesService {
                 usedAt: dbClient.fn.now(),
                 usedBy: userId,
               },
-              ["id", 'groupId']
+              ["id", "groupId"]
             );
 
           if (result && result.id) {
             await trx("user_groups").insert({
               groupId: result.groupId,
-              userId
+              userId,
             });
             resolve(result);
           } else {
@@ -91,5 +91,22 @@ export class InvitesService {
       .select("id", "groupId", "code", "expireAt", "createdAt");
   }
 
-  
+  public static findAllByUser(id: string): Promise<Invite[]> {
+    // TUDO: validate dates of expire at and userAt
+    return dbClient("invites")
+      .join("user_groups", "user_groups.groupId", "=", "invites.groupId")
+      .join("groups", "groups.id", "=", "user_groups.groupId")
+      .where("createdBy", "=", id)
+      .whereNull("usedAt")
+      .select(
+        "invites.id",
+        "invites.groupId",
+        "invites.code",
+        "invites.expireAt",
+        "invites.createdAt",
+        "groups.name",
+        "groups.description",
+        "groups.publicAddress"
+      );
+  }
 }

@@ -41,6 +41,25 @@ export class InviteController {
     }
   };
 
+  public findAllByUser: RequestHandler = async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+      res.status(400).send({ error: "group is required" });
+    } else {
+      try {
+        const invites = await InvitesService.findAllByUser(id);
+
+        if (!invites) {
+          res.status(404).send({ error: "invites not found" });
+        } else {
+          res.status(200).send(invites);
+        }
+      } catch (err: any) {
+        res.status(500).send({ error: err.message });
+      }
+    }
+  };
+
   public claim: RequestHandler = async (req, res) => {
     try {
       const { id } = req.params;
