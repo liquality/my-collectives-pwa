@@ -16,10 +16,9 @@ export function useGetMyGroups() {
     const { user } = useSignInWallet()
 
     const fetchUserGroups = async () => {
-        console.log(address && !myGroups && !isConnecting && user.id, 'wats user ID?', user.id, isConnecting)
         setLoading(true)
         try {
-            if (address && !myGroups && !isConnecting && user.id) {
+            if (address && !myGroups && !isConnecting && user?.id) {
                 const _myGroups: Group[] = await ApiService.readGroupByMemberAddress(address)
                 setMyGroups(_myGroups)
             } else if (!address) {
