@@ -3,20 +3,23 @@ import { checkAuth } from "@/utils";
 import { Group } from "@/types/chat";
 import ApiService from "@/services/ApiService";
 import { useAccount } from "wagmi";
+import { useSignInWallet } from "../useSignInWallet";
 
 export function useGetMyGroups() {
     const [myGroups, setMyGroups] = useState<Group[] | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const { address } = useAccount();
+    const { address, isConnecting } = useAccount();
     const reload = () => {
         setMyGroups(null);
     }
+    const { user } = useSignInWallet()
 
     const fetchUserGroups = async () => {
+        console.log(address && !myGroups && !isConnecting && user.id, 'wats user ID?', user.id, isConnecting)
         setLoading(true)
         try {
-            if (address && !myGroups) {
+            if (address && !myGroups && !isConnecting && user.id) {
                 const _myGroups: Group[] = await ApiService.readGroupByMemberAddress(address)
                 setMyGroups(_myGroups)
             } else if (!address) {
