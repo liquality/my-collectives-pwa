@@ -7,4 +7,4 @@ const ctrl = new InviteController();
 
 inviteRouter.get("/:id/claim", ctrl.claim);
 inviteRouter.get("/:id", ctrl.find);
-inviteRouter.post("/", authentication, ctrl.create);
+inviteRouter.get("/group/id", ctrl.findAllByGroup);
