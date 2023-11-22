@@ -21,7 +21,7 @@ const server = app.listen(appPort);
 initializeWs(server);
 
 const startMoralisSdk = () => {
-  console.log("Starting moralis sdk", process.env.MORALIS_API_KEY);
+  console.log("Starting moralis sdk");
   Moralis.start({
     apiKey: process.env.MORALIS_API_KEY,
   });
