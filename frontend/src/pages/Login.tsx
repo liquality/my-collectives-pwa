@@ -6,7 +6,6 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { checkAuth } from "@/utils";
 import React from "react";
 import Header from "@/components/Header";
 

@@ -6,7 +6,6 @@ import About from "./About";
 import { routes } from "@/utils/routeNames";
 
 const Discover: React.FC<RouteComponentProps> = ({ match }) => {
-  const { discover: discoverRoutes } = routes;
   return (
     <IonPage>
       <Header title="Discover" />

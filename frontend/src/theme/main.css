@@ -381,6 +381,10 @@ ion-toolbar {
   width: 100% !important;
 }
 
+.app-page-top-bar ion-buttons ion-button:first-child {
+  --padding-start: 0.8rem !important;
+}
+
 .app-page-top-tab-button:hover,
 .app-page-top-tab-button.ion-color-primary {
   border-bottom: 1px solid #7700d5;
@@ -543,4 +547,14 @@ ion-button {
   font-size: 12px;
   letter-spacing: 0.5px;
   padding-right: 5%;
+}
+
+ion-content.invite-page-code {
+  --background: linear-gradient(0deg, #4483B0 0%, #853DE0 46.35%, #C87FF2 100%);
+  --color: #ffffff;
+}
+
+ion-content.invite-page-link {
+  --background: linear-gradient(180deg, #823ABA 0%, #6F48C4 53.13%, #B454CC 100%);
+  --color: #ffffff;
 }

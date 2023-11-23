@@ -1,6 +1,7 @@
 import { dbClient } from "../data";
 import { Challenge } from "../models/challenges";
 import { Group, CreateGroupRequest } from "../models/group";
+import { generateInviteCode } from "../utils";
 
 export class GroupsService {
   public static create(
@@ -39,6 +40,30 @@ export class GroupsService {
             }));
             await trx("pools").insert(poolInsertData);
           }
+
+          // generate and insert invites
+          // TODO: validate if the code exists or not in DB
+          // posible solution is to insert by the time some codes and then take and assing to groups
+
+          let codes = [];
+          for (let i = 0; i < 5; i++) {
+            const code = generateInviteCode();
+            codes.push(code);
+          }
+          const expireAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3); // 3 days
+          const invites =  codes.map(code => {
+            return {
+              groupId: result.id,
+              code,
+              expireAt,
+              createdBy: userId
+            }
+          });
+          const invitesResult = await trx("invites").insert(
+            invites,
+            ["id", "groupId", "code", "expireAt", "createdAt"]
+          );
+
           resolve(result);
         } catch (error) {
           reject(error);

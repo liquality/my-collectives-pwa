@@ -77,12 +77,12 @@ const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
 // 3. Create modal
 createWeb3Modal({ wagmiConfig, projectId, chains });
 const App: React.FC = () => {
-  const routerOutlet = (
+  const AppRouterOutlet = (
     <IonRouterOutlet id="main-content">
       <Redirect exact path="/" to="/discover" />
       {/* Routes not requiring authentication */}
       <Route path="/login" render={() => <Login />} exact />
-      <Route path="/invite/:inviteLink" render={() => <Invite />} />
+      <Route path="/invite" component={Invite} />
       <Route path="/discover" component={Discover} />
       <Route path="/rewards" render={() => <Rewards />} exact />
       <Route
@@ -112,15 +112,17 @@ const App: React.FC = () => {
       return (
         <IonSplitPane when="md" contentId="main-content">
           <IonReactRouter>
-            <SideBarMenu />
-            {routerOutlet}
+            <SideBarMenu hideOn={["/invite"]} />
+            {AppRouterOutlet}
           </IonReactRouter>
         </IonSplitPane>
       );
     }
     return (
       <IonReactRouter>
-        <TabsMenu>{routerOutlet}</TabsMenu>
+        <TabsMenu hideOn={["/invite"]} >
+          {AppRouterOutlet}
+        </TabsMenu>
       </IonReactRouter>
     );
   };

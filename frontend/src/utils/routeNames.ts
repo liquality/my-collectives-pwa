@@ -22,5 +22,9 @@ export const routes = {
         chat: "/collectiveDetail/chat/",
         info: "/collectiveDetail/info/",
 
+
+    },
+    invite: {
+        index: "/invite"
     }
 }

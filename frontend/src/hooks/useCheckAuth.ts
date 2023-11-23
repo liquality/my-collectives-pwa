@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
-import { checkAuth } from "@/utils";
+import { Auth } from "@/utils";
 
 export function useCheckAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const checkAuthentication = () => {
-      const isAuthenticated = checkAuth();
-      setIsAuthenticated(isAuthenticated);
+      setIsAuthenticated(Auth.isAuthenticated);
     };
 
     checkAuthentication();
