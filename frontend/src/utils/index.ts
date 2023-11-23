@@ -1,3 +1,3 @@
-export * from './checkAuth'
+export * from './auth'
 export * from './globalState'
 export * from './adddress'
