@@ -10,7 +10,6 @@ import {
 } from "wagmi";
 
 export function useSignInWallet() {
-  const { address, connector: activeConnector } = useAccount();
   const [user, setUser] = useState<any>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const {
@@ -19,23 +18,79 @@ export function useSignInWallet() {
     isSuccess,
     isError,
     signMessage,
-  } = useSignMessage();
+  } = useSignMessage({
+    onSuccess: async (data, args) =>
+      //console.log(data, 'DATAAA')
+      await login(data)
+  },);
   const { data: walletClient } = useWalletClient();
   const { disconnect } = useDisconnect();
+  //const { address, connector: activeConnector } = useAccount();
+
+  const { isConnected, address } = useAccount({
+    onConnect: async ({ address, connector }) =>
+      //step one: set authentication
+      //step 2: get user
+      //step 3: sign message for login
+      await handleAllAuthSteps()
+
+  },);
+  const handleAllAuthSteps = async () => {
+    try {
+      // Step 1: Get the user
+      const dbUser = await getUser();
+      console.log(dbUser, 'DB USER?')
+      if (dbUser && !Auth.isAuthenticated) {
+        // Step 2: Sign message with the user
+        console.log(dbUser.nonce, 'DB USER')
+        signMessage({ message: dbUser.nonce })  //Here we are listening to onSuccess using the signMessage hook and then logging in User
+      }
+      else if (!dbUser) {
+        Auth.clearAccessToken();
+        setIsAuthenticated(false);
+      }
+    } catch (error) {
+      // Handle errors if any
+      console.error('Error during authentication steps:', error);
+    }
+  };
+
+
+
+  const login = async (data: any) => {
+    if (Auth.isAuthenticated) {
+      setIsAuthenticated(true);
+    } else {
+      console.log(data, address, 'Data & Address')
+      const authResult = await ApiService.loginUser(address!, data);
+      console.log(authResult, 'Auth result?')
+      if (authResult?.accessToken) {
+        Auth.setAccessToken(authResult.accessToken);
+        setIsAuthenticated(true);
+      } else {
+        disconnect();
+        setIsAuthenticated(false);
+        setUser(null);
+      }
+    }
+  };
+
+
 
   // GET USER DATA
   const getUser = async () => {
-    let _user = await ApiService.getUser(address!);
-    if (!_user) {
+    let dbUser = await ApiService.getUser(address!);
+    if (!dbUser) {
       // TODO: will need to show a modal / popup
       // to ask for user details for now we are using only the address
-      _user = await ApiService.createUser({
+      dbUser = await ApiService.createUser({
         publicAddress: address!,
       });
+      return user
     }
-
-    if (_user) {
-      setUser(_user);
+    if (dbUser) {
+      setUser(dbUser);
+      return dbUser
     }
   };
 
@@ -59,58 +114,44 @@ export function useSignInWallet() {
   //   };
   // }, [activeConnector]);
 
-  useEffect(() => {
-    if (address && !isAuthenticated) {
-      if (Auth.isAuthenticated) {
-        setIsAuthenticated(true);
-      } else {
-        getUser();
-      }
-    } else {
-      Auth.clearAccessToken();
-      setIsAuthenticated(false);
-    }
-  }, [address]);
-
-  // SIGN MESSAGE FOR AUTH
-  useEffect(() => {
-    if (
-      user &&
-      !isAuthenticated &&
-      !isLoading &&
-      walletClient &&
-      !signedMessage
-    ) {
-      signMessage({ message: user.nonce });
-    }
-  }, [user, isLoading, walletClient]);
-
-  // LOGIN HTTP CALL
-  useEffect(() => {
-    const login = async () => {
-      if (Auth.isAuthenticated) {
-        setIsAuthenticated(true);
-      } else {
-        const authResult = await ApiService.loginUser(address!, signedMessage!);
-        if (authResult?.accessToken) {
-          Auth.setAccessToken(authResult.accessToken);
+  /*   useEffect(() => {
+      if (address && !isAuthenticated) {
+        if (Auth.isAuthenticated) {
           setIsAuthenticated(true);
         } else {
-          disconnect();
-          setIsAuthenticated(false);
-          setUser(null);
+          getUser();
         }
+      } else {
+        Auth.clearAccessToken();
+        setIsAuthenticated(false);
       }
-    };
+    }, [address]); */
 
-    if (signedMessage && isSuccess) {
-      login();
-    } else if (isError) {
-      disconnect();
-      setIsAuthenticated(false);
-      setUser(null);
-    }
-  }, [signedMessage, isSuccess, isError]);
-
+  // SIGN MESSAGE FOR AUTH
+  /*  useEffect(() => {
+     if (
+       user &&
+       !isAuthenticated &&
+       !isLoading &&
+       walletClient &&
+       !signedMessage
+     ) {
+       signMessage({ message: user.nonce });
+     }
+   }, [user, isLoading, walletClient]);
+  
+   // LOGIN HTTP CALL
+   useEffect(() => {
+  
+  
+     if (signedMessage && isSuccess) {
+       login();
+     } else if (isError) {
+       disconnect();
+       setIsAuthenticated(false);
+       setUser(null);
+     }
+   }, [signedMessage, isSuccess, isError]);
+  */
   return { user };
-}
+} 

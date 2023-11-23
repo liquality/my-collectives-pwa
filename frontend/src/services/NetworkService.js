@@ -1,7 +1,6 @@
-
 import { Auth } from "@/utils";
 const serverAddress =
-  import.meta.env.VITE_SERVER_ADDRESS || "http://localhost:3000";
+  /* import.meta.env.VITE_SERVER_ADDRESS || */ "http://localhost:3000";
 
 const NetworkService = {
   getResource: function (url) {
@@ -37,7 +36,7 @@ const NetworkService = {
           "Content-Type": "application/json",
         },
       };
-      
+
       if (Auth.isAuthenticated) {
         request.headers["Authorization"] = "Bearer " + Auth.accessToken;
       }
@@ -120,7 +119,7 @@ const NetworkService = {
       if (response.ok) {
         return response.json();
       } else if (response.status === 401) {
-        Auth.clearAccessToken();;
+        Auth.clearAccessToken();
       }
 
       return null;
