@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { checkAuth } from "@/utils";
 import { Group } from "@/types/chat";
 import ApiService from "@/services/ApiService";
 import { useAccount } from "wagmi";

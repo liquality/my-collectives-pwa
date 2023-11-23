@@ -15,6 +15,7 @@ import { logIn, logOut, wallet } from "ionicons/icons";
 import React from "react";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { useAccount, useDisconnect } from "wagmi";
+import { Auth } from "@/utils";
 
 const ConnectButton: React.FC = () => {
   const { open } = useWeb3Modal();
@@ -22,8 +23,7 @@ const ConnectButton: React.FC = () => {
   const { disconnect } = useDisconnect();
 
   const logout = () => {
-    localStorage.removeItem("groupMints.accessToken");
-    localStorage.removeItem("groupMints.user");
+    Auth.clearAccessToken();
     disconnect();
   };
 
@@ -44,8 +44,15 @@ const ConnectButton: React.FC = () => {
         </IonChip>
       ) : (
         <>
-          <IonChip  color="primary" className="logged-in-button" outline={true} id="logout-options-triggger">
-            <IonLabel className="address">{shortenAddress(address || "")}</IonLabel>
+          <IonChip
+            color="primary"
+            className="logged-in-button"
+            outline={true}
+            id="logout-options-triggger"
+          >
+            <IonLabel className="address">
+              {shortenAddress(address || "")}
+            </IonLabel>
             <div className="divider"></div>
             <IonLabel className="balance">100 ETH</IonLabel>
           </IonChip>
