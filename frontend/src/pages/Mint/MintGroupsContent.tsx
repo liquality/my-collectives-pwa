@@ -12,10 +12,10 @@ import { shortenAddress } from "@/utils";
 import { RouteComponentProps } from "react-router";
 import Header from "@/components/Header";
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
-import MintTopBar from "@/components/Mint/MintTopBar";
+import MintTopBar from "@/components/TopBars/MintTopBar";
 import { routes } from "@/utils/routeNames";
 import { useEffect } from "react";
-import CollectiveList from "@/components/Mint/CollectiveList";
+import CollectiveList from "@/components/Mint/FullListOfCollectives";
 import PageSearchBar from "@/components/PageSearchBar";
 
 const MintGroupsContent: React.FC<RouteComponentProps> = (routerProps) => {

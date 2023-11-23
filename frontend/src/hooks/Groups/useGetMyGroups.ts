@@ -17,7 +17,7 @@ export function useGetMyGroups() {
     const fetchUserGroups = async () => {
         setLoading(true)
         try {
-            if (address && !myGroups && !isConnecting && user?.id) {
+            if (address && !myGroups && user?.id) {
                 const _myGroups: Group[] = await ApiService.readGroupByMemberAddress(address)
                 setMyGroups(_myGroups)
             } else if (!address) {
@@ -34,7 +34,7 @@ export function useGetMyGroups() {
     useEffect(() => {
         // Fetch groups on component mount and whenever the address changes
         fetchUserGroups();
-    }, [address, myGroups]);
+    }, [address, myGroups, user?.id]);
 
 
     return { myGroups, loading, reload, fetchUserGroups, setMyGroups };

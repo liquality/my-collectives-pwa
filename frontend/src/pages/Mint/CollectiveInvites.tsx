@@ -1,7 +1,7 @@
 import { IonContent, IonPage } from "@ionic/react";
 import Header from "@/components/Header";
 import { RouteComponentProps } from "react-router";
-import MintTopBar from "@/components/Mint/MintTopBar";
+import MintTopBar from "@/components/TopBars/MintTopBar";
 import PageSearchBar from "@/components/PageSearchBar";
 
 const CollectiveInvites: React.FC<RouteComponentProps> = (routerProps) => {

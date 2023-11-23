@@ -92,6 +92,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         group: groupObject,
         pools: allSelectedPools,
       });
+      console.log(result, "wats resu?");
       const { name, publicAddress, id, createdBy } = result;
       router.push(
         `${routes.mintPage.myCollectives}/?groupName=${name}&groupAddress=${publicAddress}&groupId=${id}&createdBy=${createdBy}`

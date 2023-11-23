@@ -15,7 +15,7 @@ import { Route, RouteComponentProps } from "react-router";
 import Challenge from "./Challenge";
 import Challenges from "./Challenges";
 import Messages from "./Messages";
-import Info from "./Info";
+import Info from "./CollectiveDetail/CollectiveInfo";
 import useGetGroupById from "@/hooks/Groups/useGetGroupById";
 
 const Mint: React.FC<RouteComponentProps> = ({ match }) => {
