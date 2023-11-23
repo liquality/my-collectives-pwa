@@ -1,28 +1,23 @@
 import { IonContent, IonPage } from "@ionic/react";
-import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 import Header from "@/components/Header";
 import { RouteComponentProps } from "react-router";
 import MintTopBar from "@/components/TopBars/MintTopBar";
 import PageSearchBar from "@/components/PageSearchBar";
 
-export interface ManageCollectiveProps {
-  group?: any;
-  loading: boolean;
-}
-
-const ManageCollective: React.FC<RouteComponentProps> = (routerProps) => {
+const CollectiveChat: React.FC<RouteComponentProps> = (routerProps) => {
+  console.log("IN HERE?");
   return (
     <IonPage>
-      <Header title="Manage Collective" />
+      <Header title="Collective Name" />
 
       <IonContent className="ion-padding" color="light">
         <MintTopBar {...routerProps}>
           <PageSearchBar />
         </MintTopBar>
-        <p>Manage Collective/group settings page here</p>
+        <p>Mints/pools for specific group goes here</p>
       </IonContent>
     </IonPage>
   );
 };
 
-export default ManageCollective;
+export default CollectiveChat;
