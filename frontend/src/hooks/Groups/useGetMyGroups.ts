@@ -6,7 +6,7 @@ import { useSignInWallet } from "../useSignInWallet";
 
 export function useGetMyGroups() {
     const [myGroups, setMyGroups] = useState<Group[] | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const { address, isConnecting } = useAccount();
     const reload = () => {
@@ -15,19 +15,21 @@ export function useGetMyGroups() {
     const { user } = useSignInWallet()
 
     const fetchUserGroups = async () => {
-        setLoading(true)
         try {
             if (address && !myGroups && user?.id) {
                 const _myGroups: Group[] = await ApiService.readGroupByMemberAddress(address)
                 setMyGroups(_myGroups)
+                setLoading(false)
+
             } else if (!address) {
                 setMyGroups(null)
+                setLoading(false)
+
 
             }
         } catch (error) {
             console.log(error, 'Error fetching my groups')
         }
-        setLoading(false)
     };
 
 

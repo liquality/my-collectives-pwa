@@ -3,7 +3,7 @@ import { IonContent, IonPage, IonRouterOutlet } from "@ionic/react";
 import { Redirect, Route, RouteComponentProps } from "react-router";
 import New from "./New";
 import About from "./About";
-import { routes } from "@/utils/routeNames";
+import { pathConstants } from "@/utils/routeNames";
 
 const Discover: React.FC<RouteComponentProps> = ({ match }) => {
   return (
@@ -12,10 +12,10 @@ const Discover: React.FC<RouteComponentProps> = ({ match }) => {
 
       <IonContent className="ion-padding" color="light">
         <IonRouterOutlet className="app-page-router-outlet">
-          <Route path={routes.discover.new} component={New} exact />
-          <Route path={routes.discover.about} component={About} exact />
-          <Route exact path={routes.discover.discover}>
-            <Redirect to={routes.discover.new} />
+          <Route path={pathConstants.discover.new} component={New} exact />
+          <Route path={pathConstants.discover.about} component={About} exact />
+          <Route exact path={pathConstants.discover.discover}>
+            <Redirect to={pathConstants.discover.new} />
           </Route>
         </IonRouterOutlet>
       </IonContent>

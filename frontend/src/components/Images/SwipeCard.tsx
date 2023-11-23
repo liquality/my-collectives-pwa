@@ -16,7 +16,7 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import { Challenge } from "@/types/challenges";
-import { routes } from "@/utils/routeNames";
+import { pathConstants } from "@/utils/routeNames";
 import { useLocation } from "react-router";
 
 export interface SwipeCardProps {
@@ -51,7 +51,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
   const handleClick = () => {
     if (!loading) {
       if (
-        routes.mintPage.createCollective === location.pathname &&
+        pathConstants.mintPage.createCollective === location.pathname &&
         typeof setSelectedChallenge === "function"
       ) {
         setSelectedChallenge(challenge as Challenge); // type assertion here
