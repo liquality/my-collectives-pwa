@@ -1,5 +1,5 @@
 import { Knex } from "knex";
-import { AuthService } from "../../services/auth";
+import { AuthService } from "../../../services/auth";
 
 export async function seed(knex: Knex): Promise<void> {
   return knex.transaction(async (trx) => {

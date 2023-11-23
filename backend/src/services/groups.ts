@@ -1,7 +1,6 @@
 import { dbClient } from "../data";
 import { Challenge } from "../models/challenges";
 import { Group, CreateGroupRequest } from "../models/group";
-import { generateInviteCode } from "../utils";
 
 export class GroupsService {
   public static create(
@@ -41,28 +40,18 @@ export class GroupsService {
             await trx("pools").insert(poolInsertData);
           }
 
-          // generate and insert invites
-          // TODO: validate if the code exists or not in DB
-          // posible solution is to insert by the time some codes and then take and assing to groups
-
-          let codes = [];
-          for (let i = 0; i < 5; i++) {
-            const code = generateInviteCode();
-            codes.push(code);
-          }
+          // invites update
+          const inviteIds = await trx("invites")
+            .select("id")
+            .where("groupId", null)
+            .andWhere("usedAt", null)
+            .pluck("id")
+            .limit(5);
+            
           const expireAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3); // 3 days
-          const invites =  codes.map(code => {
-            return {
-              groupId: result.id,
-              code,
-              expireAt,
-              createdBy: userId
-            }
-          });
-          const invitesResult = await trx("invites").insert(
-            invites,
-            ["id", "groupId", "code", "expireAt", "createdAt"]
-          );
+          await trx("invites")
+            .update({ groupId: result.id, expireAt })
+            .whereIn("id", inviteIds);
 
           resolve(result);
         } catch (error) {
@@ -98,13 +87,7 @@ export class GroupsService {
   public static find(id: string): Promise<Group | null> {
     return dbClient("groups")
       .where("id", "=", id)
-      .first<Group>(
-        "id",
-        "name",
-        "description",
-        "publicAddress",
-        "createdAt"
-      );
+      .first<Group>("id", "name", "description", "publicAddress", "createdAt");
   }
 
   public static async addMember(
