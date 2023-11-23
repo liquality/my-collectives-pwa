@@ -13,9 +13,7 @@ export class AuthService {
     publicAddress: string,
     signature: string
   ): Promise<string | null> {
-    const user = await dbClient("users")
-      .where("publicAddress", "=", publicAddress)
-      .first("id", "nonce");
+    const user = await this.findByAddress(publicAddress);
     if (user) {
       const decodedAddress = ethers.utils.verifyMessage(user.nonce, signature);
 
@@ -79,5 +77,11 @@ export class AuthService {
 
   public static find(id: string): Promise<UserRecord> {
     return dbClient("users").where("id", "=", id).first();
+  }
+
+  public static findByAddress(publicAddress: string): Promise<UserRecord> {
+    return dbClient("users")
+      .where("publicAddress", "=", publicAddress)
+      .first("id", "nonce", "publicAddress");
   }
 }

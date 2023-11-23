@@ -18,7 +18,7 @@ const config: { [key: string]: Knex.Config } = {
       directory: path.resolve(__dirname, "..", "data", "migrations")
     },
     seeds: {
-      directory: path.resolve(__dirname, "..", "data", "seeds")
+      directory: path.resolve(__dirname, "..", "data", "seeds", "dev")
     }
   },
   test: {
@@ -32,6 +32,9 @@ const config: { [key: string]: Knex.Config } = {
     },
     migrations: {
       directory: path.resolve(__dirname, "..", "data", "migrations")
+    },
+    seeds: {
+      directory: path.resolve(__dirname, "..", "data", "seeds", "test")
     }
   },
   production: {
@@ -47,7 +50,7 @@ const config: { [key: string]: Knex.Config } = {
       directory: path.resolve(__dirname, "..", "data", "migrations")
     },
     seeds: {
-      directory: path.resolve(__dirname, "..", "data", "seeds")
+      directory: path.resolve(__dirname, "..", "data", "seeds", "prod")
     }
   },
 };
