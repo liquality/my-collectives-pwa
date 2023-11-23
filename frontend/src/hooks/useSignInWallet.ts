@@ -1,44 +1,88 @@
 import ApiService from "@/services/ApiService";
 import { Auth } from "@/utils";
-import { useState, useEffect } from "react";
+import { useState, } from "react";
 import {
-  ConnectorData,
   useAccount,
   useDisconnect,
   useSignMessage,
-  useWalletClient,
 } from "wagmi";
 
 export function useSignInWallet() {
-  const { address, connector: activeConnector } = useAccount();
   const [user, setUser] = useState<any>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const {
-    data: signedMessage,
-    isLoading,
-    isSuccess,
-    isError,
-    signMessage,
-  } = useSignMessage();
-  const { data: walletClient } = useWalletClient();
+  const { signMessage } = useSignMessage({
+    //Listen to successfully signed message and login after that
+    onSuccess: async (data, args) =>
+      await login(data),
+    onError: async (error, variables) =>
+      //TODO: handle some error here
+      console.log(error, 'Error signing message')
+  },);
   const { disconnect } = useDisconnect();
+  //const { address, connector: activeConnector } = useAccount();
 
-  // GET USER DATA
-  const getUser = async () => {
-    let _user = await ApiService.getUser(address!);
-    if (!_user) {
-      // TODO: will need to show a modal / popup
-      // to ask for user details for now we are using only the address
-      _user = await ApiService.createUser({
-        publicAddress: address!,
-      });
-    }
+  const { isConnected, address } = useAccount({
+    onConnect: async ({ address, connector }) =>
+      //step 1: get user
+      //step 2: sign message with the user
+      //step 3: listen to onSignMessageSuccess and login if message was successfully signed
+      await handleAllAuthSteps()
 
-    if (_user) {
-      setUser(_user);
+  },);
+  const handleAllAuthSteps = async () => {
+    try {
+      // Step 1: Get the user
+      const dbUser = await getUser();
+      if (dbUser && !Auth.isAuthenticated) {
+        // Step 2: Sign message with the user
+        signMessage({ message: dbUser.nonce })  //Here we are listening to onSuccess using the signMessage hook and then logging in User
+      }
+      else if (!dbUser) {
+        Auth.clearAccessToken();
+
+      }
+    } catch (error) {
+      // Handle errors if any
+      console.error('Error during authentication steps:', error);
     }
   };
 
+
+
+  const login = async (data: any) => {
+    if (Auth.isAuthenticated) {
+    } else {
+      const authResult = await ApiService.loginUser(address!, data);
+      if (authResult?.accessToken) {
+        Auth.setAccessToken(authResult.accessToken);
+      } else {
+        disconnect();
+        setUser(null);
+      }
+    }
+  };
+
+
+
+  // GET USER DATA
+  const getUser = async () => {
+    let existingUser = await ApiService.getUser(address!);
+    if (!existingUser) {
+      // TODO: will need to show a modal / popup
+      // to ask for user details for now we are using only the address
+      const createdUser = await ApiService.createUser({
+        publicAddress: address!,
+      });
+      setUser(createdUser);
+      return createdUser
+    }
+    else if (existingUser) {
+      setUser(existingUser);
+      return existingUser
+    }
+
+  };
+
+  // --------------------------- Johannas Note: Keeping the old code here in case we need it ------------------------------------
   // TODO: check if we need this handler
   // useEffect(() => {
   //   const handleConnectorUpdate = ({ account, chain }: ConnectorData) => {
@@ -59,58 +103,44 @@ export function useSignInWallet() {
   //   };
   // }, [activeConnector]);
 
-  useEffect(() => {
-    if (address && !isAuthenticated) {
-      if (Auth.isAuthenticated) {
-        setIsAuthenticated(true);
-      } else {
-        getUser();
-      }
-    } else {
-      Auth.clearAccessToken();
-      setIsAuthenticated(false);
-    }
-  }, [address]);
-
-  // SIGN MESSAGE FOR AUTH
-  useEffect(() => {
-    if (
-      user &&
-      !isAuthenticated &&
-      !isLoading &&
-      walletClient &&
-      !signedMessage
-    ) {
-      signMessage({ message: user.nonce });
-    }
-  }, [user, isLoading, walletClient]);
-
-  // LOGIN HTTP CALL
-  useEffect(() => {
-    const login = async () => {
-      if (Auth.isAuthenticated) {
-        setIsAuthenticated(true);
-      } else {
-        const authResult = await ApiService.loginUser(address!, signedMessage!);
-        if (authResult?.accessToken) {
-          Auth.setAccessToken(authResult.accessToken);
+  /*   useEffect(() => {
+      if (address && !isAuthenticated) {
+        if (Auth.isAuthenticated) {
           setIsAuthenticated(true);
         } else {
-          disconnect();
-          setIsAuthenticated(false);
-          setUser(null);
+          getUser();
         }
+      } else {
+        Auth.clearAccessToken();
+        setIsAuthenticated(false);
       }
-    };
+    }, [address]); */
 
-    if (signedMessage && isSuccess) {
-      login();
-    } else if (isError) {
-      disconnect();
-      setIsAuthenticated(false);
-      setUser(null);
-    }
-  }, [signedMessage, isSuccess, isError]);
-
+  // SIGN MESSAGE FOR AUTH
+  /*  useEffect(() => {
+     if (
+       user &&
+       !isAuthenticated &&
+       !isLoading &&
+       walletClient &&
+       !signedMessage
+     ) {
+       signMessage({ message: user.nonce });
+     }
+   }, [user, isLoading, walletClient]);
+  
+   // LOGIN HTTP CALL
+   useEffect(() => {
+  
+  
+     if (signedMessage && isSuccess) {
+       login();
+     } else if (isError) {
+       disconnect();
+       setIsAuthenticated(false);
+       setUser(null);
+     }
+   }, [signedMessage, isSuccess, isError]);
+  */
   return { user };
-}
+} 

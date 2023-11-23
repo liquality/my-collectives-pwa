@@ -31,7 +31,10 @@ import SideBarMenu from "./components/SideBarMenu";
 import TabsMenu from "./components/TabsMenu";
 import Discover from "./pages/Discover/Discover";
 import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
-import { WagmiConfig } from "wagmi";
+
+import { createConfig, configureChains, WagmiConfig } from "wagmi";
+import { publicProvider } from "wagmi/providers/public";
+import { mainnet } from "wagmi/chains";
 import { baseGoerli } from "wagmi/chains";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Challenge from "./pages/Mint/Challenge";
@@ -72,8 +75,19 @@ const metadata = {
   ],
 };
 
+const { publicClient, webSocketPublicClient } = configureChains(
+  [mainnet],
+  [publicProvider()]
+);
+
 const chains = [baseGoerli];
 const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
+const config = createConfig({
+  autoConnect: true,
+  publicClient,
+  webSocketPublicClient,
+});
+
 // 3. Create modal
 createWeb3Modal({ wagmiConfig, projectId, chains });
 const App: React.FC = () => {
@@ -120,9 +134,7 @@ const App: React.FC = () => {
     }
     return (
       <IonReactRouter>
-        <TabsMenu hideOn={["/invite"]} >
-          {AppRouterOutlet}
-        </TabsMenu>
+        <TabsMenu hideOn={["/invite"]}>{AppRouterOutlet}</TabsMenu>
       </IonReactRouter>
     );
   };
@@ -137,7 +149,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <WagmiConfig config={wagmiConfig}>
+    <WagmiConfig config={config}>
       <Main />
     </WagmiConfig>
   );
