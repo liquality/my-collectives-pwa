@@ -20,12 +20,11 @@ export const pathConstants = {
     rewards: {
         index: "/rewards"
     },
-    //NOTE: groupId should be attached towards the end of all of these routes
     collectiveDetail: {
-        collectiveDetail: (groupId: string) => { return `/collectiveDetail/${groupId}` },
-        mints: (groupId: string) => { return `/collectiveDetail/mints/${groupId}` },
-        chat: (groupId: string) => { return `/collectiveDetail/chat/${groupId}` },
-        info: (groupId: string) => { return `/collectiveDetail/info/${groupId}` }
+        collectiveDetail: (groupId: string) => `/collectiveDetail/${groupId}`,
+        mints: (groupId: string) => `/collectiveDetail/mints/${groupId}`,
+        chat: (groupId: string) => `/collectiveDetail/chat/${groupId}`,
+        info: (groupId: string) => `/collectiveDetail/info/${groupId}`,
     },
     invite: {
         index: "/invite"
