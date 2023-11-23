@@ -1,37 +1,30 @@
 import ApiService from "@/services/ApiService";
 import { Auth } from "@/utils";
-import { useState, useEffect } from "react";
+import { useState, } from "react";
 import {
-  ConnectorData,
   useAccount,
   useDisconnect,
   useSignMessage,
-  useWalletClient,
 } from "wagmi";
 
 export function useSignInWallet() {
   const [user, setUser] = useState<any>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const {
-    data: signedMessage,
-    isLoading,
-    isSuccess,
-    isError,
-    signMessage,
-  } = useSignMessage({
+  const { signMessage } = useSignMessage({
+    //Listen to successfully signed message and login after that
     onSuccess: async (data, args) =>
-      //console.log(data, 'DATAAA')
-      await login(data)
+      await login(data),
+    onError: async (error, variables) =>
+      //TODO: handle some error here
+      console.log(error, 'Error signing message')
   },);
-  const { data: walletClient } = useWalletClient();
   const { disconnect } = useDisconnect();
   //const { address, connector: activeConnector } = useAccount();
 
   const { isConnected, address } = useAccount({
     onConnect: async ({ address, connector }) =>
-      //step one: set authentication
-      //step 2: get user
-      //step 3: sign message for login
+      //step 1: get user
+      //step 2: sign message with the user
+      //step 3: listen to onSignMessageSuccess and login if message was successfully signed
       await handleAllAuthSteps()
 
   },);
@@ -39,15 +32,13 @@ export function useSignInWallet() {
     try {
       // Step 1: Get the user
       const dbUser = await getUser();
-      console.log(dbUser, 'DB USER?')
       if (dbUser && !Auth.isAuthenticated) {
         // Step 2: Sign message with the user
-        console.log(dbUser.nonce, 'DB USER')
         signMessage({ message: dbUser.nonce })  //Here we are listening to onSuccess using the signMessage hook and then logging in User
       }
       else if (!dbUser) {
         Auth.clearAccessToken();
-        setIsAuthenticated(false);
+
       }
     } catch (error) {
       // Handle errors if any
@@ -59,17 +50,12 @@ export function useSignInWallet() {
 
   const login = async (data: any) => {
     if (Auth.isAuthenticated) {
-      setIsAuthenticated(true);
     } else {
-      console.log(data, address, 'Data & Address')
       const authResult = await ApiService.loginUser(address!, data);
-      console.log(authResult, 'Auth result?')
       if (authResult?.accessToken) {
         Auth.setAccessToken(authResult.accessToken);
-        setIsAuthenticated(true);
       } else {
         disconnect();
-        setIsAuthenticated(false);
         setUser(null);
       }
     }
@@ -79,21 +65,24 @@ export function useSignInWallet() {
 
   // GET USER DATA
   const getUser = async () => {
-    let dbUser = await ApiService.getUser(address!);
-    if (!dbUser) {
+    let existingUser = await ApiService.getUser(address!);
+    if (!existingUser) {
       // TODO: will need to show a modal / popup
       // to ask for user details for now we are using only the address
-      dbUser = await ApiService.createUser({
+      const createdUser = await ApiService.createUser({
         publicAddress: address!,
       });
-      return user
+      setUser(createdUser);
+      return createdUser
     }
-    if (dbUser) {
-      setUser(dbUser);
-      return dbUser
+    else if (existingUser) {
+      setUser(existingUser);
+      return existingUser
     }
+
   };
 
+  // --------------------------- Johannas Note: Keeping the old code here in case we need it ------------------------------------
   // TODO: check if we need this handler
   // useEffect(() => {
   //   const handleConnectorUpdate = ({ account, chain }: ConnectorData) => {
