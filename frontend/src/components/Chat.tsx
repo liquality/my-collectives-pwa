@@ -22,6 +22,7 @@ import {
   IonTextarea,
 } from "@ionic/react";
 import { navigate } from "ionicons/icons";
+import { shortenAddress } from "@/utils";
 
 interface ChatProps {
   group: Group;
@@ -38,7 +39,7 @@ export const Chat = (props: ChatProps) => {
       setMessages(chatHistory);
     }
     socket.on("messageCreation", (data) => {
-      setMessages((prevMessages) => [...prevMessages, data]); // Use functional update
+      setMessages((prevMessages) => [...prevMessages, data]);
     });
 
     return () => {
@@ -70,9 +71,7 @@ export const Chat = (props: ChatProps) => {
       <IonRow>
         <IonCol>
           <IonList className="ion-padding" inset={true}>
-            <IonListHeader>
-              <IonLabel>Group: {name}</IonLabel>
-            </IonListHeader>
+            <IonListHeader></IonListHeader>
             {messages.map((message, index) => (
               <IonItem key={index}>
                 <IonAvatar aria-hidden="true" slot="start">
@@ -82,7 +81,7 @@ export const Chat = (props: ChatProps) => {
                   />
                 </IonAvatar>
                 <IonLabel>
-                  <h3>{message.userAddress}</h3>
+                  <h3>From: {shortenAddress(message.userAddress)}</h3>
                   <p>{message.content}</p>
                 </IonLabel>
               </IonItem>

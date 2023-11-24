@@ -1,4 +1,9 @@
-import { convertIpfsImageUrl, shortenAddress } from "@/utils";
+import { Challenge } from "@/types/challenges";
+import {
+  convertIpfsImageUrl,
+  cutOffTooLongString,
+  shortenAddress,
+} from "@/utils";
 import {
   useIonRouter,
   IonCard,
@@ -7,10 +12,15 @@ import {
   IonCardSubtitle,
   IonCardTitle,
   IonSkeletonText,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonIcon,
+  IonLabel,
 } from "@ionic/react";
 import React, { useState } from "react";
 
-export interface PoolItemCardProps {
+export interface PoolItemCardProps extends Challenge {
   tokenId: string;
   mintingContractAddress: string;
   imageUrl: string;
@@ -20,6 +30,13 @@ const PoolItemCard: React.FC<PoolItemCardProps> = ({
   tokenId,
   mintingContractAddress,
   imageUrl,
+  name,
+  chainId,
+  category,
+  totalMints,
+  platform,
+  expiration,
+  expired,
 }: PoolItemCardProps) => {
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loading, setLoading] = useState(true);
@@ -33,9 +50,14 @@ const PoolItemCard: React.FC<PoolItemCardProps> = ({
   };
 
   return (
-    <IonCard className="pool-item-card" onClick={handleClick}>
+    <IonCard
+      style={{ width: "47%", marginRight: "3%" }}
+      className="card-img-swiper "
+      onClick={handleClick}
+    >
+      {" "}
       <img
-        className="pool-item-img"
+        className="swiper-item-img"
         alt="NFT Image"
         style={{ display: loading ? "none" : "block" }}
         src={ipfsImageUrl}
@@ -44,7 +66,7 @@ const PoolItemCard: React.FC<PoolItemCardProps> = ({
       />
       {loading ? (
         <IonSkeletonText
-          className="pool-item-img-skeleton"
+          className="swiper-item-img-skeleton"
           animated={true}
         ></IonSkeletonText>
       ) : null}
@@ -53,18 +75,25 @@ const PoolItemCard: React.FC<PoolItemCardProps> = ({
           {loading ? (
             <IonSkeletonText animated={true}></IonSkeletonText>
           ) : (
-            `Challenge # ${tokenId}`
+            `Creator.eth`
           )}
         </IonCardTitle>
-        <IonCardSubtitle>
-          {loading ? (
-            <IonSkeletonText animated={true}></IonSkeletonText>
-          ) : (
-            shortenAddress(mintingContractAddress)
-          )}
-        </IonCardSubtitle>
+        <IonCardSubtitle>{cutOffTooLongString(name, 20)}</IonCardSubtitle>
       </IonCardHeader>
-      <IonCardContent></IonCardContent>
+      <IonCardContent>
+        <IonGrid>
+          <IonRow className="ion-justify-content-between ion-align-items-center">
+            <IonCol size="auto">
+              <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>
+              <IonLabel>80</IonLabel>
+            </IonCol>
+            <IonCol size="auto">
+              <IonIcon src="/assets/icons/people-tile.svg"></IonIcon>
+              <IonLabel>80</IonLabel>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonCardContent>
     </IonCard>
   );
 };

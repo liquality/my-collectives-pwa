@@ -9,7 +9,14 @@ import useGetPoolsByGroupId from "@/hooks/Collective/useGetPoolsByGroupId";
 import PoolsGrid from "@/components/Mint/PoolsGrid";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 
-const CollectiveChat: React.FC<RouteComponentProps> = (routerProps) => {
+export interface CollectiveMintProps
+  extends RouteComponentProps<{
+    groupId: string;
+  }> {}
+
+const CollectiveChat: React.FC<CollectiveMintProps> = ({ match }) => {
+  //const location = useLocation();
+  //const { groupId } = match.params;
   const location = useLocation();
   const groupId = getLastIndexOfPath(location.pathname);
   const { group } = useGetGroupById(groupId);
@@ -20,7 +27,7 @@ const CollectiveChat: React.FC<RouteComponentProps> = (routerProps) => {
     <IonPage>
       <Header title={group?.name} />
       <IonContent className="ion-padding" color="light">
-        <CollectiveTopBar {...routerProps}>
+        <CollectiveTopBar>
           <PageSearchBar />
         </CollectiveTopBar>
         {pools && !loading ? (

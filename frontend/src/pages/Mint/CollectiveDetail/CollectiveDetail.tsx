@@ -18,6 +18,13 @@ import CollectiveMint from "./CollectiveMint";
 
 const CollectiveDetail: React.FC<RouteComponentProps> = ({ match }) => {
   const { groupId } = useParams<{ groupId: string }>();
+  console.log(match, "");
+  console.log(
+    "groupId INSIDE COLLECTIVE DETAIL",
+    "collective details",
+    match,
+    groupId
+  );
 
   const { group, loading } = useGetGroupById(groupId);
   const router = useIonRouter();
@@ -43,20 +50,16 @@ const CollectiveDetail: React.FC<RouteComponentProps> = ({ match }) => {
             <Route
               path={pathConstants.collectiveDetail.info(groupId)}
               component={CollectiveInfo}
-              exact
             />
             <Route
               path={pathConstants.collectiveDetail.chat(groupId)}
               component={CollectiveChat}
-              exact
             />
             <Route
               path={pathConstants.collectiveDetail.mints(groupId)}
               component={CollectiveMint}
-              exact
             />
             <Route
-              exact
               path={pathConstants.collectiveDetail.collectiveDetail(groupId)}
             >
               <Redirect to={pathConstants.collectiveDetail.mints(groupId)} />
