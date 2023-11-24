@@ -14,7 +14,7 @@ const PoolsGrid: React.FC = ({ pools, loading }: any) => {
       ) : (
         <IonRow style={{ margin: "1rem" }}>
           {pools.map((pool: any, index: number) => (
-            <PoolItemCard {...pool} />
+            <PoolItemCard key={index} {...pool} />
           ))}
         </IonRow>
       )}
