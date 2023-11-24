@@ -50,7 +50,7 @@ export class GroupsService {
             
           const expireAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3); // 3 days
           await trx("invites")
-            .update({ groupId: result.id, expireAt })
+            .update({ groupId: result.id, userId, expireAt })
             .whereIn("id", inviteIds);
 
           resolve(result);
