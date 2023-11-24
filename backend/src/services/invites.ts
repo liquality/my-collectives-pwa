@@ -2,6 +2,24 @@ import { dbClient } from "../data";
 import { Invite } from "../models/invite";
 
 export class InvitesService {
+  public static get joinQuery() {
+    return dbClient("invites")
+      .join("users", "users.id", "=", "invites.userId")
+      .join("groups", "groups.id", "=", "invites.groupId");
+  }
+
+  public static joinSelect = [
+    "invites.id",
+    "invites.groupId",
+    "invites.code",
+    "invites.expireAt",
+    "invites.createdAt",
+    "groups.name as groupName",
+    "groups.description as groupDescription",
+    "groups.publicAddress as groupAddress",
+    "users.publicAddress as userAddress",
+  ];
+
   public static async claim(id: string, userId: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       dbClient.transaction(async (trx) => {
@@ -69,44 +87,37 @@ export class InvitesService {
 
   public static find(id: string): Promise<Invite | null> {
     // TUDO: validate dates of expire at and userAt
-    return dbClient("invites")
-      .where("id", "=", id)
-      .whereNull("usedAt")
-      .first<Invite>("id", "groupId", "code", "expireAt", "createdAt");
+    return this.joinQuery
+      .where("invites.id", "=", id)
+      .whereNull("invites.usedAt")
+      .first<Invite>(this.joinSelect);
   }
 
   public static findByCode(code: string): Promise<Invite | null> {
     // TUDO: validate dates of expire at and userAt
-    return dbClient("invites")
-      .where("id", "=", code)
-      .whereNull("usedAt")
-      .first<Invite>("id", "groupId", "code", "expireAt", "createdAt");
+    return this.joinQuery
+      .where("invites.id", "=", code)
+      .whereNull("invites.usedAt")
+      .first<Invite>(this.joinSelect);
   }
 
   public static findAllByGroup(id: string): Promise<Invite[]> {
     // TUDO: validate dates of expire at and userAt
-    return dbClient("invites")
-      .where("groupId", "=", id)
-      .whereNull("usedAt")
-      .select("id", "groupId", "code", "expireAt", "createdAt");
+    return this.joinQuery
+      .where("invites.groupId", "=", id)
+      .whereNull("invites.usedAt")
+      .select(this.joinSelect);
   }
 
-  public static findAllByUser(id: string): Promise<Invite[]> {
+  public static findAllByUser(id: string, groupId?: string): Promise<Invite[]> {
     // TUDO: validate dates of expire at and userAt
-    return dbClient("invites")
-      .join("user_groups", "user_groups.groupId", "=", "invites.groupId")
-      .join("groups", "groups.id", "=", "user_groups.groupId")
-      .where("createdBy", "=", id)
-      .whereNull("usedAt")
-      .select(
-        "invites.id",
-        "invites.groupId",
-        "invites.code",
-        "invites.expireAt",
-        "invites.createdAt",
-        "groups.name",
-        "groups.description",
-        "groups.publicAddress"
-      );
+    let query = dbClient("invites")
+      .join("users", "users.id", "=", "invites.userId")
+      .join("groups", "groups.id", "=", "invites.groupId")
+      .where("invites.userId", "=", id);
+    if (groupId) {
+      query = query.andWhere("invites.groupId", "=", groupId);
+    }
+    return query.whereNull("invites.usedAt").select(this.joinSelect);
   }
 }

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Anek+Kannada:wght@100;300;400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Anek+Kannada:wght@100;300;400;500;800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;300;500&display=swap");
 
 * {
@@ -549,12 +549,47 @@ ion-button {
   padding-right: 5%;
 }
 
+/* Invite page */
 ion-content.invite-page-code {
-  --background: linear-gradient(0deg, #4483B0 0%, #853DE0 46.35%, #C87FF2 100%);
+  --background: linear-gradient(0deg, #4483b0 0%, #853de0 46.35%, #c87ff2 100%);
   --color: #ffffff;
 }
 
 ion-content.invite-page-link {
-  --background: linear-gradient(180deg, #823ABA 0%, #6F48C4 53.13%, #B454CC 100%);
+  --background: linear-gradient(
+    180deg,
+    #823aba 0%,
+    #6f48c4 53.13%,
+    #b454cc 100%
+  );
   --color: #ffffff;
 }
+
+.invite-page .title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 2.375rem;
+  letter-spacing: 0.016rem;
+}
+
+.invite-page .title .tech {
+  font-size: 1.25rem;
+}
+
+.invite-page .subtitle {
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 0.688rem;
+  letter-spacing: 0.031rem;
+}
+
+.invite-page .message {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1rem;
+  letter-spacing: 0.031rem;
+}
+.invite-page .greetings-icon .icon-inner svg {
+  width: 3rem;
+}
+

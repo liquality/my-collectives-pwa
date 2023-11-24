@@ -96,7 +96,8 @@ const App: React.FC = () => {
       <Redirect exact path="/" to="/discover" />
       {/* Routes not requiring authentication */}
       <Route path="/login" render={() => <Login />} exact />
-      <Route path="/invite" component={Invite} />
+      <Route path="/invite/code/:code?" component={Invite} />
+      <Route path="/invite/:id?" component={Invite} />
       <Route path="/discover" component={Discover} />
       <Route path="/rewards" render={() => <Rewards />} exact />
       <Route
