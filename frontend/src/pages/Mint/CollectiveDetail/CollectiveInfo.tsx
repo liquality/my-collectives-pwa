@@ -20,6 +20,7 @@ const CollectiveInfo: React.FC<RouteComponentProps> = (routerProps) => {
           <PageSearchBar />
         </CollectiveTopBar>
         <p>Info about a specific group</p>
+        {/*   <PoolCard pools={pools}/> */}
       </IonContent>
     </IonPage>
   );

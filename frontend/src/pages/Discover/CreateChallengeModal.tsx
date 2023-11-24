@@ -51,6 +51,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
   const handleCreateChallenge = async () => {
     try {
       const result = await ApiService.createChallenges(createdChallenge);
+
       setResultChallenge(result);
       if (result.id) {
         dismiss();

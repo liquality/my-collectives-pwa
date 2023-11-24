@@ -5,11 +5,16 @@ import CollectiveTopBar from "@/components/TopBars/CollectiveTopBar";
 import PageSearchBar from "@/components/PageSearchBar";
 import { getLastIndexOfPath } from "@/utils/routeNames";
 import useGetGroupById from "@/hooks/Groups/useGetGroupById";
+import useGetPoolsByGroupId from "@/hooks/Collective/useGetPoolsByGroupId";
+import PoolsGrid from "@/components/Mint/PoolsGrid";
+import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 
 const CollectiveChat: React.FC<RouteComponentProps> = (routerProps) => {
   const location = useLocation();
   const groupId = getLastIndexOfPath(location.pathname);
-  const { group, loading } = useGetGroupById(groupId);
+  const { group } = useGetGroupById(groupId);
+  const { pools, loading } = useGetPoolsByGroupId(groupId);
+  console.log(pools, "wats pools?");
 
   return (
     <IonPage>
@@ -18,7 +23,11 @@ const CollectiveChat: React.FC<RouteComponentProps> = (routerProps) => {
         <CollectiveTopBar {...routerProps}>
           <PageSearchBar />
         </CollectiveTopBar>
-        <p>Show all POOLS for a group here</p>
+        {pools && !loading ? (
+          <PoolsGrid pools={pools} />
+        ) : (
+          <PageLoadingIndicator />
+        )}
       </IonContent>
     </IonPage>
   );

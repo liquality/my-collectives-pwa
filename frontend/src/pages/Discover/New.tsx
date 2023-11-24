@@ -1,6 +1,7 @@
 import {
   IonButton,
   IonContent,
+  IonFab,
   IonFabButton,
   IonIcon,
   IonLabel,
@@ -51,14 +52,15 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
           <PageSearchBar />
         </DiscoverTopBar>
 
-        <IonButton
-          id="open-create-challenge-modal"
-          color="primary"
-          shape="round"
-          expand="block"
-        >
-          CREATE CHALLENGE
-        </IonButton>
+        <IonFab slot="fixed" vertical="bottom" horizontal="end">
+          <IonFabButton
+            id="open-create-challenge-modal"
+            className="create-fab-button"
+          >
+            <IonIcon src="/assets/icons/add.svg"></IonIcon>
+            <IonLabel>Create Challenge</IonLabel>
+          </IonFabButton>
+        </IonFab>
 
         <CreateGroupModal
           trigger="open-create-challenge-modal"
