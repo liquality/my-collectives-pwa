@@ -47,15 +47,17 @@ export const Chat = (props: ChatProps) => {
   }, [chatHistory]);
 
   const handleSendMessage = async () => {
-    console.log(newMessage)
+    console.log(newMessage, "Come hjere");
     if (newMessage) {
       try {
         const message = {
           content: newMessage,
           groupId,
         };
+        console.log(message, "");
         const postMessage = await ApiService.createMessage(message);
-        console.log(postMessage)
+        console.log(postMessage, "POST MSG??");
+        console.log(postMessage);
       } catch (error) {
         console.error("Error sending message:", error);
       }
@@ -106,12 +108,8 @@ export const Chat = (props: ChatProps) => {
                   }
                 }}
               ></IonTextarea>
-              <IonButton slot="end">
-                <IonIcon
-                  slot="icon-only"
-                  onClick={handleSendMessage}
-                  icon={navigate}
-                ></IonIcon>
+              <IonButton onClick={handleSendMessage} slot="end">
+                <IonIcon slot="icon-only" icon={navigate}></IonIcon>
               </IonButton>
             </IonItem>
           </IonList>

@@ -31,4 +31,11 @@ export const pathConstants = {
     }
 }
 
+export const getLastIndexOfPath = (pathname: string) => {
+    const groupId = pathname.substring(
+        pathname.lastIndexOf("/") + 1
+    );
+    return groupId
+}
+
 
