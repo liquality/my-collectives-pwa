@@ -1,5 +1,5 @@
 import useIsActiveRoute from "@/hooks/useIsActiveRoute";
-import { routes } from "@/utils/routeNames";
+import { pathConstants } from "@/utils/routeNames";
 import {
   IonLabel,
   IonIcon,
@@ -12,7 +12,10 @@ export interface TabBarMenuProps {
   hideOn?: [string];
   children?: React.ReactNode;
 }
-const TabsMenu: React.FC<TabBarMenuProps> = ({ children, hideOn }: TabBarMenuProps) => {
+const TabsMenu: React.FC<TabBarMenuProps> = ({
+  children,
+  hideOn,
+}: TabBarMenuProps) => {
   const isActive = useIsActiveRoute();
   if (hideOn?.some((path) => isActive(path))) {
     return children;
@@ -21,11 +24,11 @@ const TabsMenu: React.FC<TabBarMenuProps> = ({ children, hideOn }: TabBarMenuPro
     <IonTabs>
       {children}
       <IonTabBar slot="bottom" className="app-tab-bar">
-        <IonTabButton tab="discover" href={routes.discover.discover}>
+        <IonTabButton tab="discover" href={pathConstants.discover.discover}>
           <IonIcon src="./assets/icons/discover.svg" />
           <IonLabel>Discover</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="mint" href={routes.mintPage.mint}>
+        <IonTabButton tab="mint" href={pathConstants.mintPage.mint}>
           <IonIcon src="./assets/icons/mint.svg" />
           <IonLabel>Mint</IonLabel>
         </IonTabButton>

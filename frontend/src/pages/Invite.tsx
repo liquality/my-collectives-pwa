@@ -7,8 +7,7 @@ import {
   IonRow,
   useIonRouter,
 } from "@ionic/react";
-import { Redirect, Route, RouteComponentProps } from "react-router-dom";
-import { routes } from "@/utils/routeNames";
+import {  RouteComponentProps } from "react-router-dom";
 import { useEffect, useState } from "react";
 import InvitesService from "@/services/Invites";
 import { shortenAddress } from "@/utils/adddress";
@@ -17,6 +16,8 @@ export interface InvitePageProps
     id?: string;
     code?: string;
   }> {}
+
+
 const Invite: React.FC<InvitePageProps> = ({ match }) => {
   const { id, code } = match.params;
   const [invite, setInvite] = useState<any>(null);

@@ -1,70 +1,60 @@
-import React, { useState } from "react";
-
-import { convertIpfsImageUrl, cutOffTooLongString } from "@/utils";
+import { Challenge } from "@/types/challenges";
 import {
+  convertIpfsImageUrl,
+  cutOffTooLongString,
+  shortenAddress,
+} from "@/utils";
+import {
+  useIonRouter,
   IonCard,
   IonCardContent,
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
-  IonCol,
+  IonSkeletonText,
   IonGrid,
+  IonRow,
+  IonCol,
   IonIcon,
   IonLabel,
-  IonRow,
-  IonSkeletonText,
-  useIonRouter,
 } from "@ionic/react";
-import { Challenge } from "@/types/challenges";
-import { pathConstants } from "@/utils/routeNames";
-import { useLocation } from "react-router";
+import React, { useState } from "react";
 
-export interface SwipeCardProps {
-  challenge: Challenge;
-  setSelectedChallenge?: (challenge: Challenge) => void;
-  selectedChallenge?: Challenge;
+export interface PoolItemCardProps extends Challenge {
+  tokenId: string;
+  mintingContractAddress: string;
+  imageUrl: string;
 }
 
-const SwipeCard: React.FC<SwipeCardProps> = ({
-  challenge,
-  setSelectedChallenge,
-  selectedChallenge,
-}: SwipeCardProps) => {
-  const {
-    id,
-    mintingContractAddress,
-    chainId,
-    tokenId,
-    category,
-    name,
-    expiration,
-    expired,
-    totalMints,
-    imageUrl,
-    creatorOfMint,
-  } = challenge;
+const PoolItemCard: React.FC<PoolItemCardProps> = ({
+  tokenId,
+  mintingContractAddress,
+  imageUrl,
+  name,
+  chainId,
+  category,
+  totalMints,
+  platform,
+  expiration,
+  expired,
+}: PoolItemCardProps) => {
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loading, setLoading] = useState(true);
   const router = useIonRouter();
-  const location = useLocation();
-
   const handleClick = () => {
     if (!loading) {
-      if (
-        pathConstants.mintPage.createCollective === location.pathname &&
-        typeof setSelectedChallenge === "function"
-      ) {
-        setSelectedChallenge(challenge as Challenge); // type assertion here
-      } else {
-        router.push(
-          `/challenge/${tokenId}?&contractAddress=${mintingContractAddress}&imageUrl=${ipfsImageUrl}`
-        );
-      }
+      router.push(
+        `/challenge/${tokenId}?&contractAddress=${mintingContractAddress}&imageUrl=${ipfsImageUrl}`
+      );
     }
   };
 
   return (
-    <IonCard className="card-img-swiper" onClick={handleClick}>
+    <IonCard
+      style={{ width: "47%", marginRight: "3%" }}
+      className="card-img-swiper "
+      onClick={handleClick}
+    >
       {" "}
       <img
         className="swiper-item-img"
@@ -101,12 +91,6 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
               <IonIcon src="/assets/icons/people-tile.svg"></IonIcon>
               <IonLabel>80</IonLabel>
             </IonCol>
-
-            {selectedChallenge?.id === challenge?.id ? (
-              <IonCol size="auto">
-                <IonLabel>SELECTED</IonLabel>
-              </IonCol>
-            ) : null}
           </IonRow>
         </IonGrid>
       </IonCardContent>
@@ -114,4 +98,4 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
   );
 };
 
-export default SwipeCard;
+export default PoolItemCard;

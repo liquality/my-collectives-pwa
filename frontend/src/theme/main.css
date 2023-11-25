@@ -254,9 +254,9 @@ ion-toolbar {
 }
 
 .card-img-swiper {
-  margin: 0 !important;
-  width: 100% !important;
-  margin-inline: 0 !important;
+  margin: 0;
+  width: 100%;
+  margin-inline: 0;
   background-color: #f8f8f8 !important;
   border-radius: 0.938rem;
   height: 14.563rem !important;
@@ -265,6 +265,19 @@ ion-toolbar {
 
 .card-img-swiper ion-card-header {
   padding: 0.3rem 0.3rem 0 0.5rem;
+}
+
+.filter-img {
+  filter: blur(10px) !important;
+  filter: brightness(0.4) !important;
+  /*   filter: contrast(200%);
+  filter: drop-shadow(16px 16px 20px blue);
+  filter: grayscale(50%); */
+  filter: hue-rotate(90deg) !important;
+  /* filter: invert(75%);
+  filter: opacity(25%);
+  filter: saturate(30%);
+  filter: sepia(60%); */
 }
 
 .card-img-swiper ion-card-title {
