@@ -4,7 +4,7 @@ export function shortenAddress(address: string) {
   const isTerra = _address.startsWith("terra");
   return `${prefix}${_address
     .replace("0x", "")
-    .substring(0, prefix ? 2 : 3)}...${_address.substring(
+    .substring(0, prefix ? 4 : 5)}...${_address.substring(
       isTerra ? _address.length - 6 : _address.length - 4
     )}`;
 }

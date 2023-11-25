@@ -11,7 +11,7 @@ import { Redirect, Route, RouteComponentProps } from "react-router-dom";
 import { routes } from "@/utils/routeNames";
 import { useEffect, useState } from "react";
 import InvitesService from "@/services/Invites";
-
+import { shortenAddress } from "@/utils/adddress";
 export interface InvitePageProps
   extends RouteComponentProps<{
     id?: string;
@@ -53,11 +53,14 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
           {invite ? (
             <IonRow>
               <IonCol size="12" className="ion-padding ion-text-center">
-              <IonIcon className="greetings-icon" src="./assets/icons/congrats.svg" />
-                <h1 className="greetings">CONTRATS!</h1>
+                <IonIcon
+                  className="greetings-icon"
+                  src="./assets/icons/congrats.svg"
+                />
+                <h1 className="greetings">Congrats!</h1>
                 <div className="message">
                   <small>
-                    <b>{invite.userAddress}</b>
+                    <b>{shortenAddress(invite.userAddress)}</b>
                   </small>{" "}
                   invited you to join{" "}
                   <small>
