@@ -17,7 +17,7 @@ import React from "react";
 import useIsActiveRoute from "@/hooks/useIsActiveRoute";
 
 export interface SideBarMenuProps {
-  hideOn?: [string]
+  hideOn?: string[]
 }
 const SideBarMenu: React.FC<SideBarMenuProps> = ({ hideOn }: SideBarMenuProps ) => {
   const isActive = useIsActiveRoute();

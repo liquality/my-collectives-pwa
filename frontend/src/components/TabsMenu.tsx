@@ -9,7 +9,7 @@ import {
 } from "@ionic/react";
 import React from "react";
 export interface TabBarMenuProps {
-  hideOn?: [string];
+  hideOn?: string[];
   children?: React.ReactNode;
 }
 const TabsMenu: React.FC<TabBarMenuProps> = ({

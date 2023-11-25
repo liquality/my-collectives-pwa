@@ -578,6 +578,10 @@ ion-content.invite-page-link {
   --color: #ffffff;
 }
 
+.invite-page .invite-content {
+  max-width: 43.75rem;
+}
+
 .invite-page .title {
   font-size: 2.25rem;
   font-weight: 800;
@@ -596,13 +600,6 @@ ion-content.invite-page-link {
   letter-spacing: 0.031rem;
 }
 
-.invite-page .message {
-  font-size: 1rem;
-  font-weight: 500;
-  line-height: 1rem;
-  letter-spacing: 0.031rem;
-}
-
 .invite-page .greetings {
   text-transform: uppercase;
   font-size: 1.75rem;
@@ -612,7 +609,71 @@ ion-content.invite-page-link {
   word-wrap: break-word;
 }
 
+.invite-page .message {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1rem;
+  letter-spacing: 0.031rem;
+}
+
 .invite-page .greetings-icon {
   width: 3rem !important;
   height: 3rem !important;
+}
+
+.invite-page .helper-text {
+  color: #ffffff !important;
+}
+
+.invite-page .invite-action-btn {
+  color: var(--ion-color-primary) !important;
+  --background: #ffffff;
+}
+.invite-page .invite-action-btn:hover,
+.invite-page .invite-action-btn:active {
+  color: #ffffff !important;
+  --background: var(--ion-color-primary);
+}
+
+.invite-page .invite-clear-btn {
+  color: #edd8ff !important;
+  width: 100% !important;
+}
+.invite-page .invite-clear-btn:hover {
+  color: #ffffff !important;
+}
+
+.invite-page .invite-group-details {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 1rem;
+  border: 1px #f0e3fb solid;
+  padding: 1rem 2rem;
+}
+
+.invite-page .invite-group-details .group-name {
+  text-transform: uppercase;
+  color: #f8f0ff;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.125rem;
+  letter-spacing: 0.031rem;
+  word-wrap: break-word;
+}
+
+.invite-page .invite-group-details .group-desc {
+  color: white;
+  font-size: 0.938rem;
+  font-weight: 400;
+  line-height: 1.125rem;
+  letter-spacing: 0.031rem;
+  word-wrap: break-word;
+}
+
+.invite-page .invite-footer-text {
+  color: #f5f5f5;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  letter-spacing: 0.047rem;
+  word-wrap: break-word;
 }

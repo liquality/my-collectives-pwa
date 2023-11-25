@@ -96,7 +96,7 @@ export class InvitesService {
   public static findByCode(code: string): Promise<Invite | null> {
     // TUDO: validate dates of expire at and userAt
     return this.joinQuery
-      .where("invites.id", "=", code)
+      .where("invites.code", "=", code)
       .whereNull("invites.usedAt")
       .first<Invite>(this.joinSelect);
   }
