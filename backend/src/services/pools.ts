@@ -30,16 +30,31 @@ export class PoolsService {
   }
 
   public static async findByGroup(groupId: string): Promise<Pool[]> {
-    return dbClient("pools")
-      .where("groupId", "=", groupId)
-      .select<Pool[]>(
-        "id",
-        "groupId",
-        "mintingContractAddress",
-        "chainId",
-        "tokenId",
-        "createdAt"
-      );
+    return dbClient.transaction(async (trx) => {
+      const poolsWithChallenges = await trx
+        .select(
+          'pools.id as poolId',
+          'pools.groupId',
+          'pools.challengeId',
+          'pools.createdBy',
+          'challenges.id as challengeId',
+          'challenges.name',
+          'challenges.creatorOfMint',
+          'challenges.chainId',
+          'challenges.tokenId',
+          'challenges.imageUrl',
+          'challenges.category',
+          'challenges.platform',
+          'challenges.expiration',
+          'challenges.totalMints',
+          'challenges.expired',
+        )
+        .from('pools')
+        .where('pools.groupId', '=', groupId)
+        .join('challenges', 'pools.challengeId', '=', 'challenges.id');
+
+      return poolsWithChallenges;
+    });
   }
 
   //TODO: rewrite this function completly 

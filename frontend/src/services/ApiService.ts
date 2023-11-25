@@ -31,6 +31,10 @@ const ApiService = {
     return NetworkService.getResourceWithAuth("/v1/pools");
   },
 
+  readPoolsByGroupId: async function (groupId: string) {
+    return NetworkService.getResourceWithAuth("/v1/pools/group/" + groupId);
+  },
+
   readChallenges: async function () {
     return NetworkService.getResourceWithAuth("/v1/challenges");
   },

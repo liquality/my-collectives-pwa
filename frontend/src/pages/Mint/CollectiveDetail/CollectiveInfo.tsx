@@ -1,19 +1,26 @@
 import { IonContent, IonPage } from "@ionic/react";
 import Header from "@/components/Header";
-import { RouteComponentProps } from "react-router";
-import MintTopBar from "@/components/TopBars/MintTopBar";
+import { RouteComponentProps, useLocation } from "react-router";
+import CollectiveTopBar from "@/components/TopBars/CollectiveTopBar";
 import PageSearchBar from "@/components/PageSearchBar";
+import { getLastIndexOfPath } from "@/utils/routeNames";
+import useGetGroupById from "@/hooks/Groups/useGetGroupById";
 
 const CollectiveInfo: React.FC<RouteComponentProps> = (routerProps) => {
+  const location = useLocation();
+  const groupId = getLastIndexOfPath(location.pathname);
+  const { group, loading } = useGetGroupById(groupId);
+
   return (
     <IonPage>
-      <Header title="Manage Collective" />
+      <Header title={group?.name} />
 
       <IonContent className="ion-padding" color="light">
-        <MintTopBar {...routerProps}>
+        <CollectiveTopBar {...routerProps}>
           <PageSearchBar />
-        </MintTopBar>
-        <p>Put all the INFOO HERE</p>
+        </CollectiveTopBar>
+        <p>Info about a specific group</p>
+        {/*   <PoolCard pools={pools}/> */}
       </IonContent>
     </IonPage>
   );

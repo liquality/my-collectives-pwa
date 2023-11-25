@@ -1,7 +1,7 @@
 import { useSignInWallet } from "@/hooks/useSignInWallet";
 import { Group } from "@/types/chat";
 import { shortenAddress } from "@/utils";
-import { routes } from "@/utils/routeNames";
+import { pathConstants } from "@/utils/routeNames";
 import { useIonRouter, IonAvatar } from "@ionic/react";
 import React, { useState } from "react";
 
@@ -17,10 +17,9 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
   const { user } = useSignInWallet();
 
   const handleClick = (group: any) => {
-    router.push(routes.collectiveDetail.collectiveDetail + group.id);
+    router.push(pathConstants.collectiveDetail.collectiveDetail(group.id));
   };
 
-  console.log(user?.id, myGroups, "MYGROUPS");
   return (
     <div className="">
       {myGroups
@@ -35,7 +34,8 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
                     <div className="flexDirectionCol">
                       <IonAvatar aria-hidden="true" slot="start">
                         <img
-                          alt=""
+                          className="filter-img"
+                          alt="group-avatar"
                           src={`https://api.multiavatar.com/${group.name}.png`}
                         />
                       </IonAvatar>

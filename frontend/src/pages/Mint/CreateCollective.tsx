@@ -14,7 +14,7 @@ import { GroupCreation } from "@/types/chat";
 import { RouteComponentProps, useHistory } from "react-router";
 import Header from "@/components/Header";
 import { useSignInWallet } from "@/hooks/useSignInWallet";
-import { routes } from "@/utils/routeNames";
+import { pathConstants } from "@/utils/routeNames";
 import { Challenge } from "@/types/challenges";
 import SelectPoolModal from "./SelectPoolModal";
 
@@ -95,7 +95,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       console.log(result, "wats resu?");
       const { name, publicAddress, id, createdBy } = result;
       router.push(
-        `${routes.mintPage.myCollectives}/?groupName=${name}&groupAddress=${publicAddress}&groupId=${id}&createdBy=${createdBy}`
+        `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${publicAddress}&groupId=${id}&createdBy=${createdBy}`
       );
     } catch (error) {
       console.log(error, "error posting group");
