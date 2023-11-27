@@ -4,6 +4,7 @@ import { shortenAddress } from "@/utils";
 import { pathConstants } from "@/utils/routeNames";
 import { useIonRouter, IonAvatar } from "@ionic/react";
 import React, { useState } from "react";
+import GenerateInviteBtn from "../GenerateInvite";
 
 export interface ChallengeItemCardProps {
   myGroups: Group[] | null;
@@ -53,7 +54,9 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
                   </div>
                 </div>
               </div>
-              <div className="collective-card-right generic-grey-card"></div>
+              <div className="collective-card-right generic-grey-card">
+                <GenerateInviteBtn groupId={group.id} />
+              </div>
             </div>
           ))
         : null}
