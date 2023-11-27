@@ -43,14 +43,14 @@ export class GroupsService {
           // invites update
           const inviteIds = await trx("invites")
             .select("id")
-            .where("groupId", null)
+            .andWhere("groupId", null)
+            .andWhere("userId", null)
             .andWhere("usedAt", null)
             .pluck("id")
             .limit(5);
             
-          const expireAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3); // 3 days
           await trx("invites")
-            .update({ groupId: result.id, expireAt })
+            .update({ groupId: result.id, userId })
             .whereIn("id", inviteIds);
 
           resolve(result);

@@ -45,6 +45,7 @@ import OnboardingModal from "./components/OnboardingModal";
 import Challenges from "./pages/Mint/Challenges";
 import Mint from "./pages/Mint/Mint";
 import CollectiveDetail from "./pages/Mint/CollectiveDetail/CollectiveDetail";
+import Join from "./pages/Join";
 
 setupIonicReact({
   mode: "ios",
@@ -91,12 +92,15 @@ const config = createConfig({
 // 3. Create modal
 createWeb3Modal({ wagmiConfig, projectId, chains });
 const App: React.FC = () => {
+  const HineMenuOnRoutes = ["/invite", "/join"];
   const AppRouterOutlet = (
     <IonRouterOutlet id="main-content">
       <Redirect exact path="/" to="/discover" />
       {/* Routes not requiring authentication */}
       <Route path="/login" render={() => <Login />} exact />
-      <Route path="/invite" component={Invite} />
+      <Route path="/invite/code/:code?" component={Invite} />
+      <Route path="/invite/:id?" component={Invite} />
+      <Route path="/join" component={Join} />
       <Route path="/discover" component={Discover} />
       <Route path="/rewards" render={() => <Rewards />} exact />
       <Route
@@ -126,7 +130,7 @@ const App: React.FC = () => {
       return (
         <IonSplitPane when="md" contentId="main-content">
           <IonReactRouter>
-            <SideBarMenu hideOn={["/invite"]} />
+            <SideBarMenu hideOn={HineMenuOnRoutes} />
             {AppRouterOutlet}
           </IonReactRouter>
         </IonSplitPane>
@@ -134,7 +138,7 @@ const App: React.FC = () => {
     }
     return (
       <IonReactRouter>
-        <TabsMenu hideOn={["/invite"]}>{AppRouterOutlet}</TabsMenu>
+        <TabsMenu hideOn={HineMenuOnRoutes}>{AppRouterOutlet}</TabsMenu>
       </IonReactRouter>
     );
   };

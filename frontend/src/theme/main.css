@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Anek+Kannada:wght@100;300;400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Anek+Kannada:wght@100;300;400;500;600;800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;300;500&display=swap");
 
 * {
@@ -562,6 +562,7 @@ ion-button {
   padding-right: 5%;
 }
 
+/* Invite page */
 ion-content.invite-page-code {
   --background: linear-gradient(0deg, #4483b0 0%, #853de0 46.35%, #c87ff2 100%);
   --color: #ffffff;
@@ -575,4 +576,104 @@ ion-content.invite-page-link {
     #b454cc 100%
   );
   --color: #ffffff;
+}
+
+.invite-page .invite-content {
+  max-width: 43.75rem;
+}
+
+.invite-page .title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 2.375rem;
+  letter-spacing: 0.016rem;
+}
+
+.invite-page .title .tech {
+  font-size: 1.25rem;
+}
+
+.invite-page .subtitle {
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 0.688rem;
+  letter-spacing: 0.031rem;
+}
+
+.invite-page .greetings {
+  text-transform: uppercase;
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.125rem;
+  letter-spacing: 0.031rem;
+  word-wrap: break-word;
+}
+
+.invite-page .message {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1rem;
+  letter-spacing: 0.031rem;
+}
+
+.invite-page .greetings-icon {
+  width: 3rem !important;
+  height: 3rem !important;
+}
+
+.invite-page .helper-text {
+  color: #ffffff !important;
+}
+
+.invite-page .invite-action-btn {
+  color: var(--ion-color-primary) !important;
+  --background: #ffffff;
+}
+.invite-page .invite-action-btn:hover,
+.invite-page .invite-action-btn:active {
+  color: #ffffff !important;
+  --background: var(--ion-color-primary);
+}
+
+.invite-page .invite-clear-btn {
+  color: #edd8ff !important;
+  width: 100% !important;
+}
+.invite-page .invite-clear-btn:hover {
+  color: #ffffff !important;
+}
+
+.invite-page .invite-group-details {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 1rem;
+  border: 1px #f0e3fb solid;
+  padding: 1rem 2rem;
+}
+
+.invite-page .invite-group-details .group-name {
+  text-transform: uppercase;
+  color: #f8f0ff;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.125rem;
+  letter-spacing: 0.031rem;
+  word-wrap: break-word;
+}
+
+.invite-page .invite-group-details .group-desc {
+  color: white;
+  font-size: 0.938rem;
+  font-weight: 400;
+  line-height: 1.125rem;
+  letter-spacing: 0.031rem;
+  word-wrap: break-word;
+}
+
+.invite-page .invite-footer-text {
+  color: #f5f5f5;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  letter-spacing: 0.047rem;
+  word-wrap: break-word;
 }
