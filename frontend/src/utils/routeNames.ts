@@ -1,7 +1,4 @@
-import { Route } from "react-router"
-import CollectiveDetail from "@/pages/Mint/CollectiveDetail/CollectiveDetail"
-import CollectiveMint from "@/pages/Mint/CollectiveDetail/CollectiveDetail"
-import CollectiveChat from "@/pages/Mint/CollectiveDetail/CollectiveDetail"
+
 
 export const pathConstants = {
     mintPage: {
@@ -21,10 +18,10 @@ export const pathConstants = {
         index: "/rewards"
     },
     collectiveDetail: {
-        collectiveDetail: (groupId: string) => `/collectiveDetail/${groupId}`,
-        mints: (groupId: string) => `/collectiveDetail/mints/${groupId}`,
-        chat: (groupId: string) => `/collectiveDetail/chat/${groupId}`,
-        info: (groupId: string) => `/collectiveDetail/info/${groupId}`,
+        collectiveDetail: "/collectiveDetail/",
+        mints: "/collectiveDetail/mints/",
+        chat: "/collectiveDetail/chat/",
+        info: "/collectiveDetail/info/",
     },
     invite: {
         index: "/invite"
