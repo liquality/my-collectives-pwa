@@ -15,7 +15,8 @@ import InvitesService from "@/services/Invites";
 import { shortenAddress } from "@/utils/adddress";
 import { useAccount } from "wagmi";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
-import ApiService from "@/services/ApiService";
+import { pathConstants } from "@/utils/routeNames";
+import { useSignInWallet } from "@/hooks/useSignInWallet";
 export interface InvitePageProps
   extends RouteComponentProps<{
     id?: string;
@@ -30,6 +31,7 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
   const router = useIonRouter();
   const { address } = useAccount();
   const { open } = useWeb3Modal();
+  const { user } = useSignInWallet();
 
   useEffect(() => {
     setLoading(true);
@@ -47,20 +49,32 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
     setLoading(false);
   }, [id, code]);
 
-  async function onConnect() {
+  async function handleConnnect() {
     setProcessing(true);
-
-    if (invite) {
-      if (!address) {
-        await open();
-      }
+    if (invite && user && address) {
       try {
-        ApiService.createMember(invite.groupId, {
-          publicAddress: address,
-        });
-        router.push(`/messages/${invite.groupId}`);
+        await InvitesService.claim(invite.id, address!);
+        router.push(pathConstants.mintPage.myCollectives);
       } catch (error) {
         console.log(error, "Error adding member");
+      }
+    }
+    setProcessing(false);
+  }
+
+  useEffect(() => {
+    if (user) {
+      handleConnnect();
+    }
+  }, [user]);
+
+  async function onConnect() {
+    if (invite) {
+      setProcessing(true);
+      if (address) {
+        await handleConnnect();
+      } else {
+        await open();
       }
     }
     setProcessing(false);
