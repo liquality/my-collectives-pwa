@@ -8,16 +8,20 @@ import useGetGroupById from "@/hooks/Groups/useGetGroupById";
 import { getLastIndexOfPath } from "@/utils/routeNames";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 
-const CollectiveChat: React.FC<RouteComponentProps> = (routerProps) => {
-  const location = useLocation();
-  const groupId = getLastIndexOfPath(location.pathname);
+export interface CollectiveChatProps
+  extends RouteComponentProps<{
+    groupId: string;
+  }> {}
+
+const CollectiveChat: React.FC<CollectiveChatProps> = ({ match }) => {
+  const { groupId } = match.params;
   const { group, loading } = useGetGroupById(groupId);
 
   return (
     <IonPage>
       <Header title={group?.name} />
       <IonContent className="ion-padding" color="light">
-        <CollectiveTopBar {...routerProps}>
+        <CollectiveTopBar>
           <PageSearchBar />
         </CollectiveTopBar>
         {group && !loading ? <Chat group={group} /> : <PageLoadingIndicator />}

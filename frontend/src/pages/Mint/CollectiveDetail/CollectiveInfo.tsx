@@ -26,9 +26,13 @@ import GenerateInviteBtn from "@/components/GenerateInvite";
 import { useState } from "react";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 
-const CollectiveInfo: React.FC<RouteComponentProps> = (routerProps) => {
-  const location = useLocation();
-  const groupId = getLastIndexOfPath(location.pathname);
+export interface CollectiveInfoProps
+  extends RouteComponentProps<{
+    groupId: string;
+  }> {}
+
+const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
+  const { groupId } = match.params;
   const { group, loading } = useGetGroupById(groupId);
   const [inviteLink, setInviteLink] = useState<string>("");
 
@@ -38,7 +42,7 @@ const CollectiveInfo: React.FC<RouteComponentProps> = (routerProps) => {
 
       {group && !loading ? (
         <IonContent className="ion-padding" color="light">
-          <CollectiveTopBar {...routerProps}>
+          <CollectiveTopBar>
             <PageSearchBar />
           </CollectiveTopBar>
           <IonCard className="info-card-container first-card">

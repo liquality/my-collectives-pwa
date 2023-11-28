@@ -15,10 +15,25 @@ const CollectiveTopBar: React.FC<DiscoverTopBarProps> = ({ children }) => {
       tabs={[
         {
           label: `Mint | ${pools?.length}`,
-          href: pathConstants.collectiveDetail.info.replace(':groupId', groupId),
+          href: pathConstants.collectiveDetail.mints.replace(
+            ":groupId",
+            groupId
+          ),
         },
-        { label: "Chat", href: pathConstants.collectiveDetail.chat.replace(':groupId', groupId) },
-        { label: "Info", href: pathConstants.collectiveDetail.info.replace(':groupId', groupId) },
+        {
+          label: "Chat",
+          href: pathConstants.collectiveDetail.chat.replace(
+            ":groupId",
+            groupId
+          ),
+        },
+        {
+          label: "Info",
+          href: pathConstants.collectiveDetail.info.replace(
+            ":groupId",
+            groupId
+          ),
+        },
       ]}
     >
       {children}
