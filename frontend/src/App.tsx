@@ -103,11 +103,7 @@ const App: React.FC = () => {
       <Route path="/join" component={Join} />
       <Route path="/discover" component={Discover} />
       <Route path="/rewards" render={() => <Rewards />} exact />
-      <Route
-        path="/collectiveDetail/:groupId"
-        component={CollectiveDetail}
-        exact
-      />
+      <Route path="/collectiveDetail" component={CollectiveDetail} />
 
       <Route path="/mint" component={Mint} />
       <Route path="/challenges" render={() => <Challenges />} exact />

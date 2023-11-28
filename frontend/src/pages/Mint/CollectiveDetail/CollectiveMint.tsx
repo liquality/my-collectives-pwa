@@ -16,12 +16,10 @@ export interface CollectiveMintProps
 
 const CollectiveChat: React.FC<CollectiveMintProps> = ({ match }) => {
   //const location = useLocation();
-  //const { groupId } = match.params;
-  const location = useLocation();
-  const groupId = getLastIndexOfPath(location.pathname);
+  const { groupId } = match.params;
   const { group } = useGetGroupById(groupId);
   const { pools, loading } = useGetPoolsByGroupId(groupId);
-  console.log(pools, "wats pools?");
+  console.log(pools, "wats pools?", groupId, "GroupID in CollectiveMints");
 
   return (
     <IonPage>

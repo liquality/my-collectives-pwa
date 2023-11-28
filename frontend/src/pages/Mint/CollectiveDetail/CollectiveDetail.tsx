@@ -22,8 +22,7 @@ const CollectiveDetail: React.FC<RouteComponentProps> = ({ match }) => {
   console.log(
     "groupId INSIDE COLLECTIVE DETAIL",
     "collective details",
-    match,
-    groupId
+    match.params
   );
 
   const { group, loading } = useGetGroupById(groupId);
@@ -39,7 +38,6 @@ const CollectiveDetail: React.FC<RouteComponentProps> = ({ match }) => {
     }
   }, [group]); */
 
-  console.log(pathConstants.collectiveDetail.info(groupId), "PATH ????");
   return (
     <IonPage>
       <IonContent className="ion-padding" color="light">
@@ -48,22 +46,17 @@ const CollectiveDetail: React.FC<RouteComponentProps> = ({ match }) => {
         ) : (
           <IonRouterOutlet className="app-page-router-outlet">
             <Route
-              path={pathConstants.collectiveDetail.info(groupId)}
+              path={pathConstants.collectiveDetail.info}
               component={CollectiveInfo}
             />
             <Route
-              path={pathConstants.collectiveDetail.chat(groupId)}
+              path={pathConstants.collectiveDetail.chat}
               component={CollectiveChat}
             />
             <Route
-              path={pathConstants.collectiveDetail.mints(groupId)}
+              path={pathConstants.collectiveDetail.mints}
               component={CollectiveMint}
             />
-            <Route
-              path={pathConstants.collectiveDetail.collectiveDetail(groupId)}
-            >
-              <Redirect to={pathConstants.collectiveDetail.mints(groupId)} />
-            </Route>
           </IonRouterOutlet>
         )}
       </IonContent>
