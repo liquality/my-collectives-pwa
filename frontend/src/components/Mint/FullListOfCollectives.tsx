@@ -18,7 +18,10 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
   const { user } = useSignInWallet();
 
   const handleClick = (group: any) => {
-    const url = pathConstants.collectiveDetail.mints.replace(':groupId', group.id )
+    const url = pathConstants.collectiveDetail.mints.replace(
+      ":groupId",
+      group.id
+    );
     router.push(url, "root");
   };
 
@@ -55,9 +58,7 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
                   </div>
                 </div>
               </div>
-              <div className="collective-card-right generic-grey-card">
-                <GenerateInviteBtn groupId={group.id} />
-              </div>
+              <div className="collective-card-right generic-grey-card"></div>
             </div>
           ))
         : null}

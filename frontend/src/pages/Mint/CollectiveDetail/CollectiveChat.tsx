@@ -1,11 +1,10 @@
 import { IonContent, IonPage } from "@ionic/react";
 import Header from "@/components/Header";
-import { RouteComponentProps, useLocation } from "react-router";
+import { RouteComponentProps } from "react-router";
 import CollectiveTopBar from "@/components/TopBars/CollectiveTopBar";
 import PageSearchBar from "@/components/PageSearchBar";
 import Chat from "@/components/Chat";
 import useGetGroupById from "@/hooks/Groups/useGetGroupById";
-import { getLastIndexOfPath } from "@/utils/routeNames";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 
 export interface CollectiveChatProps

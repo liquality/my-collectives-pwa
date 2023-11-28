@@ -23,3 +23,14 @@ export const cutOffTooLongString = (name: string, maxLength: number) => {
     return name?.slice(0, maxLength) + ' ...';
   }
 };
+
+export const handleCopyClick = (text: string) => {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      //("Text copied to clipboard: ", text);
+    })
+    .catch((error) => {
+      console.error("Failed to copy text: ", error);
+    });
+};

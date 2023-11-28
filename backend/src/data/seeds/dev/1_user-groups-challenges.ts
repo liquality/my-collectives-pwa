@@ -45,7 +45,6 @@ export async function seed(knex: Knex): Promise<void> {
         platform: "zora",
         expiration: "2024-07-02 13:23:12.322-0",
         totalMints: "14",
-        expired: ""
 
       },
       {
