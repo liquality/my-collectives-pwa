@@ -18,10 +18,10 @@ export const pathConstants = {
         index: "/rewards"
     },
     collectiveDetail: {
-        collectiveDetail: "/collectiveDetail/",
-        mints: "/collectiveDetail/mints/:groupId",
-        chat: "/collectiveDetail/chat/:groupId",
-        info: "/collectiveDetail/info/:groupId",
+        collectiveDetail: "/collectiveDetail",
+        mints: "/collectiveDetail/:groupId/mints",
+        chat: "/collectiveDetail/:groupId/chat",
+        info: "/collectiveDetail/:groupId/info",
     },
     invite: {
         index: "/invite"

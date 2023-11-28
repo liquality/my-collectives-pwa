@@ -46,7 +46,7 @@ const CollectiveDetail: React.FC<RouteComponentProps> = ({ match }) => {
         ) : (
           <IonRouterOutlet className="app-page-router-outlet">
             <Route
-              path={pathConstants.collectiveDetail.collectiveDetail}
+              path={pathConstants.collectiveDetail.info}
               component={CollectiveInfo}
             />
             <Route
@@ -57,9 +57,6 @@ const CollectiveDetail: React.FC<RouteComponentProps> = ({ match }) => {
               path={pathConstants.collectiveDetail.mints}
               component={CollectiveMint}
             />
-            <Route path={pathConstants.collectiveDetail.collectiveDetail}>
-              <Redirect to={pathConstants.collectiveDetail.mints} />
-            </Route>
           </IonRouterOutlet>
         )}
       </IonContent>
