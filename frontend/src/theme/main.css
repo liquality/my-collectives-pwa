@@ -678,7 +678,7 @@ ion-content.invite-page-link {
   word-wrap: break-word;
 }
 
-.message-area {
+.chat-styles ion-text-area {
   border-radius: 100px;
   background-color: var(--light-purple-background);
   min-height: 50px !important;
@@ -693,9 +693,9 @@ ion-content.invite-page-link {
   padding-top: 5px;
 }
 
-.message-area:focus ion-text-area {
+.chat-styles:focus ion-text-area {
   border-radius: 100px;
-  background-color: white !important;
+  background-color: white;
   min-height: 50px !important;
   border: 1px solid var(--buttons-active, #7700d5) !important;
   display: flex;

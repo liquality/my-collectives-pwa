@@ -1,10 +1,8 @@
 import useToast from "@/hooks/useToast";
-import ApiService from "@/services/ApiService";
 import InvitesService from "@/services/Invites";
 import { Group } from "@/types/chat";
-import { IonButton, IonIcon, IonText } from "@ionic/react";
-import { copy } from "ionicons/icons";
-import { useState } from "react";
+import { IonText } from "@ionic/react";
+
 interface InviteProps {
   groupId: string;
   setInviteLink: (invite: string) => void;
@@ -14,6 +12,7 @@ const GenerateInviteBtn = (props: InviteProps) => {
   const { groupId, setInviteLink, inviteLink } = props;
   const handleGenerateInvite = async () => {
     //presentToast(`You generated a invite link, click to copy!`);
+    //TODO: here it should give you the first invite to copy from userId and groupId
     const result = await InvitesService.createInvite({
       group_id: groupId,
     } as Partial<Group>);

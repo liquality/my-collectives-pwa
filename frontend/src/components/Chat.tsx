@@ -100,7 +100,7 @@ export const Chat = (props: ChatProps) => {
   };
 
   return (
-    <IonGrid>
+    <IonGrid className="chat-styles">
       <IonRow>
         <IonCol>
           <IonList lines="none">
