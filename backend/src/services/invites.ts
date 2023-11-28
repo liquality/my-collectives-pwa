@@ -101,12 +101,14 @@ export class InvitesService {
       .first<Invite>(this.joinSelect);
   }
 
-  public static findAllByGroup(id: string): Promise<Invite[]> {
+  public static findAllByGroup(id: string, userId: string, top: number = 1): Promise<Invite[]> {
     // TUDO: validate dates of expire at and userAt
     return this.joinQuery
       .where("invites.groupId", "=", id)
+      .andWhere("invites.userId", "=", userId)
       .whereNull("invites.usedAt")
-      .select(this.joinSelect);
+      .select(this.joinSelect)
+      .limit(top);
   }
 
   public static findAllByUser(id: string, groupId?: string): Promise<Invite[]> {

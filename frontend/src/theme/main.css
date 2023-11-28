@@ -52,6 +52,7 @@
   --warning-button: #dbaeff;
   --light-input-active-color: #f8f0ff;
   --white-light-grey: #e0e0e0;
+  --ion-app-color: #3D4767;
 }
 
 .ion-color-light {
@@ -132,7 +133,7 @@ ion-toolbar {
 
 .app-title-text {
   color: var(--ion-app-color);
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 800;
   line-height: 2.375rem;
@@ -629,6 +630,7 @@ ion-content.invite-page-link {
   color: var(--ion-color-primary) !important;
   --background: #ffffff;
 }
+
 .invite-page .invite-action-btn:hover,
 .invite-page .invite-action-btn:active {
   color: #ffffff !important;
@@ -639,6 +641,7 @@ ion-content.invite-page-link {
   color: #edd8ff !important;
   width: 100% !important;
 }
+
 .invite-page .invite-clear-btn:hover {
   color: #ffffff !important;
 }
