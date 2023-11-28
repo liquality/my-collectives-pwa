@@ -21,6 +21,7 @@ export class InviteController {
       }
     }
   };
+
   public findBycode: RequestHandler = async (req, res) => {
     const { code } = req.params;
     if (!code) {
@@ -41,12 +42,13 @@ export class InviteController {
   };
 
   public findAllByGroup: RequestHandler = async (req, res) => {
-    const { id } = req.params;
-    if (!id) {
-      res.status(400).send({ error: "group is required" });
+    const { id, userId } = req.params;
+    let _top = req.query.top ? Number(req.query.top) : 1;
+    if (!id || !userId) {
+      res.status(400).send({ error: "group and user are required" });
     } else {
       try {
-        const invites = await InvitesService.findAllByGroup(id);
+        const invites = await InvitesService.findAllByGroup(id, userId, _top);
 
         if (!invites) {
           res.status(404).send({ error: "invites not found" });
