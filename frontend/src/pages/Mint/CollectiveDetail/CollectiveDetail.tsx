@@ -46,25 +46,19 @@ const CollectiveDetail: React.FC<RouteComponentProps> = ({ match }) => {
         ) : (
           <IonRouterOutlet className="app-page-router-outlet">
             <Route
-              path={pathConstants.collectiveDetail + ":groupId"}
+              path={pathConstants.collectiveDetail.collectiveDetail}
               component={CollectiveInfo}
             />
             <Route
-              path={pathConstants.collectiveDetail.chat + ":groupId"}
+              path={pathConstants.collectiveDetail.chat}
               component={CollectiveChat}
             />
             <Route
-              path={pathConstants.collectiveDetail.mints + ":groupId"}
+              path={pathConstants.collectiveDetail.mints}
               component={CollectiveMint}
             />
-            <Route
-              path={
-                pathConstants.collectiveDetail.collectiveDetail + ":groupId"
-              }
-            >
-              <Redirect
-                to={pathConstants.collectiveDetail.mints + ":groupId"}
-              />
+            <Route path={pathConstants.collectiveDetail.collectiveDetail}>
+              <Redirect to={pathConstants.collectiveDetail.mints} />
             </Route>
           </IonRouterOutlet>
         )}

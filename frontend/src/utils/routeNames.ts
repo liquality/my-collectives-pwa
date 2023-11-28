@@ -19,9 +19,9 @@ export const pathConstants = {
     },
     collectiveDetail: {
         collectiveDetail: "/collectiveDetail/",
-        mints: "/collectiveDetail/mints/",
-        chat: "/collectiveDetail/chat/",
-        info: "/collectiveDetail/info/",
+        mints: "/collectiveDetail/mints/:groupId",
+        chat: "/collectiveDetail/chat/:groupId",
+        info: "/collectiveDetail/info/:groupId",
     },
     invite: {
         index: "/invite"

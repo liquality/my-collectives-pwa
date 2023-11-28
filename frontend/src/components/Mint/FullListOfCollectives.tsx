@@ -17,7 +17,7 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
   const { user } = useSignInWallet();
 
   const handleClick = (group: any) => {
-    router.push(`${pathConstants.collectiveDetail.mints}${group.id}`, "root");
+    router.push(`${pathConstants.collectiveDetail.mints}/${group.id}`, "root");
   };
 
   return (
