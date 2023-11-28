@@ -1,34 +1,30 @@
 import useToast from "@/hooks/useToast";
 import ApiService from "@/services/ApiService";
+import InvitesService from "@/services/Invites";
 import { Group } from "@/types/chat";
-import { IonButton, IonIcon } from "@ionic/react";
+import { IonButton, IonIcon, IonText } from "@ionic/react";
 import { copy } from "ionicons/icons";
 import { useState } from "react";
 interface InviteProps {
   groupId: string;
+  setInviteLink: (invite: string) => void;
+  inviteLink: string;
 }
 const GenerateInviteBtn = (props: InviteProps) => {
-  const { groupId } = props;
-  const [inviteLink, setInviteLink] = useState<string>("");
+  const { groupId, setInviteLink, inviteLink } = props;
   const handleGenerateInvite = async () => {
-    presentToast(`You generated a invite link, click to copy!`);
-    /*     const result = await ApiService.createInvite({
+    //presentToast(`You generated a invite link, click to copy!`);
+    const result = await InvitesService.createInvite({
       group_id: groupId,
     } as Partial<Group>);
-    setInviteLink(result.invite_link); */
+    console.log(result, "wats result?");
+    setInviteLink(result.invite_link);
   };
 
-  const { presentToast } = useToast();
+  //const { presentToast } = useToast();
 
   return (
-    <IonButton
-      fill="clear"
-      color="primary"
-      expand="block"
-      onClick={handleGenerateInvite}
-    >
-      Generate Invite
-    </IonButton>
+    <IonText onClick={handleGenerateInvite}>Invite</IonText>
 
     /*   <IonCard>
         {inviteLink ? `http://localhost:5173/invite/${inviteLink}` : null}

@@ -13,6 +13,7 @@ import {
   IonCol,
   IonGrid,
   IonIcon,
+  IonInput,
   IonItem,
   IonLabel,
   IonList,
@@ -77,7 +78,7 @@ export const Chat = (props: ChatProps) => {
   };
 
   const textStyle = {
-    color: myMessage ? "#fff" : "black",
+    color: "#fff",
     fontFeatureSettings: "clig off, liga off",
     fontFamily: "Anek Kannada",
     fontSize: "14px",
@@ -109,6 +110,8 @@ export const Chat = (props: ChatProps) => {
                 ? myMessageStyle
                 : notMyMessageStyle;
 
+              myMessage ? textStyle.color === "black" : textStyle.color;
+
               return (
                 <IonItem style={messageStyle} key={index}>
                   <IonLabel style={textStyle}>
@@ -123,26 +126,24 @@ export const Chat = (props: ChatProps) => {
           <IonList className="ion-padding">
             <IonItem lines="none">
               <IonTextarea
+                className="message-area"
                 onIonInput={(e) => setNewMessage(e.detail.value!)}
-                label="Message"
                 placeholder="Type a Message ..."
-                label-placement="floating"
                 value={newMessage}
                 autoGrow={true}
-                counter={true}
                 maxlength={150}
-                counterFormatter={(inputLength, maxLength) =>
+                /*                 counterFormatter={(inputLength, maxLength) =>
                   `${maxLength - inputLength} characters remaining`
-                }
+                } */
                 onKeyUp={(e) => {
                   if (e.key === "Enter") {
                     handleSendMessage();
                   }
                 }}
               ></IonTextarea>
-              <IonButton onClick={handleSendMessage} slot="end">
+              {/*       <IonButton onClick={handleSendMessage} slot="end">
                 <IonIcon slot="icon-only" icon={navigate}></IonIcon>
-              </IonButton>
+              </IonButton> */}
             </IonItem>
           </IonList>
         </IonCol>
