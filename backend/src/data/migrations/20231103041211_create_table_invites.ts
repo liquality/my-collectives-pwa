@@ -5,6 +5,7 @@ export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable("invites", (table) => {
     table.uuid('id').primary().defaultTo(knex.fn.uuid());
     table.string("code").nullable();
+    table.string("usedBy").nullable();
     table.dateTime("usedAt").nullable();
     table.dateTime("expireAt").nullable();
     table.uuid("groupId").notNullable();

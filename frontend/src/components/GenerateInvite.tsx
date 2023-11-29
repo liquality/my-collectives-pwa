@@ -1,6 +1,7 @@
 import { useSignInWallet } from "@/hooks/useSignInWallet";
 import useToast from "@/hooks/useToast";
 import ApiService from "@/services/ApiService";
+import InvitesService from "@/services/Invites";
 import { IonText } from "@ionic/react";
 
 interface InviteProps {
@@ -13,7 +14,10 @@ const GenerateInviteBtn = (props: InviteProps) => {
   const { user } = useSignInWallet();
   const handleGenerateInvite = async () => {
     //presentToast(`You generated a invite link, click to copy!`);
-    const result = await ApiService.getInvite(groupId, user.id);
+    const result = await InvitesService.getInviteByGroupIdAndUserId(
+      groupId,
+      user.id
+    );
     console.log(result, "result from inv");
     //TODO: get the link from ENV vars when frontend is hosted in prod
     setInviteLink(`http://localhost:5173/invite/${result[0].id}`);

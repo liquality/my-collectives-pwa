@@ -83,6 +83,7 @@ export class InviteController {
 
   public claim: RequestHandler = async (req, res) => {
     try {
+
       const { id } = req.params;
       const user = await AuthService.find((req as any).auth?.sub);
       const claim = await InvitesService.claim(id, user.id);
