@@ -52,7 +52,7 @@
   --warning-button: #dbaeff;
   --light-input-active-color: #f8f0ff;
   --white-light-grey: #e0e0e0;
-  --ion-app-color: #3D4767;
+  --ion-app-color: #3d4767;
 }
 
 .ion-color-light {
@@ -696,7 +696,7 @@ ion-content.invite-page-link {
   padding-top: 5px;
 }
 
-.chat-styles:focus ion-text-area {
+.chat-styles ion-text-area:focus {
   border-radius: 100px;
   background-color: white;
   min-height: 50px !important;

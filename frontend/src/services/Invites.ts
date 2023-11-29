@@ -12,9 +12,12 @@ const InvitesService = {
     return NetworkService.getResourceWithAuth(`/v1/invites/code/${code}`);
   },
   claim: async function (id: string, publicAddress: string) {
-    return NetworkService.postResourceWithAuth(`/v1/invites/${id}`, {
+    return NetworkService.postResourceWithAuth(`/v1/invites/${id}/claim`, {
       publicAddress
     });
+  },
+  getInviteByGroupIdAndUserId: async function (groupId: string, userId: string) {
+    return NetworkService.getResourceWithAuth(`/v1/invites/group/${groupId}/user/${userId}`);
   },
 };
 
