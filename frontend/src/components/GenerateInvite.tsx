@@ -18,7 +18,6 @@ const GenerateInviteBtn = (props: InviteProps) => {
       groupId,
       user.id
     );
-    console.log(result, "result from inv");
     //TODO: get the link from ENV vars when frontend is hosted in prod
     setInviteLink(`http://localhost:5173/invite/${result[0].id}`);
   };

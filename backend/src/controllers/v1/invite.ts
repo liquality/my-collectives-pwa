@@ -43,11 +43,13 @@ export class InviteController {
 
   public findAllByGroup: RequestHandler = async (req, res) => {
     const { id, userId } = req.params;
+    console.log(id, userId, 'Inside find all by group')
     let _top = req.query.top ? Number(req.query.top) : 1;
     if (!id || !userId) {
       res.status(400).send({ error: "group and user are required" });
     } else {
       try {
+        console.log('GETTING HERE')
         const invites = await InvitesService.findAllByGroup(id, userId, _top);
         console.log(invites, 'wats invite?', req.params)
 
