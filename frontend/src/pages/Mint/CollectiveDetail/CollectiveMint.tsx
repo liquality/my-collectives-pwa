@@ -26,7 +26,7 @@ const CollectiveChat: React.FC<CollectiveMintProps> = ({ match }) => {
           <PageSearchBar />
         </CollectiveTopBar>
         {pools && !loading ? (
-          <PoolsGrid pools={pools} />
+          <PoolsGrid loading={loading} pools={pools} />
         ) : (
           <PageLoadingIndicator />
         )}
