@@ -1,6 +1,6 @@
 import { Auth } from "@/utils";
 const serverAddress =
-  /*  import.meta.env.VITE_SERVER_ADDRESS || */ "http://localhost:3000";
+  import.meta.env.VITE_SERVER_ADDRESS || "http://localhost:3000";
 
 const NetworkService = {
   getResource: function (url) {
