@@ -16,7 +16,7 @@ const GenerateInviteBtn = (props: InviteProps) => {
     const result = await ApiService.getInvite(groupId, user.id);
     console.log(result, "result from inv");
     //TODO: get the link from ENV vars when frontend is hosted in prod
-    setInviteLink(`http://localhost:5173/invite/${result[0].code}`);
+    setInviteLink(`http://localhost:5173/invite/${result[0].id}`);
   };
 
   //const { presentToast } = useToast();
