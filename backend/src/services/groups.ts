@@ -61,10 +61,6 @@ export class GroupsService {
   }
 
 
-
-
-
-
   public static async findByUserAddress(address: string): Promise<Group[]> {
     return dbClient("groups")
       .join("user_groups", "groups.id", "=", "user_groups.groupId")
