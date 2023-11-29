@@ -3,9 +3,16 @@ import { IonGrid, IonRow, IonCol, IonProgressBar } from "@ionic/react";
 import React from "react";
 import { PageLoadingIndicator } from "../PageLoadingIndicator";
 import PoolItemCard from "./PoolItemCard";
+import { Pool } from "@/types/challenges";
 
 //TODO: add pool type
-const PoolsGrid: React.FC = ({ pools, loading }: any) => {
+interface PoolsGridProps {
+  pools: Pool[];
+  loading: boolean;
+}
+
+const PoolsGrid: React.FC<PoolsGridProps> = (props) => {
+  const { pools, loading } = props;
   console.log(pools, "Pools in props?");
   return (
     <IonGrid>
