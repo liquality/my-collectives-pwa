@@ -37,7 +37,6 @@ import { publicProvider } from "wagmi/providers/public";
 import { mainnet } from "wagmi/chains";
 import { baseGoerli } from "wagmi/chains";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Challenge from "./pages/Mint/Challenge";
 import Rewards from "./pages/Rewards";
 import { useSignInWallet } from "./hooks/useSignInWallet";
 import { isPlatform } from "@ionic/react";
@@ -110,8 +109,7 @@ const App: React.FC = () => {
       />
 
       <Route path="/mint" component={Mint} />
-      <Route path="/challenges" render={() => <Challenges />} exact />
-      <Route path="/challenge/:id" render={() => <Challenge />} exact />
+      <Route path="/challenges/:id?" component={Challenges}/>
 
       {/* Default route (not requiring authentication) */}
       <Route exact path="/">

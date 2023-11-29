@@ -449,9 +449,6 @@ ion-toolbar {
   letter-spacing: 0.5px;
 }
 
-ion-button {
-  width: 50% !important;
-}
 
 .grey-container {
   background-color: var(--container-grey);
