@@ -128,13 +128,6 @@ const CreatePool: React.FC<RouteComponentProps> = ({ match }) => {
               placeholder="Length (Days)"
             ></IonInput>
           </IonItem>
-          <IonItem>
-            <IonTextarea
-              label="Terms"
-              label-placement="floating"
-              placeholder="Enter the Terms"
-            ></IonTextarea>
-          </IonItem>
         </IonList>
       </IonContent>
     </IonPage>

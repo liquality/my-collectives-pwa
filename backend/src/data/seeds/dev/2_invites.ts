@@ -6,7 +6,7 @@ export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
     await trx("invites").del();
 
-    const publicAddress = "0x2De315AE6abAfE5ee6101DD13802736977E4f700";
+    const publicAddress = "0xe7910F0b83ad155737043c771E2594f74B0BB739";
     let user = await AuthService.findByAddress(publicAddress);
 
     const uniqueCodes = [...Array(100).keys()]

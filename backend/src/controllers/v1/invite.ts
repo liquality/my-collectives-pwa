@@ -49,6 +49,7 @@ export class InviteController {
     } else {
       try {
         const invites = await InvitesService.findAllByGroup(id, userId, _top);
+        console.log(invites, 'wats invite?', req.params)
 
         if (!invites) {
           res.status(404).send({ error: "invites not found" });

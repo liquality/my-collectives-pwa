@@ -91,6 +91,13 @@ const ApiService = {
       publicAddress,
     });
   },
+
+
+  getInvite: async function (groupId: string, userId: string) {
+    return NetworkService.getResourceWithAuth(`/v1/invites/group/${groupId}/user/${userId}`);
+  },
+
+
 };
 
 export default ApiService;

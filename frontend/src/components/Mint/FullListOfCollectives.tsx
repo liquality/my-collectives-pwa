@@ -4,6 +4,7 @@ import { shortenAddress } from "@/utils";
 import { pathConstants } from "@/utils/routeNames";
 import { useIonRouter, IonAvatar } from "@ionic/react";
 import React, { useState } from "react";
+import GenerateInviteBtn from "../GenerateInvite";
 
 export interface ChallengeItemCardProps {
   myGroups: Group[] | null;
@@ -17,7 +18,11 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
   const { user } = useSignInWallet();
 
   const handleClick = (group: any) => {
-    router.push(pathConstants.collectiveDetail.collectiveDetail(group.id));
+    const url = pathConstants.collectiveDetail.mints.replace(
+      ":groupId",
+      group.id
+    );
+    router.push(url, "root");
   };
 
   return (
