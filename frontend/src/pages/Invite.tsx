@@ -63,7 +63,6 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
     setProcessing(false);
   }
 
-  console.log(processing, "processing?");
   useEffect(() => {
     if (user) {
       //TODO: Imo not great UX to auto-join, so commented out for now

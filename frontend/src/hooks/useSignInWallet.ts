@@ -82,65 +82,6 @@ export function useSignInWallet() {
 
   };
 
-  // --------------------------- Johannas Note: Keeping the old code here in case we need it ------------------------------------
-  // TODO: check if we need this handler
-  // useEffect(() => {
-  //   const handleConnectorUpdate = ({ account, chain }: ConnectorData) => {
-  //     if (account) {
-  //       console.log("new account", account);
-  //     } else if (chain) {
-  //       // TODO: will need to validate if we want to use a single chain or not
-  //       console.log("new chain", chain);
-  //     }
-  //   };
 
-  //   if (activeConnector) {
-  //     activeConnector.on("change", handleConnectorUpdate);
-  //   }
-
-  //   return () => {
-  //     activeConnector?.off("change", handleConnectorUpdate);
-  //   };
-  // }, [activeConnector]);
-
-  /*   useEffect(() => {
-      if (address && !isAuthenticated) {
-        if (Auth.isAuthenticated) {
-          setIsAuthenticated(true);
-        } else {
-          getUser();
-        }
-      } else {
-        Auth.clearAccessToken();
-        setIsAuthenticated(false);
-      }
-    }, [address]); */
-
-  // SIGN MESSAGE FOR AUTH
-  /*  useEffect(() => {
-     if (
-       user &&
-       !isAuthenticated &&
-       !isLoading &&
-       walletClient &&
-       !signedMessage
-     ) {
-       signMessage({ message: user.nonce });
-     }
-   }, [user, isLoading, walletClient]);
-  
-   // LOGIN HTTP CALL
-   useEffect(() => {
-  
-  
-     if (signedMessage && isSuccess) {
-       login();
-     } else if (isError) {
-       disconnect();
-       setIsAuthenticated(false);
-       setUser(null);
-     }
-   }, [signedMessage, isSuccess, isError]);
-  */
   return { user };
 } 
