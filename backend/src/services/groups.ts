@@ -1,6 +1,6 @@
 import { dbClient } from "../data";
 import { Challenge } from "../models/challenges";
-import { Group, CreateGroupRequest } from "../models/group";
+import { Group, CreateGroupRequest, GroupAllInfo } from "../models/group";
 import { giveUserInvitesForGroup } from "../utils";
 
 export class GroupsService {
@@ -61,20 +61,41 @@ export class GroupsService {
   }
 
 
-  public static async findByUserAddress(address: string): Promise<Group[]> {
-    return dbClient("groups")
-      .join("user_groups", "groups.id", "=", "user_groups.groupId")
-      .join("users", "users.id", "=", "user_groups.userId")
-      .where("users.publicAddress", "=", address)
-      .select<Group[]>(
-        "groups.id",
-        "groups.name",
-        "groups.description",
-        "groups.publicAddress",
-        "groups.createdAt",
-        "groups.createdBy"
-      );
+
+
+  public static async findByUserAddress(address: string): Promise<any[]> {
+    const result = await dbClient('groups')
+      .leftJoin('user_groups', 'groups.id', '=', 'user_groups.groupId')
+      .leftJoin('users', 'users.id', '=', 'user_groups.userId')
+      .leftJoin('pools', 'pools.groupId', '=', 'groups.id')
+      .where('users.publicAddress', '=', address)
+      .groupBy('groups.id')
+      .select([
+        'groups.id',
+        'groups.name',
+        'groups.description',
+        'groups.publicAddress',
+        'groups.createdAt',
+        'groups.createdBy',
+      ])
+      .countDistinct({ memberCount: 'user_groups.userId' })
+      .countDistinct({ poolsCount: 'pools.id' })
+      .orderBy('groups.createdAt', 'desc');
+
+    console.log(result, 'wats result?')
+
+    /*  const transformedResult: GroupAllInfo[] = result.map((item) => ({
+       id: item.id as string,
+       name: item.name as string,
+       publicAddress: item.publicAddress as string,
+       poolsCount: item.poolsCount ? +item.poolsCount : 0,
+       membersCount: item.memberCount ? +item.memberCount : 0,
+     })); */
+
+    return result
   }
+
+
 
   public static async findMembers(id: string): Promise<Group[]> {
     return dbClient("groups")

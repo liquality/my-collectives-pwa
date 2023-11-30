@@ -3,9 +3,21 @@ export interface Group {
   name: string;
   description?: string;
   publicAddress: string;
-  rewards: number;
+
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+export interface GroupAllInfo {
+  poolsCount: number
+  membersCount: number
+  id: string;
+  name: string;
+  description?: string;
+  publicAddress: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+
 }
 
 export interface CreateGroupRequest {
