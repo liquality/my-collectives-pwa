@@ -43,7 +43,6 @@ export const Chat = (props: ChatProps) => {
       setMessages(chatHistory);
     }
     socket.on("messageCreation", (data) => {
-      console.log(data, "IN WEBSOCKT BÄÄ");
       setMessages((prevMessages) => [...prevMessages, data]);
     });
 
@@ -59,7 +58,6 @@ export const Chat = (props: ChatProps) => {
           content: newMessage,
           groupId,
         };
-        console.log(message, "");
         const postMessage = await ApiService.createMessage(message);
         console.log(postMessage);
       } catch (error) {
@@ -69,7 +67,6 @@ export const Chat = (props: ChatProps) => {
     }
   };
 
-  let myMessage;
   let myMessageStyle = {
     display: "inline-flex",
     padding: "2px 6px",
@@ -107,7 +104,6 @@ export const Chat = (props: ChatProps) => {
         <IonCol>
           <IonList lines="none">
             {messages.map((message, index) => {
-              console.log(message, "ITEM IN MAP");
               const myMessage =
                 message.userAddress === address || user.id === message.userId;
               const messageStyle = myMessage

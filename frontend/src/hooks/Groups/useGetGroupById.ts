@@ -9,7 +9,7 @@ export function useGetGroupById(groupId: string) {
   useEffect(() => {
     const fetchGroup = async () => {
       try {
-        if (!group || group?.id !== groupId) {
+        if ((!group || (group?.id !== groupId)) && groupId) {
           setLoading(true);
           const _group: Group = await ApiService.readGroup(groupId);
 
