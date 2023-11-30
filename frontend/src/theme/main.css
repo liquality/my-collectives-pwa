@@ -806,3 +806,13 @@ ion-content.invite-page-link {
   line-height: 20px;
   letter-spacing: 0.75px;
 }
+
+.active-pools-container {
+  border-radius: 11px;
+  background: var(--buttons-hover, #ba62fe);
+  width: 37.579px;
+  height: 18px;
+  color: white;
+  font-size: 15px;
+  padding-left: 5px;
+}
