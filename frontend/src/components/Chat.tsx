@@ -24,6 +24,8 @@ import {
 } from "@ionic/react";
 import { navigate } from "ionicons/icons";
 import { shortenAddress } from "@/utils";
+import { useSignInWallet } from "@/hooks/useSignInWallet";
+import { PageLoadingIndicator } from "./PageLoadingIndicator";
 
 interface ChatProps {
   group: Group;
@@ -34,12 +36,14 @@ export const Chat = (props: ChatProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const { chatHistory, loading } = useChatHistory(groupId);
   const { address } = useAccount();
+  const { user } = useSignInWallet();
 
   useEffect(() => {
     if (chatHistory) {
       setMessages(chatHistory);
     }
     socket.on("messageCreation", (data) => {
+      console.log(data, "IN WEBSOCKT BÄÄ");
       setMessages((prevMessages) => [...prevMessages, data]);
     });
 
@@ -49,7 +53,6 @@ export const Chat = (props: ChatProps) => {
   }, [chatHistory]);
 
   const handleSendMessage = async () => {
-    console.log(newMessage, "Come hjere");
     if (newMessage) {
       try {
         const message = {
@@ -58,7 +61,6 @@ export const Chat = (props: ChatProps) => {
         };
         console.log(message, "");
         const postMessage = await ApiService.createMessage(message);
-        console.log(postMessage, "POST MSG??");
         console.log(postMessage);
       } catch (error) {
         console.error("Error sending message:", error);
@@ -99,24 +101,26 @@ export const Chat = (props: ChatProps) => {
     marginLeft: "calc(100% - 260px)",
   };
 
-  return (
+  return address ? (
     <IonGrid className="chat-styles">
       <IonRow>
         <IonCol>
           <IonList lines="none">
             {messages.map((message, index) => {
-              const myMessage = message.userAddress === address;
+              console.log(message, "ITEM IN MAP");
+              const myMessage =
+                message.userAddress === address || user.id === message.userId;
               const messageStyle = myMessage
                 ? myMessageStyle
                 : notMyMessageStyle;
 
-              myMessage ? textStyle.color === "black" : textStyle.color;
+              const textColor = myMessage ? textStyle.color : "black";
 
               return (
                 <IonItem style={messageStyle} key={index}>
-                  <IonLabel style={textStyle}>
-                    {shortenAddress(message.userAddress)}
-                    <p style={textStyle}>{message.content}</p>
+                  <IonLabel style={{ color: textColor }}>
+                    {shortenAddress(myMessage ? address : message.userAddress)}
+                    <p style={{ color: textColor }}>{message.content}</p>
                   </IonLabel>
                 </IonItem>
               );
@@ -132,23 +136,19 @@ export const Chat = (props: ChatProps) => {
                 value={newMessage}
                 autoGrow={true}
                 maxlength={150}
-                /*                 counterFormatter={(inputLength, maxLength) =>
-                  `${maxLength - inputLength} characters remaining`
-                } */
                 onKeyUp={(e) => {
                   if (e.key === "Enter") {
                     handleSendMessage();
                   }
                 }}
               ></IonTextarea>
-              {/*       <IonButton onClick={handleSendMessage} slot="end">
-                <IonIcon slot="icon-only" icon={navigate}></IonIcon>
-              </IonButton> */}
             </IonItem>
           </IonList>
         </IonCol>
       </IonRow>
     </IonGrid>
+  ) : (
+    <PageLoadingIndicator />
   );
 };
 
