@@ -98,7 +98,7 @@ export const Chat = (props: ChatProps) => {
     marginLeft: "calc(100% - 260px)",
   };
 
-  return address ? (
+  return address && user ? (
     <IonGrid className="chat-styles">
       <IonRow>
         <IonCol>

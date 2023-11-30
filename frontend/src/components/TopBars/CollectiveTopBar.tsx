@@ -14,7 +14,7 @@ const CollectiveTopBar: React.FC<DiscoverTopBarProps> = ({ children }) => {
     <PageTopBar
       tabs={[
         {
-          label: `Mint | ${pools?.length}`,
+          label: `Mint | ${loading ? " " : pools?.length}`,
           href: pathConstants.collectiveDetail.mints.replace(
             ":groupId",
             groupId
