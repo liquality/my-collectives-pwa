@@ -14,7 +14,6 @@ middleware.authenticateJWT = (req: Request, res: Response, next: NextFunction) =
   if (!token) {
     return res.status(401).json({ error: 'No token provided' });
   }
-
   // TODO: add secret in env variable/config file
   jwt.verify(token, 'my-secret', (err, user) => {
     if (err) {

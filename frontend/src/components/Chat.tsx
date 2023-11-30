@@ -1,28 +1,19 @@
-import React, { FormEvent, useEffect, useState } from "react";
-import "../theme/chat-box.css";
+import { useEffect, useState } from "react";
 //@ts-ignore
 import ApiService from "../services/ApiService";
 import { Group, Message } from "@/types/chat";
-import GenerateInvite from "./GenerateInvite";
 import { useChatHistory } from "@/hooks/useChatHistory";
 import socket from "../services/SocketService"; // Import the socket instance
 import { useAccount } from "wagmi";
 import {
-  IonAvatar,
-  IonButton,
   IonCol,
   IonGrid,
-  IonIcon,
-  IonInput,
   IonItem,
   IonLabel,
   IonList,
-  IonListHeader,
-  IonNote,
   IonRow,
   IonTextarea,
 } from "@ionic/react";
-import { navigate } from "ionicons/icons";
 import { shortenAddress } from "@/utils";
 import { useSignInWallet } from "@/hooks/useSignInWallet";
 import { PageLoadingIndicator } from "./PageLoadingIndicator";
