@@ -1,6 +1,9 @@
 import { Knex } from "knex";
 import path from "path";
+import dotenv from "dotenv";
 
+dotenv.config( { path: path.resolve(__dirname, "..", "..", ".env") } );
+const env = process.env.NODE_ENV || "development";
 const config: { [key: string]: Knex.Config } = {
   development: {
     client: "pg",
@@ -15,7 +18,7 @@ const config: { [key: string]: Knex.Config } = {
       directory: path.resolve(__dirname, "..", "data", "migrations")
     },
     seeds: {
-      directory: path.resolve(__dirname, "..", "data", "seeds")
+      directory: path.resolve(__dirname, "..", "data", "seeds", "dev")
     }
   },
   test: {
@@ -29,6 +32,9 @@ const config: { [key: string]: Knex.Config } = {
     },
     migrations: {
       directory: path.resolve(__dirname, "..", "data", "migrations")
+    },
+    seeds: {
+      directory: path.resolve(__dirname, "..", "data", "seeds", "test")
     }
   },
   production: {
@@ -37,13 +43,16 @@ const config: { [key: string]: Knex.Config } = {
       user: process.env.PROD_DB_USERNAME,
       password: process.env.PROD_DB_PASSWORD,
       database: process.env.PROD_DB_NAME,
-      host: process.env.PROD_DB_HOSTNAME,
-      port: Number(process.env.PROD_DB_PORT) || 3306,
+      host: process.env.PROD_DB_HOST,
+      port: Number(process.env.PROD_DB_PORT) || 5432,
     },
     migrations: {
       directory: path.resolve(__dirname, "..", "data", "migrations")
+    },
+    seeds: {
+      directory: path.resolve(__dirname, "..", "data", "seeds", "prod")
     }
   },
 };
-
-export default config;
+console.log(`using environment: ${env}`);
+export default config[env];

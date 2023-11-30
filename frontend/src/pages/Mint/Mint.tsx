@@ -4,31 +4,30 @@ import {
   IonRouterOutlet,
   useIonRouter,
 } from "@ionic/react";
-import { useEffect } from "react";
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
-import { Redirect, Route, RouteComponentProps } from "react-router";
-import MintGroupsContent from "./MintGroupsContent";
+import {
+  Redirect,
+  Route,
+  RouteComponentProps,
+  useLocation,
+  useParams,
+} from "react-router";
+import MintCollectiveContent from "./MintCollectiveContent";
 import NoGroups from "./NoGroups";
 import CreateCollective from "./CreateCollective";
 import ManageCollective from "./ManageCollective";
-import { routes } from "@/utils/routeNames";
+import { pathConstants } from "@/utils/routeNames";
 import CollectiveInvites from "./CollectiveInvites";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
+import { useEffect } from "react";
 
 const Mint: React.FC<RouteComponentProps> = ({ match }) => {
   const { myGroups, loading } = useGetMyGroups();
   const router = useIonRouter();
 
+  const location = useLocation();
+
   //TODO: make the logic for this more bug-proof
-  useEffect(() => {
-    if (!loading) {
-      if (myGroups && myGroups.length > 0) {
-        router.push(routes.mintPage.myCollectives);
-      } else if (myGroups && !myGroups.length) {
-        router.push(routes.mintPage.noCollectives);
-      }
-    }
-  }, [myGroups]);
 
   return (
     <IonPage>
@@ -38,37 +37,35 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
         ) : (
           <IonRouterOutlet className="app-page-router-outlet">
             <Route
-              path={routes.mintPage.createCollective}
+              path={pathConstants.mintPage.createCollective}
               component={CreateCollective}
               exact
             />
             <Route
-              path={routes.mintPage.manageCollective}
+              path={pathConstants.mintPage.manageCollective}
               component={ManageCollective}
               exact
             />
             <Route
-              path={routes.mintPage.myCollectives}
-              component={MintGroupsContent}
+              path={pathConstants.mintPage.myCollectives}
+              component={MintCollectiveContent}
               exact
             />
             <Route
-              path={routes.mintPage.noCollectives}
+              path={pathConstants.mintPage.noCollectives}
               component={NoGroups}
               exact
             />
             <Route
-              path={routes.mintPage.collectiveInvites}
+              path={pathConstants.mintPage.collectiveInvites}
               component={CollectiveInvites}
               exact
             />
 
-            <Route exact path={routes.mintPage.mint}>
+            <Route exact path={pathConstants.mintPage.mint}>
               <Redirect
                 to={
-                  myGroups
-                    ? routes.mintPage.myCollectives
-                    : routes.mintPage.noCollectives
+                  pathConstants.mintPage.myCollectives //mintCollectiveContent
                 }
               />
             </Route>

@@ -1,5 +1,6 @@
+import { Auth } from "@/utils";
 const serverAddress =
-  import.meta.env.VITE_SERVER_ADDRESS || "http://localhost:3000";
+  import.meta.env.VITE_SERVER_PRODUCTION_URL || "http://localhost:3000";
 
 const NetworkService = {
   getResource: function (url) {
@@ -35,9 +36,9 @@ const NetworkService = {
           "Content-Type": "application/json",
         },
       };
-      const accessToken = localStorage.getItem("groupMints.accessToken");
-      if (accessToken) {
-        request.headers["Authorization"] = "Bearer " + accessToken;
+
+      if (Auth.isAuthenticated) {
+        request.headers["Authorization"] = "Bearer " + Auth.accessToken;
       }
       fetch(serverAddress + url, request)
         .then((response) => {
@@ -58,9 +59,8 @@ const NetworkService = {
         Accept: "application/json",
         "Content-Type": "application/json",
       };
-      const accessToken = localStorage.getItem("groupMints.accessToken");
-      if (accessToken) {
-        headers["Authorization"] = "Bearer " + accessToken;
+      if (Auth.isAuthenticated) {
+        headers["Authorization"] = "Bearer " + Auth.accessToken;
       }
 
       let request = {
@@ -90,9 +90,8 @@ const NetworkService = {
         "Content-Type": "application/json",
       };
 
-      const accessToken = localStorage.getItem("groupMints.accessToken");
-      if (accessToken) {
-        headers["Authorization"] = "Bearer " + accessToken;
+      if (Auth.isAuthenticated) {
+        headers["Authorization"] = "Bearer " + Auth.accessToken;
       }
 
       let request = {
@@ -120,8 +119,7 @@ const NetworkService = {
       if (response.ok) {
         return response.json();
       } else if (response.status === 401) {
-        localStorage.removeItem("groupMints.accessToken");
-        localStorage.removeItem("groupMints.user");
+        Auth.clearAccessToken();
       }
 
       return null;

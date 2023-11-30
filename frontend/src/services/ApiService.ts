@@ -2,7 +2,7 @@ import { Message, Group, GroupCreation } from "@/types/chat";
 //@ts-ignore
 import NetworkService from "./NetworkService";
 import { Challenge, ChallengeCreation } from "@/types/challenges";
-
+import { Auth } from "@/utils";
 const ApiService = {
   createGroup: async function (groupObject: any) {
     return NetworkService.postResourceWithAuth("/v1/groups/", groupObject,);
@@ -21,15 +21,18 @@ const ApiService = {
   },
 
   readGroupByMemberAddress: async function (memberAddress: string) {
-    const accessToken = localStorage.getItem("groupMints.accessToken");
     return NetworkService.getResourceWithAuth(
       `/v1/groups/address/${memberAddress}`,
-      accessToken
+      Auth.accessToken
     );
   },
 
   readPools: async function () {
     return NetworkService.getResourceWithAuth("/v1/pools");
+  },
+
+  readPoolsByGroupId: async function (groupId: string) {
+    return NetworkService.getResourceWithAuth("/v1/pools/group/" + groupId);
   },
 
   readChallenges: async function () {
@@ -46,11 +49,10 @@ const ApiService = {
   },
 
   createMessage: async function (messageObject: any) {
-    const accessToken = localStorage.getItem("groupMints.accessToken");
     return NetworkService.postResourceWithAuth(
       "/v1/chat/message",
       messageObject,
-      accessToken
+      Auth.accessToken
     );
   },
 
@@ -89,6 +91,11 @@ const ApiService = {
       publicAddress,
     });
   },
+
+
+
+
+
 };
 
 export default ApiService;

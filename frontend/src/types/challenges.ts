@@ -22,3 +22,13 @@ export interface Challenge {
     creatorOfMint: string,
 }
 
+
+export interface Pool {
+    id: string;
+    groupId: string;
+    mintingContractAddress?: string;
+    chainId?: number;
+    createdAt: Date;
+    tokenId: string;
+}
+

@@ -38,9 +38,10 @@ export class ChallengesController {
         //const user = await AuthService.find((req as any).auth?.sub);
 
         //TODO: add back auth (it did not work)
+        console.log(req.body, 'REQ BODY?')
         try {
             const challenge = await ChallengesService.create(
-                req.body,
+                req.body
                 //user.id
             );
 

@@ -1,4 +1,6 @@
-export const routes = {
+
+
+export const pathConstants = {
     mintPage: {
         mint: "/mint",
         myCollectives: "/mint/collectiveContent",
@@ -14,5 +16,23 @@ export const routes = {
     },
     rewards: {
         index: "/rewards"
+    },
+    collectiveDetail: {
+        collectiveDetail: "/collectiveDetail",
+        mints: "/collectiveDetail/:groupId/mints",
+        chat: "/collectiveDetail/:groupId/chat",
+        info: "/collectiveDetail/:groupId/info",
+    },
+    invite: {
+        index: "/invite"
     }
 }
+
+export const getLastIndexOfPath = (pathname: string) => {
+    const groupId = pathname.substring(
+        pathname.lastIndexOf("/") + 1
+    );
+    return groupId
+}
+
+

@@ -16,8 +16,15 @@ import {
 import React from "react";
 import useIsActiveRoute from "@/hooks/useIsActiveRoute";
 
-const SideBarMenu: React.FC = () => {
+export interface SideBarMenuProps {
+  hideOn?: string[]
+}
+const SideBarMenu: React.FC<SideBarMenuProps> = ({ hideOn }: SideBarMenuProps ) => {
   const isActive = useIsActiveRoute();
+  if(hideOn?.some(path => isActive(path))) {
+    return null
+  }
+
   return (
     <IonMenu type="push" contentId="main-content">
       <IonHeader className="ion-padding ion-no-border">

@@ -45,6 +45,8 @@ export class GroupsController {
       res.status(400).send({ error: "name is required" });
     } else {
       try {
+        console.log(group, pools, user, 'USER ID')
+
         const createdGroup = await GroupsService.create(
           group, pools, user.id
         );
@@ -55,6 +57,7 @@ export class GroupsController {
 
         res.status(200).send(createdGroup);
       } catch (err: any) {
+        console.error(err)
         res.status(500).send({ error: err.message });
       }
     }

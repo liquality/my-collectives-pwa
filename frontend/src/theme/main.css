@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Anek+Kannada:wght@100;300;400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Anek+Kannada:wght@100;300;400;500;600;800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;300;500&display=swap");
 
 * {
@@ -52,6 +52,7 @@
   --warning-button: #dbaeff;
   --light-input-active-color: #f8f0ff;
   --white-light-grey: #e0e0e0;
+  --ion-app-color: #3d4767;
 }
 
 .ion-color-light {
@@ -132,7 +133,7 @@ ion-toolbar {
 
 .app-title-text {
   color: var(--ion-app-color);
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 800;
   line-height: 2.375rem;
@@ -254,9 +255,9 @@ ion-toolbar {
 }
 
 .card-img-swiper {
-  margin: 0 !important;
-  width: 100% !important;
-  margin-inline: 0 !important;
+  margin: 0;
+  width: 100%;
+  margin-inline: 0;
   background-color: #f8f8f8 !important;
   border-radius: 0.938rem;
   height: 14.563rem !important;
@@ -265,6 +266,19 @@ ion-toolbar {
 
 .card-img-swiper ion-card-header {
   padding: 0.3rem 0.3rem 0 0.5rem;
+}
+
+.filter-img {
+  filter: blur(10px) !important;
+  filter: brightness(0.4) !important;
+  /*   filter: contrast(200%);
+  filter: drop-shadow(16px 16px 20px blue);
+  filter: grayscale(50%); */
+  filter: hue-rotate(90deg) !important;
+  /* filter: invert(75%);
+  filter: opacity(25%);
+  filter: saturate(30%);
+  filter: sepia(60%); */
 }
 
 .card-img-swiper ion-card-title {
@@ -379,6 +393,10 @@ ion-toolbar {
   --padding-start: 0rem !important;
   --padding-end: 0rem !important;
   width: 100% !important;
+}
+
+.app-page-top-bar ion-buttons ion-button:first-child {
+  --padding-start: 0.8rem !important;
 }
 
 .app-page-top-tab-button:hover,
@@ -543,4 +561,248 @@ ion-button {
   font-size: 12px;
   letter-spacing: 0.5px;
   padding-right: 5%;
+}
+
+/* Invite page */
+ion-content.invite-page-code {
+  --background: linear-gradient(0deg, #4483b0 0%, #853de0 46.35%, #c87ff2 100%);
+  --color: #ffffff;
+}
+
+ion-content.invite-page-link {
+  --background: linear-gradient(
+    180deg,
+    #823aba 0%,
+    #6f48c4 53.13%,
+    #b454cc 100%
+  );
+  --color: #ffffff;
+}
+
+.invite-page .invite-content {
+  max-width: 43.75rem;
+}
+
+.invite-page .title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 2.375rem;
+  letter-spacing: 0.016rem;
+}
+
+.invite-page .title .tech {
+  font-size: 1.25rem;
+}
+
+.invite-page .subtitle {
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 0.688rem;
+  letter-spacing: 0.031rem;
+}
+
+.invite-page .greetings {
+  text-transform: uppercase;
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.125rem;
+  letter-spacing: 0.031rem;
+  word-wrap: break-word;
+}
+
+.invite-page .message {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1rem;
+  letter-spacing: 0.031rem;
+}
+
+.invite-page .greetings-icon {
+  width: 3rem !important;
+  height: 3rem !important;
+}
+
+.invite-page .helper-text {
+  color: #ffffff !important;
+}
+
+.invite-page .invite-action-btn {
+  color: var(--ion-color-primary) !important;
+  --background: #ffffff;
+}
+
+.invite-page .invite-action-btn:hover,
+.invite-page .invite-action-btn:active {
+  color: #ffffff !important;
+  --background: var(--ion-color-primary);
+}
+
+.invite-page .invite-clear-btn {
+  color: #edd8ff !important;
+  width: 100% !important;
+}
+
+.invite-page .invite-clear-btn:hover {
+  color: #ffffff !important;
+}
+
+.invite-page .invite-group-details {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 1rem;
+  border: 1px #f0e3fb solid;
+  padding: 1rem 2rem;
+}
+
+.invite-page .invite-group-details .group-name {
+  text-transform: uppercase;
+  color: #f8f0ff;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.125rem;
+  letter-spacing: 0.031rem;
+  word-wrap: break-word;
+}
+
+.invite-page .invite-group-details .group-desc {
+  color: white;
+  font-size: 0.938rem;
+  font-weight: 400;
+  line-height: 1.125rem;
+  letter-spacing: 0.031rem;
+  word-wrap: break-word;
+}
+
+.invite-page .invite-footer-text {
+  color: #f5f5f5;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  letter-spacing: 0.047rem;
+  word-wrap: break-word;
+}
+
+.chat-styles ion-text-area {
+  border-radius: 100px;
+  background-color: var(--light-purple-background);
+  min-height: 50px !important;
+
+  display: flex;
+  width: 100%;
+  padding: 6px 8px;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  text-align: center;
+  padding-top: 5px;
+}
+
+.chat-styles ion-text-area:focus {
+  border-radius: 100px;
+  background-color: white;
+  min-height: 50px !important;
+  border: 1px solid var(--buttons-active, #7700d5) !important;
+  display: flex;
+  width: 100%;
+  padding: 6px 8px;
+  align-items: center;
+  text-align: center;
+  padding-top: 5px;
+}
+
+.info-card-container {
+  width: 90%;
+  background-color: var(--container-grey);
+  padding: 15px;
+  margin-bottom: 5px !important;
+  margin-top: 10px !important;
+  box-shadow: none !important;
+}
+
+.first-card {
+  height: 17%;
+}
+
+.second-card {
+  height: 40%;
+}
+
+.third-card {
+  height: 60%;
+}
+
+.info-card-container ion-card-title {
+  color: var(--greys-text-dark-grey, #3d4767);
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: "Anek Kannada";
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 21px; /* 123.529% */
+  letter-spacing: 0.5px;
+}
+
+.info-card-container ion-card-subtitle {
+  color: var(--light-mode-asset-activity-rows-grey-meta-data, #646f85);
+  font-family: "Anek Kannada";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 153.846% */
+  letter-spacing: 0.75px;
+}
+.info-card-container ion-card-content {
+  padding: 0 !important;
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 400;
+  padding-inline-start: 0px !important;
+}
+.info-card-container ion-label {
+  margin-left: 5px;
+}
+
+.info-card-container ion-card-content ion-col {
+  display: flex;
+  align-items: flex-start;
+}
+
+.info-card-container ion-text {
+  color: var(--buttons-active, #7700d5);
+  font-family: "Anek Kannada";
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.75px;
+}
+
+.members-table ion-card-subtitle {
+  color: #3d4767;
+  font-size: 13px;
+  font-family: "JetBrains Mono";
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  word-wrap: break-word;
+}
+
+.members-table ion-label {
+  margin-left: 0px !important;
+}
+
+.members-table ion-col {
+  margin-left: 0px;
+}
+
+.members-table ion-row {
+  margin: 0px;
+  padding: 0px;
+}
+
+.manage-group-row ion-text {
+  color: var(--buttons-active, #7700d5);
+  font-family: "Anek Kannada";
+  font-style: normal;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.75px;
 }

@@ -43,20 +43,6 @@ const CreatePool: React.FC<RouteComponentProps> = ({ match }) => {
     goBack();
   };
 
-  const handleCreateGroup = async () => {
-    const groupObject: GroupCreation = {
-      name: groupName,
-      publicAddress: "0x0232u326483848787ndas7298bda7289da", //TODO: hardcoded for now but will have to create the contract address from our factory
-    };
-    try {
-      const result = await ApiService.createGroup(groupObject);
-      setGroupId(result.id);
-      //onSuccess(result.id);
-    } catch (error) {
-      console.log(error, "error posting group");
-    }
-  };
-
   const [createGroup, setCreatedGroup] = useState({
     name: "",
     description: "",
@@ -141,13 +127,6 @@ const CreatePool: React.FC<RouteComponentProps> = ({ match }) => {
               type="number"
               placeholder="Length (Days)"
             ></IonInput>
-          </IonItem>
-          <IonItem>
-            <IonTextarea
-              label="Terms"
-              label-placement="floating"
-              placeholder="Enter the Terms"
-            ></IonTextarea>
           </IonItem>
         </IonList>
       </IonContent>

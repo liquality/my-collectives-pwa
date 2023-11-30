@@ -205,6 +205,7 @@ export async function getTokenMetadataFromZoraWhenCreatingChallenge(challenge: a
             includeFullDetails: true
         }) */
 
+        console.log(challenge.tokenId, challenge.mintingContractAddress, 'TokenID and Address')
         const tokensWithData = await zdk.tokens({
             where: {
                 tokens: [{ tokenId: challenge.tokenId, address: challenge.mintingContractAddress }]
@@ -212,11 +213,11 @@ export async function getTokenMetadataFromZoraWhenCreatingChallenge(challenge: a
             },
         });
 
-        console.log(tokensWithData.tokens.nodes, 'Tokens')
-
+        //TODO: handle if this is array is empty
+        console.log(tokensWithData.tokens.nodes, 'Tokens, WHY')
         const result = tokensWithData.tokens.nodes.map(({ token }) => ({
             ...challenge,
-            name: token.name,
+            name: token.name || "Untitled",
             imageUrl: token.image?.url ?? "",
             totalMints: 0,
             creatorOfMint: "creator.eth"

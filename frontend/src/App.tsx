@@ -31,7 +31,10 @@ import SideBarMenu from "./components/SideBarMenu";
 import TabsMenu from "./components/TabsMenu";
 import Discover from "./pages/Discover/Discover";
 import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
-import { WagmiConfig } from "wagmi";
+
+import { createConfig, configureChains, WagmiConfig } from "wagmi";
+import { publicProvider } from "wagmi/providers/public";
+import { mainnet } from "wagmi/chains";
 import { baseGoerli } from "wagmi/chains";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Challenge from "./pages/Mint/Challenge";
@@ -41,6 +44,8 @@ import { isPlatform } from "@ionic/react";
 import OnboardingModal from "./components/OnboardingModal";
 import Challenges from "./pages/Mint/Challenges";
 import Mint from "./pages/Mint/Mint";
+import CollectiveDetail from "./pages/Mint/CollectiveDetail/CollectiveDetail";
+import Join from "./pages/Join";
 
 setupIonicReact({
   mode: "ios",
@@ -71,19 +76,34 @@ const metadata = {
   ],
 };
 
+const { publicClient, webSocketPublicClient } = configureChains(
+  [mainnet],
+  [publicProvider()]
+);
+
 const chains = [baseGoerli];
 const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
+const config = createConfig({
+  autoConnect: true,
+  publicClient,
+  webSocketPublicClient,
+});
+
 // 3. Create modal
 createWeb3Modal({ wagmiConfig, projectId, chains });
 const App: React.FC = () => {
-  const routerOutlet = (
+  const HineMenuOnRoutes = ["/invite", "/join"];
+  const AppRouterOutlet = (
     <IonRouterOutlet id="main-content">
       <Redirect exact path="/" to="/discover" />
       {/* Routes not requiring authentication */}
       <Route path="/login" render={() => <Login />} exact />
-      <Route path="/invite/:inviteLink" render={() => <Invite />} />
+      <Route path="/invite/code/:code?" component={Invite} />
+      <Route path="/invite/:id?" component={Invite} />
+      <Route path="/join" component={Join} />
       <Route path="/discover" component={Discover} />
       <Route path="/rewards" render={() => <Rewards />} exact />
+      <Route path="/collectiveDetail" component={CollectiveDetail} />
 
       <Route path="/mint" component={Mint} />
       <Route path="/challenges" render={() => <Challenges />} exact />
@@ -106,15 +126,15 @@ const App: React.FC = () => {
       return (
         <IonSplitPane when="md" contentId="main-content">
           <IonReactRouter>
-            <SideBarMenu />
-            {routerOutlet}
+            <SideBarMenu hideOn={HineMenuOnRoutes} />
+            {AppRouterOutlet}
           </IonReactRouter>
         </IonSplitPane>
       );
     }
     return (
       <IonReactRouter>
-        <TabsMenu>{routerOutlet}</TabsMenu>
+        <TabsMenu hideOn={HineMenuOnRoutes}>{AppRouterOutlet}</TabsMenu>
       </IonReactRouter>
     );
   };
@@ -129,7 +149,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <WagmiConfig config={wagmiConfig}>
+    <WagmiConfig config={config}>
       <Main />
     </WagmiConfig>
   );
