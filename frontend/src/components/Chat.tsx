@@ -115,7 +115,6 @@ export const Chat = (props: ChatProps) => {
                 : notMyMessageStyle;
 
               const textColor = myMessage ? textStyle.color : "black";
-
               return (
                 <IonItem style={messageStyle} key={index}>
                   <IonLabel style={{ color: textColor }}>
