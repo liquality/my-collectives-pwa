@@ -5,7 +5,7 @@ export let io: WSServer;
 export const initialize = (server: http.Server) => {
   io = new WSServer(server, {
     cors: {
-      origin: "http://localhost:5173",
+      origin: process.env.PROD_CLIENT_URL || "http://localhost:5173",
       credentials: true,
     },
   });
