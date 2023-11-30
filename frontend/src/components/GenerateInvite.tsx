@@ -10,6 +10,9 @@ interface InviteProps {
   inviteLink: string;
 }
 const GenerateInviteBtn = (props: InviteProps) => {
+  const url =
+    import.meta.env.VITE_CLIENT_PRODUCTION_URL || "http://localhost:5173";
+
   const { groupId, setInviteLink, inviteLink } = props;
   const { user } = useSignInWallet();
   const handleGenerateInvite = async () => {
@@ -18,8 +21,7 @@ const GenerateInviteBtn = (props: InviteProps) => {
       groupId,
       user.id
     );
-    //TODO: get the link from ENV vars when frontend is hosted in prod
-    setInviteLink(`http://localhost:5173/invite/${result[0].id}`);
+    setInviteLink(`${url}/invite/${result[0].id}`);
   };
 
   //const { presentToast } = useToast();
