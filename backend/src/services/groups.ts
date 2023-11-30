@@ -1,3 +1,4 @@
+import knex from "knex";
 import { dbClient } from "../data";
 import { Challenge } from "../models/challenges";
 import { Group, CreateGroupRequest, GroupAllInfo } from "../models/group";
@@ -63,12 +64,13 @@ export class GroupsService {
 
 
 
-  public static async findByUserAddress(address: string): Promise<any[]> {
+  public static async findByUserAddress(address: string): Promise<GroupAllInfo[]> {
     const result: any[] = await dbClient('groups')
       .leftJoin('user_groups', 'groups.id', '=', 'user_groups.groupId')
       .leftJoin('users', 'users.id', '=', 'user_groups.userId')
       .leftJoin('pools', 'pools.groupId', '=', 'groups.id')
-      .leftJoin('messages', 'messages.groupId', '=', 'groups.id') // Join with messages table
+      .leftJoin('challenges', 'challenges.id', '=', 'pools.challengeId') // Join with challenges table
+      .leftJoin('messages', 'messages.groupId', '=', 'groups.id')
       .where('users.publicAddress', '=', address)
       .groupBy('groups.id')
       .select([
@@ -78,12 +80,13 @@ export class GroupsService {
         'groups.publicAddress',
         'groups.createdAt',
         'groups.createdBy',
+        'groups.mintCount'
       ])
       .countDistinct({ memberCount: 'user_groups.userId' })
       .countDistinct({ poolsCount: 'pools.id' })
-      .countDistinct({ messagesCount: 'messages.id' }) // Count of messages in each group
+      .countDistinct({ messagesCount: 'messages.id' })
+      .countDistinct({ activePoolsCount: dbClient.raw('CASE WHEN challenges.expiration > CURRENT_TIMESTAMP THEN pools.id ELSE NULL END') })
       .orderBy('groups.createdAt', 'desc');
-
 
     console.log(result, 'wats result?')
 

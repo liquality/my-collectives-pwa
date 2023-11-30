@@ -64,7 +64,7 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
                       <p className="public-address">
                         {" "}
                         <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>{" "}
-                        <IonLabel>{group.poolsCount}</IonLabel>{" "}
+                        <IonLabel>{group.mintCount}</IonLabel>{" "}
                         <IonIcon
                           style={{ fontSize: 15, marginTop: 5, marginLeft: 5 }}
                           src="/assets/icons/people-tile.svg"
@@ -80,7 +80,13 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
                   </div>
                 </div>
               </div>
-              <div className="collective-card-right generic-grey-card"></div>
+              <div className="collective-card-right generic-grey-card">
+                {" "}
+                <div className="active-pools-container flexDirectionRow">
+                  <IonIcon src="/assets/icons/mint-tile-white.svg"></IonIcon>{" "}
+                  <p style={{ marginTop: 11 }}>{group.activePoolsCount}</p>{" "}
+                </div>
+              </div>
             </div>
           ))
         : null}
