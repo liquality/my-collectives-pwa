@@ -2,7 +2,15 @@ import { useSignInWallet } from "@/hooks/useSignInWallet";
 import { Group } from "@/types/chat";
 import { shortenAddress } from "@/utils";
 import { pathConstants } from "@/utils/routeNames";
-import { useIonRouter, IonAvatar } from "@ionic/react";
+import {
+  useIonRouter,
+  IonAvatar,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonIcon,
+  IonLabel,
+} from "@ionic/react";
 import React, { useState } from "react";
 import GenerateInviteBtn from "../GenerateInvite";
 
@@ -53,7 +61,21 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
                       <p className="public-address">
                         {shortenAddress(group.publicAddress)}
                       </p>
-                      <p className="public-address">IconX IconY IconZ</p>
+                      <p className="public-address">
+                        {" "}
+                        <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>{" "}
+                        <IonLabel>{group.poolsCount}</IonLabel>{" "}
+                        <IonIcon
+                          style={{ fontSize: 15, marginTop: 5, marginLeft: 5 }}
+                          src="/assets/icons/people-tile.svg"
+                        ></IonIcon>{" "}
+                        <IonLabel>{group.memberCount}</IonLabel>{" "}
+                        <IonIcon
+                          style={{ fontSize: 12, marginTop: 3, marginLeft: 5 }}
+                          src="/assets/icons/message-tile.svg"
+                        ></IonIcon>{" "}
+                        <IonLabel>{group.messagesCount}</IonLabel>{" "}
+                      </p>
                     </div>
                   </div>
                 </div>
