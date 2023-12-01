@@ -5,25 +5,12 @@ export let io: WSServer;
 export const initialize = (server: http.Server) => {
   io = new WSServer(server, {
     cors: {
-      origin: "http://localhost:5173",
+      origin: process.env.PROD_CLIENT_URL || "http://localhost:5173",
       credentials: true,
     },
   });
 
-  //TODO: use this function when we have auth flow enabled
-  /* io.use((socket, next) => {
-    //const token = socket.handshake.auth.token;
-    if (middleware.authenticateJWTForWebsocket) {
-      middleware.authenticateJWTForWebsocket(socket, (err) => {
-        if (err) {
-          console.log('No user auth')
-          return next(err);
-        }
-        next();
-      });
-    }
-  
-  }); */
+
 
   //Dummy auth as we dont have it yet
   io.use((socket: any, next) => {

@@ -43,12 +43,15 @@ export class InviteController {
 
   public findAllByGroup: RequestHandler = async (req, res) => {
     const { id, userId } = req.params;
+    console.log(id, userId, 'Inside find all by group')
     let _top = req.query.top ? Number(req.query.top) : 1;
     if (!id || !userId) {
       res.status(400).send({ error: "group and user are required" });
     } else {
       try {
+        console.log('GETTING HERE')
         const invites = await InvitesService.findAllByGroup(id, userId, _top);
+        console.log(invites, 'wats invite?', req.params)
 
         if (!invites) {
           res.status(404).send({ error: "invites not found" });
@@ -82,6 +85,7 @@ export class InviteController {
 
   public claim: RequestHandler = async (req, res) => {
     try {
+
       const { id } = req.params;
       const user = await AuthService.find((req as any).auth?.sub);
       const claim = await InvitesService.claim(id, user.id);

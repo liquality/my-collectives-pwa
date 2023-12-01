@@ -52,7 +52,7 @@
   --warning-button: #dbaeff;
   --light-input-active-color: #f8f0ff;
   --white-light-grey: #e0e0e0;
-  --ion-app-color: #3D4767;
+  --ion-app-color: #3d4767;
 }
 
 .ion-color-light {
@@ -676,4 +676,140 @@ ion-content.invite-page-link {
   line-height: 1.25rem;
   letter-spacing: 0.047rem;
   word-wrap: break-word;
+}
+
+.chat-styles ion-text-area {
+  border-radius: 100px;
+  background-color: var(--light-purple-background);
+  min-height: 50px !important;
+
+  display: flex;
+  width: 100%;
+  padding: 6px 8px;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  text-align: center;
+  padding-top: 5px;
+}
+
+.chat-styles ion-text-area:focus {
+  border-radius: 100px;
+  background-color: white;
+  min-height: 50px !important;
+  border: 1px solid var(--buttons-active, #7700d5) !important;
+  display: flex;
+  width: 100%;
+  padding: 6px 8px;
+  align-items: center;
+  text-align: center;
+  padding-top: 5px;
+}
+
+.info-card-container {
+  width: 90%;
+  background-color: var(--container-grey);
+  padding: 15px;
+  margin-bottom: 5px !important;
+  margin-top: 10px !important;
+  box-shadow: none !important;
+}
+
+.first-card {
+  height: 17%;
+}
+
+.second-card {
+  height: 40%;
+}
+
+.third-card {
+  height: 60%;
+}
+
+.info-card-container ion-card-title {
+  color: var(--greys-text-dark-grey, #3d4767);
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: "Anek Kannada";
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 21px; /* 123.529% */
+  letter-spacing: 0.5px;
+}
+
+.info-card-container ion-card-subtitle {
+  color: var(--light-mode-asset-activity-rows-grey-meta-data, #646f85);
+  font-family: "Anek Kannada";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 153.846% */
+  letter-spacing: 0.75px;
+}
+.info-card-container ion-card-content {
+  padding: 0 !important;
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 400;
+  padding-inline-start: 0px !important;
+}
+.info-card-container ion-label {
+  margin-left: 5px;
+}
+
+.info-card-container ion-card-content ion-col {
+  display: flex;
+  align-items: flex-start;
+}
+
+.info-card-container ion-text {
+  color: var(--buttons-active, #7700d5);
+  font-family: "Anek Kannada";
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.75px;
+}
+
+.members-table ion-card-subtitle {
+  color: #3d4767;
+  font-size: 13px;
+  font-family: "JetBrains Mono";
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  word-wrap: break-word;
+}
+
+.members-table ion-label {
+  margin-left: 0px !important;
+}
+
+.members-table ion-col {
+  margin-left: 0px;
+}
+
+.members-table ion-row {
+  margin: 0px;
+  padding: 0px;
+}
+
+.manage-group-row ion-text {
+  color: var(--buttons-active, #7700d5);
+  font-family: "Anek Kannada";
+  font-style: normal;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.75px;
+}
+
+.active-pools-container {
+  border-radius: 11px;
+  background: var(--buttons-hover, #ba62fe);
+  width: 37.579px;
+  height: 18px;
+  color: white;
+  font-size: 15px;
+  padding-left: 5px;
 }

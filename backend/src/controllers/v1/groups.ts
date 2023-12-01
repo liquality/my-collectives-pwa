@@ -5,6 +5,7 @@ import { AuthService } from "../../services/auth";
 export class GroupsController {
   public findByUserAddress: RequestHandler = async (req, res) => {
     const { address } = req.params;
+    console.log(address, 'ADDRES HERE?')
 
     if (!address) {
       res.status(400).send({ error: "address is required" });
@@ -14,6 +15,7 @@ export class GroupsController {
 
         res.status(200).send(groups);
       } catch (err: any) {
+        console.log(err, 'ERROR?')
         res.status(500).send({ error: err.message });
       }
     }
@@ -40,12 +42,13 @@ export class GroupsController {
 
   public create: RequestHandler = async (req, res) => {
     const { group, pools } = req.body;
-    console.log(group, pools, 'group and pools?')
     const user = await AuthService.find((req as any).auth?.sub);
     if (!group.name) {
       res.status(400).send({ error: "name is required" });
     } else {
       try {
+        console.log(group, pools, user, 'USER ID')
+
         const createdGroup = await GroupsService.create(
           group, pools, user.id
         );

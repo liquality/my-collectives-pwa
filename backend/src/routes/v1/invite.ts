@@ -5,7 +5,7 @@ export const inviteRouter = Router();
 const ctrl = new InviteController();
 
 
-inviteRouter.get("/:id/claim", ctrl.claim);
+inviteRouter.post("/:id/claim", authentication, ctrl.claim);
 inviteRouter.get("/:id", ctrl.find);
 inviteRouter.get("/code/:code", ctrl.findBycode);
 inviteRouter.get("/group/:id/user/:userId", ctrl.findAllByGroup);

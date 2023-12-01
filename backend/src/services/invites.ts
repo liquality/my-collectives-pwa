@@ -1,5 +1,6 @@
 import { dbClient } from "../data";
 import { Invite } from "../models/invite";
+import { giveUserInvitesForGroup } from "../utils";
 
 export class InvitesService {
   public static get joinQuery() {
@@ -12,7 +13,6 @@ export class InvitesService {
     "invites.id",
     "invites.groupId",
     "invites.code",
-    "invites.expireAt",
     "invites.createdAt",
     "groups.name as groupName",
     "groups.description as groupDescription",
@@ -40,6 +40,8 @@ export class InvitesService {
               groupId: result.groupId,
               userId,
             });
+            await giveUserInvitesForGroup(userId, result.groupId, 3)
+
             resolve(result);
           } else {
             reject(new Error("Invite not found"));
@@ -101,18 +103,31 @@ export class InvitesService {
       .first<Invite>(this.joinSelect);
   }
 
-  public static findAllByGroup(id: string, userId: string, top: number = 1): Promise<Invite[]> {
+  public static async findAllByGroup(id: string, userId: string, top: number = 1): Promise<Invite[]> {
     // TUDO: validate dates of expire at and userAt
-    return this.joinQuery
+    const q = await this.joinQuery
       .where("invites.groupId", "=", id)
       .andWhere("invites.userId", "=", userId)
       .whereNull("invites.usedAt")
       .select(this.joinSelect)
       .limit(top);
+    const results: Invite[] = await q;
+    console.log(results, 'wats Q?', q)
+
+    return q
+    /* return dbClient("invites")
+      .join("users", "users.id", "=", "invites.userId")
+      .join("groups", "groups.id", "=", "invites.groupId")
+      .where("invites.groupId", "=", id)
+      .andWhere("invites.userId", "=", userId)
+      .whereNull("invites.usedAt")
+      .select(this.joinSelect) */
   }
 
   public static findAllByUser(id: string, groupId?: string): Promise<Invite[]> {
     // TUDO: validate dates of expire at and userAt
+
+
     let query = dbClient("invites")
       .join("users", "users.id", "=", "invites.userId")
       .join("groups", "groups.id", "=", "invites.groupId")
@@ -120,6 +135,7 @@ export class InvitesService {
     if (groupId) {
       query = query.andWhere("invites.groupId", "=", groupId);
     }
+
     return query.whereNull("invites.usedAt").select(this.joinSelect);
   }
 }

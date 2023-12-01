@@ -27,11 +27,12 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
   const { id, code } = match.params;
   const [invite, setInvite] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [processing, setProcessing] = useState<boolean>();
+  const [processing, setProcessing] = useState<boolean>(false);
   const router = useIonRouter();
   const { address } = useAccount();
   const { open } = useWeb3Modal();
   const { user } = useSignInWallet();
+  const claimInviteAvailable = invite && user && address;
 
   useEffect(() => {
     setLoading(true);
@@ -49,9 +50,9 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
     setLoading(false);
   }, [id, code]);
 
-  async function handleConnnect() {
+  async function handleConnect() {
     setProcessing(true);
-    if (invite && user && address) {
+    if (claimInviteAvailable) {
       try {
         await InvitesService.claim(invite.id, address!);
         router.push(pathConstants.mintPage.myCollectives);
@@ -64,7 +65,8 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
 
   useEffect(() => {
     if (user) {
-      handleConnnect();
+      //TODO: Imo not great UX to auto-join, so commented out for now
+      //handleConnect();
     }
   }, [user]);
 
@@ -72,7 +74,8 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
     if (invite) {
       setProcessing(true);
       if (address) {
-        await handleConnnect();
+        //TODO: Imo not great UX to auto-join, so commented out for now
+        //await handleConnect();
       } else {
         await open();
       }
@@ -130,6 +133,7 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
                   </div>
                 </IonCol>
               </IonRow>
+              <IonRow></IonRow>
             </>
           ) : (
             <IonRow>
@@ -150,10 +154,12 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
                     shape="round"
                     fill="solid"
                     className="invite-action-btn"
-                    onClick={onConnect}
+                    onClick={claimInviteAvailable ? handleConnect : onConnect}
                   >
                     {processing ? (
                       <IonSpinner name="circular"></IonSpinner>
+                    ) : claimInviteAvailable ? (
+                      "Confirm Invite"
                     ) : (
                       "Connect"
                     )}
