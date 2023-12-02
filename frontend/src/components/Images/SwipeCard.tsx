@@ -50,15 +50,10 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
 
   const handleClick = () => {
     if (!loading) {
-      if (
-        pathConstants.mintPage.createCollective === location.pathname &&
-        typeof setSelectedChallenge === "function"
-      ) {
+      if (setSelectedChallenge) {
         setSelectedChallenge(challenge as Challenge); // type assertion here
       } else {
-        router.push(
-          `/challenge/${tokenId}?&contractAddress=${mintingContractAddress}&imageUrl=${ipfsImageUrl}`
-        );
+        router.push(`/challenges/${id}`);
       }
     }
   };
