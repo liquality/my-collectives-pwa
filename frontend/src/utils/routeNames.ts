@@ -7,7 +7,9 @@ export const pathConstants = {
         manageCollective: "/mint/manageCollective",
         createCollective: "/mint/createCollective",
         noCollectives: "/mint/noCollectives",
-        collectiveInvites: "/mint/collectiveInvites"
+        collectiveInvites: "/mint/collectiveInvites",
+        mymints: "/mint/mymints"
+
     },
     discover: {
         discover: "/discover",

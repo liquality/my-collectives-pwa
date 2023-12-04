@@ -8,7 +8,6 @@ const RewardsTopBar: React.FC<DiscoverTopBarProps> = ({ children }) => {
   return (
     <PageTopBar
       tabs={[
-        { label: "My Mints", href: pathConstants.rewards.mymints },
         { label: "Summary", href: pathConstants.rewards.summary },
         { label: "Airdrops", href: pathConstants.rewards.airdrops },
       ]}

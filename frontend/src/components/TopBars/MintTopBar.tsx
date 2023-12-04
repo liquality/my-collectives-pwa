@@ -9,7 +9,7 @@ const MintTopBar: React.FC<DiscoverTopBarProps> = ({ children }) => {
     <PageTopBar
       tabs={[
         { label: "My Collectives", href: pathConstants.mintPage.myCollectives },
-        { label: "Invites", href: pathConstants.mintPage.collectiveInvites },
+        { label: "My Mints", href: pathConstants.mintPage.mymints },
       ]}
     >
       {children}

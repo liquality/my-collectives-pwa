@@ -1,30 +1,29 @@
 import { useSignInWallet } from "@/hooks/useSignInWallet";
 import useToast from "@/hooks/useToast";
-import ApiService from "@/services/ApiService";
 import InvitesService from "@/services/Invites";
+import { handleCopyClick } from "@/utils";
 import { IonText } from "@ionic/react";
 
 interface InviteProps {
   groupId: string;
-  setInviteLink: (invite: string) => void;
-  inviteLink: string;
 }
 const GenerateInviteBtn = (props: InviteProps) => {
   const url =
     import.meta.env.VITE_CLIENT_PRODUCTION_URL || "http://localhost:5173";
 
-  const { groupId, setInviteLink, inviteLink } = props;
+  const { presentToast } = useToast();
+  const { groupId } = props;
   const { user } = useSignInWallet();
   const handleGenerateInvite = async () => {
-    //presentToast(`You generated a invite link, click to copy!`);
+    presentToast(
+      `You generated and copied a invite link! Send it to someone you like :)`
+    );
     const result = await InvitesService.getInviteByGroupIdAndUserId(
       groupId,
       user.id
     );
-    setInviteLink(`${url}/invite/${result[0].id}`);
+    handleCopyClick(`${url}/invite/${result[0].id}`);
   };
-
-  //const { presentToast } = useToast();
 
   return <IonText onClick={handleGenerateInvite}>Invite</IonText>;
 };

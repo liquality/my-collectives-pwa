@@ -3,7 +3,6 @@ import { IonContent, IonPage, IonRouterOutlet } from "@ionic/react";
 import { Redirect, Route, RouteComponentProps } from "react-router";
 
 import { pathConstants } from "@/utils/routeNames";
-import MyMints from "./MyMints";
 import Summary from "./Summary";
 import Airdrops from "./Airdrops";
 
@@ -14,11 +13,6 @@ const Rewards: React.FC<RouteComponentProps> = ({ match }) => {
 
       <IonContent className="ion-padding" color="light">
         <IonRouterOutlet className="app-page-router-outlet">
-          <Route
-            path={pathConstants.rewards.mymints}
-            component={MyMints}
-            exact
-          />
           <Route
             path={pathConstants.rewards.summary}
             component={Summary}
@@ -31,7 +25,7 @@ const Rewards: React.FC<RouteComponentProps> = ({ match }) => {
           />
 
           <Route exact path={pathConstants.rewards.index}>
-            <Redirect to={pathConstants.rewards.mymints} />
+            <Redirect to={pathConstants.rewards.summary} />
           </Route>
         </IonRouterOutlet>
       </IonContent>
