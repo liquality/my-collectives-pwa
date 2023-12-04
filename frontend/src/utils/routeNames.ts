@@ -15,7 +15,10 @@ export const pathConstants = {
         about: "/discover/about"
     },
     rewards: {
-        index: "/rewards"
+        index: "/rewards",
+        mymints: "/rewards/mymints",
+        summary: "/rewards/summary",
+        airdrops: "/rewards/airdrops"
     },
     collectiveDetail: {
         collectiveDetail: "/collectiveDetail",
@@ -25,7 +28,8 @@ export const pathConstants = {
     },
     invite: {
         index: "/invite"
-    }
+    },
+
 }
 
 export const getLastIndexOfPath = (pathname: string) => {
