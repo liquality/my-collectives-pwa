@@ -1,4 +1,16 @@
-import { IonButton, IonContent, IonPage } from "@ionic/react";
+import {
+  IonButton,
+  IonCard,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonCol,
+  IonContent,
+  IonItem,
+  IonLabel,
+  IonPage,
+  IonRow,
+  IonText,
+} from "@ionic/react";
 
 import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
 import { RouteComponentProps } from "react-router";
@@ -37,33 +49,72 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
         {loadingAllData ? (
           <PageLoadingIndicator />
         ) : (
-          <div className="flexDirectionCol mb-1">
+          <div className="rewards-summary-page ">
             <h4></h4>
             <ul className="bullet-points">
               <li>No styling yet as figma design is still WIP</li>
               <li>Below is just the data we need:</li>
             </ul>
             <div className="pink-line mb-1"></div>
-            My Created Collectives: {myGroups?.length}
-            {filterForUserCreatedGroups?.map((group, index) => (
-              <div className="flexDirectionRow" key={index}>
-                <p>{group.name} </p>{" "}
-                <p>Address: {shortenAddress(group.publicAddress || "")}</p>
-                <p>Members: {group.memberCount}</p>
-                <p>Mints: {group.mintCount}</p>
-                <GenerateInviteBtn groupId={group.id} />
-              </div>
-            ))}
-            <div className="pink-line mb-1"></div>
-            Member of Collectives: {myGroups?.length}
-            {filterForUserCreatedGroups?.map((group, index) => (
-              <div className="flexDirectionRow" key={index}>
-                <p>{group.name} </p>{" "}
-                <p>Address: {shortenAddress(group.publicAddress || "")}</p>
-                <p>Members: {group.memberCount}</p>
-                <p>Mints: {group.mintCount}</p>
-              </div>
-            ))}
+            <IonCard className="info-card-container second-card ">
+              <IonCardTitle>
+                {" "}
+                My Created Collectives: {myGroups?.length}
+              </IonCardTitle>
+
+              {filterForUserCreatedGroups?.map((group, index) => (
+                <div key={index}>
+                  <IonRow className="ion-justify-content-between ion-align-items-center">
+                    <IonCardTitle>{group.name} </IonCardTitle>
+                    <IonText style={{ fontSize: "13px" }}>
+                      {" "}
+                      <GenerateInviteBtn groupId={group.id} /> | Manage
+                    </IonText>
+                  </IonRow>
+
+                  <IonRow className="ion-justify-content-between ion-align-items-center">
+                    <IonLabel>
+                      {" "}
+                      {shortenAddress(group.publicAddress || "")}
+                    </IonLabel>
+                    <IonLabel>
+                      {" "}
+                      Members: {group.memberCount} Mints: {group.mintCount}
+                    </IonLabel>
+                  </IonRow>
+                </div>
+              ))}
+            </IonCard>
+
+            <IonCard className="info-card-container second-card ">
+              <IonCardTitle>
+                {" "}
+                My Created Collectives: {myGroups?.length}
+              </IonCardTitle>
+              Member of Collectives: {myGroups?.length}
+              {filterForUserCreatedGroups?.map((group, index) => (
+                <div key={index}>
+                  <IonRow className="ion-justify-content-between ion-align-items-center">
+                    <IonCardTitle>{group.name} </IonCardTitle>
+                    <IonText style={{ fontSize: "13px" }}>
+                      {" "}
+                      <GenerateInviteBtn groupId={group.id} /> | Leave
+                    </IonText>
+                  </IonRow>
+
+                  <IonRow className="ion-justify-content-between ion-align-items-center">
+                    <IonLabel>
+                      {" "}
+                      {shortenAddress(group.publicAddress || "")}
+                    </IonLabel>
+                    <IonLabel>
+                      {" "}
+                      Members: {group.memberCount} Mints: {group.mintCount}
+                    </IonLabel>
+                  </IonRow>
+                </div>
+              ))}
+            </IonCard>
           </div>
         )}
 
