@@ -3,12 +3,12 @@ import { useState } from "react";
 
 export interface ImageLoaderProps {
   src: string;
-  className: string;
+  className?: string;
 }
 
 const ImageLoader: React.FC<ImageLoaderProps> = ({
   src,
-  className,
+  className = 'img-responsive',
 }: ImageLoaderProps) => {
   const [loading, setLoading] = useState(true);
   return (

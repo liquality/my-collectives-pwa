@@ -55,6 +55,20 @@
   --ion-app-color: #3d4767;
 }
 
+ion-button.grey-btn {
+  --background: var(--grey-meta);
+  --background-hover: var(--dark-grey);
+  --background-activated: var(--dark-grey);
+  --background-focused: var(--dark-grey);
+
+  --color: #ffffff;
+
+  --border-radius: 0;
+  --border-color: var(--grey-meta);
+  --border-style: solid;
+  --border-width: 1px;
+}
+
 .ion-color-light {
   --ion-color-base: #ffffff !important;
 }
@@ -814,12 +828,14 @@ ion-content.invite-page-link {
   padding-left: 5px;
 }
 
+ion-modal.challenge-item-modal {
+  --min-height: 55% !important;
+}
 ion-modal#sheet-info-modal {
   --ion-background-color: rgba(255, 255, 255, 0.77) !important;
 }
 
 ion-modal#sheet-info-modal::part(content) {
-
   --ion-background-color: transparent !important;
   --border-radius: 1rem;
   --border-style: solid !important;
@@ -839,4 +855,131 @@ ion-modal#sheet-info-modal::part(handle) {
   background-image: url("/assets/icons/modal-handle.svg") !important;
   width: 1.625rem;
   height: 0.44rem;
+}
+
+.img-responsive {
+  width: 100%;
+  object-fit: contain;
+}
+
+.challenge-info-grid {
+  padding-inline-start: 0px !important;
+  padding-inline-end: 0px !important;
+  padding: 0px !important;
+}
+
+.challenge-item-actions {
+  display: flex;
+  justify-content: center !important;
+  padding: 0rem 1rem;
+}
+
+.challenge-item-actions ion-button {
+  --border-radius: 100%;
+  margin: 0.3rem;
+}
+
+.challenge-top-grid {
+  --ion-grid-column-padding: 1px !important;
+  --ion-grid-column-padding-xs: 1px !important;
+}
+
+.challenge-top-grid .challenge-info-title {
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.313rem; /* 150% */
+  letter-spacing: 0.031rem;
+}
+
+.challenge-top-grid .challenge-info-amount {
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.313rem;
+  letter-spacing: 0.031rem;
+}
+
+.challenge-top-grid .challenge-info-creator {
+  color: #4f4f4f;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.313rem; /* 150% */
+  letter-spacing: 0.031rem;
+}
+
+.challenge-top-grid .challenge-info-item-details {
+  color: #4f4f4f;
+  font-size: 0.688rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.25rem;
+}
+
+.challenge-top-grid .challenge-info-item-details ion-col {
+  margin-right: 0.4rem;
+}
+
+.challenge-top-grid .challenge-info-item-details ion-label {
+  padding-left: 0.2rem;
+  padding-bottom: 0.1rem;
+}
+
+.challenge-top-bar {
+  --padding-start: 0rem !important;
+  --padding-end: 0rem !important;
+  width: 100% !important;
+  padding-left: 0.3rem !important;
+}
+
+.challenge-top-tab-button {
+  min-height: 22px !important;
+
+  --padding-start: 0px !important;
+  --padding-end: 0px !important;
+  margin-inline-start: 0.5rem !important;
+  margin-inline-end: 0.5rem !important;
+}
+
+.challenge-top-bar ion-buttons ion-button:first-child {
+  margin-inline-start: 0rem !important;
+}
+
+.challenge-top-tab-button:hover,
+.challenge-top-tab-button.ion-color-primary {
+  border-bottom: 1px solid #7700d5;
+}
+
+img.challenge-info-img {
+  height: 25rem;
+  object-fit: contain;
+}
+
+.challenge-info-list-title {
+  text-transform: uppercase;
+  font-size: 0.938rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.313rem;
+  letter-spacing: 0.031rem;
+}
+
+.challenge-info-list-content {
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.313rem;
+  letter-spacing: 0.031rem;
+  margin-bottom: 1rem;
+}
+
+.challenge-mint-fab-button {
+  transition: bottom 0.6s;
+  position: sticky;
+  pointer-events: none;
+  max-width: 50%;
+  z-index: 99999 !important;
+  bottom: 0%;
+  left: 25%;
 }

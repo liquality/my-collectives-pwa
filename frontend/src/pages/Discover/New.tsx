@@ -60,13 +60,33 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
     setSelectedChallenge(null);
   };
 
+  const handleItemOnReject = () => {
+    if (selectedChallenge) {
+      const total = challenges.length;
+      const currentIndex = challenges.findIndex(
+        (challenge: Challenge) => challenge.id === selectedChallenge.id
+      );
+      if (currentIndex + 1 >= total) {
+        setSelectedChallenge(challenges[0]);
+      } else {
+        setSelectedChallenge(challenges[currentIndex + 1]);
+      }
+    } else {
+      challenges &&
+        challenges.length > 0 &&
+        setSelectedChallenge(challenges[0]);
+    }
+  };
+
+  const handleItemOnMint = () => {};
+
   useEffect(() => {
-    if(selectedChallenge) {
-      setItemModalIsOpen(true);
+    if (selectedChallenge) {
+      !itemModalIsOpen && setItemModalIsOpen(true);
     } else {
       setItemModalIsOpen(false);
     }
-  }, [selectedChallenge])
+  }, [selectedChallenge]);
 
   return (
     <IonPage>
@@ -116,10 +136,14 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
           loading={loading}
         ></HorizontalSwipe>
         <ChallengeItemModal
-            isOpen={itemModalIsOpen}
-            challenge={selectedChallenge!}
-            dismiss={onCloseChallenteItemModal}
-          />
+          isOpen={itemModalIsOpen}
+          challenges={challenges}
+          currentChallengeId={selectedChallenge?.id}
+          presentingElement={presentingElement!}
+          onMint={handleItemOnMint}
+          onReject={handleItemOnReject}
+          dismiss={onCloseChallenteItemModal}
+        />
       </IonContent>
     </IonPage>
   );

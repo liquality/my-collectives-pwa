@@ -14,6 +14,9 @@ import {
   IonCol,
   IonGrid,
   IonRow,
+  IonFab,
+  IonFabButton,
+  IonLabel,
 } from "@ionic/react";
 import { ModalBreakpointChangeEventDetail } from "@ionic/core";
 import ChallengeItemInfoSheetModal from "./ChallengeItemInfoSheetModal";
@@ -22,23 +25,34 @@ import { Challenge } from "@/types/challenges";
 import { closeOutline, arrowDownOutline } from "ionicons/icons";
 import { convertIpfsImageUrl } from "@/utils";
 import ImageLoader from "../Images/ImageLoader";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { EffectCards } from "swiper/modules";
 export interface ChallengeItemModalProps {
   dismiss: () => void;
-  challenge: Challenge;
+  challenges: Challenge[];
+  currentChallengeId?: string;
   isOpen: boolean;
   onReject?: () => void;
-  onApprove?: () => void;
+  onMint?: () => void;
+  presentingElement?: HTMLElement;
 }
+
+const initialInfoBreakpoint = 0.12;
 
 const ChallengeItemModal = ({
   dismiss,
-  challenge,
+  currentChallengeId,
   isOpen,
+  presentingElement,
+  challenges,
+  onReject,
+  onMint,
 }: ChallengeItemModalProps) => {
   const [itemInfoIsOpen, setItemInfoIsOpen] = useState(true);
   const [showArrowDown, setShowArrowDown] = useState(false);
-  const [infoHeight, setInfoHeight] = useState(0.25);
+  const [infoHeight, setInfoHeight] = useState(initialInfoBreakpoint);
   const [title, setTitle] = useState("");
+  const [challenge, setChallenge] = useState<Challenge | null>(null);
   const infoSheetModalRef = useRef<HTMLIonModalElement>(null);
 
   function handleDismiss() {
@@ -50,18 +64,34 @@ const ChallengeItemModal = ({
     setInfoHeight(value);
   }
 
-  function reduceInfoHeigth() {
-    infoSheetModalRef.current?.setCurrentBreakpoint(0.25);
+  function handleReject() {
+    onReject && onReject();
   }
-  useEffect(() => {
-    if (challenge) {
-      setTitle(challenge.name);
-      setItemInfoIsOpen(true);
-    }
-  }, [challenge]);
+
+  function handleMint() {
+    onMint && onMint();
+  }
+
+  function reduceInfoHeigth() {
+    infoSheetModalRef.current?.setCurrentBreakpoint(initialInfoBreakpoint);
+  }
 
   useEffect(() => {
-    if (infoHeight > 0.25) {
+    if (currentChallengeId) {
+      const index = challenges?.findIndex(
+        (challenge) => challenge.id === currentChallengeId
+      );
+      if (index >= 0) {
+        setChallenge(challenges[index]);
+        setTitle(challenges[index].name);
+
+        setItemInfoIsOpen(true);
+      }
+    }
+  }, [currentChallengeId]);
+
+  useEffect(() => {
+    if (infoHeight > initialInfoBreakpoint) {
       setShowArrowDown(true);
     } else {
       setShowArrowDown(false);
@@ -69,8 +99,12 @@ const ChallengeItemModal = ({
   }, [infoHeight]);
 
   return (
-    <IonModal isOpen={isOpen}>
-      <IonHeader translucent={true}>
+    <IonModal
+      isOpen={isOpen}
+      presentingElement={presentingElement!}
+      className="challenge-item-modal"
+    >
+      <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
             {showArrowDown ? (
@@ -87,18 +121,31 @@ const ChallengeItemModal = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonGrid style={{ padding: "none" }}>
+        <IonGrid className="challenge-info-grid">
           <IonRow>
             <IonCol>
-              <ImageLoader
-                src={convertIpfsImageUrl(challenge?.imageUrl)}
-                className=""
-              />
+              {challenge ? (
+                <ImageLoader
+                  src={convertIpfsImageUrl(challenge?.imageUrl)}
+                  className="challenge-info-img"
+                />
+              ) : null}
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol className="challenge-item-actions">
+              <IonButton color="danger" onClick={handleReject}>
+                <IonIcon icon={closeOutline}></IonIcon>
+              </IonButton>
+              <IonButton color="primary" onClick={handleMint}>
+                <IonIcon src="/assets/icons/mint-tile-white.svg"></IonIcon>
+              </IonButton>
             </IonCol>
           </IonRow>
         </IonGrid>
         <ChallengeItemInfoSheetModal
-          challenge={challenge}
+          challenge={challenge!}
+          initialBreakpoint={initialInfoBreakpoint}
           isOpen={itemInfoIsOpen}
           ref={infoSheetModalRef}
           onBreakpointDidChange={onInfoBreakpointDidChange}
