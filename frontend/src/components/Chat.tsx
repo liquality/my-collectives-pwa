@@ -22,7 +22,7 @@ interface ChatProps {
   group: Group;
 }
 export const Chat = (props: ChatProps) => {
-  const { name, id: groupId, rewards } = props.group;
+  const { name, id: groupId } = props.group;
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const { chatHistory, loading } = useChatHistory(groupId);

@@ -983,3 +983,23 @@ img.challenge-info-img {
   bottom: 0%;
   left: 25%;
 }
+
+.rewards-summary-page ion-card {
+  background-color: var(--container-grey);
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  height: 40%;
+  margin: 0 auto;
+  padding: 12px;
+  line-height: 0px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  box-shadow: none !important;
+}
+
+.rewards-summary-page ion-item {
+  background-color: none !important;
+  background-color: transparent !important;
+  background: none !important;
+}
