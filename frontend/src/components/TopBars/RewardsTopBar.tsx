@@ -4,12 +4,12 @@ import { RouteComponentProps } from "react-router";
 export interface DiscoverTopBarProps {
   children?: React.ReactNode;
 }
-const MintTopBar: React.FC<DiscoverTopBarProps> = ({ children }) => {
+const RewardsTopBar: React.FC<DiscoverTopBarProps> = ({ children }) => {
   return (
     <PageTopBar
       tabs={[
-        { label: "My Collectives", href: pathConstants.mintPage.myCollectives },
-        { label: "My Mints", href: pathConstants.mintPage.mymints },
+        { label: "Summary", href: pathConstants.rewards.summary },
+        { label: "Airdrops", href: pathConstants.rewards.airdrops },
       ]}
     >
       {children}
@@ -17,4 +17,4 @@ const MintTopBar: React.FC<DiscoverTopBarProps> = ({ children }) => {
   );
 };
 
-export default MintTopBar;
+export default RewardsTopBar;

@@ -17,7 +17,7 @@ import NoGroups from "./NoGroups";
 import CreateCollective from "./CreateCollective";
 import ManageCollective from "./ManageCollective";
 import { pathConstants } from "@/utils/routeNames";
-import CollectiveInvites from "./CollectiveInvites";
+import MyMints from "./MyMints";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 import { useEffect } from "react";
 
@@ -57,8 +57,8 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
               exact
             />
             <Route
-              path={pathConstants.mintPage.collectiveInvites}
-              component={CollectiveInvites}
+              path={pathConstants.mintPage.mymints}
+              component={MyMints}
               exact
             />
 

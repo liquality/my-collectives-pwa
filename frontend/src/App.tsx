@@ -38,7 +38,6 @@ import { mainnet } from "wagmi/chains";
 import { baseGoerli } from "wagmi/chains";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Challenge from "./pages/Mint/Challenge";
-import Rewards from "./pages/Rewards";
 import { useSignInWallet } from "./hooks/useSignInWallet";
 import { isPlatform } from "@ionic/react";
 import OnboardingModal from "./components/OnboardingModal";
@@ -46,6 +45,7 @@ import Challenges from "./pages/Mint/Challenges";
 import Mint from "./pages/Mint/Mint";
 import CollectiveDetail from "./pages/Mint/CollectiveDetail/CollectiveDetail";
 import Join from "./pages/Join";
+import Rewards from "./pages/Rewards/Rewards";
 
 setupIonicReact({
   mode: "ios",
@@ -102,7 +102,7 @@ const App: React.FC = () => {
       <Route path="/invite/:id?" component={Invite} />
       <Route path="/join" component={Join} />
       <Route path="/discover" component={Discover} />
-      <Route path="/rewards" render={() => <Rewards />} exact />
+      <Route path="/rewards" component={Rewards} />
       <Route path="/collectiveDetail" component={CollectiveDetail} />
 
       <Route path="/mint" component={Mint} />

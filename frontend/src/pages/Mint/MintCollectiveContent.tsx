@@ -41,7 +41,15 @@ const MintCollectiveContent: React.FC<RouteComponentProps> = (routerProps) => {
         publicAddress: groupAddress,
         id: groupId,
         createdBy: createdBy,
+        description: "",
+        createdAt: new Date(),
+        mintCount: 0,
+        memberCount: 0,
+        activePoolsCount: 0,
+        poolsCount: 0,
+        messagesCount: 0,
       };
+
       setMyGroups((prevGroups) => [...(prevGroups || []), newGroup]);
     }
   }, [groupName, groupAddress, groupId, createdBy]);

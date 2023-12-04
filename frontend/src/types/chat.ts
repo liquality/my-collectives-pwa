@@ -7,14 +7,25 @@ export interface Message {
     groupId: string;
 }
 
-export interface Group {
+
+export type Group = {
     id: string;
-    name?: string;
-    createdAt?: string;
-    members?: number,
-    rewards?: number;
-    publicAddress: string
-}
+    name: string;
+    description: string;
+    publicAddress: string | null;
+    createdAt: Date | null;
+    createdBy: string;
+    mintCount: number;
+    memberCount: number;
+    poolsCount: number;
+    messagesCount: number;
+    activePoolsCount: number;
+};
+
+
+
+
+
 
 export interface GroupCreation {
     name?: string;
