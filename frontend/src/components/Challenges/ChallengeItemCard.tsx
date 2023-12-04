@@ -12,12 +12,14 @@ import {
 import React, { useState } from "react";
 
 export interface ChallengeItemCardProps {
+  id: string;
   tokenId: string;
   mintingContractAddress: string;
   imageUrl: string;
 }
 
 const ChallengeItemCard: React.FC<ChallengeItemCardProps> = ({
+  id,
   tokenId,
   mintingContractAddress,
   imageUrl,
@@ -28,7 +30,7 @@ const ChallengeItemCard: React.FC<ChallengeItemCardProps> = ({
   const handleClick = () => {
     if (!loading) {
       router.push(
-        `/challenge/${tokenId}?&contractAddress=${mintingContractAddress}&imageUrl=${ipfsImageUrl}`
+        `/challenges/${id}`
       );
     }
   };

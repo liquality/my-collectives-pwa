@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import ApiService from "@/services/ApiService";
+import { Challenge } from "@/types/challenges";
 
 export function useGetChallenges() {
-  const [challenges, setChallenges] = useState<any | null>(null);
+  const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (!challenges) {
+        if (challenges.length <= 0) {
           setLoading(true);
           const _challenges = await ApiService.readChallenges();
           setChallenges(_challenges);

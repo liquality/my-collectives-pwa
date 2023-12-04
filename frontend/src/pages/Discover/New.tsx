@@ -1,5 +1,4 @@
 import {
-  IonButton,
   IonContent,
   IonFab,
   IonFabButton,
@@ -15,17 +14,24 @@ import DiscoverTopBar from "./DiscoverTopBar";
 import { useEffect, useRef, useState } from "react";
 import CreateGroupModal from "./CreateChallengeModal";
 import { Challenge } from "@/types/challenges";
+import ChallengeItemModal from "@/components/Challenges/ChallengeItemModal";
 
 const New: React.FC<RouteComponentProps> = (routerProps) => {
   const { challenges, loading, setChallenges } = useGetChallenges();
   const page = useRef(undefined);
   const createChallengeModal = useRef<HTMLIonModalElement>(null);
+  const [itemModalIsOpen, setItemModalIsOpen] = useState(false);
+
   const [presentingElement, setPresentingElement] = useState<
     HTMLElement | undefined
   >(undefined);
   const [resultChallenge, setResultChallenge] = useState<Challenge | null>(
     null
   );
+
+  const [selectedChallenge, setSelectedChallenge] = useState<
+    Challenge | undefined | null
+  >();
 
   useEffect(() => {
     //If a new challenge has been created, push into exisitng challenge array state to avoid re-fetching of challenges
@@ -45,6 +51,43 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
   function handleCreateChallenge(groupId: number) {
     hideCreateChallengeModal();
   }
+
+  const onChallengeSelected = async (challenge: Challenge) => {
+    setSelectedChallenge(challenge);
+  };
+
+  const onCloseChallenteItemModal = () => {
+    setSelectedChallenge(null);
+  };
+
+  const handleItemOnReject = () => {
+    if (selectedChallenge) {
+      const total = challenges.length;
+      const currentIndex = challenges.findIndex(
+        (challenge: Challenge) => challenge.id === selectedChallenge.id
+      );
+      if (currentIndex + 1 >= total) {
+        setSelectedChallenge(challenges[0]);
+      } else {
+        setSelectedChallenge(challenges[currentIndex + 1]);
+      }
+    } else {
+      challenges &&
+        challenges.length > 0 &&
+        setSelectedChallenge(challenges[0]);
+    }
+  };
+
+  const handleItemOnMint = () => {};
+
+  useEffect(() => {
+    if (selectedChallenge) {
+      !itemModalIsOpen && setItemModalIsOpen(true);
+    } else {
+      setItemModalIsOpen(false);
+    }
+  }, [selectedChallenge]);
+
   return (
     <IonPage>
       <IonContent className="ion-padding" color="light">
@@ -79,6 +122,7 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
 
         <HorizontalSwipe
           imageData={challenges}
+          setSelectedChallenge={onChallengeSelected}
           loading={loading}
         ></HorizontalSwipe>
 
@@ -87,9 +131,19 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
           <IonLabel color="primary">See All</IonLabel>
         </div>
         <HorizontalSwipe
+          setSelectedChallenge={onChallengeSelected}
           imageData={challenges}
           loading={loading}
         ></HorizontalSwipe>
+        <ChallengeItemModal
+          isOpen={itemModalIsOpen}
+          challenges={challenges}
+          currentChallengeId={selectedChallenge?.id}
+          presentingElement={presentingElement!}
+          onMint={handleItemOnMint}
+          onReject={handleItemOnReject}
+          dismiss={onCloseChallenteItemModal}
+        />
       </IonContent>
     </IonPage>
   );

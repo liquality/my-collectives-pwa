@@ -106,8 +106,7 @@ const App: React.FC = () => {
       <Route path="/collectiveDetail" component={CollectiveDetail} />
 
       <Route path="/mint" component={Mint} />
-      <Route path="/challenges" render={() => <Challenges />} exact />
-      <Route path="/challenge/:id" render={() => <Challenge />} exact />
+      <Route path="/challenges/:id?" component={Challenges}/>
 
       {/* Default route (not requiring authentication) */}
       <Route exact path="/">
