@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Group } from "@/types/chat";
+import { Group } from "@/types/general-types";
 import ApiService from "@/services/ApiService";
 import { useAccount } from "wagmi";
 import { useSignInWallet } from "../useSignInWallet";

@@ -1,7 +1,7 @@
 
 
 import { useState, useEffect } from "react";
-import { Invite } from "@/types/chat";
+import { Invite } from "@/types/general-types";
 import ApiService from "@/services/ApiService";
 import { useParams } from "react-router";
 

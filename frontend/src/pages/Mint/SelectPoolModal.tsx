@@ -1,15 +1,27 @@
-import { useState, forwardRef, Ref } from "react";
-import { IonButton, IonContent, IonModal, IonLabel } from "@ionic/react";
+import { useState, forwardRef, Ref, useMemo } from "react";
+import {
+  IonButton,
+  IonContent,
+  IonModal,
+  IonLabel,
+  IonAvatar,
+  IonIcon,
+} from "@ionic/react";
 import { Challenge } from "@/types/challenges";
 import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
 import HorizontalSwipe from "@/components/Images/HorizontalSwipe";
+import {
+  convertIpfsImageUrl,
+  cutOffTooLongString,
+  shortenAddress,
+} from "@/utils";
 
 export interface SelectPoolModal {
   presentingElement?: HTMLElement;
   dismiss: () => void;
   onSuccess?: (groupId: number) => void;
   trigger: string;
-  selectedPool: Challenge | undefined;
+  selectedPools: Challenge[];
   setSelectedPool: (challenge: Challenge | undefined) => void;
 }
 const SelectPoolModal = forwardRef(function CreateGroupModal(
@@ -17,19 +29,41 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
     presentingElement,
     dismiss,
     onSuccess,
+    selectedPools,
     trigger,
-    selectedPool,
+
     setSelectedPool,
   }: SelectPoolModal,
   ref: Ref<HTMLIonModalElement>
 ) {
   const { challenges, loading } = useGetChallenges();
-  let isButtonDisabled = !selectedPool?.mintingContractAddress;
+  const [clickedPool, setClickedPool] = useState<Challenge | null>(null);
+  let isButtonDisabled = !clickedPool?.mintingContractAddress;
 
   const handleSelectPool = async () => {
-    setSelectedPool(undefined);
+    setSelectedPool(clickedPool);
     dismiss();
   };
+
+  console.log(challenges, "challenges", selectedPools);
+
+  const filteredChallenges = useMemo(() => {
+    if (challenges && selectedPools) {
+      return challenges.filter((challenge) => {
+        // Check if challengeId exists in selectedPools
+        const existsInSelectedPools = selectedPools.some(
+          (selectedPool) =>
+            selectedPool?.challengeId === challenge?.id ||
+            selectedPool?.id === challenge?.id
+        );
+
+        // Include challenge if it doesn't exist in selectedPools
+        return !existsInSelectedPools;
+      });
+    } else {
+      return [];
+    }
+  }, [challenges, selectedPools]);
 
   return (
     <IonModal
@@ -39,19 +73,74 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
       presentingElement={presentingElement!}
     >
       <IonContent className="ion-padding" color="light">
-        <div className="spaced-on-sides">
-          <IonLabel>Music | {challenges?.length}</IonLabel>
-          <IonLabel color="primary">See All</IonLabel>
-        </div>
+        <div className="spaced-on-sides mb-3"></div>
         <div className="mb-3">
           {/* TODO: maybe refactor this to its own component specifically for SELECT
           as having optional Props is not the best */}
-          <HorizontalSwipe
+          {/*    <HorizontalSwipe
             imageData={challenges}
             loading={loading}
             selectedChallenge={selectedPool}
             setSelectedChallenge={setSelectedPool}
-          ></HorizontalSwipe>
+          ></HorizontalSwipe> */}
+
+          <div className="">
+            {challenges
+              ? filteredChallenges.map((pool: any, index: number) => (
+                  <div key={index} className="flexDirectionRow parent-hover">
+                    <div
+                      style={{ width: "100%" }}
+                      className="collective-card generic-grey-card"
+                      onClick={() => setClickedPool(pool)}
+                    >
+                      <div className="collective-data-container">
+                        <div className="flexDirectionRow">
+                          <div className="flexDirectionCol">
+                            <IonAvatar aria-hidden="true" slot="start">
+                              <img
+                                alt="group-avatar"
+                                src={convertIpfsImageUrl(pool.imageUrl)}
+                              />
+                            </IonAvatar>
+                          </div>
+                          <div className="flexDirectionCol">
+                            <p className="collective-card-name">
+                              {cutOffTooLongString(pool.name, 25)}
+                            </p>
+                            <p className="public-address">
+                              {shortenAddress(pool.mintingContractAddress)}
+                            </p>
+                            <p className="public-address">
+                              {" "}
+                              <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>{" "}
+                              <IonLabel>{pool.totalMints}</IonLabel>{" "}
+                              <IonIcon
+                                style={{
+                                  fontSize: 15,
+                                  marginTop: 5,
+                                  marginLeft: 5,
+                                }}
+                                src="/assets/icons/people-tile.svg"
+                              ></IonIcon>{" "}
+                              <IonLabel>{pool.memberCount}</IonLabel>{" "}
+                              <IonIcon
+                                style={{
+                                  fontSize: 12,
+                                  marginTop: 3,
+                                  marginLeft: 5,
+                                }}
+                                src="/assets/icons/message-tile.svg"
+                              ></IonIcon>{" "}
+                              <IonLabel>{pool.messagesCount}</IonLabel>{" "}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              : null}
+          </div>
         </div>
         <div className="button-container">
           <IonButton

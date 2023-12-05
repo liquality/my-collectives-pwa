@@ -10,7 +10,7 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import ApiService from "@/services/ApiService";
-import { GroupCreation } from "@/types/chat";
+import { GroupCreation } from "@/types/general-types";
 import { RouteComponentProps, useHistory, useParams } from "react-router";
 import Header from "@/components/Header";
 import { useSignInWallet } from "@/hooks/useSignInWallet";
@@ -32,8 +32,6 @@ export interface ManageCollectivePageProps
     groupId?: string;
   }> {}
 
-// ... other imports
-
 const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
   const { goBack } = useIonRouter();
   const { user } = useSignInWallet();
@@ -48,11 +46,8 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
   });
 
   const [allSelectedPools, setAllSelectedPools] = useState<Challenge[]>([]);
-
   const selectPoolModal = useRef<HTMLIonModalElement>(null);
-
   const isButtonDisabled = !updatedGroup.description || !updatedGroup.name;
-
   const page = useRef(undefined);
 
   useEffect(() => {
@@ -91,13 +86,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
   };
 
   const handlePoolSelection = (selectedPool: Challenge) => {
-    const alreadyExists = allSelectedPools.find(
-      (pool) => selectedPool.id === pool.id
-    );
-
-    if (alreadyExists) {
-      console.log("ERROR, you already picked this pool!");
-    } else {
+    if (allSelectedPools) {
       setAllSelectedPools((prevGroups) => [...prevGroups, selectedPool]);
     }
 
@@ -118,7 +107,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
           ref={selectPoolModal}
           presentingElement={presentingElement}
           dismiss={hideSelectPoolModal}
-          selectedPool={undefined}
+          selectedPools={allSelectedPools}
           setSelectedPool={handlePoolSelection}
         />
         <IonList inset={true}>

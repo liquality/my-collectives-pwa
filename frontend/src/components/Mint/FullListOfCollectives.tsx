@@ -1,5 +1,5 @@
 import { useSignInWallet } from "@/hooks/useSignInWallet";
-import { Group } from "@/types/chat";
+import { Group } from "@/types/general-types";
 import { shortenAddress } from "@/utils";
 import { pathConstants } from "@/utils/routeNames";
 import {

@@ -1,4 +1,4 @@
-import { Message, Group, GroupCreation } from "@/types/chat";
+import { Message, Group, GroupCreation } from "@/types/general-types";
 //@ts-ignore
 import NetworkService from "./NetworkService";
 const InvitesService = {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Message } from "@/types/chat";
+import { Message } from "@/types/general-types";
 import ApiService from "@/services/ApiService";
 interface ChatHistoryHookResult {
     chatHistory: Message[] | null;

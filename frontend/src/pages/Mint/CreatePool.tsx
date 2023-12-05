@@ -20,7 +20,7 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import ApiService from "@/services/ApiService";
-import { GroupCreation } from "@/types/chat";
+import { GroupCreation } from "@/types/general-types";
 import { useAccount } from "wagmi";
 import { RouteComponentProps, useHistory } from "react-router";
 import Header from "@/components/Header";
