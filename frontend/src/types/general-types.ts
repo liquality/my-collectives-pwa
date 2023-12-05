@@ -22,7 +22,7 @@ export type Group = {
     activePoolsCount: number;
 };
 
-type PoolWithChallenge = {
+export type PoolWithChallenge = {
     poolId: string;
     groupId: string;
     challengeId: string;

@@ -24,7 +24,6 @@ export interface CreateCollectiveProps {
   onSuccess?: (groupId: number) => void;
   trigger: string;
 }
-//TODO: Make this a page, not a modal
 const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
   const { goBack } = useIonRouter();
   const { user } = useSignInWallet();
@@ -33,12 +32,8 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     name: "",
     description: "",
   });
-  const [selectedPool, setSelectedPool] = useState<Challenge | undefined>(
-    undefined
-  );
-  const [allSelectedPools, setAllSelectedPools] = useState<
-    Challenge[] | undefined
-  >(undefined);
+  const [allSelectedPools, setAllSelectedPools] = useState<Challenge[]>([]);
+
   const page = useRef(undefined);
   const selectPoolModal = useRef<HTMLIonModalElement>(null);
   const [presentingElement, setPresentingElement] = useState<
@@ -51,24 +46,15 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
   }
 
   useEffect(() => {
-    //TODO: refine this logic, if we refactor to having our own HorizontalSwipeForSelection
-    //component we can have much better logic than this that will be more bug-free
-    if (selectedPool) {
-      const alreadyExists = allSelectedPools?.find(
-        (pool) => selectedPool.id === pool.id
-      );
-      if (alreadyExists) {
-        //TODO: handle error already picked this
-        console.log("ERROR, you already picked this pool!");
-      } else {
-        setAllSelectedPools((prevGroups: Challenge[] | undefined) => [
-          ...(prevGroups || []),
-          selectedPool as Challenge,
-        ]);
-      }
-    }
     setPresentingElement(page.current);
-  }, [selectedPool]);
+  }, []);
+
+  const handlePoolSelection = (selectedPool: Challenge) => {
+    if (allSelectedPools) {
+      setAllSelectedPools((prevGroups) => [...prevGroups, selectedPool]);
+    }
+    hideSelectPoolModal();
+  };
 
   const cancel = () => {
     goBack();
@@ -112,8 +98,8 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
           ref={selectPoolModal}
           presentingElement={presentingElement}
           dismiss={hideSelectPoolModal}
-          selectedPool={selectedPool}
-          setSelectedPool={setSelectedPool}
+          selectedPools={allSelectedPools}
+          handlePoolSelection={handlePoolSelection}
         />
         <IonList inset={true}>
           <IonItem>

@@ -34,51 +34,45 @@ export interface ManageCollectivePageProps
 
 const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
   const { goBack } = useIonRouter();
-  const { user } = useSignInWallet();
-  const router = useIonRouter();
   const { groupId } = useParams<{ groupId: string }>();
-  const { pools, loading } = useGetPoolsByGroupId(groupId);
+  const { pools } = useGetPoolsByGroupId(groupId);
   const { group } = useGetGroupById(groupId);
-
   const [updatedGroup, setUpdatedGroup] = useState({
     name: "",
     description: "",
   });
-
   const [allSelectedPools, setAllSelectedPools] = useState<Challenge[]>([]);
   const selectPoolModal = useRef<HTMLIonModalElement>(null);
   const isButtonDisabled = !updatedGroup.description || !updatedGroup.name;
+  const [presentingElement, setPresentingElement] = useState<
+    HTMLElement | undefined
+  >(undefined);
   const page = useRef(undefined);
 
   useEffect(() => {
     if (pools && !allSelectedPools.length) {
       setAllSelectedPools(pools);
     }
+    setPresentingElement(page.current);
   }, [pools, group]);
-
-  const [presentingElement, setPresentingElement] = useState<
-    HTMLElement | undefined
-  >(undefined);
 
   const hideSelectPoolModal = () => {
     selectPoolModal.current?.dismiss();
   };
 
   const handleRemoval = (poolToRemove: Challenge) => {
+    //TODO: add database removal here as well
     setAllSelectedPools((prevGroups) =>
       prevGroups.filter((pool) => pool !== poolToRemove)
     );
   };
 
-  const handleCreateGroup = async () => {
-    // ... existing code
-
+  const handleUpdateGroup = async () => {
     try {
-      const result = await ApiService.createGroup({
-        group: groupObject,
+      /*   const result = await ApiService.updateGroup({
+        group: updatedGroup,
         pools: allSelectedPools,
-      });
-
+      }); */
       // ... existing code
     } catch (error) {
       console.log(error, "error posting group");
@@ -89,7 +83,6 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
     if (allSelectedPools) {
       setAllSelectedPools((prevGroups) => [...prevGroups, selectedPool]);
     }
-
     hideSelectPoolModal();
   };
 
@@ -108,7 +101,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
           presentingElement={presentingElement}
           dismiss={hideSelectPoolModal}
           selectedPools={allSelectedPools}
-          setSelectedPool={handlePoolSelection}
+          handlePoolSelection={handlePoolSelection}
         />
         <IonList inset={true}>
           <IonItem>
@@ -172,7 +165,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
 
         <div className="button-container">
           <IonButton
-            onClick={handleCreateGroup}
+            onClick={handleUpdateGroup}
             shape="round"
             disabled={isButtonDisabled}
             color={isButtonDisabled ? "medium" : "primary"}

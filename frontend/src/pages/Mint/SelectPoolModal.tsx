@@ -9,7 +9,6 @@ import {
 } from "@ionic/react";
 import { Challenge } from "@/types/challenges";
 import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
-import HorizontalSwipe from "@/components/Images/HorizontalSwipe";
 import {
   convertIpfsImageUrl,
   cutOffTooLongString,
@@ -21,8 +20,8 @@ export interface SelectPoolModal {
   dismiss: () => void;
   onSuccess?: (groupId: number) => void;
   trigger: string;
-  selectedPools: Challenge[];
-  setSelectedPool: (challenge: Challenge | undefined) => void;
+  selectedPools: any[];
+  handlePoolSelection: (challenge: Challenge) => void;
 }
 const SelectPoolModal = forwardRef(function CreateGroupModal(
   {
@@ -32,7 +31,7 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
     selectedPools,
     trigger,
 
-    setSelectedPool,
+    handlePoolSelection: setSelectedPool,
   }: SelectPoolModal,
   ref: Ref<HTMLIonModalElement>
 ) {
@@ -41,8 +40,10 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
   let isButtonDisabled = !clickedPool?.mintingContractAddress;
 
   const handleSelectPool = async () => {
-    setSelectedPool(clickedPool);
-    dismiss();
+    if (clickedPool) {
+      setSelectedPool(clickedPool);
+      dismiss();
+    }
   };
 
   console.log(challenges, "challenges", selectedPools);
@@ -50,14 +51,13 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
   const filteredChallenges = useMemo(() => {
     if (challenges && selectedPools) {
       return challenges.filter((challenge) => {
-        // Check if challengeId exists in selectedPools
+        // check if challengeId exists in selectedPools already
         const existsInSelectedPools = selectedPools.some(
           (selectedPool) =>
             selectedPool?.challengeId === challenge?.id ||
             selectedPool?.id === challenge?.id
         );
-
-        // Include challenge if it doesn't exist in selectedPools
+        // include challenge if it doesn't exist in selectedPools
         return !existsInSelectedPools;
       });
     } else {
@@ -75,15 +75,6 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
       <IonContent className="ion-padding" color="light">
         <div className="spaced-on-sides mb-3"></div>
         <div className="mb-3">
-          {/* TODO: maybe refactor this to its own component specifically for SELECT
-          as having optional Props is not the best */}
-          {/*    <HorizontalSwipe
-            imageData={challenges}
-            loading={loading}
-            selectedChallenge={selectedPool}
-            setSelectedChallenge={setSelectedPool}
-          ></HorizontalSwipe> */}
-
           <div className="">
             {challenges
               ? filteredChallenges.map((pool: any, index: number) => (
