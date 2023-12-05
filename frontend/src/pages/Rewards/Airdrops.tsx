@@ -4,12 +4,15 @@ import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
 import { RouteComponentProps } from "react-router";
 import PageSearchBar from "@/components/PageSearchBar";
 import RewardsTopBar from "@/components/TopBars/RewardsTopBar";
+import Header from "@/components/Header";
 
 const Airdrops: React.FC<RouteComponentProps> = (routerProps) => {
   const { challenges, loading } = useGetChallenges();
   //TODO: change parent tag to IonPage
   return (
     <IonPage>
+      <Header title="Rewards" />
+
       <IonContent className="ion-padding" color="light">
         <RewardsTopBar {...routerProps}>
           <PageSearchBar searchEnabled={false} reloadEnabled={false} />

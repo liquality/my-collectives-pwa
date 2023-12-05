@@ -1,16 +1,13 @@
-import Header from "@/components/Header";
 import { IonContent, IonPage, IonRouterOutlet } from "@ionic/react";
 import { Redirect, Route, RouteComponentProps } from "react-router";
-
 import { pathConstants } from "@/utils/routeNames";
 import Summary from "./Summary";
 import Airdrops from "./Airdrops";
+import ManageCollective from "./ManageCollective";
 
 const Rewards: React.FC<RouteComponentProps> = ({ match }) => {
   return (
     <IonPage>
-      <Header title="Rewards" />
-
       <IonContent className="ion-padding" color="light">
         <IonRouterOutlet className="app-page-router-outlet">
           <Route
@@ -22,6 +19,11 @@ const Rewards: React.FC<RouteComponentProps> = ({ match }) => {
             path={pathConstants.rewards.airdrops}
             component={Airdrops}
             exact
+          />
+
+          <Route
+            path={pathConstants.rewards.manage}
+            component={ManageCollective}
           />
 
           <Route exact path={pathConstants.rewards.index}>

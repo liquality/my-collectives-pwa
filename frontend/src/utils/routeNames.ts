@@ -4,7 +4,6 @@ export const pathConstants = {
     mintPage: {
         mint: "/mint",
         myCollectives: "/mint/collectiveContent",
-        manageCollective: "/mint/manageCollective",
         createCollective: "/mint/createCollective",
         noCollectives: "/mint/noCollectives",
         collectiveInvites: "/mint/collectiveInvites",
@@ -20,7 +19,8 @@ export const pathConstants = {
         index: "/rewards",
         mymints: "/rewards/mymints",
         summary: "/rewards/summary",
-        airdrops: "/rewards/airdrops"
+        airdrops: "/rewards/airdrops",
+        manage: "/manage/:groupId"
     },
     collectiveDetail: {
         collectiveDetail: "/collectiveDetail",

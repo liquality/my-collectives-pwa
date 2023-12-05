@@ -15,7 +15,6 @@ import {
 import MintCollectiveContent from "./MintCollectiveContent";
 import NoGroups from "./NoGroups";
 import CreateCollective from "./CreateCollective";
-import ManageCollective from "./ManageCollective";
 import { pathConstants } from "@/utils/routeNames";
 import MyMints from "./MyMints";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
@@ -41,11 +40,7 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
               component={CreateCollective}
               exact
             />
-            <Route
-              path={pathConstants.mintPage.manageCollective}
-              component={ManageCollective}
-              exact
-            />
+
             <Route
               path={pathConstants.mintPage.myCollectives}
               component={MintCollectiveContent}
