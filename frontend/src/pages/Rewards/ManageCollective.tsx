@@ -47,8 +47,6 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
   >(undefined);
   const page = useRef(undefined);
 
-  console.log(updatedGroup, "updated group?", group);
-
   useEffect(() => {
     if (pools && !allSelectedPools.length) {
       setAllSelectedPools(pools);
@@ -67,7 +65,6 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
   };
 
   const handleRemoval = (poolToRemove: Challenge) => {
-    //TODO: add database removal here as well
     setAllSelectedPools((prevGroups) =>
       prevGroups.filter((pool) => pool !== poolToRemove)
     );
@@ -79,7 +76,6 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
         group: updatedGroup,
         pools: allSelectedPools,
       });
-      console.log(result, "resuöt");
     } catch (error) {
       console.log(error, "error posting group");
     }

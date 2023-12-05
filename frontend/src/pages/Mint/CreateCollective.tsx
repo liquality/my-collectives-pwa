@@ -79,7 +79,6 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         group: groupObject,
         pools: allSelectedPools,
       });
-      console.log(result, "wats resu?");
       const { name, publicAddress, id, createdBy } = result;
       router.push(
         `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${publicAddress}&groupId=${id}&createdBy=${createdBy}`
@@ -88,8 +87,6 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       console.log(error, "error posting group");
     }
   };
-
-  console.log(allSelectedPools, "all selec");
 
   return (
     <IonPage>

@@ -4,7 +4,6 @@ import {
   IonContent,
   IonModal,
   IonLabel,
-  IonAvatar,
   IonIcon,
 } from "@ionic/react";
 import { Challenge } from "@/types/challenges";
@@ -18,7 +17,6 @@ import {
 export interface SelectPoolModal {
   presentingElement?: HTMLElement;
   dismiss: () => void;
-  onSuccess?: (groupId: number) => void;
   trigger: string;
   selectedPools: any[];
   handlePoolSelection: (challenge: Challenge) => void;
@@ -27,15 +25,13 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
   {
     presentingElement,
     dismiss,
-    onSuccess,
     selectedPools,
     trigger,
-
     handlePoolSelection: setSelectedPool,
   }: SelectPoolModal,
   ref: Ref<HTMLIonModalElement>
 ) {
-  const { challenges, loading } = useGetChallenges();
+  const { challenges } = useGetChallenges();
   const [clickedPool, setClickedPool] = useState<Challenge | null>(null);
   let isButtonDisabled = !clickedPool?.mintingContractAddress;
 
@@ -45,8 +41,6 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
       dismiss();
     }
   };
-
-  console.log(challenges, "challenges", selectedPools);
 
   const filteredChallenges = useMemo(() => {
     if (challenges && selectedPools) {
