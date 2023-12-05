@@ -11,12 +11,13 @@ import {
 } from "@ionic/react";
 import ApiService from "@/services/ApiService";
 import { GroupCreation } from "@/types/general-types";
-import { RouteComponentProps, useHistory } from "react-router";
+import { RouteComponentProps } from "react-router";
 import Header from "@/components/Header";
 import { useSignInWallet } from "@/hooks/useSignInWallet";
 import { pathConstants } from "@/utils/routeNames";
 import { Challenge } from "@/types/challenges";
 import SelectPoolModal from "./SelectPoolModal";
+import { convertIpfsImageUrl, cutOffTooLongString } from "@/utils";
 
 export interface CreateCollectiveProps {
   presentingElement?: HTMLElement;
@@ -88,6 +89,8 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     }
   };
 
+  console.log(allSelectedPools, "all selec");
+
   return (
     <IonPage>
       <Header title="Create Collective" />
@@ -137,7 +140,19 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
             ? allSelectedPools?.map((pool, index) => (
                 <div className="grey-container" key={index}>
                   <div className="flexDirectionRow space-between">
-                    <p> {pool?.tokenId}</p>
+                    <div className="flexDirectionRow">
+                      <img
+                        className="row-img"
+                        alt="group-avatar"
+                        src={convertIpfsImageUrl(pool.imageUrl)}
+                      />
+                      <div className="ml-1">
+                        <p> {cutOffTooLongString(pool?.name, 20)}</p>
+                        <p className="creator-of-mint">
+                          {pool?.creatorOfMint ?? "creator.eth"}
+                        </p>
+                      </div>
+                    </div>
                     <p
                       className="small-purple-text"
                       onClick={() => handleRemoval(pool)}
@@ -145,8 +160,6 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
                       Remove
                     </p>
                   </div>
-                  <p>{pool?.name}</p>
-                  <IonLabel>Creator: {pool?.creatorOfMint}</IonLabel>
                 </div>
               ))
             : null}

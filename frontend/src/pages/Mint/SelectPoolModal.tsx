@@ -73,7 +73,9 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
       presentingElement={presentingElement!}
     >
       <IonContent className="ion-padding" color="light">
-        <div className="spaced-on-sides mb-3"></div>
+        <div className="spaced-on-sides mb-3">
+          <h2 className="header-title-text">SELECT</h2>
+        </div>
         <div className="mb-3">
           <div className="">
             {challenges
@@ -87,12 +89,11 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
                       <div className="collective-data-container">
                         <div className="flexDirectionRow">
                           <div className="flexDirectionCol">
-                            <IonAvatar aria-hidden="true" slot="start">
-                              <img
-                                alt="group-avatar"
-                                src={convertIpfsImageUrl(pool.imageUrl)}
-                              />
-                            </IonAvatar>
+                            <img
+                              className="row-img"
+                              alt="group-avatar"
+                              src={convertIpfsImageUrl(pool.imageUrl)}
+                            />
                           </div>
                           <div className="flexDirectionCol">
                             <p className="collective-card-name">
