@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 //@ts-ignore
 import ApiService from "../services/ApiService";
-import { Group, Message } from "@/types/chat";
+import { Group, Message } from "@/types/general-types";
 import { useChatHistory } from "@/hooks/useChatHistory";
 import socket from "../services/SocketService"; // Import the socket instance
 import { useAccount } from "wagmi";

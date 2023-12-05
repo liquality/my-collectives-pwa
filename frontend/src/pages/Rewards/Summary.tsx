@@ -10,6 +10,7 @@ import {
   IonPage,
   IonRow,
   IonText,
+  useIonRouter,
 } from "@ionic/react";
 
 import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
@@ -22,12 +23,15 @@ import { shortenAddress } from "@/utils";
 import { useMemo } from "react";
 import { useSignInWallet } from "@/hooks/useSignInWallet";
 import GenerateInviteBtn from "@/components/GenerateInvite";
+import { pathConstants } from "@/utils/routeNames";
+import Header from "@/components/Header";
 
 const Summary: React.FC<RouteComponentProps> = (routerProps) => {
   //TODO: change parent tag to IonPage
 
   const { myGroups, loading, reload } = useGetMyGroups();
   const { user } = useSignInWallet();
+  const router = useIonRouter();
   console.log(myGroups, "My groups");
 
   const loadingAllData = !myGroups && loading;
@@ -40,8 +44,15 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
 
   console.log(filterForUserCreatedGroups, "filtered groups");
 
+  const handleManageNavigation = (groupId: string) => {
+    const url = pathConstants.rewards.manage.replace(":groupId", groupId);
+    router.push(url, "root");
+  };
+
   return (
     <IonPage>
+      <Header title="Rewards" />
+
       <IonContent className="ion-padding" color="light">
         <RewardsTopBar {...routerProps}>
           <PageSearchBar searchEnabled={false} reloadEnabled={false} />
@@ -68,7 +79,10 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
                     <IonCardTitle>{group.name} </IonCardTitle>
                     <IonText style={{ fontSize: "13px" }}>
                       {" "}
-                      <GenerateInviteBtn groupId={group.id} /> | Manage
+                      <GenerateInviteBtn groupId={group.id} /> |{" "}
+                      <IonText onClick={() => handleManageNavigation(group.id)}>
+                        Manage{" "}
+                      </IonText>
                     </IonText>
                   </IonRow>
 

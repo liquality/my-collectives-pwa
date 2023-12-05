@@ -1,4 +1,4 @@
-import { Message, Group, GroupCreation } from "@/types/chat";
+import { Message, Group, GroupCreation } from "@/types/general-types";
 //@ts-ignore
 import NetworkService from "./NetworkService";
 import { Challenge, ChallengeCreation } from "@/types/challenges";
@@ -6,6 +6,10 @@ import { Auth } from "@/utils";
 const ApiService = {
   createGroup: async function (groupObject: any) {
     return NetworkService.postResourceWithAuth("/v1/groups/", groupObject,);
+  },
+
+  updateGroup: async function (groupId: string, groupObject: any) {
+    return NetworkService.putResourceWithAuth("/v1/groups/" + groupId, groupObject,);
   },
 
   //Includes groupId and public address
@@ -19,6 +23,7 @@ const ApiService = {
   readGroup: async function (groupId: string) {
     return NetworkService.getResourceWithAuth("/v1/groups/" + groupId);
   },
+
 
   readGroupByMemberAddress: async function (memberAddress: string) {
     return NetworkService.getResourceWithAuth(

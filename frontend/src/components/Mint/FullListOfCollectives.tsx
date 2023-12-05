@@ -1,6 +1,6 @@
 import { useSignInWallet } from "@/hooks/useSignInWallet";
-import { Group } from "@/types/chat";
-import { shortenAddress } from "@/utils";
+import { Group } from "@/types/general-types";
+import { cutOffTooLongString, shortenAddress } from "@/utils";
 import { pathConstants } from "@/utils/routeNames";
 import {
   useIonRouter,
@@ -57,7 +57,9 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
                       ) : null}
                     </div>
                     <div className="flexDirectionCol">
-                      <p className="collective-card-name">{group.name}</p>
+                      <p className="collective-card-name">
+                        {cutOffTooLongString(group.name, 20)}
+                      </p>
                       <p className="public-address">
                         {shortenAddress(group.publicAddress)}
                       </p>

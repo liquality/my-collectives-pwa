@@ -3,6 +3,7 @@ import { dbClient } from "../data";
 import { Challenge } from "../models/challenges";
 import { Group, CreateGroupRequest, GroupAllInfo } from "../models/group";
 import { giveUserInvitesForGroup } from "../utils";
+import Pool from "mysql2/typings/mysql/lib/Pool";
 
 export class GroupsService {
   public static create(
@@ -88,7 +89,6 @@ export class GroupsService {
       .countDistinct({ activePoolsCount: dbClient.raw('CASE WHEN challenges.expiration > CURRENT_TIMESTAMP THEN pools.id ELSE NULL END') })
       .orderBy('groups.createdAt', 'desc');
 
-    console.log(result, 'wats result?')
 
 
     return result
@@ -110,7 +110,36 @@ export class GroupsService {
       .first<Group>("id", "name", "description", "publicAddress", "createdAt");
   }
 
+  public static async update(id: string, updatedGroupFields: Partial<Group>, pools: any[], userId: string): Promise<any> {
+    const existingPools = await dbClient("pools").select("challengeId").where("groupId", "=", id);
+    // identify pools to be inserted (new ones) and removed (existing ones not in the updated array)
+    const newPools = pools.filter((pool) => !existingPools.some((existingPool) => existingPool.challengeId === pool.id || existingPool.challengeId === pool.challengeId));
+    const poolsToRemove = existingPools.filter((existingPool) => !pools.some((pool) => existingPool.challengeId === pool.id || existingPool.challengeId === pool.challengeId));
 
+    const queryResult = await dbClient("groups").where("id", "=", id).update(updatedGroupFields);
 
+    // insert new pools
+    if (newPools.length > 0) {
+      const poolInsertData = newPools.map((pool) => ({
+        groupId: id,
+        createdBy: userId,
+        challengeId: pool.id,
+        createdAt: new Date()
+      }));
+      await dbClient("pools").insert(poolInsertData);
+    }
 
+    // remove pools that are not in the updated array
+    if (poolsToRemove.length > 0) {
+      const challengeIdsToRemove = poolsToRemove.map((existingPool) => existingPool.challengeId);
+      await dbClient("pools").where("groupId", "=", id).whereIn("challengeId", challengeIdsToRemove).del();
+    }
+
+    return queryResult;
+  }
 }
+
+
+
+
+
