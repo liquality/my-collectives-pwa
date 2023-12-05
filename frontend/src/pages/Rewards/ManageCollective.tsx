@@ -16,6 +16,7 @@ import SelectPoolModal from "../Mint/SelectPoolModal";
 import useGetPoolsByGroupId from "@/hooks/Collective/useGetPoolsByGroupId";
 import useGetGroupById from "@/hooks/Groups/useGetGroupById";
 import { convertIpfsImageUrl, cutOffTooLongString } from "@/utils";
+import ApiService from "@/services/ApiService";
 
 export interface CreateCollectiveProps {
   presentingElement?: HTMLElement;
@@ -66,11 +67,11 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
 
   const handleUpdateGroup = async () => {
     try {
-      /*   const result = await ApiService.updateGroup({
+      const result = await ApiService.updateGroup(groupId, {
         group: updatedGroup,
         pools: allSelectedPools,
-      }); */
-      // ... existing code
+      });
+      console.log(result, "resuöt");
     } catch (error) {
       console.log(error, "error posting group");
     }

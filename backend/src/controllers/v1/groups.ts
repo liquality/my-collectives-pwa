@@ -65,6 +65,33 @@ export class GroupsController {
     }
   };
 
+  public update: RequestHandler = async (req, res) => {
+    const { group, pools } = req.body;
+    const { id } = req.params
+    const user = await AuthService.find((req as any).auth?.sub);
+    if (!id) {
+      res.status(400).send({ error: "GroupId is required" });
+    } else {
+      try {
+        console.log(group, pools, user, 'USER ID')
+
+        const updatedGroup = await GroupsService.update(
+          id, group, pools, user.id
+        );
+        console.log(updatedGroup, 'UPDATED GROUP?')
+
+        if (!updatedGroup) {
+          throw new Error("Group not created");
+        }
+
+        res.status(200).send({ ok: updatedGroup });
+      } catch (err: any) {
+        console.error(err)
+        res.status(500).send({ error: err.message });
+      }
+    }
+  };
+
   public findMembers: RequestHandler = async (req, res) => {
     const { id } = req.params;
     if (!id) {

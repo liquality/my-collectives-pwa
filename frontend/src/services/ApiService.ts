@@ -8,6 +8,10 @@ const ApiService = {
     return NetworkService.postResourceWithAuth("/v1/groups/", groupObject,);
   },
 
+  updateGroup: async function (groupId: string, groupObject: any) {
+    return NetworkService.putResourceWithAuth("/v1/groups/" + groupId, groupObject,);
+  },
+
   //Includes groupId and public address
   createMember: async function (id: string, member: any) {
     return NetworkService.postResourceWithAuth(
@@ -19,6 +23,7 @@ const ApiService = {
   readGroup: async function (groupId: string) {
     return NetworkService.getResourceWithAuth("/v1/groups/" + groupId);
   },
+
 
   readGroupByMemberAddress: async function (memberAddress: string) {
     return NetworkService.getResourceWithAuth(
