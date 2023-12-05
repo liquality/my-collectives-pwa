@@ -16,20 +16,13 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import { Challenge } from "@/types/challenges";
-import { pathConstants } from "@/utils/routeNames";
 import { useLocation } from "react-router";
 
 export interface SwipeCardProps {
   challenge: Challenge;
-  setSelectedChallenge?: (challenge: Challenge) => void;
-  selectedChallenge?: Challenge;
 }
 
-const SwipeCard: React.FC<SwipeCardProps> = ({
-  challenge,
-  setSelectedChallenge,
-  selectedChallenge,
-}: SwipeCardProps) => {
+const SwipeCard: React.FC<SwipeCardProps> = ({ challenge }: SwipeCardProps) => {
   const {
     id,
     mintingContractAddress,
@@ -50,11 +43,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
 
   const handleClick = () => {
     if (!loading) {
-      if (setSelectedChallenge) {
-        setSelectedChallenge(challenge as Challenge); // type assertion here
-      } else {
-        router.push(`/challenges/${id}`);
-      }
+      router.push(`/challenges/${id}`);
     }
   };
 
@@ -96,12 +85,6 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
               <IonIcon src="/assets/icons/people-tile.svg"></IonIcon>
               <IonLabel>80</IonLabel>
             </IonCol>
-
-            {selectedChallenge?.id === challenge?.id ? (
-              <IonCol size="auto">
-                <IonLabel>SELECTED</IonLabel>
-              </IonCol>
-            ) : null}
           </IonRow>
         </IonGrid>
       </IonCardContent>
