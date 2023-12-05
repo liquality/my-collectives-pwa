@@ -47,9 +47,17 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
   >(undefined);
   const page = useRef(undefined);
 
+  console.log(updatedGroup, "updated group?", group);
+
   useEffect(() => {
     if (pools && !allSelectedPools.length) {
       setAllSelectedPools(pools);
+    }
+    if (group) {
+      setUpdatedGroup({
+        name: group.name,
+        description: group.description,
+      });
     }
     setPresentingElement(page.current);
   }, [pools, group]);
@@ -107,6 +115,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
               label={group?.name}
               label-placement="floating"
               placeholder="Enter the name"
+              value={updatedGroup.name}
               onIonInput={(e) =>
                 setUpdatedGroup((prevGroup) => ({
                   ...prevGroup,
@@ -121,6 +130,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
               label={group?.description}
               label-placement="floating"
               placeholder="Enter the description"
+              value={updatedGroup.description}
               onIonInput={(e) =>
                 setUpdatedGroup((prevGroup) => ({
                   ...prevGroup,
