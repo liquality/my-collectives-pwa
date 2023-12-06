@@ -79,6 +79,8 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         group: groupObject,
         pools: allSelectedPools,
       });
+      //TODO: in the backend or frontend, when a POOL is created, need to call createPool() from smart contract, which returns
+      //the unique public address of that pool
       const { name, publicAddress, id, createdBy } = result;
       router.push(
         `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${publicAddress}&groupId=${id}&createdBy=${createdBy}`
