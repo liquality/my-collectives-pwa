@@ -8,6 +8,8 @@ export async function up(knex: Knex): Promise<void> {
         table.string('description').nullable();
         table.string('publicAddress').nullable();
         table.integer('mintCount').defaultTo(0).notNullable();
+        table.integer('wonChallenges').defaultTo(0).notNullable();
+        table.integer('totalRewardedInEth').defaultTo(0).notNullable();
         table.uuid("createdBy").notNullable();
         table.foreign("createdBy").references("users.id").onDelete("CASCADE");
         table.timestamps({ useCamelCase: true });
