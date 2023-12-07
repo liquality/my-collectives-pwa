@@ -14,7 +14,7 @@ import DiscoverTopBar from "./DiscoverTopBar";
 import { useEffect, useRef, useState } from "react";
 import CreateGroupModal from "./CreateChallengeModal";
 import { Challenge } from "@/types/challenges";
-import ChallengeItemModal from "@/components/ChallengeSwipeModal/ChallengeItemModal";
+import ChallengeItemModal from "@/components/ChallengesModal/ChallengeItemModal";
 
 
 const New: React.FC<RouteComponentProps> = (routerProps) => {
