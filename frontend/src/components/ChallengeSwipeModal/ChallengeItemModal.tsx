@@ -64,10 +64,12 @@ const ChallengeItemModal = ({
   const [applyRejectAnimation, setApplyRejectAnimation] = useState(false);
 
   const infoSheetModalRef = useRef<HTMLIonModalElement>(null);
+  const modal = useRef<HTMLIonModalElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   function handleDismiss() {
     setItemInfoIsOpen(false);
+    setMintModalIsOpen(false);
     dismiss();
   }
 
@@ -76,7 +78,13 @@ const ChallengeItemModal = ({
   }
 
   function onClickMint() {
+    setItemInfoIsOpen(false);
     setMintModalIsOpen(true);
+  }
+
+  function onDismissMintModal() {
+    setMintModalIsOpen(false);
+    setItemInfoIsOpen(true);
   }
 
   function onClickReject() {
@@ -91,7 +99,7 @@ const ChallengeItemModal = ({
     if ((direction as CardSwipeDirection) === "left") {
       setCurrentCard();
     } else {
-      //
+      onClickMint();
     }
   }
 
@@ -147,6 +155,7 @@ const ChallengeItemModal = ({
   return (
     <IonModal
       isOpen={isOpen}
+      ref={modal}
       presentingElement={presentingElement!}
       className="challenge-item-modal"
     >
@@ -163,7 +172,7 @@ const ChallengeItemModal = ({
               </IonButton>
             )}
           </IonButtons>
-          <IonTitle>{challenges[currentIndex]?.name}</IonTitle>
+          <IonTitle>176 Minted | 6 Groups</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -221,12 +230,13 @@ const ChallengeItemModal = ({
               isOpen={itemInfoIsOpen}
               ref={infoSheetModalRef}
               onBreakpointDidChange={onInfoBreakpointDidChange}
+              onClickMint={onClickMint}
             />
             <ChallengeItemMintModal
-              presentingElement={presentingElement}
+              presentingElement={modal.current}
               challenge={challenges[currentIndex]}
               isOpen={mintModalIsOpen}
-              dismiss={() => setMintModalIsOpen(false)}
+              dismiss={onDismissMintModal}
             />
           </>
         ) : null}

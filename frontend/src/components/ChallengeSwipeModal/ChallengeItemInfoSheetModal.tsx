@@ -34,12 +34,14 @@ const ChallengeItemInfoSheetModal = (
     challenge,
     onBreakpointDidChange,
     isOpen = true,
-    initialBreakpoint = 0.12
+    initialBreakpoint = 0.12,
+    onClickMint,
   }: {
     challenge: Challenge;
     isOpen: boolean;
     initialBreakpoint: number;
     onBreakpointDidChange?: (value: number) => void;
+    onClickMint: () => void;
   },
   ref: Ref<HTMLIonModalElement>
 ) => {
@@ -55,7 +57,7 @@ const ChallengeItemInfoSheetModal = (
     }
     if (breakpoint > 0.35) {
       setFabBottom("27%");
-    } else if(breakpoint > 0.55){
+    } else if (breakpoint > 0.55) {
       setFabBottom("45%");
     } else {
       setFabBottom("68%");
@@ -154,16 +156,17 @@ const ChallengeItemInfoSheetModal = (
             </IonButton>
           </IonButtons>
         </IonToolbar>
-        <IonContent className="">{renderActiveContent()}</IonContent>
+        {renderActiveContent()}
       </IonContent>
       <IonButton
-          className="challenge-mint-fab-button"
-          color="primary"
-          shape="round"
-          style={{ bottom: fabBottom }}
-        >
-          Mint 0.00 ETH
-        </IonButton>
+        onClick={() => onClickMint()}
+        className="challenge-mint-fab-button"
+        color="primary"
+        shape="round"
+        style={{ bottom: fabBottom }}
+      >
+        Mint 0.00 ETH
+      </IonButton>
     </IonModal>
   );
 };

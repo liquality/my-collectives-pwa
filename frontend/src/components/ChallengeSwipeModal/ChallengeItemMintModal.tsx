@@ -14,7 +14,7 @@ export interface ChallengeItemMintModalProps {
   dismiss: () => void;
   challenge: Challenge;
   isOpen: boolean;
-  presentingElement?: HTMLElement;
+  presentingElement?: HTMLIonModalElement | null;
 }
 
 const ChallengeItemMintModal = ({
