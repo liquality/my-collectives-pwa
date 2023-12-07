@@ -24,7 +24,7 @@ export class AuthService {
             publicAddress,
           },
           config.secret,
-          { expiresIn: config.expiresIn, subject: user.id }
+          { /* expiresIn: config.expiresIn, */ subject: user.id }
         );
         // update the nonce in the database, should not be reusable after the login
         const nonce = this.createNonce();

@@ -105,3 +105,43 @@ query JacobsNFTs {
 
 
 */
+
+
+/* 
+
+
+Reservoir API
+Endpoint to get token data: collectionCreator, media, ownerOfNft, tokenCount of collection (how many unique tokenIds are in the collection)
+//TokenSupply: how many tokens have been minted in total FOR  erc-1155s
+//collection.tokenCount: how many tokens have been minted in total FOR erc-721s
+
+
+
+
+When creating a challenge:
+Given a chainId, have a switch function that returns the API url for reservoir
+
+*Remove platform row
+
+-Go into the API data
+* If token.kind: "erc721" get the following:
+
+list[0]collection.tokenCount (totalNumberOfMints)
+list[0].collection.name 
+list[0].collection.image 
+list[0].collection.description 
+list[0].collection.chainId 
+list[0].collection.creator || whoEverCreatedThisChallenge
+
+
+* If tokenId exists then && token.kind: "erc1155" get the following:
+token.supply (totalNumberOfMints)
+token.name
+token.image
+token.description
+collection.chainId
+collection.creator || whoEverCreatedThisChallenge
+
+
+
+*/

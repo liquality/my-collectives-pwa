@@ -32,7 +32,6 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
   const { myGroups, loading, reload } = useGetMyGroups();
   const { user } = useSignInWallet();
   const router = useIonRouter();
-  console.log(myGroups, "My groups");
 
   const loadingAllData = !myGroups && loading;
 
@@ -41,8 +40,6 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
       return myGroups.filter((group) => group.createdBy === user.id);
     } else return [];
   }, [myGroups, user?.id]);
-
-  console.log(filterForUserCreatedGroups, "filtered groups");
 
   const handleManageNavigation = (groupId: string) => {
     const url = pathConstants.rewards.manage.replace(":groupId", groupId);

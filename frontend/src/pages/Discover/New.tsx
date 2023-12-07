@@ -11,11 +11,10 @@ import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
 import { RouteComponentProps } from "react-router";
 import PageSearchBar from "@/components/PageSearchBar";
 import DiscoverTopBar from "./DiscoverTopBar";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import CreateGroupModal from "./CreateChallengeModal";
 import { Challenge } from "@/types/challenges";
 import ChallengeItemModal from "@/components/ChallengesModal/ChallengeItemModal";
-
 
 const New: React.FC<RouteComponentProps> = (routerProps) => {
   const { challenges, loading, setChallenges } = useGetChallenges();
@@ -69,6 +68,14 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
     }
   }, [selectedChallenge]);
 
+  const musicChallenges = useMemo(() => {
+    return challenges.filter((item) => item.category === "music");
+  }, [challenges]);
+
+  const artChallenges = useMemo(() => {
+    return challenges.filter((item) => item.category === "art");
+  }, [challenges]);
+
   return (
     <IonPage>
       <IonContent className="ion-padding" color="light">
@@ -97,23 +104,23 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
         />
 
         <div className="spaced-on-sides">
-          <IonLabel>Art | {challenges?.length}</IonLabel>
+          <IonLabel>Art | {artChallenges?.length}</IonLabel>
           <IonLabel color="primary">See All</IonLabel>
         </div>
 
         <HorizontalSwipe
-          imageData={challenges}
+          imageData={artChallenges}
           setSelectedChallenge={onChallengeSelected}
           loading={loading}
         ></HorizontalSwipe>
 
         <div className="spaced-on-sides">
-          <IonLabel>Music | {challenges?.length}</IonLabel>
+          <IonLabel>Music | {musicChallenges?.length}</IonLabel>
           <IonLabel color="primary">See All</IonLabel>
         </div>
         <HorizontalSwipe
           setSelectedChallenge={onChallengeSelected}
-          imageData={challenges}
+          imageData={musicChallenges}
           loading={loading}
         ></HorizontalSwipe>
         <ChallengeItemModal

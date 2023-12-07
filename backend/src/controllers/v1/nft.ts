@@ -1,12 +1,23 @@
 import { RequestHandler } from "express";
 import { NFTService } from "../../services/nft";
-import { getZoraLeaderboardEvents, sendGraphQLQuery } from "../../utils";
+import { fetchReservoirData, getZoraLeaderboardEvents, sendGraphQLQuery } from "../../utils";
 import { ethers } from "ethers";
 
 export class NFTController {
   public getTokenMetadata: RequestHandler = async (req, res) => {
     try {
       const meta = await NFTService.getTokenMetadata();
+
+      res.status(200).send(meta);
+    } catch (err) {
+      console.error(err, "Error in moralis handler");
+      res.status(500).send({ error: "An error occurred" });
+    }
+  };
+
+  public getReservoirApi: RequestHandler = async (req, res) => {
+    try {
+      const meta = await fetchReservoirData(req.params.contractAddress, req.params.network, req.params.tokenId)
 
       res.status(200).send(meta);
     } catch (err) {
