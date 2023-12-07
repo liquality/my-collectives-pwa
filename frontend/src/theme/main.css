@@ -872,11 +872,12 @@ ion-modal#sheet-info-modal::part(handle) {
   display: flex;
   justify-content: center !important;
   padding: 0rem 1rem;
+  margin-top: 26rem;
 }
 
 .challenge-item-actions ion-button {
   --border-radius: 100%;
-  margin: 0.3rem;
+  margin: 0 0.3rem;
 }
 
 .challenge-top-grid {
@@ -951,11 +952,6 @@ ion-modal#sheet-info-modal::part(handle) {
   border-bottom: 1px solid #7700d5;
 }
 
-img.challenge-info-img {
-  height: 25rem;
-  object-fit: contain;
-}
-
 .challenge-info-list-title {
   text-transform: uppercase;
   font-size: 0.938rem;
@@ -1002,4 +998,34 @@ img.challenge-info-img {
   background-color: none !important;
   background-color: transparent !important;
   background: none !important;
+}
+
+.challenge-info-cards {
+  position: relative;
+  background-color: #ffffff;
+}
+
+.challenge-info-card-item {
+  background-color: #ffffff;
+  position: absolute;
+  left: 0;
+  pointer-events: none;
+  width: 100%;
+  aspect-ratio: 100/150;
+}
+
+img.challenge-info-img {
+  object-fit: cover;
+  width: 100%;
+}
+
+.challenge-info-card-item-element {
+  position: absolute;
+  height: 25rem;
+  width: 100%;
+  aspect-ratio: 100/150;
+}
+
+.challenge-info-card-item-element-dragging {
+  cursor: grab;
 }
