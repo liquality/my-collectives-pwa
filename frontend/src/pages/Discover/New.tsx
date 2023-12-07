@@ -14,7 +14,8 @@ import DiscoverTopBar from "./DiscoverTopBar";
 import { useEffect, useRef, useState } from "react";
 import CreateGroupModal from "./CreateChallengeModal";
 import { Challenge } from "@/types/challenges";
-import ChallengeItemModal from "@/components/Challenges/ChallengeItemModal";
+import ChallengeItemModal from "@/components/ChallengeSwipeModal/ChallengeItemModal";
+
 
 const New: React.FC<RouteComponentProps> = (routerProps) => {
   const { challenges, loading, setChallenges } = useGetChallenges();
@@ -59,26 +60,6 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
   const onCloseChallenteItemModal = () => {
     setSelectedChallenge(null);
   };
-
-  const handleItemOnReject = () => {
-    if (selectedChallenge) {
-      const total = challenges.length;
-      const currentIndex = challenges.findIndex(
-        (challenge: Challenge) => challenge.id === selectedChallenge.id
-      );
-      if (currentIndex + 1 >= total) {
-        setSelectedChallenge(challenges[0]);
-      } else {
-        setSelectedChallenge(challenges[currentIndex + 1]);
-      }
-    } else {
-      challenges &&
-        challenges.length > 0 &&
-        setSelectedChallenge(challenges[0]);
-    }
-  };
-
-  const handleItemOnMint = () => {};
 
   useEffect(() => {
     if (selectedChallenge) {
@@ -138,10 +119,8 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
         <ChallengeItemModal
           isOpen={itemModalIsOpen}
           challenges={challenges}
-          currentChallengeId={selectedChallenge?.id}
+          selectedChallengeId={selectedChallenge?.id}
           presentingElement={presentingElement!}
-          onMint={handleItemOnMint}
-          onReject={handleItemOnReject}
           dismiss={onCloseChallenteItemModal}
         />
       </IonContent>
