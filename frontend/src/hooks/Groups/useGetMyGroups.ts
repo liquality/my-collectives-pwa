@@ -19,7 +19,6 @@ export function useGetMyGroups() {
             if (address && !myGroups && user?.id) {
                 const _myGroups: Group[] = await ApiService.readGroupByMemberAddress(address)
                 setMyGroups(_myGroups)
-                console.log(_myGroups, 'MY GROUPS?')
                 setLoading(false)
 
             } else if (!address) {

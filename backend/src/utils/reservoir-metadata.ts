@@ -9,7 +9,6 @@ export async function fetchReservoirData(collectionAddress: string, network: str
 
     try {
         const response = await axios.get(url, {
-            //params: { collection: collectionAddress },
             headers: {
                 'Content-Type': 'application/json',
                 'x-api-key': process.env.RESERVOIR_API_KEY,
@@ -35,7 +34,6 @@ export async function fetchReservoirData(collectionAddress: string, network: str
 }
 
 export async function prettifyERC721Data(nftList: any) {
-    console.log(nftList[0].token.collection, 'CÖÖÖÖÖLEETCTIÖÖÖÖN')
     const { tokenCount, name, image, description, creator, chainId } = nftList[0].token.collection
     const prettifiedList = {
 
@@ -49,9 +47,6 @@ export async function prettifyERC721Data(nftList: any) {
     }
     return prettifiedList
 }
-
-
-
 
 
 export async function prettifyERC1155Data(nftList: any) {
@@ -73,11 +68,9 @@ export async function prettifyERC1155Data(nftList: any) {
 
 export function getServerUrl(tokenId: string, network: string, collectionAddress: string) {
     if (tokenId) {
-        //FOR ERC-1155 s with tokenID: url = "https://api-zora.reservoir.tools/tokens/v6?tokens=0x5aa959de99e0e49b8a85e0a630a74a7b757772b7:1"
         return `https://api-${network}.reservoir.tools/tokens/v6?tokens=${collectionAddress}%3A${tokenId}`
     }
     else {
-        //http GET 'https://api-zora.reservoir.tools/tokens/v6?collection=0x09dd68c87020055a19733a6ccd7bfc7e7dfb3483' \
         return `https://api-${network}.reservoir.tools/tokens/v6?collection=${collectionAddress}`
     }
 }

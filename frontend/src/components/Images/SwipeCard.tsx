@@ -63,7 +63,6 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
     }
   };
 
-  console.log(challenge, "Challenge in card");
   return (
     <IonCard className="card-img-swiper" onClick={handleClick}>
       {" "}

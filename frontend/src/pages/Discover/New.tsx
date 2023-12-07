@@ -68,8 +68,6 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
     }
   }, [selectedChallenge]);
 
-  console.log(challenges, "challenges");
-
   const musicChallenges = useMemo(() => {
     return challenges.filter((item) => item.category === "music");
   }, [challenges]);
