@@ -2,7 +2,7 @@ import { Knex } from "knex";
 import path from "path";
 import dotenv from "dotenv";
 
-dotenv.config( { path: path.resolve(__dirname, "..", "..", ".env") } );
+dotenv.config({ path: path.resolve(__dirname, "..", "..", ".env") });
 const env = process.env.NODE_ENV || "development";
 const config: { [key: string]: Knex.Config } = {
   development: {
@@ -50,7 +50,7 @@ const config: { [key: string]: Knex.Config } = {
       directory: path.resolve(__dirname, "..", "data", "migrations")
     },
     seeds: {
-      directory: path.resolve(__dirname, "..", "data", "seeds", "prod")
+      directory: path.resolve(__dirname, "..", "data", "seeds", "dev")
     }
   },
 };

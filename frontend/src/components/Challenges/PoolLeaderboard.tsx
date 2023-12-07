@@ -30,7 +30,6 @@ const PoolLeaderboard: React.FC = () => {
     loading: loadingLeaderboard,
     error: errorLoadingLeaderboard,
   } = useGetLeaderboard();
-  console.log(leaderboard, "wats leaderboard?", loadingLeaderboard);
 
   return (
     <IonGrid>

@@ -8,7 +8,6 @@ export interface DiscoverTopBarProps {
 const CollectiveTopBar: React.FC<DiscoverTopBarProps> = ({ children }) => {
   const { groupId } = useParams<{ groupId: string }>();
   const { pools, loading } = useGetPoolsByGroupId(groupId);
-  console.log(groupId, "groupId in CollectiveBarTop");
 
   return (
     <PageTopBar

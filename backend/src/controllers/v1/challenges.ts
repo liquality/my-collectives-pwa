@@ -36,9 +36,7 @@ export class ChallengesController {
 
     public create: RequestHandler = async (req, res) => {
         //const user = await AuthService.find((req as any).auth?.sub);
-
         //TODO: add back auth (it did not work)
-        console.log(req.body, 'REQ BODY?')
         try {
             const challenge = await ChallengesService.create(
                 req.body

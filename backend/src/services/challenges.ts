@@ -1,62 +1,51 @@
 import { dbClient } from "../data";
-import { Challenge, ChallengeWithMeta } from "../models/challenges";
-import { convertToDate, getTokenMetadataFromZora, getTokenMetadataFromZoraWhenCreatingChallenge } from "../utils";
+import { Challenge } from "../models/challenges";
+import { convertToDate, fetchReservoirData, getTokenMetadataFromZora } from "../utils";
 
 export class ChallengesService {
 
-    //TODO: when creating a challenge artist provides the following info:
-    /*    
-    table.string("mintingContractAddress").nullable();
-    table.integer("chainId").nullable();
-    table.string("tokenId").nullable();
-    table.string("category").nullable(); //music, art, or other type
-    table.string("platform").nullable(); //sound, zora or prohobition
-    table.timestamp("expiration").nullable(); //example: 7 days from creation //expiration: new Date("2023-12-01T12:00:00Z")
-    table.boolean("expired").nullable();
-    */
-
-    //And we have to find the following in zora SDK or Sound API then add in our db BEFORE we create full object:
-    /* 
-    table.integer("totalMints").nullable()
-     table.string("imageUrl").nullable();
-    */
     public static async create(
         data: any,
 
     ): Promise<Challenge | null> {
         //TODO: change this to challenges data insert
-        console.log(data, 'this is data')
+        const { mintingContractAddress, tokenId, network, category, expiration } = data
+        const metaTwo = await fetchReservoirData(mintingContractAddress, network, tokenId)
+        try {
+            const result = await dbClient("challenges").insert(
+                {
+                    mintingContractAddress,
+                    network, category,
+                    expiration: convertToDate(expiration),
+                    ...metaTwo,
+                    //createdBy: userId,
+                },
+                [
+                    "id",
+                    "mintingContractAddress",
+                    "chainId",
+                    "tokenId",
+                    "category",
+                    "name",
+                    "platform",
+                    "expiration",
+                    "expired",
+                    "totalMints",
+                    "imageUrl",
+                    "creatorOfMint"
+                ]
+            );
 
-        //TODO based on data.platform we have to have diff scenarios not only Zora
-        const meta = await getTokenMetadataFromZoraWhenCreatingChallenge(data)
-        meta.expiration = convertToDate(meta.expiration)
+            if (result.length > 0) {
+                return result[0];
+            }
 
-
-        const result = await dbClient("challenges").insert(
-            {
-                ...meta,
-                //createdBy: userId,
-            },
-            [
-                "id",
-                "mintingContractAddress",
-                "chainId",
-                "tokenId",
-                "category",
-                "name",
-                "platform",
-                "expiration",
-                "expired",
-                "totalMints",
-                "imageUrl",
-                "creatorOfMint"
-            ]
-        );
-        if (result.length > 0) {
-            return result[0];
+            return null;
+        } catch (error) {
+            console.log(error, 'wats err?')
+            return null
         }
 
-        return null;
     }
 
 

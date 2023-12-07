@@ -36,17 +36,13 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     chainId: "",
     tokenId: "", //can be left empty if tokenIds are unique (erc1155 vs erc721)
     category: "", //music, art or other
-    platform: "", // zora, sound or prohobition
+    network: "", // zora, arbitrum, polygon or base
     expiration: "",
   });
-  const { mintingContractAddress, chainId, category, platform, expiration } =
+  const { mintingContractAddress, chainId, category, network, expiration } =
     createdChallenge;
   let isButtonDisabled =
-    !mintingContractAddress ||
-    !chainId ||
-    !category ||
-    !platform ||
-    !expiration;
+    !mintingContractAddress || !category || !network || !expiration;
 
   const handleCreateChallenge = async () => {
     try {
@@ -85,19 +81,6 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
               }
             ></IonInput>
           </IonItem>
-          <IonItem>
-            <IonInput
-              label="Chain Id"
-              label-placement="floating"
-              placeholder="Enter the chain id"
-              onIonInput={(e) =>
-                setCreatedChallenge((prevGroup) => ({
-                  ...prevGroup,
-                  chainId: e.detail.value!,
-                }))
-              }
-            ></IonInput>
-          </IonItem>
 
           {/* TODO: field is optional 
           If erc-721, tokenIds are unique and this shouldnt be filled in  
@@ -119,6 +102,26 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
 
           <IonItem>
             <IonSelect
+              value={createdChallenge.network}
+              onIonChange={(e) =>
+                setCreatedChallenge((prevGroup) => ({
+                  ...prevGroup,
+                  network: e.detail.value!,
+                }))
+              }
+              label="Network"
+              placeholder="Network"
+            >
+              <IonSelectOption value="zora">Zora</IonSelectOption>
+              <IonSelectOption value="arbitrum">Arbitrum</IonSelectOption>
+              <IonSelectOption value="optimism">Optimism</IonSelectOption>
+              <IonSelectOption value="base">Base</IonSelectOption>
+              <IonSelectOption value="polygon">Polygon</IonSelectOption>
+            </IonSelect>
+          </IonItem>
+
+          <IonItem>
+            <IonSelect
               value={createdChallenge.category} // Set the selected value
               onIonChange={(e) =>
                 setCreatedChallenge((prevGroup) => ({
@@ -132,24 +135,6 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
               <IonSelectOption value="art">Art</IonSelectOption>
               <IonSelectOption value="music">Music</IonSelectOption>
               <IonSelectOption value="other">Other</IonSelectOption>
-            </IonSelect>
-          </IonItem>
-
-          <IonItem>
-            <IonSelect
-              value={createdChallenge.platform}
-              onIonChange={(e) =>
-                setCreatedChallenge((prevGroup) => ({
-                  ...prevGroup,
-                  platform: e.detail.value!,
-                }))
-              }
-              label="Platform"
-              placeholder="Platform"
-            >
-              <IonSelectOption value="zora">Zora</IonSelectOption>
-              <IonSelectOption value="sound">Sound</IonSelectOption>
-              <IonSelectOption value="prohobition">Prohobition</IonSelectOption>
             </IonSelect>
           </IonItem>
 

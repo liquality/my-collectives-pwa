@@ -13,7 +13,6 @@ interface PoolsGridProps {
 
 const PoolsGrid: React.FC<PoolsGridProps> = (props) => {
   const { pools, loading } = props;
-  console.log(pools, "Pools in props?");
   return (
     <IonGrid>
       {loading || !pools ? (
