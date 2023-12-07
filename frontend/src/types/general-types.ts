@@ -22,6 +22,24 @@ export type Group = {
     activePoolsCount: number;
 };
 
+export type PoolWithChallenge = {
+    poolId: string;
+    groupId: string;
+    challengeId: string;
+    createdBy: string;
+    name: string;
+    creatorOfMint: string;
+    chainId: number;
+    tokenId: string;
+    imageUrl: string;
+    category: string;
+    platform: string;
+    expiration: string;
+    totalMints: number;
+    expired: null | boolean;
+};
+
+
 
 
 

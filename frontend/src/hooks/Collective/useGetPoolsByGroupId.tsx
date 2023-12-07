@@ -8,9 +8,11 @@ export function useGetPoolsByGroupId(groupId: string) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log(pools, groupId, "wats groupID?");
         if (!pools && groupId) {
           setLoading(true);
           const _pools = await ApiService.readPoolsByGroupId(groupId);
+          console.log(_pools, "PÖÖLS?");
           setPools(_pools);
           setLoading(false);
         }

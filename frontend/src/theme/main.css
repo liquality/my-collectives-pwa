@@ -209,6 +209,12 @@ ion-toolbar {
   font-size: 2.5rem;
 }
 
+.row-img {
+  border-radius: 10px;
+  width: 80px;
+  object-fit: cover;
+}
+
 .logged-in-button {
   display: flex;
   align-items: stretch;
@@ -1028,4 +1034,16 @@ img.challenge-info-img {
 
 .challenge-info-card-item-element-dragging {
   cursor: grab;
+}
+.creator-of-mint {
+  color: var(--greys-text-dark-grey, #3d4767);
+  font-family: "Anek Kannada";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.ml-1 {
+  margin-left: 10px !important;
 }

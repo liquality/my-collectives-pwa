@@ -7,6 +7,7 @@ export async function up(knex: Knex): Promise<void> {
         table.uuid('groupId').notNullable();
         table.uuid('challengeId').notNullable();
         table.uuid("createdBy").nullable();
+        table.string('publicAddress').nullable().unique();
         table.foreign("challengeId").references("challenges.id").onDelete("CASCADE");
         table.foreign("groupId").references("groups.id").onDelete("CASCADE");
         table.foreign("createdBy").references("users.id").onDelete("CASCADE");

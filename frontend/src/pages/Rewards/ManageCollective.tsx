@@ -9,15 +9,14 @@ import {
   IonPage,
   useIonRouter,
 } from "@ionic/react";
-import ApiService from "@/services/ApiService";
-import { GroupCreation } from "@/types/general-types";
-import { RouteComponentProps } from "react-router";
+import { RouteComponentProps, useParams } from "react-router";
 import Header from "@/components/Header";
-import { useSignInWallet } from "@/hooks/useSignInWallet";
-import { pathConstants } from "@/utils/routeNames";
 import { Challenge } from "@/types/challenges";
-import SelectPoolModal from "./SelectPoolModal";
+import SelectPoolModal from "../Mint/SelectPoolModal";
+import useGetPoolsByGroupId from "@/hooks/Collective/useGetPoolsByGroupId";
+import useGetGroupById from "@/hooks/Groups/useGetGroupById";
 import { convertIpfsImageUrl, cutOffTooLongString } from "@/utils";
+import ApiService from "@/services/ApiService";
 
 export interface CreateCollectiveProps {
   presentingElement?: HTMLElement;
@@ -25,30 +24,62 @@ export interface CreateCollectiveProps {
   onSuccess?: (groupId: number) => void;
   trigger: string;
 }
-const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
+
+export interface ManageCollectivePageProps
+  extends RouteComponentProps<{
+    groupId?: string;
+  }> {}
+
+const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
   const { goBack } = useIonRouter();
-  const { user } = useSignInWallet();
-  const router = useIonRouter();
-  const [createGroup, setCreatedGroup] = useState({
+  const { groupId } = useParams<{ groupId: string }>();
+  const { pools } = useGetPoolsByGroupId(groupId);
+  const { group } = useGetGroupById(groupId);
+  const [updatedGroup, setUpdatedGroup] = useState({
     name: "",
     description: "",
   });
   const [allSelectedPools, setAllSelectedPools] = useState<Challenge[]>([]);
-
-  const page = useRef(undefined);
   const selectPoolModal = useRef<HTMLIonModalElement>(null);
+  const isButtonDisabled = !updatedGroup.description || !updatedGroup.name;
   const [presentingElement, setPresentingElement] = useState<
     HTMLElement | undefined
   >(undefined);
-  const isButtonDisabled = !createGroup.description || !createGroup.name;
-
-  function hideSelectPoolModal() {
-    selectPoolModal.current?.dismiss();
-  }
+  const page = useRef(undefined);
 
   useEffect(() => {
+    if (pools && !allSelectedPools.length) {
+      setAllSelectedPools(pools);
+    }
+    if (group) {
+      setUpdatedGroup({
+        name: group.name,
+        description: group.description,
+      });
+    }
     setPresentingElement(page.current);
-  }, []);
+  }, [pools, group]);
+
+  const hideSelectPoolModal = () => {
+    selectPoolModal.current?.dismiss();
+  };
+
+  const handleRemoval = (poolToRemove: Challenge) => {
+    setAllSelectedPools((prevGroups) =>
+      prevGroups.filter((pool) => pool !== poolToRemove)
+    );
+  };
+
+  const handleUpdateGroup = async () => {
+    try {
+      const result = await ApiService.updateGroup(groupId, {
+        group: updatedGroup,
+        pools: allSelectedPools,
+      });
+    } catch (error) {
+      console.log(error, "error posting group");
+    }
+  };
 
   const handlePoolSelection = (selectedPool: Challenge) => {
     if (allSelectedPools) {
@@ -61,38 +92,9 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     goBack();
   };
 
-  const handleRemoval = (poolToRemove: Challenge) => {
-    setAllSelectedPools((prevGroups) =>
-      prevGroups?.filter((pool) => pool !== poolToRemove)
-    );
-  };
-
-  const handleCreateGroup = async () => {
-    const groupObject: GroupCreation = {
-      createdBy: user?.id,
-      name: createGroup.name,
-      description: createGroup.description,
-      publicAddress: "0x0232u326483848787ndas7298bda7289da", //TODO: hardcoded for now but will have to create the contract address from our factory
-    };
-    try {
-      const result = await ApiService.createGroup({
-        group: groupObject,
-        pools: allSelectedPools,
-      });
-      //TODO: in the backend or frontend, when a POOL is created, need to call createPool() from smart contract, which returns
-      //the unique public address of that pool
-      const { name, publicAddress, id, createdBy } = result;
-      router.push(
-        `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${publicAddress}&groupId=${id}&createdBy=${createdBy}`
-      );
-    } catch (error) {
-      console.log(error, "error posting group");
-    }
-  };
-
   return (
     <IonPage>
-      <Header title="Create Collective" />
+      <Header title="Manage Collective" />
 
       <IonContent>
         <SelectPoolModal
@@ -106,11 +108,12 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         <IonList inset={true}>
           <IonItem>
             <IonInput
-              label="Collective Name"
+              label={group?.name}
               label-placement="floating"
               placeholder="Enter the name"
+              value={updatedGroup.name}
               onIonInput={(e) =>
-                setCreatedGroup((prevGroup) => ({
+                setUpdatedGroup((prevGroup) => ({
                   ...prevGroup,
                   name: e.detail.value!,
                 }))
@@ -120,11 +123,12 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
 
           <IonItem>
             <IonInput
-              label="Description"
+              label={group?.description}
               label-placement="floating"
               placeholder="Enter the description"
+              value={updatedGroup.description}
               onIonInput={(e) =>
-                setCreatedGroup((prevGroup) => ({
+                setUpdatedGroup((prevGroup) => ({
                   ...prevGroup,
                   description: e.detail.value!,
                 }))
@@ -175,12 +179,12 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
 
         <div className="button-container">
           <IonButton
-            onClick={handleCreateGroup}
+            onClick={handleUpdateGroup}
             shape="round"
             disabled={isButtonDisabled}
             color={isButtonDisabled ? "medium" : "primary"}
           >
-            Create Collective
+            Edit Collective
           </IonButton>
           <IonButton
             onClick={cancel}
@@ -196,4 +200,4 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
   );
 };
 
-export default CreateCollective;
+export default ManageCollective;
