@@ -1,6 +1,6 @@
 import { dbClient } from "../data";
 import { Challenge, ChallengeWithMeta } from "../models/challenges";
-import { convertToDate, getTokenMetadataFromZora, getTokenMetadataFromZoraWhenCreatingChallenge } from "../utils";
+import { convertToDate, fetchReservoirData, getTokenMetadataFromZora, getTokenMetadataFromZoraWhenCreatingChallenge } from "../utils";
 
 export class ChallengesService {
 
@@ -25,38 +25,51 @@ export class ChallengesService {
 
     ): Promise<Challenge | null> {
         //TODO: change this to challenges data insert
-        console.log(data, 'this is data')
+
+        const { mintingContractAddress, tokenId, network, category, expiration } = data
 
         //TODO based on data.platform we have to have diff scenarios not only Zora
-        const meta = await getTokenMetadataFromZoraWhenCreatingChallenge(data)
-        meta.expiration = convertToDate(meta.expiration)
+        //const meta = await getTokenMetadataFromZoraWhenCreatingChallenge(data)
+        const metaTwo = await fetchReservoirData(mintingContractAddress, network, tokenId)
+        console.log(metaTwo, 'wats META?')
 
 
-        const result = await dbClient("challenges").insert(
-            {
-                ...meta,
-                //createdBy: userId,
-            },
-            [
-                "id",
-                "mintingContractAddress",
-                "chainId",
-                "tokenId",
-                "category",
-                "name",
-                "platform",
-                "expiration",
-                "expired",
-                "totalMints",
-                "imageUrl",
-                "creatorOfMint"
-            ]
-        );
-        if (result.length > 0) {
-            return result[0];
+        try {
+            const result = await dbClient("challenges").insert(
+                {
+                    mintingContractAddress,
+                    network, category,
+                    expiration: convertToDate(expiration),
+                    ...metaTwo,
+                    //createdBy: userId,
+                },
+                [
+                    "id",
+                    "mintingContractAddress",
+                    "chainId",
+                    "tokenId",
+                    "category",
+                    "name",
+                    "platform",
+                    "expiration",
+                    "expired",
+                    "totalMints",
+                    "imageUrl",
+                    "creatorOfMint"
+                ]
+            );
+            console.log(result, 'wats Result of insert?')
+
+            if (result.length > 0) {
+                return result[0];
+            }
+
+            return null;
+        } catch (error) {
+            console.log(error, 'wats err?')
+            return null
         }
 
-        return null;
     }
 
 

@@ -3,7 +3,7 @@ export interface ChallengeCreation {
     chainId: string;
     tokenId?: string,
     category: string;
-    platform: string
+    network: string
     expiration: string
 }
 
@@ -17,7 +17,7 @@ export interface Challenge {
     imageUrl: string;
     totalMints: number;
     platform: string
-    expiration: string
+    expiration: Date
     expired: boolean
     creatorOfMint: string,
 }

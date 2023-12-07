@@ -34,32 +34,7 @@ export async function seed(knex: Knex): Promise<void> {
 
 
     await trx("challenges").insert([
-      {
-        name: "Fried Potato Spectrum",
-        mintingContractAddress: "0xF41A3e3033D4e878943194B729AeC993a4Ea2045",
-        creatorOfMint: "creator.eth",
-        chainId: "777777",
-        tokenId: "16",
-        imageUrl: "ipfs://bafybeiewyx2fybhxaqgjrlsw5p2nj3w6hv3siifgy3ilprodxco5yq24gm",
-        category: "art",
-        platform: "zora",
-        expiration: "2024-07-02 13:23:12.322-0",
-        totalMints: "14",
 
-      },
-      {
-        name: "ENERGY",
-        mintingContractAddress: "0xF41A3e3033D4e878943194B729AeC993a4Ea2045",
-        creatorOfMint: "",
-        chainId: "777777",
-        tokenId: "1",
-        imageUrl: "ipfs://bafybeifydhtmthjtja7y4m6eyzmyuvzgbt4w7ejuldivv5iitwqqsihxfu",
-        category: "art",
-        platform: "zora",
-        expiration: "2024-07-04 13:58:18.943-0",
-        totalMints: "3",
-
-      },
 
       {
         name: "Gitcoin Impact Report 01: PDF Onchain",
@@ -72,8 +47,6 @@ export async function seed(knex: Knex): Promise<void> {
         platform: "zora",
         expiration: "2030-06-06 13:59:08.053-03",
         totalMints: "2",
-
-
       },
 
       {
@@ -87,9 +60,49 @@ export async function seed(knex: Knex): Promise<void> {
         platform: "zora",
         expiration: "2024-07-01 13:59:49.831-03",
         totalMints: "13",
-
-
       },
+
+      {
+        mintingContractAddress: '0xBD87f4dA73ff92A7BeA31e2dE20E14f9829f42Fe',
+        chainId: 8453,
+        tokenId: null,
+        category: 'music',
+        name: 'Keepers Of Wisdom',
+        platform: null,
+        expiration: "2024-02-13T21:41:36.090Z",
+        expired: null,
+        totalMints: 10,
+        imageUrl: 'https://img.reservoir.tools/images/v2/base/hc%2BnPcLmWxs%2FDW99DlBQ42k40ZoyYV5jCIms5qHjwvuiiod1GIdCBqGsYCdDMem3ilRBzFP%2BrZrV8f92sO2zb1bE7la8NyJUSf2FHzsOwXDyehGVJtjY04yxEDVnKrnlLnLKCDLNSZiPiqDzBabHZfq636Dwjry3EPfzqmjrtEbdSsTTr69sJG6KieVpgAmG?width=512',
+        creatorOfMint: '0x625307de45bd25ad6bf6cc7391a308fc84067cf7'
+      },
+
+      {
+        mintingContractAddress: '0x9F3303E2C04e79387C3B5089B8a73e0B466e9076',
+        chainId: 10,
+        tokenId: null,
+        category: 'music',
+        name: 'Pete Rango - HONEY ft Betty Dawl',
+        platform: null,
+        expiration: "2024-02-10T21:46:09.910Z",
+        expired: null,
+        totalMints: 101,
+        imageUrl: 'https://img.reservoir.tools/images/v2/optimism/ldXga3w5LnmrtU6KljLWfUlu8HfaO8ITP6Qa1%2ByIa3wZjvpQ0%2FenYI8QxnThWpoVEiuLQARDLoZoOIU7SV2dFUKLqNlwJoaRXRnYgyjR%2BwUiKG7opbVx29UD8bN3Fu9PU3w8ALcBo5s0kbc1mGIyh7kYgtIIaSSHSDDnSLDmqdqLf%2Fqny4x6LLTJzSnyuzjv',
+        creatorOfMint: "peterango.eth"
+      },
+
+      {
+        mintingContractAddress: '0xbc2ca61440faf65a9868295efa5d5d87c55b9529',
+        chainId: 7777777,
+        tokenId: null,
+        category: 'art',
+        name: 'sqr(16)',
+        platform: null,
+        expiration: "2023-12-12T21:59:02.806Z",
+        expired: null,
+        totalMints: 515200,
+        imageUrl: 'https://img.reservoir.tools/images/v2/zora/hc%2BnPcLmWxs%2FDW99DlBQ42k40ZoyYV5jCIms5qHjwvtE2G7JSZ5NiF4xU%2F0kOsOnXSdFDdpd3qZtJdJ0HSfrgiQOQzuJ8CsbfqCqED1URzXTKjhi7mLwPZVQY3FJE7FOfBXNSJ8gHYSiLGPPhE%2BuJMv%2BWFQBzaigZ4PI6TnAdmC7Ev1T0p%2FD%2BL%2BnQCM7WHvl',
+        creatorOfMint: '0xdbe0c5341a229e604ef99093972f5e30984f95ac'
+      }
 
     ]);
   });

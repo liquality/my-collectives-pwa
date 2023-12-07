@@ -85,7 +85,7 @@ const PoolItemCard: React.FC<PoolItemCardProps> = ({
           <IonRow className="ion-justify-content-between ion-align-items-center">
             <IonCol size="auto">
               <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>
-              <IonLabel>80</IonLabel>
+              <IonLabel>{}80</IonLabel>
             </IonCol>
             <IonCol size="auto">
               <IonIcon src="/assets/icons/people-tile.svg"></IonIcon>

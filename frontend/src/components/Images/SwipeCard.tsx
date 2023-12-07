@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 
-import { convertIpfsImageUrl, cutOffTooLongString } from "@/utils";
+import {
+  convertIpfsImageUrl,
+  convertDateToReadable,
+  cutOffTooLongString,
+  shortenAddress,
+} from "@/utils";
 import {
   IonCard,
   IonCardContent,
@@ -58,6 +63,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
     }
   };
 
+  console.log(challenge, "Challenge in card");
   return (
     <IonCard className="card-img-swiper" onClick={handleClick}>
       {" "}
@@ -80,7 +86,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
           {loading ? (
             <IonSkeletonText animated={true}></IonSkeletonText>
           ) : (
-            `Creator.eth`
+            shortenAddress(challenge.creatorOfMint) ?? "Creator.eth"
           )}
         </IonCardTitle>
         <IonCardSubtitle>{cutOffTooLongString(name, 20)}</IonCardSubtitle>
@@ -90,11 +96,11 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
           <IonRow className="ion-justify-content-between ion-align-items-center">
             <IonCol size="auto">
               <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>
-              <IonLabel>80</IonLabel>
+              <IonLabel>{challenge.totalMints ?? "0"}</IonLabel>
             </IonCol>
             <IonCol size="auto">
               <IonIcon src="/assets/icons/people-tile.svg"></IonIcon>
-              <IonLabel>80</IonLabel>
+              <IonLabel>{convertDateToReadable(challenge.expiration)}</IonLabel>
             </IonCol>
 
             {selectedChallenge?.id === challenge?.id ? (
