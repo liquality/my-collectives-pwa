@@ -17,7 +17,7 @@ export class NFTController {
 
   public getReservoirApi: RequestHandler = async (req, res) => {
     try {
-      const meta = fetchReservoirData(req.params.contractAddress, req.params.network)
+      const meta = await fetchReservoirData(req.params.contractAddress, req.params.network, req.params.tokenId)
 
       res.status(200).send(meta);
     } catch (err) {
