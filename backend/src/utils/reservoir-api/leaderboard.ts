@@ -40,7 +40,6 @@ export function getServerUrlForLeaderboard(tokenId: string, network: string, col
 
 
 export async function getTopMinters(owners: any[]) {
-
     const sortedOwners = owners.sort((a, b) => parseInt(b.ownership.tokenCount) - parseInt(a.ownership.tokenCount));
     const topMinters = sortedOwners.slice(0, 10);
 
