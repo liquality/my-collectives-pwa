@@ -24,16 +24,13 @@ const ChallengeItemMintModal = ({
   isOpen,
   presentingElement,
 }: ChallengeItemMintModalProps) => {
-  function handleDismiss() {
-    dismiss();
-  }
 
   return (
     <IonModal isOpen={isOpen} presentingElement={presentingElement!}>
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton color="dark" onClick={handleDismiss}>
+            <IonButton color="dark" onClick={()=> dismiss()}>
               <IonIcon icon={closeOutline} />
             </IonButton>
           </IonButtons>
