@@ -16,6 +16,10 @@ import CreateGroupModal from "./CreateChallengeModal";
 import { Challenge } from "@/types/challenges";
 import ChallengeItemModal from "@/components/ChallengesModal/ChallengeItemModal";
 
+export type GroupedChallenge = {
+  [key: string]: Challenge[];
+};
+
 const New: React.FC<RouteComponentProps> = (routerProps) => {
   const { challenges, loading, setChallenges } = useGetChallenges();
   const page = useRef(undefined);
@@ -68,15 +72,14 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
     }
   }, [selectedChallenge]);
 
-  const musicChallenges = useMemo(() => {
-    return challenges.filter((item) => item.category === "music");
+  const groupedChallenges: GroupedChallenge = useMemo(() => {
+    return challenges?.reduce((rv: GroupedChallenge, x: Challenge) => {
+      (rv[x["category"]] = rv[x["category"]] || []).push(x);
+      return rv;
+    }, {}) || {};
   }, [challenges]);
 
-  const artChallenges = useMemo(() => {
-    return challenges.filter((item) => item.category === "art");
-  }, [challenges]);
-
-  console.log(challenges, "challenges");
+  console.log(groupedChallenges, "groupedChallenges");
 
   return (
     <IonPage>
@@ -104,30 +107,25 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
           resultChallenge={resultChallenge}
           setResultChallenge={setResultChallenge}
         />
+        {Object.keys(groupedChallenges).map((category: string) => (
+          <>
+            <div className="spaced-on-sides">
+              <IonLabel className="ion-text-capitalize">
+                {category} | {groupedChallenges[category]?.length}
+              </IonLabel>
+              <IonLabel color="primary">See All</IonLabel>
+            </div>
+            <HorizontalSwipe
+              imageData={groupedChallenges[category]}
+              setSelectedChallenge={onChallengeSelected}
+              loading={loading}
+            ></HorizontalSwipe>
+          </>
+        ))}
 
-        <div className="spaced-on-sides">
-          <IonLabel>Art | {artChallenges?.length}</IonLabel>
-          <IonLabel color="primary">See All</IonLabel>
-        </div>
-
-        <HorizontalSwipe
-          imageData={artChallenges}
-          setSelectedChallenge={onChallengeSelected}
-          loading={loading}
-        ></HorizontalSwipe>
-
-        <div className="spaced-on-sides">
-          <IonLabel>Music | {musicChallenges?.length}</IonLabel>
-          <IonLabel color="primary">See All</IonLabel>
-        </div>
-        <HorizontalSwipe
-          setSelectedChallenge={onChallengeSelected}
-          imageData={musicChallenges}
-          loading={loading}
-        ></HorizontalSwipe>
         <ChallengeItemModal
           isOpen={itemModalIsOpen}
-          challenges={challenges}
+          challenges={challenges || []}
           selectedChallengeId={selectedChallenge?.id}
           presentingElement={presentingElement!}
           dismiss={onCloseChallenteItemModal}

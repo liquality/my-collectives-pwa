@@ -34,7 +34,6 @@ const PoolItemCard: React.FC<PoolItemCardProps> = ({
   chainId,
   category,
   totalMints,
-  platform,
   expiration,
   expired,
 }: PoolItemCardProps) => {
