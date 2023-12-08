@@ -1,5 +1,4 @@
 import Header from "@/components/Header";
-import PoolLeaderboard from "@/components/Challenges/PoolLeaderboard";
 
 import {
   IonCard,
@@ -69,9 +68,7 @@ const Challenge: React.FC = () => {
                 <IonCardContent></IonCardContent>
               </IonCard>
             </IonCol>
-            <IonCol size="12" sizeLg="6">
-              <PoolLeaderboard />
-            </IonCol>
+            <IonCol size="12" sizeLg="6"></IonCol>
           </IonRow>
         </IonGrid>
       </IonContent>
