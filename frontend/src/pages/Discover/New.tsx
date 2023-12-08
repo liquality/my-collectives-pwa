@@ -76,6 +76,8 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
     return challenges.filter((item) => item.category === "art");
   }, [challenges]);
 
+  console.log(challenges, "challenges");
+
   return (
     <IonPage>
       <IonContent className="ion-padding" color="light">
