@@ -35,11 +35,13 @@ const ChallengeItemInfoSheetModal = (
     onBreakpointDidChange,
     isOpen = true,
     initialBreakpoint = 0.12,
+    onClickMint,
   }: {
     challenge: Challenge;
     isOpen: boolean;
     initialBreakpoint: number;
     onBreakpointDidChange?: (value: number) => void;
+    onClickMint: () => void;
   },
   ref: Ref<HTMLIonModalElement>
 ) => {
@@ -154,9 +156,10 @@ const ChallengeItemInfoSheetModal = (
             </IonButton>
           </IonButtons>
         </IonToolbar>
-        <IonContent className="">{renderActiveContent()}</IonContent>
+        {renderActiveContent()}
       </IonContent>
       <IonButton
+        onClick={() => onClickMint()}
         className="challenge-mint-fab-button"
         color="primary"
         shape="round"

@@ -20,33 +20,17 @@ import {
 } from "@ionic/react";
 import React, { useState } from "react";
 
-export interface PoolItemCardProps extends Challenge {
-  tokenId: string;
-  mintingContractAddress: string;
-  imageUrl: string;
+export interface MintItemContentProps {
+  challenge: Challenge;
 }
 
-const PoolItemCard: React.FC<PoolItemCardProps> = ({
-  tokenId,
-  mintingContractAddress,
-  imageUrl,
-  name,
-  chainId,
-  category,
-  totalMints,
-  expiration,
-  expired,
-}: PoolItemCardProps) => {
+const MintItemContent: React.FC<MintItemContentProps> = ({
+  challenge: { imageUrl, name },
+}: MintItemContentProps) => {
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loading, setLoading] = useState(true);
   const router = useIonRouter();
-  const handleClick = () => {
-    if (!loading) {
-      router.push(
-        `/challenge/${tokenId}?&contractAddress=${mintingContractAddress}&imageUrl=${ipfsImageUrl}`
-      );
-    }
-  };
+  const handleClick = () => {};
 
   return (
     <IonCard
@@ -84,7 +68,7 @@ const PoolItemCard: React.FC<PoolItemCardProps> = ({
           <IonRow className="ion-justify-content-between ion-align-items-center">
             <IonCol size="auto">
               <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>
-              <IonLabel>{}80</IonLabel>
+              <IonLabel>80</IonLabel>
             </IonCol>
             <IonCol size="auto">
               <IonIcon src="/assets/icons/people-tile.svg"></IonIcon>
@@ -97,4 +81,4 @@ const PoolItemCard: React.FC<PoolItemCardProps> = ({
   );
 };
 
-export default PoolItemCard;
+export default MintItemContent;

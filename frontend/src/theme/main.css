@@ -82,6 +82,9 @@ ion-button.grey-btn {
   --background: var(--ion-color-primary);
 }
 
+ion-modal ion-title {
+  text-transform: uppercase !important;
+}
 ion-split-pane {
   --side-width: 350px;
   --side-max-width: 350px;
@@ -838,7 +841,7 @@ ion-modal.challenge-item-modal {
   --min-height: 55% !important;
 }
 ion-modal#sheet-info-modal {
-  --ion-background-color: rgba(255, 255, 255, 0.77) !important;
+  --ion-background-color: rgba(255, 255, 255, 0.95) !important;
 }
 
 ion-modal#sheet-info-modal::part(content) {
@@ -941,12 +944,13 @@ ion-modal#sheet-info-modal::part(handle) {
 }
 
 .challenge-top-tab-button {
-  min-height: 22px !important;
+  min-height: 1.25rem !important;
 
   --padding-start: 0px !important;
   --padding-end: 0px !important;
   margin-inline-start: 0.5rem !important;
   margin-inline-end: 0.5rem !important;
+  
 }
 
 .challenge-top-bar ion-buttons ion-button:first-child {
@@ -979,9 +983,8 @@ ion-modal#sheet-info-modal::part(handle) {
 .challenge-mint-fab-button {
   transition: bottom 0.6s;
   position: sticky;
-  pointer-events: none;
   max-width: 50%;
-  z-index: 99999 !important;
+  z-index: 999999 !important;
   bottom: 0%;
   left: 25%;
 }

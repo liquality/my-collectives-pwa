@@ -10,40 +10,36 @@ import {
 } from "@ionic/react";
 import { Challenge } from "@/types/challenges";
 import { closeOutline } from "ionicons/icons";
+import MintItemContent from "../Mint/MintItemContent";
 export interface ChallengeItemMintModalProps {
   dismiss: () => void;
   challenge: Challenge;
   isOpen: boolean;
-  presentingElement?: HTMLElement;
+  presentingElement?: HTMLIonModalElement | null;
 }
 
 const ChallengeItemMintModal = ({
   dismiss,
+  challenge,
   isOpen,
   presentingElement,
 }: ChallengeItemMintModalProps) => {
 
-  function handleDismiss() {
-    dismiss();
-  }
-
-
   return (
-    <IonModal
-      isOpen={isOpen}
-      presentingElement={presentingElement!}
-    >
+    <IonModal isOpen={isOpen} presentingElement={presentingElement!}>
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton color="dark" onClick={handleDismiss}>
+            <IonButton color="dark" onClick={()=> dismiss()}>
               <IonIcon icon={closeOutline} />
             </IonButton>
           </IonButtons>
           <IonTitle>Mint</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>Mint Content</IonContent>
+      <IonContent>
+      <MintItemContent challenge={challenge} />
+      </IonContent>
     </IonModal>
   );
 };
