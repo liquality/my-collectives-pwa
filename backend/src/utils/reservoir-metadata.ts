@@ -1,6 +1,7 @@
 //This file touches everything that has to do with the metadata from Reservoir NFT API
 import dotenv from "dotenv";
 import axios from 'axios';
+import { ethers } from "ethers";
 dotenv.config();
 
 export async function fetchReservoirData(collectionAddress: string, network: string, tokenId: string) {
@@ -19,7 +20,7 @@ export async function fetchReservoirData(collectionAddress: string, network: str
         if (tokenId) {
             const prettifiedList = await prettifyERC1155Data(data.tokens[0].token)
             console.log('Data: in erc 1155', data.tokens[0].token);
-            return prettifiedList;
+            return data.tokens[0].token;
 
         }
         else {
@@ -34,7 +35,10 @@ export async function fetchReservoirData(collectionAddress: string, network: str
 }
 
 export async function prettifyERC721Data(nftList: any) {
-    const { tokenCount, name, image, description, creator, chainId } = nftList[0].token.collection
+    const { tokenCount, name, image, description, creator, chainId, floorAskPrice } = nftList[0].token.collection
+
+    const decimalPrice = floorAskPrice.amount.decimal
+    const convertedWeiPrice = ethers.utils.formatEther(floorAskPrice.amount.raw)
     const prettifiedList = {
 
         totalMints: tokenCount,
@@ -43,15 +47,20 @@ export async function prettifyERC721Data(nftList: any) {
         kind: nftList[0].token.kind,
         imageUrl: image ? image : nftList[0].token.image,
         description: description ? description : nftList[0].token.description,
-        creatorOfMint: creator
+        creatorOfMint: creator,
+        floorPrice: decimalPrice ? decimalPrice : convertedWeiPrice
     }
     return prettifiedList
 }
 
 
 export async function prettifyERC1155Data(nftList: any) {
-    const { name, chainId, tokenId, kind, supply, image, description, } = nftList
-    console.log()
+    const { name, chainId, tokenId, kind, supply, image, description } = nftList
+    const { floorAskPrice } = nftList.collection
+    console.log(floorAskPrice, 'floor ask price')
+
+    const decimalPrice = floorAskPrice.amount.decimal
+    const convertedWeiPrice = ethers.utils.formatEther(floorAskPrice.amount.raw)
     const prettifiedList = {
         totalMints: supply,
         name,
@@ -60,7 +69,9 @@ export async function prettifyERC1155Data(nftList: any) {
         kind,
         imageUrl: image,
         description,
-        creatorOfMint: nftList.collection.creator
+        creatorOfMint: nftList.collection.creator,
+        floorPrice: decimalPrice ? decimalPrice : convertedWeiPrice
+
     }
 
     return prettifiedList
