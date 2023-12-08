@@ -27,11 +27,13 @@ export class ChallengesService {
                     "tokenId",
                     "category",
                     "name",
-                    "platform",
+                    "kind",
+                    "floorPrice",
                     "expiration",
                     "expired",
                     "totalMints",
                     "imageUrl",
+                    "network",
                     "creatorOfMint"
                 ]
             );
@@ -57,11 +59,13 @@ export class ChallengesService {
             "tokenId",
             "category",
             "name",
-            "platform",
+            "kind",
+            "floorPrice",
             "expiration",
             "expired",
             "totalMints",
             "imageUrl",
+            "network",
             "creatorOfMint"
         );
         return challenges as any[];
@@ -75,7 +79,16 @@ export class ChallengesService {
                 "mintingContractAddress",
                 "chainId",
                 "tokenId",
-                "createdAt"
+                "category",
+                "name",
+                "kind",
+                "floorPrice",
+                "expiration",
+                "expired",
+                "totalMints",
+                "imageUrl",
+                "network",
+                "creatorOfMint"
             );
 
         if (challenge) {

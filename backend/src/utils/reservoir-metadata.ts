@@ -3,32 +3,28 @@ import dotenv from "dotenv";
 import axios from 'axios';
 import { ethers } from "ethers";
 dotenv.config();
-
+const configHeaders = {
+    headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.RESERVOIR_API_KEY,
+    },
+}
 export async function fetchReservoirData(collectionAddress: string, network: string, tokenId: string) {
     let _tokenId = tokenId ? tokenId : ""
-    const url = getServerUrl(_tokenId, network, collectionAddress)
-
+    const url = getServerUrlForTokenData(_tokenId, network, collectionAddress)
     try {
-        const response = await axios.get(url, {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': process.env.RESERVOIR_API_KEY,
-            },
-        });
-
+        const response = await axios.get(url, configHeaders);
         const data = response.data;
         if (tokenId) {
             const prettifiedList = await prettifyERC1155Data(data.tokens[0].token)
             console.log('Data: in erc 1155', data.tokens[0].token);
-            return data.tokens[0].token;
-
+            return prettifiedList;
         }
         else {
             const prettifiedList = await prettifyERC721Data(data.tokens)
             console.log('Data: in erc 721', data.tokens)
             return prettifiedList;
         }
-
     } catch (error) {
         console.error('Error:', error);
     }
@@ -57,8 +53,6 @@ export async function prettifyERC721Data(nftList: any) {
 export async function prettifyERC1155Data(nftList: any) {
     const { name, chainId, tokenId, kind, supply, image, description } = nftList
     const { floorAskPrice } = nftList.collection
-    console.log(floorAskPrice, 'floor ask price')
-
     const decimalPrice = floorAskPrice.amount.decimal
     const convertedWeiPrice = ethers.utils.formatEther(floorAskPrice.amount.raw)
     const prettifiedList = {
@@ -73,16 +67,37 @@ export async function prettifyERC1155Data(nftList: any) {
         floorPrice: decimalPrice ? decimalPrice : convertedWeiPrice
 
     }
-
     return prettifiedList
 }
 
-export function getServerUrl(tokenId: string, network: string, collectionAddress: string) {
+export function getServerUrlForTokenData(tokenId: string, network: string, collectionAddress: string) {
     if (tokenId) {
         return `https://api-${network}.reservoir.tools/tokens/v6?tokens=${collectionAddress}%3A${tokenId}`
     }
     else {
         return `https://api-${network}.reservoir.tools/tokens/v6?collection=${collectionAddress}`
+    }
+}
+
+
+export async function fetchLeaderboardMintActivityData(collectionAddress: string, network: string, tokenId: string) {
+    let _tokenId = tokenId ? tokenId : ""
+    const url = getServerUrlForTokenData(_tokenId, network, collectionAddress)
+    try {
+        const response = await axios.get(url, configHeaders);
+        const data = response.data;
+        if (tokenId) {
+            const prettifiedList = await prettifyERC1155Data(data.tokens[0].token)
+            console.log('Data: in erc 1155', data.tokens[0].token);
+            return prettifiedList;
+        }
+        else {
+            const prettifiedList = await prettifyERC721Data(data.tokens)
+            console.log('Data: in erc 721', data.tokens)
+            return prettifiedList;
+        }
+    } catch (error) {
+        console.error('Error:', error);
     }
 }
 

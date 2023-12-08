@@ -26,6 +26,17 @@ export class NFTController {
     }
   };
 
+  public getMintActivityForLeaderboard: RequestHandler = async (req, res) => {
+    try {
+      const meta = await fetchReservoirData(req.params.contractAddress, req.params.network, req.params.tokenId)
+
+      res.status(200).send(meta);
+    } catch (err) {
+      console.error(err, "Error in getting leaderboard for mint activity");
+      res.status(500).send({ error: "An error occurred" });
+    }
+  };
+
   public getLeaderboardForMoralis: RequestHandler = async (req, res) => {
     try {
       const { contractAddress, tokenId } = req.params;
