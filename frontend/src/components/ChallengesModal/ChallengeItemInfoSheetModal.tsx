@@ -81,7 +81,7 @@ const ChallengeItemInfoSheetModal = (
       case "details":
         return <InfoSheetModalDetails />;
       case "mintActivity":
-        return <InfoSheetModalMintActivity />;
+        return <InfoSheetModalMintActivity challenge={challenge} />;
       default:
         return <InfoSheetModalOverview />;
     }

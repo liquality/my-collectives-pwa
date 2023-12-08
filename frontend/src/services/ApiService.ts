@@ -97,6 +97,10 @@ const ApiService = {
     });
   },
 
+  getLeaderboardMintActivity: async function (collectionAddress: string, network: string, tokenId: string) {
+    return NetworkService.getResourceWithAuth(`/v1/nft/mintactivity/${collectionAddress}/${network}/${tokenId}`);
+  },
+
 
 
 

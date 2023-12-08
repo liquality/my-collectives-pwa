@@ -10,6 +10,7 @@ export async function up(knex: Knex): Promise<void> {
         table.integer("chainId").nullable();
         table.string("tokenId").nullable();
         table.string("imageUrl", 2048).nullable();
+        table.string("floorPrice").nullable();
         table.string("network").nullable();
         table.string("description", 2048).nullable();
         table.string("kind").nullable();

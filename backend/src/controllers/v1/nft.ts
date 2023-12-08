@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { NFTService } from "../../services/nft";
 import { fetchReservoirData, getZoraLeaderboardEvents, sendGraphQLQuery } from "../../utils";
 import { ethers } from "ethers";
+import { fetchLeaderboardMintActivityData } from "../../utils/reservoir-api/leaderboard";
 
 export class NFTController {
   public getTokenMetadata: RequestHandler = async (req, res) => {
@@ -22,6 +23,17 @@ export class NFTController {
       res.status(200).send(meta);
     } catch (err) {
       console.error(err, "Error in moralis handler");
+      res.status(500).send({ error: "An error occurred" });
+    }
+  };
+
+  public getMintActivityForLeaderboard: RequestHandler = async (req, res) => {
+    try {
+      const meta = await fetchLeaderboardMintActivityData(req.params.contractAddress, req.params.network, req.params.tokenId)
+
+      res.status(200).send(meta);
+    } catch (err) {
+      console.error(err, "Error in getting leaderboard for mint activity");
       res.status(500).send({ error: "An error occurred" });
     }
   };

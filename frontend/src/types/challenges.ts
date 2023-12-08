@@ -9,17 +9,19 @@ export interface ChallengeCreation {
 
 export interface Challenge {
     id: string;
-    name: string,
     mintingContractAddress: string;
-    chainId: string;
-    tokenId?: string,
+    chainId: number;
+    tokenId: null | string;
     category: string;
-    imageUrl: string;
+    name: string;
+    kind: string;
+    floorPrice: string;
+    expiration: string;
+    expired: string;
     totalMints: number;
-    platform: string
-    expiration: Date
-    expired: boolean
-    creatorOfMint: string,
+    imageUrl: string;
+    network: string;
+    creatorOfMint: null | string;
 }
 
 
