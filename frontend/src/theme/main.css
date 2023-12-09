@@ -339,6 +339,7 @@ ion-toolbar {
   padding: 0 !important;
   text-transform: none;
 }
+
 .swiper-item-img {
   object-fit: cover;
 }
@@ -950,7 +951,6 @@ ion-modal#sheet-info-modal::part(handle) {
   --padding-end: 0px !important;
   margin-inline-start: 0.5rem !important;
   margin-inline-end: 0.5rem !important;
-  
 }
 
 .challenge-top-bar ion-buttons ion-button:first-child {
@@ -1038,6 +1038,82 @@ img.challenge-info-img {
 .challenge-info-card-item-element-dragging {
   cursor: grab;
 }
+
+.challenge-mint-img {
+  height: 15.077rem !important;
+  width: 15.077rem !important;
+  object-fit: cover;
+}
+
+.challenge-mint-img,
+.challenge-mint-img-skeleton {
+  border-radius: 0.813rem;
+}
+
+.challenge-mint-img-skeleton {
+  margin-top: 0;
+}
+
+.challenge-mint-card {
+  margin: 0;
+  width: 100%;
+  margin-inline: 0;
+  background-color: #f8f8f8 !important;
+  box-shadow: none !important;
+  cursor: pointer;
+}
+
+.challenge-mint-card ion-card-header {
+  padding: 0.3rem 0.3rem 0 0.5rem;
+}
+
+.challenge-mint-card ion-card-title,
+.challenge-mint-card ion-card-subtitle {
+  font-size: 0.875rem;
+  font-style: normal;
+  line-height: 1.313rem;
+  letter-spacing: 0.031rem;
+}
+
+.challenge-mint-card ion-card-title {
+  color: #4f4f4f;
+  font-weight: 500;
+}
+
+.challenge-mint-card ion-card-subtitle {
+  color: #000;
+  display: flex;
+  justify-content: space-between;
+}
+
+.challenge-mint-card ion-card-subtitle .name {
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.challenge-mint-card ion-card-subtitle .cost {
+  font-weight: 500;
+}
+
+.challenge-mint-amount-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.challenge-mint-amount-btn {
+  height: 2.188rem !important;
+  width: 3.179rem !important;
+  --padding-start: 0.1rem !important;
+  --padding-end: 0.1rem !important;
+  border-radius: 1.5rem !important;
+}
+
+.challenge-mint-amount {
+  height: 2.188rem !important;
+  width: 7.943rem !important;
+}
+
 .creator-of-mint {
   color: var(--greys-text-dark-grey, #3d4767);
   font-family: "Anek Kannada";

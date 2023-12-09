@@ -125,7 +125,7 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
 
         <ChallengeItemModal
           isOpen={itemModalIsOpen}
-          challenges={challenges || []}
+          challenges={selectedChallenge ? groupedChallenges[selectedChallenge.category] : challenges || []}
           selectedChallengeId={selectedChallenge?.id}
           presentingElement={presentingElement!}
           dismiss={onCloseChallenteItemModal}
