@@ -1,7 +1,7 @@
 import axios from "axios";
 import { configHeaders } from "./token-metadata";
 
-//TODO if floorprice doesnt exist, we have to fetch it from a seperate apiEndpoint
+//If floorprice doesnt exist, we have to fetch it from a seperate apiEndpoint
 export async function getFloorPrice(tokenId: string, network: string, collectionAddress: string) {
     let _tokenId = tokenId ? tokenId : ""
     const url = getServerUrlForPriceFloor(_tokenId, network, collectionAddress)
