@@ -20,7 +20,7 @@ import PageSearchBar from "@/components/PageSearchBar";
 import NoGroups from "./NoGroups";
 
 const MintCollectiveContent: React.FC<RouteComponentProps> = (routerProps) => {
-  const { myGroups, loading, setMyGroups } = useGetMyGroups();
+  const { myGroups, loading, setMyGroups, reload } = useGetMyGroups();
   const router = useIonRouter();
   const queryParams = new URLSearchParams(location.search);
   const groupName = queryParams.get("groupName");

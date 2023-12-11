@@ -6,13 +6,20 @@ import {
   useDisconnect,
   useSignMessage,
 } from "wagmi";
+import useGetMyGroups from "./Groups/useGetMyGroups";
 
 export function useSignInWallet() {
+
   const [user, setUser] = useState<any>(null);
+  const { reload } = useGetMyGroups()
   const { signMessage } = useSignMessage({
     //Listen to successfully signed message and login after that
-    onSuccess: async (data, args) =>
-      await login(data),
+    onSuccess: async (data, args) => {
+      await login(data);
+      reload()
+    },
+
+
     onError: async (error, variables) =>
       //TODO: handle some error here
       console.log(error, 'Error signing message')
@@ -49,6 +56,7 @@ export function useSignInWallet() {
 
 
   const login = async (data: any) => {
+    console.log('Inside here, is auth?', Auth.isAuthenticated)
     if (Auth.isAuthenticated) {
     } else {
       const authResult = await ApiService.loginUser(address!, data);
@@ -58,6 +66,7 @@ export function useSignInWallet() {
         disconnect();
         setUser(null);
       }
+
     }
   };
 
@@ -66,6 +75,7 @@ export function useSignInWallet() {
   // GET USER DATA
   const getUser = async () => {
     let existingUser = await ApiService.getUser(address!);
+    console.log(existingUser, 'exisitng user?')
     if (!existingUser) {
       // TODO: will need to show a modal / popup
       // to ask for user details for now we are using only the address

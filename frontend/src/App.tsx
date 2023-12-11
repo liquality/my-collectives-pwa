@@ -46,6 +46,7 @@ import Mint from "./pages/Mint/Mint";
 import CollectiveDetail from "./pages/Mint/CollectiveDetail/CollectiveDetail";
 import Join from "./pages/Join";
 import Rewards from "./pages/Rewards/Rewards";
+import useGetMyGroups from "./hooks/Groups/useGetMyGroups";
 
 setupIonicReact({
   mode: "ios",
@@ -106,7 +107,7 @@ const App: React.FC = () => {
       <Route path="/collectiveDetail" component={CollectiveDetail} />
 
       <Route path="/mint" component={Mint} />
-      <Route path="/challenges/:id?" component={Challenges}/>
+      <Route path="/challenges/:id?" component={Challenges} />
 
       {/* Default route (not requiring authentication) */}
       <Route exact path="/">
