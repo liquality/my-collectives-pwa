@@ -1,4 +1,4 @@
-import { useState, forwardRef, Ref } from "react";
+import { useState, forwardRef, Ref, useEffect } from "react";
 import {
   IonItem,
   IonButton,
@@ -59,6 +59,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     }
   };
 
+  console.log(createdChallenge, "created challegne");
   return (
     <IonModal
       initialBreakpoint={0.85}
@@ -144,7 +145,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
               label="Length (Days)"
               type="number"
               placeholder="Length (Days)"
-              onIonChange={(e) =>
+              onIonInput={(e) =>
                 setCreatedChallenge((prevGroup) => ({
                   ...prevGroup,
                   expiration: e.detail.value!,
