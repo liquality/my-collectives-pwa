@@ -839,7 +839,7 @@ ion-content.invite-page-link {
 }
 
 ion-modal.challenge-item-modal {
-  --min-height: 55% !important;
+  --min-height: 85% !important;
 }
 ion-modal#sheet-info-modal {
   --ion-background-color: rgba(255, 255, 255, 0.95) !important;
@@ -1024,7 +1024,8 @@ ion-modal#sheet-info-modal::part(handle) {
 }
 
 img.challenge-info-img {
-  object-fit: cover;
+  object-fit: contain;
+  height: 25rem;
   width: 100%;
 }
 
@@ -1048,6 +1049,7 @@ img.challenge-info-img {
 .challenge-mint-img,
 .challenge-mint-img-skeleton {
   border-radius: 0.813rem;
+  align-self: center;
 }
 
 .challenge-mint-img-skeleton {
@@ -1055,6 +1057,8 @@ img.challenge-info-img {
 }
 
 .challenge-mint-card {
+  display: flex;
+  flex-direction: column;
   margin: 0;
   width: 100%;
   margin-inline: 0;
@@ -1095,6 +1099,10 @@ img.challenge-info-img {
   font-weight: 500;
 }
 
+.challenge-mint-card ion-card-content {
+  padding-inline-start: 0px !important;
+  padding-bottom: 0px !important;
+}
 .challenge-mint-amount-container {
   width: 100%;
   display: flex;
@@ -1112,6 +1120,41 @@ img.challenge-info-img {
 .challenge-mint-amount {
   height: 2.188rem !important;
   width: 7.943rem !important;
+}
+
+.challenge-mint-amount ion-label {
+  padding-top: 0.3rem;
+}
+
+.mint-content-bottom-ribbon {
+  background-color: #f8f8f8 !important;
+  text-align: center;
+  font-size: 0.813rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1rem;
+}
+
+.challenge-time-chip {
+  border-radius: 1.125rem;
+  background: #fbff4a;
+  box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.25);
+  color: #000;
+
+  font-family: JetBrains Mono;
+  font-size: 0.563rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-align: center;
+}
+
+.challenge-time-chip.challenge-time-chip-ontop {
+  position: absolute;
+  left: 0.6rem;
+  top: 13.077rem;
+  padding-inline-start: 0.5rem;
+  padding-inline-end: 0.5rem;
 }
 
 .creator-of-mint {
