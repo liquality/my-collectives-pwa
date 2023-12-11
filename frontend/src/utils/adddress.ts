@@ -35,7 +35,7 @@ export const handleCopyClick = (text: string) => {
     });
 };
 
-export function convertDateToReadable(expiration: Date): string {
+export function convertDateToReadable(expiration: Date | string): string {
   const expirationDate = typeof expiration === 'string' ? new Date(expiration) : expiration;
 
   const now = new Date();

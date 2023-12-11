@@ -11,8 +11,13 @@ export function useSignInWallet() {
   const [user, setUser] = useState<any>(null);
   const { signMessage } = useSignMessage({
     //Listen to successfully signed message and login after that
-    onSuccess: async (data, args) =>
-      await login(data),
+    onSuccess: async (data, args) => {
+      await login(data);
+      //TODO: investiage better way to reloadGroups
+      window.location.reload()
+    },
+
+
     onError: async (error, variables) =>
       //TODO: handle some error here
       console.log(error, 'Error signing message')

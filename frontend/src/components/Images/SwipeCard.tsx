@@ -85,10 +85,10 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
           {loading ? (
             <IonSkeletonText animated={true}></IonSkeletonText>
           ) : (
-            shortenAddress(challenge.creatorOfMint) ?? "Creator.eth"
+            shortenAddress(challenge.creatorOfMint || "") ?? "Creator.eth"
           )}
         </IonCardTitle>
-        <IonCardSubtitle>{cutOffTooLongString(name, 20)}</IonCardSubtitle>
+        <IonCardSubtitle>{cutOffTooLongString(name, 17)}</IonCardSubtitle>
       </IonCardHeader>
       <IonCardContent>
         <IonGrid>
@@ -99,7 +99,9 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
             </IonCol>
             <IonCol size="auto">
               <IonIcon src="/assets/icons/people-tile.svg"></IonIcon>
-              <IonLabel>{convertDateToReadable(challenge.expiration)}</IonLabel>
+              <IonLabel>
+                {convertDateToReadable(challenge.expiration)}{" "}
+              </IonLabel>
             </IonCol>
 
             {selectedChallenge?.id === challenge?.id ? (

@@ -96,7 +96,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
 
       <IonContent>
         <SelectPoolModal
-          trigger="open-create-challenge-modal"
+          trigger="open-add-pool-modal"
           ref={selectPoolModal}
           presentingElement={presentingElement}
           dismiss={hideSelectPoolModal}
@@ -164,7 +164,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
             : null}
 
           <IonButton
-            id="open-create-challenge-modal"
+            id="open-add-pool-modal"
             fill="clear"
             color="primary"
             expand="block"

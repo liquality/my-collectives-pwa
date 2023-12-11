@@ -107,7 +107,7 @@ const ChallengeItemInfoSheetModal = (
               {challenge.name}
             </IonCol>
             <IonCol size="3" className="challenge-info-amount">
-              0.002 ETH
+              {challenge.floorPrice} ETH
             </IonCol>
           </IonRow>
           <IonRow>

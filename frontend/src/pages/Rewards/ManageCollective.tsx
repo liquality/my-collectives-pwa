@@ -98,7 +98,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
 
       <IonContent>
         <SelectPoolModal
-          trigger="open-create-challenge-modal"
+          trigger="open-manage-collective-modal"
           ref={selectPoolModal}
           presentingElement={presentingElement}
           dismiss={hideSelectPoolModal}
@@ -168,7 +168,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
             : null}
 
           <IonButton
-            id="open-create-challenge-modal"
+            id="open-manage-collective-modal"
             fill="clear"
             color="primary"
             expand="block"
