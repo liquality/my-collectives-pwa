@@ -5,6 +5,9 @@ import {
   IonModal,
   IonLabel,
   IonIcon,
+  IonToolbar,
+  IonButtons,
+  IonTitle,
 } from "@ionic/react";
 import { Challenge } from "@/types/challenges";
 import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
@@ -13,6 +16,7 @@ import {
   cutOffTooLongString,
   shortenAddress,
 } from "@/utils";
+import { closeOutline } from "ionicons/icons";
 
 export interface SelectPoolModal {
   presentingElement?: HTMLElement;
@@ -61,15 +65,20 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
 
   return (
     <IonModal
-      initialBreakpoint={0.85}
+      initialBreakpoint={0.95}
       ref={ref}
       trigger={trigger}
       presentingElement={presentingElement!}
     >
+      <IonToolbar>
+        <IonButtons slot="start">
+          <IonButton color="dark" onClick={() => dismiss()}>
+            <IonIcon icon={closeOutline} />
+          </IonButton>
+        </IonButtons>
+        <IonTitle>Select Pool</IonTitle>
+      </IonToolbar>
       <IonContent className="ion-padding" color="light">
-        <div className="spaced-on-sides mb-3">
-          <h2 className="header-title-text">SELECT</h2>
-        </div>
         <div className="mb-3">
           <div className="">
             {challenges
@@ -135,7 +144,7 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
             disabled={isButtonDisabled}
             color={isButtonDisabled ? "medium" : "primary"}
           >
-            Select Pool
+            Select
           </IonButton>
           <IonButton
             onClick={dismiss}
