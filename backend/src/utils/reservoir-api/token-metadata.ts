@@ -2,6 +2,7 @@
 import dotenv from "dotenv";
 import axios from 'axios';
 import { ethers } from "ethers";
+import { getFloorPrice } from "./floorprice";
 dotenv.config();
 export const configHeaders = {
     headers: {
@@ -12,16 +13,18 @@ export const configHeaders = {
 export async function fetchReservoirData(collectionAddress: string, network: string, tokenId: string) {
     let _tokenId = tokenId ? tokenId : ""
     const url = getServerUrlForTokenData(_tokenId, network, collectionAddress)
+    let price = await getFloorPrice(_tokenId, network, collectionAddress)
+    console.log(price, 'wats price?')
     try {
         const response = await axios.get(url, configHeaders);
         const data = response.data;
         if (tokenId) {
-            const prettifiedList = await prettifyERC1155Data(data.tokens[0].token)
+            const prettifiedList = await prettifyERC1155Data(data.tokens[0].token, price)
             console.log('Data: in erc 1155', data.tokens[0].token);
             return prettifiedList;
         }
         else {
-            const prettifiedList = await prettifyERC721Data(data.tokens)
+            const prettifiedList = await prettifyERC721Data(data.tokens, price)
             console.log('Data: in erc 721', data.tokens)
             return prettifiedList;
         }
@@ -30,12 +33,10 @@ export async function fetchReservoirData(collectionAddress: string, network: str
     }
 }
 
-export async function prettifyERC721Data(nftList: any) {
+export async function prettifyERC721Data(nftList: any, price: string) {
     const { tokenCount, name, image, description, creator, chainId, floorAskPrice } = nftList[0].token.collection
-    console.log(nftList[0].token, 'colectioööön')
-    //TODO if floorprice doesnt exist, we have to fetch it from a seperate apiEndpoint
     var decimalPrice = floorAskPrice?.amount?.decimal
-    var convertedWeiPrice = ethers.utils.formatEther(floorAskPrice?.amount?.raw ?? "0")
+    var convertedWeiPrice = floorAskPrice?.amount?.raw ? ethers.utils.formatEther(floorAskPrice?.amount?.raw) : price
     const prettifiedList = {
 
         totalMints: tokenCount,
@@ -51,12 +52,11 @@ export async function prettifyERC721Data(nftList: any) {
 }
 
 
-export async function prettifyERC1155Data(nftList: any) {
+export async function prettifyERC1155Data(nftList: any, price: string) {
     const { name, chainId, tokenId, kind, supply, image, description } = nftList
     const { floorAskPrice } = nftList.collection
-    //TODO if floorprice doesnt exist, we have to fetch it from a seperate apiEndpoint
     const decimalPrice = floorAskPrice?.amount?.decimal
-    const convertedWeiPrice = ethers.utils.formatEther(floorAskPrice?.amount?.raw ?? "0")
+    var convertedWeiPrice = floorAskPrice?.amount?.raw ? ethers.utils.formatEther(floorAskPrice?.amount?.raw) : price
     const prettifiedList = {
         totalMints: supply,
         name,
