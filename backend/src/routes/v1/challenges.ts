@@ -4,7 +4,7 @@ import { authentication } from "../../middlewares";
 export const challengesRouter = Router();
 const challenge = new ChallengesController();
 
-challengesRouter.post("", challenge.create);
+challengesRouter.post("", authentication, challenge.create);
 challengesRouter.post("/:id", challenge.find);
 challengesRouter.get("", challenge.findAll);
 

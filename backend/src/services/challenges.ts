@@ -6,6 +6,7 @@ export class ChallengesService {
 
     public static async create(
         data: any,
+        userId: string
 
     ): Promise<Challenge | null> {
         //TODO: change this to challenges data insert

@@ -15,6 +15,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import CreateGroupModal from "./CreateChallengeModal";
 import { Challenge } from "@/types/challenges";
 import ChallengeItemModal from "@/components/ChallengesModal/ChallengeItemModal";
+import { useAccount } from "wagmi";
+import { useSignInWallet } from "@/hooks/useSignInWallet";
 
 export type GroupedChallenge = {
   [key: string]: Challenge[];
@@ -25,6 +27,7 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
   const page = useRef(undefined);
   const createChallengeModal = useRef<HTMLIonModalElement>(null);
   const [itemModalIsOpen, setItemModalIsOpen] = useState(false);
+  const { user } = useSignInWallet();
 
   const [presentingElement, setPresentingElement] = useState<
     HTMLElement | undefined
@@ -70,13 +73,15 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
     } else {
       setItemModalIsOpen(false);
     }
-  }, [selectedChallenge]);
+  }, [selectedChallenge, user]);
 
   const groupedChallenges: GroupedChallenge = useMemo(() => {
-    return challenges?.reduce((rv: GroupedChallenge, x: Challenge) => {
-      (rv[x["category"]] = rv[x["category"]] || []).push(x);
-      return rv;
-    }, {}) || {};
+    return (
+      challenges?.reduce((rv: GroupedChallenge, x: Challenge) => {
+        (rv[x["category"]] = rv[x["category"]] || []).push(x);
+        return rv;
+      }, {}) || {}
+    );
   }, [challenges]);
 
   console.log(groupedChallenges, "groupedChallenges");
@@ -92,6 +97,7 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
           <IonFabButton
             id="open-create-challenge-modal"
             className="create-fab-button"
+            disabled={!user}
           >
             <IonIcon src="/assets/icons/add.svg"></IonIcon>
             <IonLabel>Create Challenge</IonLabel>
@@ -125,7 +131,11 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
 
         <ChallengeItemModal
           isOpen={itemModalIsOpen}
-          challenges={selectedChallenge ? groupedChallenges[selectedChallenge.category] : challenges || []}
+          challenges={
+            selectedChallenge
+              ? groupedChallenges[selectedChallenge.category]
+              : challenges || []
+          }
           selectedChallengeId={selectedChallenge?.id}
           presentingElement={presentingElement!}
           dismiss={onCloseChallenteItemModal}

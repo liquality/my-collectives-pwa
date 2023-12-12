@@ -43,6 +43,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     category: "", //music, art or other
     network: "", // zora, arbitrum, polygon or base
     expiration: "",
+    honeyPotAddress: "",
   });
   const { mintingContractAddress, chainId, category, network, expiration } =
     createdChallenge;
@@ -91,6 +92,19 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
                 setCreatedChallenge((prevGroup) => ({
                   ...prevGroup,
                   mintingContractAddress: e.detail.value!,
+                }))
+              }
+            ></IonInput>
+          </IonItem>
+          <IonItem>
+            <IonInput
+              label="Honey Pot Reward Contract Address"
+              label-placement="floating"
+              placeholder="Enter the address"
+              onIonInput={(e) =>
+                setCreatedChallenge((prevGroup) => ({
+                  ...prevGroup,
+                  honeyPotAddress: e.detail.value!,
                 }))
               }
             ></IonInput>
