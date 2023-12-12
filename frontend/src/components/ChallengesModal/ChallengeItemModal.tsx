@@ -37,7 +37,7 @@ const cardVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.3, ease: easeOutExpo },
+    transition: { duration: 0 },
   },
   exit: {
     opacity: 0,
@@ -182,7 +182,7 @@ const ChallengeItemModal = ({
               <AnimatePresence>
                 <motion.div
                   variants={cardVariants}
-                  animate={applyRejectAnimation ? "exit" : "current"}
+                  animate={applyRejectAnimation ? "" : "current"}
                 >
                   <ChallengeImageCard
                     onSwipe={handleCardSwipe}
@@ -197,7 +197,7 @@ const ChallengeItemModal = ({
               <AnimatePresence>
                 <motion.div
                   variants={cardVariants}
-                  animate={applyRejectAnimation ? "exit" : "current"}
+                  animate={applyRejectAnimation ? "exit" : ""}
                 >
                   <ChallengeImageCard
                     onSwipe={handleCardSwipe}

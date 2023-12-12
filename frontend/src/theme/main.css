@@ -339,6 +339,7 @@ ion-toolbar {
   padding: 0 !important;
   text-transform: none;
 }
+
 .swiper-item-img {
   object-fit: cover;
 }
@@ -838,7 +839,7 @@ ion-content.invite-page-link {
 }
 
 ion-modal.challenge-item-modal {
-  --min-height: 55% !important;
+  --min-height: 85% !important;
 }
 ion-modal#sheet-info-modal {
   --ion-background-color: rgba(255, 255, 255, 0.95) !important;
@@ -950,7 +951,6 @@ ion-modal#sheet-info-modal::part(handle) {
   --padding-end: 0px !important;
   margin-inline-start: 0.5rem !important;
   margin-inline-end: 0.5rem !important;
-  
 }
 
 .challenge-top-bar ion-buttons ion-button:first-child {
@@ -1024,7 +1024,8 @@ ion-modal#sheet-info-modal::part(handle) {
 }
 
 img.challenge-info-img {
-  object-fit: cover;
+  object-fit: contain;
+  height: 25rem;
   width: 100%;
 }
 
@@ -1038,6 +1039,124 @@ img.challenge-info-img {
 .challenge-info-card-item-element-dragging {
   cursor: grab;
 }
+
+.challenge-mint-img {
+  height: 15.077rem !important;
+  width: 15.077rem !important;
+  object-fit: cover;
+}
+
+.challenge-mint-img,
+.challenge-mint-img-skeleton {
+  border-radius: 0.813rem;
+  align-self: center;
+}
+
+.challenge-mint-img-skeleton {
+  margin-top: 0;
+}
+
+.challenge-mint-card {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  width: 100%;
+  margin-inline: 0;
+  background-color: #f8f8f8 !important;
+  box-shadow: none !important;
+  cursor: pointer;
+}
+
+.challenge-mint-card ion-card-header {
+  padding: 0.3rem 0.3rem 0 0.5rem;
+}
+
+.challenge-mint-card ion-card-title,
+.challenge-mint-card ion-card-subtitle {
+  font-size: 0.875rem;
+  font-style: normal;
+  line-height: 1.313rem;
+  letter-spacing: 0.031rem;
+}
+
+.challenge-mint-card ion-card-title {
+  color: #4f4f4f;
+  font-weight: 500;
+}
+
+.challenge-mint-card ion-card-subtitle {
+  color: #000;
+  display: flex;
+  justify-content: space-between;
+}
+
+.challenge-mint-card ion-card-subtitle .name {
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.challenge-mint-card ion-card-subtitle .cost {
+  font-weight: 500;
+}
+
+.challenge-mint-card ion-card-content {
+  padding-inline-start: 0px !important;
+  padding-bottom: 0px !important;
+}
+.challenge-mint-amount-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.challenge-mint-amount-btn {
+  height: 2.188rem !important;
+  width: 3.179rem !important;
+  --padding-start: 0.1rem !important;
+  --padding-end: 0.1rem !important;
+  border-radius: 1.5rem !important;
+}
+
+.challenge-mint-amount {
+  height: 2.188rem !important;
+  width: 7.943rem !important;
+}
+
+.challenge-mint-amount ion-label {
+  padding-top: 0.3rem;
+}
+
+.mint-content-bottom-ribbon {
+  background-color: #f8f8f8 !important;
+  text-align: center;
+  font-size: 0.813rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1rem;
+}
+
+.challenge-time-chip {
+  border-radius: 1.125rem;
+  background: #fbff4a;
+  box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.25);
+  color: #000;
+
+  font-family: JetBrains Mono;
+  font-size: 0.563rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-align: center;
+}
+
+.challenge-time-chip.challenge-time-chip-ontop {
+  position: absolute;
+  left: 0.6rem;
+  top: 13.077rem;
+  padding-inline-start: 0.5rem;
+  padding-inline-end: 0.5rem;
+}
+
 .creator-of-mint {
   color: var(--greys-text-dark-grey, #3d4767);
   font-family: "Anek Kannada";

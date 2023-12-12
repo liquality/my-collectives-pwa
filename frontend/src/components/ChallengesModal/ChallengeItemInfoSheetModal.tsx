@@ -114,7 +114,11 @@ const ChallengeItemInfoSheetModal = (
             <IonCol size="9" className="challenge-info-creator">
               {shortenAddress(challenge.mintingContractAddress)}
             </IonCol>
-            <IonCol size="3" className=""></IonCol>
+            <IonCol size="3">
+              <div className="challenge-time-chip">
+                28 mins left
+              </div>
+            </IonCol>
           </IonRow>
           <IonRow className="ion-justify-content-start ion-align-items-center challenge-info-item-details">
             <IonCol size="auto">
