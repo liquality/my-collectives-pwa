@@ -172,7 +172,10 @@ const ChallengeItemModal = ({
               </IonButton>
             )}
           </IonButtons>
-          <IonTitle>{challenges[nextIndex]?.totalMints} | 6 Groups</IonTitle>
+          <IonTitle>
+            {challenges[currentIndex]?.totalMints} |{" "}
+            {challenges[currentIndex]?.groupcount} Groups
+          </IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>

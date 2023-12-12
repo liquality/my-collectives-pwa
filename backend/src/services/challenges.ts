@@ -52,24 +52,33 @@ export class ChallengesService {
 
 
     public static async findAll(): Promise<any[]> {
-        const challenges = await dbClient("challenges").select<Challenge[]>(
-            "id",
-            "mintingContractAddress",
-            "chainId",
-            "tokenId",
-            "category",
-            "name",
-            "kind",
-            "floorPrice",
-            "expiration",
-            "expired",
-            "totalMints",
-            "imageUrl",
-            "network",
-            "creatorOfMint"
-        );
-        return challenges as any[];
+        const challenges = await dbClient("challenges")
+            .select(
+                "challenges.id",
+                "mintingContractAddress",
+                "chainId",
+                "tokenId",
+                "category",
+                "challenges.name", // Specify the table alias or table name
+                "kind",
+                "floorPrice",
+                "expiration",
+                "expired",
+                "totalMints",
+                "imageUrl",
+                "network",
+                "creatorOfMint",
+                dbClient.raw('COUNT(groups.id) as groupCount')
+            )
+            .leftJoin("pools", "challenges.id", "pools.challengeId")
+            .leftJoin("groups", "pools.groupId", "groups.id")
+            .groupBy("challenges.id")
+            .orderBy("challenges.id", "asc");
+
+        return challenges;
     }
+
+
 
     public static async find(id: string): Promise<any | null> {
         const challenge = await dbClient("challenges")

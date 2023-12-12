@@ -22,6 +22,7 @@ export interface Challenge {
     imageUrl: string;
     network: string;
     creatorOfMint: null | string;
+    groupcount?: string
 }
 
 
