@@ -8,9 +8,14 @@ import {
   IonInput,
   IonSelect,
   IonSelectOption,
+  IonToolbar,
+  IonButtons,
+  IonIcon,
+  IonTitle,
 } from "@ionic/react";
 import ApiService from "@/services/ApiService";
 import { Challenge } from "@/types/challenges";
+import { closeOutline } from "ionicons/icons";
 
 export interface CreateChallengeModalProps {
   presentingElement?: HTMLElement;
@@ -62,11 +67,19 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
   console.log(createdChallenge, "created challegne");
   return (
     <IonModal
-      initialBreakpoint={0.85}
+      initialBreakpoint={0.95}
       ref={ref}
       trigger={trigger}
       presentingElement={presentingElement!}
     >
+      <IonToolbar>
+        <IonButtons slot="start">
+          <IonButton color="dark" onClick={() => dismiss()}>
+            <IonIcon icon={closeOutline} />
+          </IonButton>
+        </IonButtons>
+        <IonTitle>Create Challenge</IonTitle>
+      </IonToolbar>
       <IonContent color="light">
         <IonList className="ion-padding" inset={true}>
           <IonItem>
