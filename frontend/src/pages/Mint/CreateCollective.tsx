@@ -72,7 +72,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       createdBy: user?.id,
       name: createGroup.name,
       description: createGroup.description,
-      publicAddress: "0x0232u326483848787ndas7298bda7289da", //TODO: hardcoded for now but will have to create the contract address from our factory
+      publicAddress: Math.floor(Math.random() * 100).toString(), //TODO: hardcoded for now but will have to create the contract address from our factory
     };
     try {
       const result = await ApiService.createGroup({

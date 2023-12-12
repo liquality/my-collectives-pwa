@@ -33,6 +33,8 @@ const MintCollectiveContent: React.FC<RouteComponentProps> = (routerProps) => {
     router.push(pathConstants.mintPage.createCollective);
   };
 
+  console.log(routerProps.location.pathname, "routerprops?", routerProps);
+
   //If a new group has been created, push into exisitng groups array state to avoid re-fetching of groups
   useEffect(() => {
     if (isNewlyCreatedGroup) {
@@ -51,6 +53,7 @@ const MintCollectiveContent: React.FC<RouteComponentProps> = (routerProps) => {
       };
 
       setMyGroups((prevGroups) => [...(prevGroups || []), newGroup]);
+      routerProps.history.replace(routerProps.location.pathname);
     }
   }, [groupName, groupAddress, groupId, createdBy]);
 
