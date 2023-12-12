@@ -48,6 +48,7 @@ export class PoolsService {
           'challenges.expiration',
           'challenges.totalMints',
           'challenges.expired',
+          'challenges.honeyPotAddress',
         )
         .from('pools')
         .where('pools.groupId', '=', groupId)

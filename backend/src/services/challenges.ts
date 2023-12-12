@@ -35,7 +35,8 @@ export class ChallengesService {
                     "totalMints",
                     "imageUrl",
                     "network",
-                    "creatorOfMint"
+                    "creatorOfMint",
+                    "honeyPotAddress"
                 ]
             );
 
@@ -69,6 +70,7 @@ export class ChallengesService {
                 "imageUrl",
                 "network",
                 "creatorOfMint",
+                "honeyPotAddress",
                 dbClient.raw('COUNT(groups.id) as groupCount')
             )
             .leftJoin("pools", "challenges.id", "pools.challengeId")
