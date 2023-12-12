@@ -29,19 +29,35 @@ export interface MintItemContentProps {
 }
 
 const MintItemContent: React.FC<MintItemContentProps> = ({
-  challenge: { imageUrl, name },
+  challenge: { imageUrl, name, floorPrice, groupCount },
 }: MintItemContentProps) => {
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loading, setLoading] = useState(true);
+  const [amount, setAmount] = useState(1);
   const router = useIonRouter();
-  const handleClick = () => {};
+
+  const handleDetailsClick = () => {};
+  const handleChangeCollectiveClick = () => {};
+  const handleMintClick = () => {};
+
+  const handlePlusClick = () => {
+    setAmount(amount + 1);
+  };
+
+  const handleMinusClick = () => {
+    if (amount > 2) {
+      setAmount(amount - 1);
+    } else {
+      setAmount(1);
+    }
+  };
 
   return (
     <IonContent>
       <IonGrid>
         <IonRow className="ion-justify-content-center">
           <IonCol size="8">
-            <IonCard className="challenge-mint-card" onClick={handleClick}>
+            <IonCard className="challenge-mint-card">
               <img
                 className="challenge-mint-img"
                 alt="NFT Image"
@@ -69,7 +85,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
                 </IonCardTitle>
                 <IonCardSubtitle>
                   <div className="name">{cutOffTooLongString(name, 20)}</div>
-                  <div className="cost">0.002 ETH</div>
+                  <div className="cost">{floorPrice} ETH</div>
                 </IonCardSubtitle>
               </IonCardHeader>
               <IonCardContent>
@@ -81,7 +97,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
                     </IonCol>
                     <IonCol size="auto">
                       <IonIcon src="/assets/icons/people-tile.svg"></IonIcon>
-                      <IonLabel>80</IonLabel>
+                      <IonLabel>{`${groupCount || 0}`}</IonLabel>
                     </IonCol>
                     <IonCol size="auto">
                       <IonIcon src="/assets/icons/message-tile.svg"></IonIcon>
@@ -100,6 +116,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
               fill="outline"
               shape="round"
               size="small"
+              onClick={handlePlusClick}
             >
               <IonIcon slot="icon-only" icon={add}></IonIcon>
             </IonButton>
@@ -109,13 +126,14 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
               shape="round"
               size="small"
             >
-              <IonLabel>23</IonLabel>
+              <IonLabel>{amount}</IonLabel>
             </IonButton>
             <IonButton
               className="challenge-mint-amount-btn"
               fill="outline"
               shape="round"
               size="small"
+              onClick={handleMinusClick}
             >
               <IonIcon slot="icon-only" icon={remove}></IonIcon>
             </IonButton>
@@ -123,24 +141,37 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
         </IonRow>
         <IonRow className="ion-justify-content-center">
           <IonCol size="6">NFT & Fee: 0.00077</IonCol>
-          <IonCol size="2">Details</IonCol>
+          <IonCol size="2">
+            <IonButton fill="clear" size="small" onClick={handleDetailsClick}>
+              Details
+            </IonButton>
+          </IonCol>
         </IonRow>
         <IonRow className="ion-justify-content-center">
           <IonCol size="6">Collective Name</IonCol>
-          <IonCol size="2">Change</IonCol>
+
+          <IonCol size="2">
+            <IonButton
+              fill="clear"
+              size="small"
+              onClick={handleChangeCollectiveClick}
+            >
+              Change
+            </IonButton>
+          </IonCol>
         </IonRow>
-        <IonRow className="mint-content-bottom-ribbon ion-justify-content-center">
+        <IonRow className="mint-content-bottom-ribbon ion-justify-content-center ion-align-items-center">
           <IonCol size="12">
-            <IonButton fill="clear" size="small">
+            <IonButton fill="clear" size="small" className="ion-no-padding">
               Mint in a Group
             </IonButton>
-            for a chance to get rewared
+            <IonLabel> for a chance to get rewared</IonLabel>
           </IonCol>
         </IonRow>
         <IonRow className="ion-justify-content-center">
           <IonCol size="auto">
             <IonButton onClick={() => {}} color="primary" shape="round">
-              Mint 0.00 ETH
+              Mint {floorPrice} ETH
             </IonButton>
           </IonCol>
         </IonRow>
