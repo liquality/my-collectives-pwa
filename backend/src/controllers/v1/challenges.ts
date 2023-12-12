@@ -35,12 +35,11 @@ export class ChallengesController {
     };
 
     public create: RequestHandler = async (req, res) => {
-        //const user = await AuthService.find((req as any).auth?.sub);
-        //TODO: add back auth (it did not work)
+        const user = await AuthService.find((req as any).auth?.sub);
         try {
             const challenge = await ChallengesService.create(
-                req.body
-                //user.id
+                req.body,
+                user.id
             );
 
             if (!challenge) {
@@ -48,6 +47,7 @@ export class ChallengesController {
             }
             res.status(200).send(challenge);
         } catch (err: any) {
+            console.log(err, 'wats err?')
             res.status(500).send({ error: err.message });
         }
     }

@@ -23,6 +23,7 @@ export interface Challenge {
     network: string;
     creatorOfMint: null | string;
     groupcount?: string
+    honeyPotAddress: string;
 }
 
 

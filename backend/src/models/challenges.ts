@@ -9,6 +9,8 @@ export interface Challenge {
     platform: string
     expiration: string
     expired: boolean
+    honeyPotAddress: string;
+
 }
 
 

@@ -19,7 +19,8 @@ export async function up(knex: Knex): Promise<void> {
         table.timestamp("expiration").nullable(); //example: 7 days from creation //expiration: new Date("2023-12-01T12:00:00Z")
         table.integer("totalMints").nullable()
         table.boolean("expired").nullable();
-        table.unique(["tokenId", "mintingContractAddress", "creatorOfMint"])
+        table.string("honeyPotAddress").nullable()
+        table.unique(["tokenId", "mintingContractAddress", "creatorOfMint", "chainId"])
         table.timestamps({ useCamelCase: true });
     });
 }

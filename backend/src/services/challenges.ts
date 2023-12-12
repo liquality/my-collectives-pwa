@@ -1,25 +1,39 @@
 import { dbClient } from "../data";
 import { Challenge } from "../models/challenges";
 import { convertToDate, fetchReservoirData, getTokenMetadataFromZora } from "../utils";
+import { AuthService } from "./auth";
 
 export class ChallengesService {
 
     public static async create(
         data: any,
+        userId: string
 
     ): Promise<Challenge | null> {
         //TODO: change this to challenges data insert
-        const { mintingContractAddress, tokenId, network, category, expiration } = data
-        const metaTwo = await fetchReservoirData(mintingContractAddress, network, tokenId)
+        const { mintingContractAddress, tokenId, network, category, expiration, honeyPotAddress } = data
+        const tokenData = await fetchReservoirData(mintingContractAddress, network, tokenId)
+        const user = await AuthService.find(userId)
+        console.log(user, 'wats USER? created challenges')
+
+        const insertObject = {
+            honeyPotAddress,
+            mintingContractAddress,
+            network,
+            category,
+            expiration: convertToDate(expiration),
+            ...tokenData,
+        };
+
+        if (tokenData?.creatorOfMint) {
+            insertObject.creatorOfMint = tokenData.creatorOfMint;
+        } else {
+            insertObject.creatorOfMint = user.publicAddress;
+        }
+
         try {
             const result = await dbClient("challenges").insert(
-                {
-                    mintingContractAddress,
-                    network, category,
-                    expiration: convertToDate(expiration),
-                    ...metaTwo,
-                    //createdBy: userId,
-                },
+                insertObject,
                 [
                     "id",
                     "mintingContractAddress",
@@ -34,7 +48,8 @@ export class ChallengesService {
                     "totalMints",
                     "imageUrl",
                     "network",
-                    "creatorOfMint"
+                    "creatorOfMint",
+                    "honeyPotAddress"
                 ]
             );
 
@@ -68,6 +83,7 @@ export class ChallengesService {
                 "imageUrl",
                 "network",
                 "creatorOfMint",
+                "honeyPotAddress",
                 dbClient.raw('COUNT(groups.id) as groupCount')
             )
             .leftJoin("pools", "challenges.id", "pools.challengeId")

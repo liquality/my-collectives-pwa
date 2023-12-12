@@ -11,7 +11,6 @@ export function useGetPoolsByGroupId(groupId: string) {
         if (!pools && groupId) {
           setLoading(true);
           const _pools = await ApiService.readPoolsByGroupId(groupId);
-          console.log(_pools, "PÖÖLS?");
           setPools(_pools);
           setLoading(false);
         }

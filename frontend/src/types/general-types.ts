@@ -36,6 +36,8 @@ export type PoolWithChallenge = {
     platform: string;
     expiration: string;
     totalMints: number;
+    honeyPotAddress: string;
+
     expired: null | boolean;
 };
 
