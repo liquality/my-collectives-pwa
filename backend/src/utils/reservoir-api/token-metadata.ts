@@ -14,7 +14,6 @@ export async function fetchReservoirData(collectionAddress: string, network: str
     let _tokenId = tokenId ? tokenId : ""
     const url = getServerUrlForTokenData(_tokenId, network, collectionAddress)
     let price = await getFloorPrice(_tokenId, network, collectionAddress)
-    console.log(price, 'wats price?')
     try {
         const response = await axios.get(url, configHeaders);
         const data = response.data;

@@ -50,7 +50,6 @@ export const Chat = (props: ChatProps) => {
           groupId,
         };
         const postMessage = await ApiService.createMessage(message);
-        console.log(postMessage);
       } catch (error) {
         console.error("Error sending message:", error);
       }

@@ -65,7 +65,6 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     }
   };
 
-  console.log(createdChallenge, "created challegne");
   return (
     <IonModal
       initialBreakpoint={0.95}
