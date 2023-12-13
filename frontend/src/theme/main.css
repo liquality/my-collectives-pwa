@@ -1103,10 +1103,12 @@ img.challenge-info-img {
   padding-inline-start: 0px !important;
   padding-bottom: 0px !important;
 }
+
 .challenge-mint-amount-container {
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .challenge-mint-amount-btn {
@@ -1118,12 +1120,20 @@ img.challenge-info-img {
 }
 
 .challenge-mint-amount {
+  --padding-top: 0px !important;
+  min-height: 2.188rem !important;
   height: 2.188rem !important;
   width: 7.943rem !important;
+  margin-left: 0.4rem;
+  margin-right: 0.4rem;
+  border-radius: 2rem;
+  padding-top: 0px !important;
+  border: 1px solid var(--ion-color-primary);
+  text-align: center;
 }
 
-.challenge-mint-amount ion-label {
-  padding-top: 0.3rem;
+.challenge-mint-amount:focus {
+ border-bottom: 0px !important;
 }
 
 .mint-content-bottom-ribbon {

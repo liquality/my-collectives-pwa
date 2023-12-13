@@ -20,6 +20,7 @@ import {
   IonContent,
   IonChip,
   IonButton,
+  IonInput,
 } from "@ionic/react";
 import { add, remove } from "ionicons/icons";
 import React, { useState } from "react";
@@ -120,27 +121,22 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
             >
               <IonIcon slot="icon-only" icon={add}></IonIcon>
             </IonButton>
-            <IonButton
-              className="challenge-mint-amount"
-              fill="outline"
-              shape="round"
-              size="small"
-            >
-              <IonLabel>{amount}</IonLabel>
-            </IonButton>
+            
+            <IonInput className="challenge-mint-amount" type="number" value={amount}></IonInput>
             <IonButton
               className="challenge-mint-amount-btn"
               fill="outline"
               shape="round"
               size="small"
               onClick={handleMinusClick}
+              disabled={amount <= 1}
             >
               <IonIcon slot="icon-only" icon={remove}></IonIcon>
             </IonButton>
           </IonCol>
         </IonRow>
         <IonRow className="ion-justify-content-center">
-          <IonCol size="6">NFT & Fee: 0.00077</IonCol>
+          <IonCol size="6">NFT & Fee: {floorPrice}</IonCol>
           <IonCol size="2">
             <IonButton fill="clear" size="small" onClick={handleDetailsClick}>
               Details
