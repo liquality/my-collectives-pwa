@@ -10,7 +10,7 @@ import {
 } from "@ionic/react";
 import { Challenge } from "@/types/challenges";
 import { closeOutline } from "ionicons/icons";
-import MintItemContent from "../Mint/MintItemContent";
+import MintItemScreen from "../Mint/MintItemScreen";
 export interface ChallengeItemMintModalProps {
   dismiss: () => void;
   challenge: Challenge;
@@ -38,7 +38,7 @@ const ChallengeItemMintModal = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>
-      <MintItemContent challenge={challenge} />
+      <MintItemScreen challenge={challenge} />
       </IonContent>
     </IonModal>
   );
