@@ -52,8 +52,12 @@ export class ChallengesService {
                 ]
             );
 
+
+
             if (result.length > 0) {
                 return result[0];
+            } else if (!result[0].imageUrl || !result[0].totalMints || !result[0].name) {
+                return null //TODO: add error handling; we could not fetch necessary NFT API Data
             }
 
             return null;
@@ -66,7 +70,7 @@ export class ChallengesService {
 
 
     public static async update(challenge: Challenge): Promise<Challenge | null> {
-        const { mintingContractAddress, tokenId, network, } = challenge;
+        const { mintingContractAddress, tokenId, network, groupcount } = challenge;
         const tokenData = await fetchReservoirData(mintingContractAddress, network, tokenId ?? undefined);
 
         const insertObject = {
@@ -94,12 +98,14 @@ export class ChallengesService {
                     "imageUrl",
                     "network",
                     "creatorOfMint",
-                    "honeyPotAddress"
+                    "honeyPotAddress",
+
                 ]
             ).where("id", "=", challenge.id);
 
+            const resultObj = { groupcount, ...result[0], }
             if (result.length > 0) {
-                return result[0];
+                return resultObj;
             }
 
             // If the update didn't affect any rows, return null

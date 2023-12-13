@@ -11,6 +11,7 @@ export interface Challenge {
     expired: boolean
     honeyPotAddress: string;
     network: string;
+    groupcount?: number
 
 }
 

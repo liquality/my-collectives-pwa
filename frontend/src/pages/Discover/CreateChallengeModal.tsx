@@ -12,10 +12,14 @@ import {
   IonButtons,
   IonIcon,
   IonTitle,
+  IonLabel,
+  IonCol,
+  IonRow,
 } from "@ionic/react";
 import ApiService from "@/services/ApiService";
 import { Challenge } from "@/types/challenges";
 import { closeOutline } from "ionicons/icons";
+import { isAddress } from "viem";
 
 export interface CreateChallengeModalProps {
   presentingElement?: HTMLElement;
@@ -49,20 +53,50 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     createdChallenge;
   let isButtonDisabled =
     !mintingContractAddress || !category || !network || !expiration;
+  const [validMintingContractAdress, setValidMintingContractAddress] =
+    useState(false);
+  const [validHoneyPotAddress, setValidHoneyPotAddress] = useState(false);
+  const [error, setError] = useState("");
 
   const handleCreateChallenge = async () => {
     try {
       const result = await ApiService.createChallenges(createdChallenge);
 
-      setResultChallenge(result);
-      if (result.id) {
+      if (result?.id) {
+        setResultChallenge(result);
         dismiss();
       } else {
         //TODO: setError
+        setError(
+          "We could not fetch the necessary NFT info, please assure that you have entered the correct details"
+        );
       }
     } catch (error) {
+      setError(
+        "We could not fetch the necessary NFT info, please assure that you have entered the correct details"
+      );
       console.log(error, "error posting group");
     }
+  };
+
+  const handleSetMintingContractAddress = (value: string) => {
+    isAddress(value) === true
+      ? setValidMintingContractAddress(true)
+      : setValidMintingContractAddress(false);
+    setCreatedChallenge((prevGroup) => ({
+      ...prevGroup,
+      mintingContractAddress: value,
+    }));
+  };
+
+  const handleSetHoneyPotAddress = (value: string) => {
+    isAddress(value) === true
+      ? setValidHoneyPotAddress(true)
+      : setValidHoneyPotAddress(false);
+    setCreatedChallenge((prevGroup) => ({
+      ...prevGroup,
+      honeyPotAddress: value,
+    }));
   };
 
   return (
@@ -88,24 +122,17 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
               label-placement="floating"
               placeholder="Enter the address"
               onIonInput={(e) =>
-                setCreatedChallenge((prevGroup) => ({
-                  ...prevGroup,
-                  mintingContractAddress: e.detail.value!,
-                }))
+                handleSetMintingContractAddress(e.detail.value!)
               }
             ></IonInput>
           </IonItem>
+
           <IonItem>
             <IonInput
               label="Honey Pot Reward Contract Address"
               label-placement="floating"
               placeholder="Enter the address"
-              onIonInput={(e) =>
-                setCreatedChallenge((prevGroup) => ({
-                  ...prevGroup,
-                  honeyPotAddress: e.detail.value!,
-                }))
-              }
+              onIonInput={(e) => handleSetHoneyPotAddress(e.detail.value!)}
             ></IonInput>
           </IonItem>
 
@@ -166,7 +193,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
           </IonItem>
 
           {/* TODO: maybe make this a calender picker instead ? */}
-          <IonItem>
+          <IonItem className="mb-3">
             <IonInput
               label="Length (Days)"
               type="number"
@@ -178,6 +205,12 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
                 }))
               }
             ></IonInput>
+          </IonItem>
+
+          <IonItem>
+            {error ? (
+              <IonTitle style={{ color: "#EA0000" }}>{error}</IonTitle>
+            ) : null}
           </IonItem>
         </IonList>
 
