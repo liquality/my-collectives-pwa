@@ -18,6 +18,8 @@ import { pathConstants } from "@/utils/routeNames";
 import { Challenge } from "@/types/challenges";
 import SelectPoolModal from "./SelectPoolModal";
 import { convertIpfsImageUrl, cutOffTooLongString } from "@/utils";
+import useToast from "@/hooks/useToast";
+import { banOutline } from "ionicons/icons";
 
 export interface CreateCollectiveProps {
   presentingElement?: HTMLElement;
@@ -34,6 +36,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     description: "",
   });
   const [allSelectedPools, setAllSelectedPools] = useState<Challenge[]>([]);
+  const { presentToast } = useToast();
 
   const page = useRef(undefined);
   const selectPoolModal = useRef<HTMLIonModalElement>(null);
@@ -86,6 +89,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${publicAddress}&groupId=${id}&createdBy=${createdBy}`
       );
     } catch (error) {
+      presentToast("We could not create your group :(", "danger", banOutline);
       console.log(error, "error posting group");
     }
   };
