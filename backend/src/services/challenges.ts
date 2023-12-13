@@ -71,55 +71,62 @@ export class ChallengesService {
 
     public static async update(challenge: Challenge): Promise<Challenge | null> {
         const { mintingContractAddress, tokenId, network, groupcount } = challenge;
-        const tokenData = await fetchReservoirData(mintingContractAddress, network, tokenId ?? undefined);
-
-        const insertObject = {
-            floorPrice: tokenData?.floorPrice,
-            totalMints: tokenData?.totalMints,
-            name: tokenData?.name
-        };
-
-
         try {
-            const result = await dbClient("challenges").update(
-                insertObject,
-                [
-                    "id",
-                    "mintingContractAddress",
-                    "chainId",
-                    "tokenId",
-                    "category",
-                    "name",
-                    "kind",
-                    "floorPrice",
-                    "expiration",
-                    "expired",
-                    "totalMints",
-                    "imageUrl",
-                    "network",
-                    "creatorOfMint",
-                    "honeyPotAddress",
+            const tokenData = await fetchReservoirData(mintingContractAddress, network, tokenId ?? undefined);
+            const insertObject = {
+                floorPrice: tokenData?.floorPrice,
+                totalMints: tokenData?.totalMints,
+                name: tokenData?.name
+            };
 
-                ]
-            ).where("id", "=", challenge.id);
 
-            const resultObj = { groupcount, ...result[0], }
-            if (result.length > 0) {
-                return resultObj;
+            try {
+                const result = await dbClient("challenges").update(
+                    insertObject,
+                    [
+                        "id",
+                        "mintingContractAddress",
+                        "chainId",
+                        "tokenId",
+                        "category",
+                        "name",
+                        "kind",
+                        "floorPrice",
+                        "expiration",
+                        "expired",
+                        "totalMints",
+                        "imageUrl",
+                        "network",
+                        "creatorOfMint",
+                        "honeyPotAddress",
+
+                    ]
+                ).where("id", "=", challenge.id);
+
+                const resultObj = { groupcount, ...result[0], }
+                if (result.length > 0) {
+                    return resultObj;
+                }
+
+                // If the update didn't affect any rows, return null
+                return null;
+            } catch (error) {
+                //If there was an error in Reservoir API, just return old challenges
+                return challenge;
             }
 
-            // If the update didn't affect any rows, return null
-            return null;
+
         } catch (error) {
-            console.log(error, 'wats err?');
-            // Handle the error if needed
-            return null;
+
+            // If error occurs in Reservoir API, best to just return old challenges data
+            return challenge;
         }
     }
 
 
 
     public static async findAll(): Promise<any[] | null> {
+
         const challenges = await dbClient("challenges")
             .select(
                 "challenges.id",
