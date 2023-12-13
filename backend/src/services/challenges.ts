@@ -14,7 +14,6 @@ export class ChallengesService {
         const { mintingContractAddress, tokenId, network, category, expiration, honeyPotAddress } = data
         const tokenData = await fetchReservoirData(mintingContractAddress, network, tokenId)
         const user = await AuthService.find(userId)
-        console.log(user, 'wats USER? created challenges')
 
         const insertObject = {
             honeyPotAddress,
@@ -66,7 +65,55 @@ export class ChallengesService {
     }
 
 
-    public static async findAll(): Promise<any[]> {
+    public static async update(challenge: Challenge): Promise<Challenge | null> {
+        const { mintingContractAddress, tokenId, network, } = challenge;
+        const tokenData = await fetchReservoirData(mintingContractAddress, network, tokenId ?? undefined);
+
+        const insertObject = {
+            floorPrice: tokenData?.floorPrice,
+            totalMints: tokenData?.totalMints,
+            name: tokenData?.name
+        };
+
+
+        try {
+            const result = await dbClient("challenges").update(
+                insertObject,
+                [
+                    "id",
+                    "mintingContractAddress",
+                    "chainId",
+                    "tokenId",
+                    "category",
+                    "name",
+                    "kind",
+                    "floorPrice",
+                    "expiration",
+                    "expired",
+                    "totalMints",
+                    "imageUrl",
+                    "network",
+                    "creatorOfMint",
+                    "honeyPotAddress"
+                ]
+            ).where("id", "=", challenge.id);
+
+            if (result.length > 0) {
+                return result[0];
+            }
+
+            // If the update didn't affect any rows, return null
+            return null;
+        } catch (error) {
+            console.log(error, 'wats err?');
+            // Handle the error if needed
+            return null;
+        }
+    }
+
+
+
+    public static async findAll(): Promise<any[] | null> {
         const challenges = await dbClient("challenges")
             .select(
                 "challenges.id",
@@ -91,7 +138,14 @@ export class ChallengesService {
             .groupBy("challenges.id")
             .orderBy("challenges.id", "asc");
 
-        return challenges;
+        const updatedChallenges = await Promise.all(challenges.map(async (challenge) => {
+            const updatedChallenge = await this.update(challenge);
+            return updatedChallenge;
+        }));
+
+
+
+        return updatedChallenges;
     }
 
 

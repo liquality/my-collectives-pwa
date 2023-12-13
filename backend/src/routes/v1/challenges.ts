@@ -8,3 +8,4 @@ challengesRouter.post("", authentication, challenge.create);
 challengesRouter.post("/:id", challenge.find);
 challengesRouter.get("", challenge.findAll);
 
+

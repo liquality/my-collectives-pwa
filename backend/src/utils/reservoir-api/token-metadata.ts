@@ -10,7 +10,7 @@ export const configHeaders = {
         'x-api-key': process.env.RESERVOIR_API_KEY,
     },
 }
-export async function fetchReservoirData(collectionAddress: string, network: string, tokenId: string) {
+export async function fetchReservoirData(collectionAddress: string, network: string, tokenId: string | undefined) {
     let _tokenId = tokenId ? tokenId : ""
     const url = getServerUrlForTokenData(_tokenId, network, collectionAddress)
     let price = await getFloorPrice(_tokenId, network, collectionAddress)

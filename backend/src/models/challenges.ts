@@ -10,6 +10,7 @@ export interface Challenge {
     expiration: string
     expired: boolean
     honeyPotAddress: string;
+    network: string;
 
 }
 
