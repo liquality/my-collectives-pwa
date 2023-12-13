@@ -1,4 +1,4 @@
-import { useState, forwardRef, Ref, useEffect } from "react";
+import { useState, forwardRef, Ref } from "react";
 import {
   IonItem,
   IonButton,
@@ -12,9 +12,7 @@ import {
   IonButtons,
   IonIcon,
   IonTitle,
-  IonLabel,
-  IonCol,
-  IonRow,
+  IonText,
 } from "@ionic/react";
 import ApiService from "@/services/ApiService";
 import { Challenge } from "@/types/challenges";
@@ -51,7 +49,12 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     expiration: "",
     honeyPotAddress: "",
   });
-  const { mintingContractAddress, chainId, category, network, expiration } =
+  const [validAddresses, setValidAddresses] = useState({
+    mintingContractAddress: false,
+    honeyPotAddress: false,
+  });
+
+  const { mintingContractAddress, category, network, expiration } =
     createdChallenge;
   let isButtonDisabled =
     !mintingContractAddress || !category || !network || !expiration;
@@ -60,6 +63,24 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
   const [validHoneyPotAddress, setValidHoneyPotAddress] = useState(false);
   const [error, setError] = useState("");
   const { presentToast } = useToast();
+  const [isHoneyTouched, setIsHoneyTouched] = useState(false);
+  const [isMintTouched, setIsMintTouched] = useState(false);
+
+  const handleDismiss = async () => {
+    setCreatedChallenge({
+      mintingContractAddress: "",
+      chainId: "",
+      tokenId: "",
+      category: "",
+      network: "",
+      expiration: "",
+      honeyPotAddress: "",
+    });
+    setValidAddresses({
+      mintingContractAddress: false,
+      honeyPotAddress: false,
+    });
+  };
 
   const handleCreateChallenge = async () => {
     try {
@@ -67,7 +88,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
 
       if (result?.id) {
         setResultChallenge(result);
-        dismiss();
+        handleDismiss();
       } else {
         throw new Error();
       }
@@ -77,14 +98,14 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
         "danger",
         banOutline
       );
-      console.log(error, "error posting group");
     }
   };
 
   const handleSetMintingContractAddress = (value: string) => {
-    isAddress(value) === true
-      ? setValidMintingContractAddress(true)
-      : setValidMintingContractAddress(false);
+    setValidAddresses((prevGroup) => ({
+      ...prevGroup,
+      mintingContractAddress: isAddress(value),
+    }));
     setCreatedChallenge((prevGroup) => ({
       ...prevGroup,
       mintingContractAddress: value,
@@ -92,9 +113,10 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
   };
 
   const handleSetHoneyPotAddress = (value: string) => {
-    isAddress(value) === true
-      ? setValidHoneyPotAddress(true)
-      : setValidHoneyPotAddress(false);
+    setValidAddresses((prevGroup) => ({
+      ...prevGroup,
+      honeyPotAddress: isAddress(value),
+    }));
     setCreatedChallenge((prevGroup) => ({
       ...prevGroup,
       honeyPotAddress: value,
@@ -110,7 +132,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     >
       <IonToolbar>
         <IonButtons slot="start">
-          <IonButton color="dark" onClick={() => dismiss()}>
+          <IonButton color="dark" onClick={handleDismiss}>
             <IonIcon icon={closeOutline} />
           </IonButton>
         </IonButtons>
@@ -118,23 +140,39 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
       </IonToolbar>
       <IonContent color="light">
         <IonList className="ion-padding" inset={true}>
-          <IonItem>
+          <IonItem lines="none">
             <IonInput
+              className={`${
+                validAddresses.mintingContractAddress && "ion-valid"
+              } ${
+                validAddresses.mintingContractAddress === false && "ion-invalid"
+              } ${isMintTouched && "ion-touched"}`}
+              onIonBlur={() => setIsMintTouched(true)}
+              errorText="Invalid Address"
+              clearInput={true}
               label="Minting Contract Address"
               label-placement="floating"
               placeholder="Enter the address"
-              onIonInput={(e) =>
+              onIonChange={(e) =>
                 handleSetMintingContractAddress(e.detail.value!)
               }
-            ></IonInput>
+            >
+              {" "}
+            </IonInput>
           </IonItem>
 
-          <IonItem>
+          <IonItem lines="none">
             <IonInput
+              className={`${validAddresses.honeyPotAddress && "ion-valid"} ${
+                validAddresses.honeyPotAddress === false && "ion-invalid"
+              } ${isHoneyTouched && "ion-touched"}`}
+              onIonBlur={() => setIsHoneyTouched(true)}
+              errorText="Invalid Address"
+              clearInput={true}
               label="Honey Pot Reward Contract Address"
               label-placement="floating"
               placeholder="Enter the address"
-              onIonInput={(e) => handleSetHoneyPotAddress(e.detail.value!)}
+              onIonChange={(e) => handleSetHoneyPotAddress(e.detail.value!)}
             ></IonInput>
           </IonItem>
 
