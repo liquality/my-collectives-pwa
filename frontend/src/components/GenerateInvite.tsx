@@ -3,6 +3,7 @@ import useToast from "@/hooks/useToast";
 import InvitesService from "@/services/Invites";
 import { handleCopyClick } from "@/utils";
 import { IonText } from "@ionic/react";
+import { copy } from "ionicons/icons";
 
 interface InviteProps {
   groupId: string;
@@ -16,7 +17,9 @@ const GenerateInviteBtn = (props: InviteProps) => {
   const { user } = useSignInWallet();
   const handleGenerateInvite = async () => {
     presentToast(
-      `You generated and copied a invite link! Send it to someone you like :)`
+      `You generated and copied a invite link! Send it to someone you like :)`,
+      "primary",
+      copy
     );
     const result = await InvitesService.getInviteByGroupIdAndUserId(
       groupId,

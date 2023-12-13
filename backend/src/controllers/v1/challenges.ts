@@ -37,15 +37,22 @@ export class ChallengesController {
     public create: RequestHandler = async (req, res) => {
         const user = await AuthService.find((req as any).auth?.sub);
         try {
-            const challenge = await ChallengesService.create(
-                req.body,
-                user.id
-            );
+            if (user.id) {
+                const challenge = await ChallengesService.create(
+                    req.body,
+                    user.id
+                );
+                if (!challenge) {
+                    throw new Error("Challenge not created");
+                }
+                res.status(200).send(challenge);
 
-            if (!challenge) {
-                throw new Error("Challenge not created");
             }
-            res.status(200).send(challenge);
+            else {
+                res.status(401).send({ error: "Could not authenticate for creating challenges" });
+            }
+
+
         } catch (err: any) {
             console.log(err, 'wats err?')
             res.status(500).send({ error: err.message });

@@ -14,7 +14,6 @@ export class ChallengesService {
         const { mintingContractAddress, tokenId, network, category, expiration, honeyPotAddress } = data
         const tokenData = await fetchReservoirData(mintingContractAddress, network, tokenId)
         const user = await AuthService.find(userId)
-        console.log(user, 'wats USER? created challenges')
 
         const insertObject = {
             honeyPotAddress,
@@ -53,8 +52,12 @@ export class ChallengesService {
                 ]
             );
 
+
+
             if (result.length > 0) {
                 return result[0];
+            } else if (!result[0].imageUrl || !result[0].totalMints || !result[0].name) {
+                return null //TODO: add error handling; we could not fetch necessary NFT API Data
             }
 
             return null;
@@ -66,7 +69,64 @@ export class ChallengesService {
     }
 
 
-    public static async findAll(): Promise<any[]> {
+    public static async update(challenge: Challenge): Promise<Challenge | null> {
+        const { mintingContractAddress, tokenId, network, groupcount } = challenge;
+        try {
+            const tokenData = await fetchReservoirData(mintingContractAddress, network, tokenId ?? undefined);
+            const insertObject = {
+                floorPrice: tokenData?.floorPrice,
+                totalMints: tokenData?.totalMints,
+                name: tokenData?.name
+            };
+
+
+            try {
+                const result = await dbClient("challenges").update(
+                    insertObject,
+                    [
+                        "id",
+                        "mintingContractAddress",
+                        "chainId",
+                        "tokenId",
+                        "category",
+                        "name",
+                        "kind",
+                        "floorPrice",
+                        "expiration",
+                        "expired",
+                        "totalMints",
+                        "imageUrl",
+                        "network",
+                        "creatorOfMint",
+                        "honeyPotAddress",
+
+                    ]
+                ).where("id", "=", challenge.id);
+
+                const resultObj = { groupcount, ...result[0], }
+                if (result.length > 0) {
+                    return resultObj;
+                }
+
+                // If the update didn't affect any rows, return null
+                return null;
+            } catch (error) {
+                //If there was an error in Reservoir API, just return old challenges
+                return challenge;
+            }
+
+
+        } catch (error) {
+
+            // If error occurs in Reservoir API, best to just return old challenges data
+            return challenge;
+        }
+    }
+
+
+
+    public static async findAll(): Promise<any[] | null> {
+
         const challenges = await dbClient("challenges")
             .select(
                 "challenges.id",
@@ -91,7 +151,14 @@ export class ChallengesService {
             .groupBy("challenges.id")
             .orderBy("challenges.id", "asc");
 
-        return challenges;
+        const updatedChallenges = await Promise.all(challenges.map(async (challenge) => {
+            const updatedChallenge = await this.update(challenge);
+            return updatedChallenge;
+        }));
+
+
+
+        return updatedChallenges;
     }
 
 

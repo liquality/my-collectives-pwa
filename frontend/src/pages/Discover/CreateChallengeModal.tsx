@@ -1,4 +1,4 @@
-import { useState, forwardRef, Ref, useEffect } from "react";
+import { useState, forwardRef, Ref } from "react";
 import {
   IonItem,
   IonButton,
@@ -12,10 +12,14 @@ import {
   IonButtons,
   IonIcon,
   IonTitle,
+  IonText,
 } from "@ionic/react";
 import ApiService from "@/services/ApiService";
 import { Challenge } from "@/types/challenges";
 import { closeOutline } from "ionicons/icons";
+import { isAddress } from "viem";
+import useToast from "@/hooks/useToast";
+import { banOutline } from "ionicons/icons";
 
 export interface CreateChallengeModalProps {
   presentingElement?: HTMLElement;
@@ -45,24 +49,77 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     expiration: "",
     honeyPotAddress: "",
   });
-  const { mintingContractAddress, chainId, category, network, expiration } =
+  const [validAddresses, setValidAddresses] = useState({
+    mintingContractAddress: false,
+    honeyPotAddress: false,
+  });
+
+  const { mintingContractAddress, category, network, expiration } =
     createdChallenge;
   let isButtonDisabled =
     !mintingContractAddress || !category || !network || !expiration;
+  const [validMintingContractAdress, setValidMintingContractAddress] =
+    useState(false);
+  const [validHoneyPotAddress, setValidHoneyPotAddress] = useState(false);
+  const [error, setError] = useState("");
+  const { presentToast } = useToast();
+  const [isHoneyTouched, setIsHoneyTouched] = useState(false);
+  const [isMintTouched, setIsMintTouched] = useState(false);
+
+  const handleDismiss = async () => {
+    setCreatedChallenge({
+      mintingContractAddress: "",
+      chainId: "",
+      tokenId: "",
+      category: "",
+      network: "",
+      expiration: "",
+      honeyPotAddress: "",
+    });
+    setValidAddresses({
+      mintingContractAddress: false,
+      honeyPotAddress: false,
+    });
+  };
 
   const handleCreateChallenge = async () => {
     try {
       const result = await ApiService.createChallenges(createdChallenge);
-
-      setResultChallenge(result);
-      if (result.id) {
-        dismiss();
+      if (result?.id) {
+        setResultChallenge(result);
+        handleDismiss();
       } else {
-        //TODO: setError
+        throw new Error();
       }
     } catch (error) {
-      console.log(error, "error posting group");
+      presentToast(
+        "We could not fetch the necessary NFT info, please assure that you have entered the correct details",
+        "danger",
+        banOutline
+      );
     }
+  };
+
+  const handleSetMintingContractAddress = (value: string) => {
+    setValidAddresses((prevGroup) => ({
+      ...prevGroup,
+      mintingContractAddress: isAddress(value),
+    }));
+    setCreatedChallenge((prevGroup) => ({
+      ...prevGroup,
+      mintingContractAddress: value,
+    }));
+  };
+
+  const handleSetHoneyPotAddress = (value: string) => {
+    setValidAddresses((prevGroup) => ({
+      ...prevGroup,
+      honeyPotAddress: isAddress(value),
+    }));
+    setCreatedChallenge((prevGroup) => ({
+      ...prevGroup,
+      honeyPotAddress: value,
+    }));
   };
 
   return (
@@ -74,7 +131,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     >
       <IonToolbar>
         <IonButtons slot="start">
-          <IonButton color="dark" onClick={() => dismiss()}>
+          <IonButton color="dark" onClick={handleDismiss}>
             <IonIcon icon={closeOutline} />
           </IonButton>
         </IonButtons>
@@ -82,30 +139,39 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
       </IonToolbar>
       <IonContent color="light">
         <IonList className="ion-padding" inset={true}>
-          <IonItem>
+          <IonItem lines="none">
             <IonInput
+              className={`${
+                validAddresses.mintingContractAddress && "ion-valid"
+              } ${
+                validAddresses.mintingContractAddress === false && "ion-invalid"
+              } ${isMintTouched && "ion-touched"}`}
+              onIonBlur={() => setIsMintTouched(true)}
+              errorText="Invalid Address"
+              clearInput={true}
               label="Minting Contract Address"
               label-placement="floating"
               placeholder="Enter the address"
-              onIonInput={(e) =>
-                setCreatedChallenge((prevGroup) => ({
-                  ...prevGroup,
-                  mintingContractAddress: e.detail.value!,
-                }))
+              onIonChange={(e) =>
+                handleSetMintingContractAddress(e.detail.value!)
               }
-            ></IonInput>
+            >
+              {" "}
+            </IonInput>
           </IonItem>
-          <IonItem>
+
+          <IonItem lines="none">
             <IonInput
+              className={`${validAddresses.honeyPotAddress && "ion-valid"} ${
+                validAddresses.honeyPotAddress === false && "ion-invalid"
+              } ${isHoneyTouched && "ion-touched"}`}
+              onIonBlur={() => setIsHoneyTouched(true)}
+              errorText="Invalid Address"
+              clearInput={true}
               label="Honey Pot Reward Contract Address"
               label-placement="floating"
               placeholder="Enter the address"
-              onIonInput={(e) =>
-                setCreatedChallenge((prevGroup) => ({
-                  ...prevGroup,
-                  honeyPotAddress: e.detail.value!,
-                }))
-              }
+              onIonChange={(e) => handleSetHoneyPotAddress(e.detail.value!)}
             ></IonInput>
           </IonItem>
 
@@ -166,7 +232,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
           </IonItem>
 
           {/* TODO: maybe make this a calender picker instead ? */}
-          <IonItem>
+          <IonItem className="mb-3">
             <IonInput
               label="Length (Days)"
               type="number"
@@ -178,6 +244,12 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
                 }))
               }
             ></IonInput>
+          </IonItem>
+
+          <IonItem>
+            {error ? (
+              <IonTitle style={{ color: "#EA0000" }}>{error}</IonTitle>
+            ) : null}
           </IonItem>
         </IonList>
 

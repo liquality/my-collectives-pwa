@@ -17,6 +17,7 @@ import { Challenge } from "@/types/challenges";
 import ChallengeItemModal from "@/components/ChallengesModal/ChallengeItemModal";
 import { useAccount } from "wagmi";
 import { useSignInWallet } from "@/hooks/useSignInWallet";
+import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 
 export type GroupedChallenge = {
   [key: string]: Challenge[];
@@ -39,11 +40,10 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
   const [selectedChallenge, setSelectedChallenge] = useState<
     Challenge | undefined | null
   >();
-
   useEffect(() => {
-    //If a new challenge has been created, push into exisitng challenge array state to avoid re-fetching of challenges
+    // If a new challenge has been created, push into existing challenge array state to avoid re-fetching of challenges
     if (resultChallenge) {
-      setChallenges((prevGroups: Challenge[]) => [
+      setChallenges((prevGroups: Challenge[] | null) => [
         ...(prevGroups || []),
         resultChallenge,
       ]);
@@ -113,21 +113,24 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
           resultChallenge={resultChallenge}
           setResultChallenge={setResultChallenge}
         />
-        {Object.keys(groupedChallenges).map((category: string) => (
-          <>
-            <div className="spaced-on-sides">
-              <IonLabel className="ion-text-capitalize">
-                {category} | {groupedChallenges[category]?.length}
-              </IonLabel>
-              <IonLabel color="primary">See All</IonLabel>
-            </div>
-            <HorizontalSwipe
-              imageData={groupedChallenges[category]}
-              setSelectedChallenge={onChallengeSelected}
-              loading={loading}
-            ></HorizontalSwipe>
-          </>
-        ))}
+
+        {Object.keys(groupedChallenges).map(
+          (category: string, index: number) => (
+            <>
+              <div key={index} className="spaced-on-sides">
+                <IonLabel className="ion-text-capitalize">
+                  {category} | {groupedChallenges[category]?.length}
+                </IonLabel>
+                <IonLabel color="primary">See All</IonLabel>
+              </div>
+              <HorizontalSwipe
+                imageData={groupedChallenges[category]}
+                setSelectedChallenge={onChallengeSelected}
+                loading={loading}
+              ></HorizontalSwipe>
+            </>
+          )
+        )}
 
         <ChallengeItemModal
           isOpen={itemModalIsOpen}
