@@ -4,27 +4,11 @@ import {
   cutOffTooLongString,
   shortenAddress,
 } from "@/utils";
-import {
-  useIonRouter,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonSkeletonText,
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonIcon,
-  IonLabel,
-  IonContent,
-  IonButton,
-  IonInput,
-} from "@ionic/react";
-import { add, remove } from "ionicons/icons";
+import { IonContent } from "@ionic/react";
 import React, { useState } from "react";
 import MintItemContent from "./MintItemContent";
 import MintItemResult from "./MintItemResult";
+import { MintResult } from "@/types/mint";
 
 export interface MintItemScreenProps {
   challenge: Challenge;
@@ -34,15 +18,14 @@ const MintItemScreen: React.FC<MintItemScreenProps> = ({
   challenge,
 }: MintItemScreenProps) => {
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
-  const router = useIonRouter();
+  const [result, setResult] = useState<MintResult | null>(null);
 
   return (
     <IonContent>
       {result ? (
         <MintItemResult challenge={challenge} result={result} />
       ) : (
-        <MintItemContent challenge={challenge} setResult={setResult}/>
+        <MintItemContent challenge={challenge} setResult={setResult} />
       )}
     </IonContent>
   );

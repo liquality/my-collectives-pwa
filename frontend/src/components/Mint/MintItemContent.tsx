@@ -1,4 +1,5 @@
 import { Challenge } from "@/types/challenges";
+import { MintResult } from "@/types/mint";
 import {
   convertIpfsImageUrl,
   cutOffTooLongString,
@@ -25,7 +26,7 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 
 export interface MintItemContentProps {
   challenge: Challenge;
-  setResult: Dispatch<SetStateAction<any>>;
+  setResult: Dispatch<SetStateAction<MintResult | null>>;
 }
 
 const MintItemContent: React.FC<MintItemContentProps> = ({
@@ -170,7 +171,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
       <IonRow className="ion-justify-content-center">
         <IonCol size="auto">
           <IonButton
-            onClick={() => setResult(true)}
+            onClick={() => setResult({ success: true })}
             color="primary"
             shape="round"
           >
