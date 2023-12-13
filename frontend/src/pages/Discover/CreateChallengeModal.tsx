@@ -20,6 +20,8 @@ import ApiService from "@/services/ApiService";
 import { Challenge } from "@/types/challenges";
 import { closeOutline } from "ionicons/icons";
 import { isAddress } from "viem";
+import useToast from "@/hooks/useToast";
+import { banOutline } from "ionicons/icons";
 
 export interface CreateChallengeModalProps {
   presentingElement?: HTMLElement;
@@ -57,6 +59,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     useState(false);
   const [validHoneyPotAddress, setValidHoneyPotAddress] = useState(false);
   const [error, setError] = useState("");
+  const { presentToast } = useToast();
 
   const handleCreateChallenge = async () => {
     try {
@@ -66,14 +69,13 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
         setResultChallenge(result);
         dismiss();
       } else {
-        //TODO: setError
-        setError(
-          "We could not fetch the necessary NFT info, please assure that you have entered the correct details"
-        );
+        throw new Error();
       }
     } catch (error) {
-      setError(
-        "We could not fetch the necessary NFT info, please assure that you have entered the correct details"
+      presentToast(
+        "We could not fetch the necessary NFT info, please assure that you have entered the correct details",
+        "danger",
+        banOutline
       );
       console.log(error, "error posting group");
     }
