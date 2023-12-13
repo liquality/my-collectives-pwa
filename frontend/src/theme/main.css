@@ -1059,8 +1059,10 @@ img.challenge-info-img {
 .challenge-mint-card {
   display: flex;
   flex-direction: column;
+  align-self: center;
   margin: 0;
   width: 100%;
+  max-width:  16rem !important;;
   margin-inline: 0;
   background-color: #f8f8f8 !important;
   box-shadow: none !important;
@@ -1142,6 +1144,7 @@ img.challenge-info-img {
 /* Firefox */
 .challenge-mint-amount input[type=number] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .challenge-mint-amount:focus {
