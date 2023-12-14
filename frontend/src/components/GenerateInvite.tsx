@@ -2,18 +2,20 @@ import { useSignInWallet } from "@/hooks/useSignInWallet";
 import useToast from "@/hooks/useToast";
 import InvitesService from "@/services/Invites";
 import { handleCopyClick } from "@/utils";
-import { IonText } from "@ionic/react";
+import { IonButton, IonText } from "@ionic/react";
 import { copy } from "ionicons/icons";
 
-interface InviteProps {
+export interface InviteBtnProps {
   groupId: string;
+  type?: 'button' | 'text';
+  text?: string;
 }
-const GenerateInviteBtn = (props: InviteProps) => {
+
+const GenerateInviteBtn = ({ groupId, type ='text', text = 'Invite' }: InviteBtnProps) => {
   const url =
     import.meta.env.VITE_CLIENT_PRODUCTION_URL || "http://localhost:5173";
 
   const { presentToast } = useToast();
-  const { groupId } = props;
   const { user } = useSignInWallet();
   const handleGenerateInvite = async () => {
     presentToast(
@@ -27,8 +29,11 @@ const GenerateInviteBtn = (props: InviteProps) => {
     );
     handleCopyClick(`${url}/invite/${result[0].id}`);
   };
-
-  return <IonText onClick={handleGenerateInvite}>Invite</IonText>;
+  
+  if(type === 'button') {
+    return <IonButton onClick={handleGenerateInvite}>{text}</IonButton>;
+  }
+  return <IonText onClick={handleGenerateInvite}>{text}</IonText>;
 };
 
 export default GenerateInviteBtn;
