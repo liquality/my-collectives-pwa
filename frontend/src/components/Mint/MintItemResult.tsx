@@ -85,7 +85,7 @@ const MintItemResult: React.FC<MintItemResultProps> = ({
               <h4>Invite others to do the same</h4>
             </IonCol>
           </IonRow>
-          <IonRow className="ion-justify-content-center ion-margin-bottom">
+          <IonRow className="ion-justify-content-center ion-margin-bottom ">
             <IonCol size="auto">
               <IonButton color="primary" shape="round">
                 Invite to Group

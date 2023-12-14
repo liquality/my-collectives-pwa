@@ -838,9 +838,15 @@ ion-content.invite-page-link {
   padding-left: 5px;
 }
 
-ion-modal.challenge-item-modal {
+ion-modal.challenge-item-modal,
+ion-modal.challenge-item-mint-modal  {
   --min-height: 85% !important;
 }
+
+ion-modal.challenge-item-mint-modal {
+  --width: 600px;
+}
+
 ion-modal#sheet-info-modal {
   --ion-background-color: rgba(255, 255, 255, 0.95) !important;
 }
@@ -1062,7 +1068,7 @@ img.challenge-info-img {
   align-self: center;
   margin: 0;
   width: 100%;
-  max-width:  16rem !important;;
+  max-width: 16rem !important;
   margin-inline: 0;
   background-color: #f8f8f8 !important;
   box-shadow: none !important;
@@ -1142,13 +1148,13 @@ img.challenge-info-img {
 }
 
 /* Firefox */
-.challenge-mint-amount input[type=number] {
+.challenge-mint-amount input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
 }
 
 .challenge-mint-amount:focus {
- border-bottom: 0px !important;
+  border-bottom: 0px !important;
 }
 
 .mint-content-bottom-ribbon {

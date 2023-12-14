@@ -84,7 +84,7 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
     );
   }, [challenges]);
 
-  console.log(challenges, "challenges");
+  console.log(groupedChallenges, "groupedChallenges");
 
   return (
     <IonPage>
@@ -115,9 +115,9 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
         />
 
         {Object.keys(groupedChallenges).map(
-          (category: string, index: number) => (
-            <>
-              <div key={index} className="spaced-on-sides">
+          (category: string) => (
+            <div key={category}>
+              <div className="spaced-on-sides">
                 <IonLabel className="ion-text-capitalize">
                   {category} | {groupedChallenges[category]?.length}
                 </IonLabel>
@@ -128,7 +128,7 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
                 setSelectedChallenge={onChallengeSelected}
                 loading={loading}
               ></HorizontalSwipe>
-            </>
+            </div>
           )
         )}
 

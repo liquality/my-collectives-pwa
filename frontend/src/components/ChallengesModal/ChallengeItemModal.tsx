@@ -156,6 +156,7 @@ const ChallengeItemModal = ({
     <IonModal
       isOpen={isOpen}
       ref={modal}
+      onIonModalDidDismiss={() => handleDismiss()}
       presentingElement={presentingElement!}
       className="challenge-item-modal"
     >
