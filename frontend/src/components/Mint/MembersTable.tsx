@@ -28,8 +28,8 @@ const MembersTable: React.FC<MembersTableProps> = (
           <IonCardSubtitle>TOTAL</IonCardSubtitle>
         </IonCol>
       </IonRow>
-      {staticDummyArray.map(() => (
-        <IonRow className="ion-justify-content-between ">
+      {staticDummyArray.map((item, index) => (
+        <IonRow className="ion-justify-content-between " key={index}>
           <IonCol size="auto">
             <IonLabel>0x1234...5678</IonLabel>
           </IonCol>

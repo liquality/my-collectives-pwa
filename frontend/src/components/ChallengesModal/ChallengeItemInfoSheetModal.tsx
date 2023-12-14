@@ -169,7 +169,7 @@ const ChallengeItemInfoSheetModal = (
         shape="round"
         style={{ bottom: fabBottom }}
       >
-        Mint 0.00 ETH
+        Mint {challenge?.floorPrice} ETH
       </IonButton>
     </IonModal>
   );

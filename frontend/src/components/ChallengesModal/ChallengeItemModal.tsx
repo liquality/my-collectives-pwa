@@ -64,7 +64,6 @@ const ChallengeItemModal = ({
   const [applyRejectAnimation, setApplyRejectAnimation] = useState(false);
 
   const infoSheetModalRef = useRef<HTMLIonModalElement>(null);
-  const modal = useRef<HTMLIonModalElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   function handleDismiss() {
@@ -155,7 +154,7 @@ const ChallengeItemModal = ({
   return (
     <IonModal
       isOpen={isOpen}
-      ref={modal}
+      onIonModalDidDismiss={() => handleDismiss()}
       presentingElement={presentingElement!}
       className="challenge-item-modal"
     >
@@ -236,7 +235,6 @@ const ChallengeItemModal = ({
               onClickMint={onClickMint}
             />
             <ChallengeItemMintModal
-              presentingElement={modal.current}
               challenge={challenges[currentIndex]}
               isOpen={mintModalIsOpen}
               dismiss={onDismissMintModal}

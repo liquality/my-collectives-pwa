@@ -20,6 +20,7 @@ export interface Challenge {
     expired: string;
     totalMints: number;
     imageUrl: string;
+    groupCount?: number;
     network: string;
     creatorOfMint: null | string;
     groupcount?: string
