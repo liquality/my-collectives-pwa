@@ -85,6 +85,14 @@ ion-button.grey-btn {
 ion-modal ion-title {
   text-transform: uppercase !important;
 }
+
+.app-header ion-title {
+  text-transform: uppercase !important;
+  font-size: 20px;
+  text-align: left;
+  margin-left: -30px;
+  margin-top: 3px;
+}
 ion-split-pane {
   --side-width: 350px;
   --side-max-width: 350px;
@@ -228,8 +236,8 @@ ion-toolbar {
 }
 
 .space-between {
-  display: flex;
-  justify-content: space-between;
+  display: flex !important;
+  justify-content: space-between !important;
 }
 .logged-in-button .divider {
   background-color: var(--ion-color-primary);
