@@ -45,7 +45,6 @@ const MyMints: React.FC<MyMintsProps> = (routerProps) => {
     return filteredPools;
   }, [pools, mintFilter]);
 
-  console.log(filteredMints, "filtered mints?");
   return (
     <IonPage>
       <Header title="Mint" />
@@ -55,10 +54,8 @@ const MyMints: React.FC<MyMintsProps> = (routerProps) => {
           <PageSearchBar />
         </MintTopBar>
 
-        <div className="flexDirectionRow">
-          <p style={{ marginLeft: 10 }} className="public-address">
-            Sort by:
-          </p>
+        <div className="flexDirectionRow  mt-3" style={{ width: "95%" }}>
+          <p className="public-address">Sort by:</p>
           <p
             onClick={() => setMintFilter("expiration")}
             className={
@@ -82,7 +79,7 @@ const MyMints: React.FC<MyMintsProps> = (routerProps) => {
           </p>{" "}
         </div>
 
-        <div className="mt-3">
+        <div>
           {!loading && pools
             ? filteredMints.map((pool: any, index: number) => (
                 <div key={index} className="flexDirectionRow ">
