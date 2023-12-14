@@ -59,9 +59,6 @@ const MintItemResult: React.FC<MintItemResultProps> = ({
                     animated={true}
                   ></IonSkeletonText>
                 ) : null}
-                <div className="challenge-time-chip challenge-time-chip-ontop">
-                  28 mins left
-                </div>
                 <IonCardHeader>
                   <IonCardTitle>
                     {loadingImage ? (
