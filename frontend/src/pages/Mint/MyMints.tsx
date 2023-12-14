@@ -12,6 +12,7 @@ import MintTopBar from "@/components/TopBars/MintTopBar";
 import PageSearchBar from "@/components/PageSearchBar";
 import useGetGroupById from "@/hooks/Groups/useGetGroupById";
 import useGetPoolsByGroupId from "@/hooks/Collective/useGetPoolsByGroupId";
+import { useMemo, useState } from "react";
 
 export interface MyMintsProps
   extends RouteComponentProps<{
@@ -23,7 +24,28 @@ const MyMints: React.FC<MyMintsProps> = (routerProps) => {
   const { pools, loading } = useGetPoolsByGroupId(
     "a29e1fc6-4e63-4970-b063-802bae62dfef"
   );
+  const [mintFilter, setMintFilter] = useState("");
   //TODO backend function fetch from user_rewards the poolIds that have been minted from a user
+
+  console.log(pools, "ools");
+  const filteredMints = useMemo(() => {
+    let filteredPools = pools || [];
+
+    if (mintFilter === "challenge") {
+      filteredPools = [...filteredPools].sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+    } else if (mintFilter === "expiration") {
+      filteredPools = [...filteredPools].sort(
+        (a, b) =>
+          new Date(a.expiration).getTime() - new Date(b.expiration).getTime()
+      );
+    }
+
+    return filteredPools;
+  }, [pools, mintFilter]);
+
+  console.log(filteredMints, "filtered mints?");
   return (
     <IonPage>
       <Header title="Mint" />
@@ -33,9 +55,36 @@ const MyMints: React.FC<MyMintsProps> = (routerProps) => {
           <PageSearchBar />
         </MintTopBar>
 
+        <div className="flexDirectionRow">
+          <p style={{ marginLeft: 10 }} className="public-address">
+            Sort by:
+          </p>
+          <p
+            onClick={() => setMintFilter("expiration")}
+            className={
+              mintFilter === "expiration"
+                ? "public-address-purple"
+                : "public-address"
+            }
+          >
+            Expiration
+          </p>{" "}
+          <p className="public-address">|</p>
+          <p
+            onClick={() => setMintFilter("challenge")}
+            className={
+              mintFilter === "challenge"
+                ? "public-address-purple"
+                : "public-address"
+            }
+          >
+            Challenge
+          </p>{" "}
+        </div>
+
         <div className="mt-3">
           {!loading && pools
-            ? pools.map((pool: any, index: number) => (
+            ? filteredMints.map((pool: any, index: number) => (
                 <div key={index} className="flexDirectionRow ">
                   <div
                     style={{ width: "100%", backgroundColor: "white" }}

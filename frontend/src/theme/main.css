@@ -519,6 +519,15 @@ ion-toolbar {
   line-height: 20px; /* 153.846% */
   letter-spacing: 0.75px;
 }
+
+.public-address-purple {
+  color: var(--primary-purple);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.75px;
+  word-wrap: break-word;
+  margin-left: 20px;
+}
 .align-to-grey-container {
   width: 90%;
   margin: 0 auto;

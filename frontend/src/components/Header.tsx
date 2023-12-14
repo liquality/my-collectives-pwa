@@ -11,16 +11,22 @@ import {
   IonLabel,
   IonButton,
   IonIcon,
+  useIonRouter,
 } from "@ionic/react";
 import ConnectButton from "./ConnectButton";
 import React from "react";
-import { closeOutline } from "ionicons/icons";
+import {
+  arrowBackCircleOutline,
+  chevronBackOutline,
+  closeOutline,
+} from "ionicons/icons";
 
 export interface HeaderProps {
   title?: string;
   children?: React.ReactNode;
 }
 const Header = ({ title, children }: HeaderProps) => {
+  const router = useIonRouter();
   return (
     /*     <IonHeader className="ion-padding ion-no-border app-header">
       <IonToolbar>
@@ -48,8 +54,8 @@ const Header = ({ title, children }: HeaderProps) => {
     <IonHeader slot="start" className="ion-padding ion-no-border app-header ">
       <IonToolbar>
         <IonButtons slot="start">
-          <IonButton color="dark" onClick={() => console.log("Bää")}>
-            <IonIcon icon={closeOutline} />
+          <IonButton color="dark" onClick={() => router.goBack()}>
+            <IonIcon icon={chevronBackOutline} />
           </IonButton>
         </IonButtons>
         <IonTitle>{title}</IonTitle>
