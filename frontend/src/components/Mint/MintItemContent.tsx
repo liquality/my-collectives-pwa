@@ -188,10 +188,10 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
           >
             Mint {floorPrice} ETH
           </IonButton>
-          {chainId && tokenId && mintingContractAddress ? (
+          {chainId && mintingContractAddress ? (
             <MintZoraLogic
               chainId={chainId}
-              tokenId={tokenId}
+              tokenId={tokenId ?? undefined}
               tokenContract={mintingContractAddress as `0x${string}`}
             />
           ) : null}

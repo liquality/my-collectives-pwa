@@ -16,6 +16,8 @@ const useMintClient = () => {
   const publicClient = usePublicClient();
 
   const { chain } = useNetwork();
+  //const { switchNetwork } = useSwitchNetwork();
+  //const result = switchNetwork?.(chainId); //TODO: debug this as it does not work
 
   const mintClient = useMemo(
     () => chain && createMintClient({ chain, publicClient }),
@@ -26,7 +28,7 @@ const useMintClient = () => {
 };
 
 export const MintZoraLogic = (props: {
-  tokenId: string;
+  tokenId?: string;
   tokenContract: Address;
   chainId: number;
 }) => {
@@ -39,6 +41,7 @@ export const MintZoraLogic = (props: {
 
   // params for the prepare contract write hook
   const [params, setParams] = useState<SimulateContractParameters>();
+  const [paramError, setParamError] = useState("");
 
   const { address } = useAccount();
 
@@ -47,26 +50,43 @@ export const MintZoraLogic = (props: {
 
     const makeParams = async () => {
       // make the params for the prepare contract write hook
-      const _params = await mintClient.makePrepareMintTokenParams({
-        minterAccount: address,
-        tokenAddress: tokenContract,
-        tokenId,
-        //tokenId: undefined,
-        mintArguments: {
-          mintToAddress: address,
-          quantityToMint,
-        },
-      });
-      setParams(_params);
+      try {
+        const _params = await mintClient.makePrepareMintTokenParams({
+          minterAccount: address,
+          tokenAddress: tokenContract,
+          tokenId: tokenId ?? undefined,
+          mintArguments: {
+            mintToAddress: address,
+            quantityToMint,
+          },
+        });
+        setParams(_params);
+        setParamError("");
+      } catch (err) {
+        setParamError(
+          "Could not find token to mint, please switch network to chainId:" +
+            chainId
+        );
+      }
     };
 
     makeParams();
   }, [mintClient, address, quantityToMint]);
 
   console.log(params, "wat is params?");
-  const { config } = usePrepareContractWrite(params);
+  const {
+    config,
+    error: prepareError,
+    isError: isPrepareError,
+  } = usePrepareContractWrite(params);
 
-  const { write, data, error, isLoading, isError } = useContractWrite(config);
+  const {
+    write,
+    data,
+    error: writeError,
+    isLoading,
+    isError: isWriteError,
+  } = useContractWrite(config);
   const {
     data: receipt,
     isLoading: isPending,
@@ -104,7 +124,10 @@ export const MintZoraLogic = (props: {
           </div>
         </>
       )}
-      {isError && <div>{(error as BaseError)?.shortMessage}</div>}
+      {paramError && <div>{paramError}</div>}
+      {isPrepareError && <div>{(prepareError as BaseError)?.shortMessage}</div>}
+
+      {isWriteError && <div>{(writeError as BaseError)?.shortMessage}</div>}
     </>
   );
 };
