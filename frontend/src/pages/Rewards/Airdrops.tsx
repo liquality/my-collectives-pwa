@@ -14,8 +14,12 @@ const Airdrops: React.FC<RouteComponentProps> = (routerProps) => {
       <Header title="Rewards" />
 
       <Mint
+        chainId={"7777777"}
         tokenId={"1"}
         tokenContract={"0x5aa959de99e0e49b8a85e0a630a74a7b757772b7"}
+        /* chainId={"8453"}
+           tokenId={""}
+        tokenContract={"0xbd87f4da73ff92a7bea31e2de20e14f9829f42fe"} */
       />
       <IonContent className="ion-padding" color="light">
         <RewardsTopBar {...routerProps}>
@@ -48,12 +52,14 @@ import {
   usePrepareContractWrite,
   usePublicClient,
   useWaitForTransaction,
+  useSwitchNetwork,
 } from "wagmi";
 
 // custom hook that gets the mintClient for the current chain
-const useMintClient = () => {
+const useMintClient = (mintChainId: string) => {
   const publicClient = usePublicClient();
-
+  const { switchNetwork } = useSwitchNetwork();
+  switchNetwork?.(Number(mintChainId));
   const { chain } = useNetwork();
 
   const mintClient = useMemo(
@@ -64,10 +70,14 @@ const useMintClient = () => {
   return mintClient;
 };
 
-export const Mint = (props: { tokenId: string; tokenContract: Address }) => {
-  const { tokenId, tokenContract } = props;
+export const Mint = (props: {
+  tokenId: string;
+  tokenContract: Address;
+  chainId: string;
+}) => {
+  const { tokenId, tokenContract, chainId } = props;
   // call custom hook to get the mintClient
-  const mintClient = useMintClient();
+  const mintClient = useMintClient(chainId);
 
   // value will be set by the form
   const [quantityToMint, setQuantityToMint] = useState<number>(1);
@@ -83,9 +93,10 @@ export const Mint = (props: { tokenId: string; tokenContract: Address }) => {
     const makeParams = async () => {
       // make the params for the prepare contract write hook
       const _params = await mintClient.makePrepareMintTokenParams({
-        tokenId,
-        tokenContract,
         minterAccount: address,
+        tokenAddress: tokenContract,
+        tokenId,
+        //tokenId: undefined,
         mintArguments: {
           mintToAddress: address,
           quantityToMint,
@@ -97,6 +108,7 @@ export const Mint = (props: { tokenId: string; tokenContract: Address }) => {
     makeParams();
   }, [mintClient, address, quantityToMint]);
 
+  console.log(params, "wat is params?");
   const { config } = usePrepareContractWrite(params);
 
   const { write, data, error, isLoading, isError } = useContractWrite(config);
