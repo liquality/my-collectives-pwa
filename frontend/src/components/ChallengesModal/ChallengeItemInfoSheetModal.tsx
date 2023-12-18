@@ -22,7 +22,7 @@ import {
 } from "@ionic/react";
 import { ModalBreakpointChangeEventDetail } from "@ionic/core";
 import { Ref, forwardRef, useEffect, useRef, useState } from "react";
-import { convertIpfsImageUrl, shortenAddress } from "@/utils";
+import { convertDateToReadable, convertIpfsImageUrl, shortenAddress } from "@/utils";
 import { closeOutline } from "ionicons/icons";
 import ImageLoader from "../Images/ImageLoader";
 import InfoSheetModalOverview from "./InfoSheetModalOverview";
@@ -34,7 +34,7 @@ const ChallengeItemInfoSheetModal = (
     challenge,
     onBreakpointDidChange,
     isOpen = true,
-    initialBreakpoint = 0.12,
+    initialBreakpoint = 0.35,
     onClickMint,
   }: {
     challenge: Challenge;
@@ -116,7 +116,7 @@ const ChallengeItemInfoSheetModal = (
             </IonCol>
             <IonCol size="3">
               <div className="challenge-time-chip">
-                28 mins left
+                {convertDateToReadable(challenge.expiration)}
               </div>
             </IonCol>
           </IonRow>

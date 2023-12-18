@@ -27,7 +27,7 @@ export interface ChallengeItemModalProps {
   presentingElement?: HTMLElement;
 }
 
-const initialInfoBreakpoint = 0.12;
+const initialInfoBreakpoint = 0.35;
 type CardSwipeDirection = "left" | "right";
 
 export const easeOutExpo = [0.16, 1, 0.3, 1];

@@ -37,15 +37,13 @@ import { publicProvider } from "wagmi/providers/public";
 import { mainnet } from "wagmi/chains";
 import { baseGoerli } from "wagmi/chains";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Challenge from "./pages/Mint/Challenge";
 import { useSignInWallet } from "./hooks/useSignInWallet";
 import { isPlatform } from "@ionic/react";
 import OnboardingModal from "./components/OnboardingModal";
-import Challenges from "./pages/Mint/Challenges";
 import Mint from "./pages/Mint/Mint";
-import CollectiveDetail from "./pages/Mint/CollectiveDetail/CollectiveDetail";
 import Join from "./pages/Join";
 import Rewards from "./pages/Rewards/Rewards";
+import { pathConstants } from "./utils/routeNames";
 
 setupIonicReact({
   mode: "ios",
@@ -92,7 +90,11 @@ const config = createConfig({
 // 3. Create modal
 createWeb3Modal({ wagmiConfig, projectId, chains });
 const App: React.FC = () => {
-  const HineMenuOnRoutes = ["/invite", "/join"];
+  const HideMenuOnRoutes = ["/invite", "/join"];
+  const HideTabMenuOnRoutes = [
+    "/invite",
+    "/join"
+  ];
   const AppRouterOutlet = (
     <IonRouterOutlet id="main-content">
       <Redirect exact path="/" to="/discover" />
@@ -103,10 +105,7 @@ const App: React.FC = () => {
       <Route path="/join" component={Join} />
       <Route path="/discover" component={Discover} />
       <Route path="/rewards" component={Rewards} />
-      <Route path="/collectiveDetail" component={CollectiveDetail} />
-
       <Route path="/mint" component={Mint} />
-      <Route path="/challenges/:id?" component={Challenges}/>
 
       {/* Default route (not requiring authentication) */}
       <Route exact path="/">
@@ -125,7 +124,7 @@ const App: React.FC = () => {
       return (
         <IonSplitPane when="md" contentId="main-content">
           <IonReactRouter>
-            <SideBarMenu hideOn={HineMenuOnRoutes} />
+            <SideBarMenu hideOn={HideMenuOnRoutes} />
             {AppRouterOutlet}
           </IonReactRouter>
         </IonSplitPane>
@@ -133,7 +132,7 @@ const App: React.FC = () => {
     }
     return (
       <IonReactRouter>
-        <TabsMenu hideOn={HineMenuOnRoutes}>{AppRouterOutlet}</TabsMenu>
+        <TabsMenu hideOn={HideTabMenuOnRoutes}>{AppRouterOutlet}</TabsMenu>
       </IonReactRouter>
     );
   };

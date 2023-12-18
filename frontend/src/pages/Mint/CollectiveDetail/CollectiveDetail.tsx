@@ -20,15 +20,15 @@ const CollectiveDetail: React.FC<RouteComponentProps> = ({ match }) => {
         ) : (
           <IonRouterOutlet className="app-page-router-outlet">
             <Route
-              path={pathConstants.collectiveDetail.info}
+              path={pathConstants.collective.info}
               component={CollectiveInfo}
             />
             <Route
-              path={pathConstants.collectiveDetail.chat}
+              path={pathConstants.collective.chat}
               component={CollectiveChat}
             />
             <Route
-              path={pathConstants.collectiveDetail.mints}
+              path={pathConstants.collective.mints}
               component={CollectiveMint}
             />
           </IonRouterOutlet>

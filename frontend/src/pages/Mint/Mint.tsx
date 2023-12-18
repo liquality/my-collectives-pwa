@@ -18,7 +18,7 @@ import CreateCollective from "./CreateCollective";
 import { pathConstants } from "@/utils/routeNames";
 import MyMints from "./MyMints";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
-import { useEffect } from "react";
+import CollectiveDetail from "./CollectiveDetail/CollectiveDetail";
 
 const Mint: React.FC<RouteComponentProps> = ({ match }) => {
   const { myGroups, loading } = useGetMyGroups();
@@ -38,25 +38,22 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
             <Route
               path={pathConstants.mintPage.createCollective}
               component={CreateCollective}
-              exact
             />
 
             <Route
               path={pathConstants.mintPage.myCollectives}
               component={MintCollectiveContent}
-              exact
             />
             <Route
               path={pathConstants.mintPage.noCollectives}
               component={NoGroups}
-              exact
             />
-            <Route
-              path={pathConstants.mintPage.mymints}
-              component={MyMints}
-              exact
-            />
+            <Route path={pathConstants.mintPage.mymints} component={MyMints} />
 
+            <Route
+              path={pathConstants.collective.collective}
+              component={CollectiveDetail}
+            />
             <Route exact path={pathConstants.mintPage.mint}>
               <Redirect
                 to={
