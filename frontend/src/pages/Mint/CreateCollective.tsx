@@ -17,9 +17,18 @@ import { useSignInWallet } from "@/hooks/useSignInWallet";
 import { pathConstants } from "@/utils/routeNames";
 import { Challenge } from "@/types/challenges";
 import SelectPoolModal from "./SelectPoolModal";
-import { convertIpfsImageUrl, cutOffTooLongString, shortenAddress } from "@/utils";
+import {
+  convertIpfsImageUrl,
+  cutOffTooLongString,
+  shortenAddress,
+} from "@/utils";
 import useToast from "@/hooks/useToast";
 import { banOutline } from "ionicons/icons";
+import * as MyCollectives from "@koderholic/my-collectives";
+import { usePublicClient } from "wagmi";
+
+import { Config } from "@koderholic/my-collectives";
+import { generateSalt } from "@/utils/salt";
 
 export interface CreateCollectiveProps {
   presentingElement?: HTMLElement;
@@ -37,6 +46,9 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
   });
   const [allSelectedPools, setAllSelectedPools] = useState<Challenge[]>([]);
   const { presentToast } = useToast();
+  const publicClient = usePublicClient();
+
+  console.log(publicClient, "PUBLIC CLIENT?");
 
   const page = useRef(undefined);
   const selectPoolModal = useRef<HTMLIonModalElement>(null);
@@ -77,6 +89,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       description: createGroup.description,
       publicAddress: Math.floor(Math.random() * 100).toString(), //TODO: hardcoded for now but will have to create the contract address from our factory
     };
+
     try {
       const result = await ApiService.createGroup({
         group: groupObject,
@@ -152,7 +165,8 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
                       <div className="ml-1">
                         <p> {cutOffTooLongString(pool?.name, 20)}</p>
                         <p className="creator-of-mint">
-                          {shortenAddress(pool?.creatorOfMint || '') ?? "creator.eth"}
+                          {shortenAddress(pool?.creatorOfMint || "") ??
+                            "creator.eth"}
                         </p>
                       </div>
                     </div>
