@@ -24,6 +24,7 @@ import {
 } from "@ionic/react";
 import { add, remove } from "ionicons/icons";
 import React, { Dispatch, SetStateAction, useState } from "react";
+import MintZoraLogic from "../MintZoraLogic";
 
 export interface MintItemContentProps {
   challenge: Challenge;
@@ -31,7 +32,12 @@ export interface MintItemContentProps {
 }
 
 const MintItemContent: React.FC<MintItemContentProps> = ({
-  challenge: { imageUrl, name, floorPrice, groupCount, expiration },
+  challenge: {
+    imageUrl, name, floorPrice, groupCount, expiration,
+    mintingContractAddress,
+    tokenId,
+    chainId,
+  },
   setResult,
 }: MintItemContentProps) => {
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
@@ -54,6 +60,8 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
       setAmount(1);
     }
   };
+
+  console.log(mintingContractAddress, tokenId, chainId, "All of it");
 
   return (
     <IonGrid>
@@ -170,6 +178,13 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
           >
             Mint {floorPrice} ETH
           </IonButton>
+          {chainId && mintingContractAddress ? (
+            <MintZoraLogic
+              chainId={chainId}
+              tokenId={tokenId ?? undefined}
+              tokenContract={mintingContractAddress as `0x${string}`}
+            />
+          ) : null}
         </IonCol>
       </IonRow>
     </IonGrid>

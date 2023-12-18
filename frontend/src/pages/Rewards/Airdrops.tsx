@@ -5,6 +5,7 @@ import { RouteComponentProps } from "react-router";
 import PageSearchBar from "@/components/PageSearchBar";
 import RewardsTopBar from "@/components/TopBars/RewardsTopBar";
 import Header from "@/components/Header";
+import MintZoraLogic from "@/components/MintZoraLogic";
 
 const Airdrops: React.FC<RouteComponentProps> = (routerProps) => {
   const { challenges, loading } = useGetChallenges();
@@ -13,6 +14,14 @@ const Airdrops: React.FC<RouteComponentProps> = (routerProps) => {
     <IonPage>
       <Header title="Rewards" />
 
+      <MintZoraLogic
+        chainId={7777777}
+        tokenId={"1"}
+        tokenContract={"0x5aa959de99e0e49b8a85e0a630a74a7b757772b7"}
+        /* chainId={"8453"}
+           tokenId={""}
+        tokenContract={"0xbd87f4da73ff92a7bea31e2de20e14f9829f42fe"} */
+      />
       <IonContent className="ion-padding" color="light">
         <RewardsTopBar {...routerProps}>
           <PageSearchBar searchEnabled={false} reloadEnabled={false} />
