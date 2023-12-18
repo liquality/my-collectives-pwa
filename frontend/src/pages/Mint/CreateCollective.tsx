@@ -29,6 +29,7 @@ import { usePublicClient } from "wagmi";
 
 import { Config } from "@koderholic/my-collectives";
 import { generateSalt } from "@/utils/salt";
+import ContractService from "@/services/ContractService";
 
 export interface CreateCollectiveProps {
   presentingElement?: HTMLElement;
@@ -82,6 +83,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     );
   };
 
+  console.log(allSelectedPools, "all selected pools");
   const handleCreateGroup = async () => {
     const groupObject: GroupCreation = {
       createdBy: user?.id,
@@ -91,6 +93,14 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     };
 
     try {
+      const tokenContracts = allSelectedPools.map(
+        (item) => item.mintingContractAddress
+      );
+      const createGroupContract = ContractService.createCollective(
+        tokenContracts,
+        tokenContracts
+      );
+      console.log(createGroupContract, "create group contract?");
       const result = await ApiService.createGroup({
         group: groupObject,
         pools: allSelectedPools,
