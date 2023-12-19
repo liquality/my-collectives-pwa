@@ -21,10 +21,11 @@ import {
   convertIpfsImageUrl,
   cutOffTooLongString,
   handleDisplayAddress,
-  shortenAddress,
 } from "@/utils";
 import useToast from "@/hooks/useToast";
 import { banOutline } from "ionicons/icons";
+
+import ContractService from "@/services/ContractService";
 
 export interface CreateCollectiveProps {
   presentingElement?: HTMLElement;
@@ -75,25 +76,55 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     );
   };
 
+  console.log(allSelectedPools, "all selected pools");
   const handleCreateGroup = async () => {
     const groupObject: GroupCreation = {
       createdBy: user?.id,
       name: createGroup.name,
       description: createGroup.description,
-      publicAddress: Math.floor(Math.random() * 100).toString(), //TODO: hardcoded for now but will have to create the contract address from our factory
     };
+
+    //TODO: clean this up after MVP
     try {
+      const tokenContracts = allSelectedPools.map(
+        (item) => item.mintingContractAddress
+      );
+      const createdContract = await ContractService.createCollective(
+        tokenContracts,
+        tokenContracts
+      );
+      const { cWallet, cAddress, nonce } = createdContract;
+      console.log(createdContract, "create group contract?");
       const result = await ApiService.createGroup({
         group: groupObject,
         pools: allSelectedPools,
       });
-      //TODO: in the backend or frontend, when a POOL is created, need to call createPool() from smart contract, which returns
-      //the unique public address of that pool
-      const { name, publicAddress, id, createdBy } = result;
-      router.push(
-        `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${publicAddress}&groupId=${id}&createdBy=${createdBy}&activePools=${allSelectedPools.length}`
-      );
+      console.log(result, "RESULT AFTER CREATING GROUP");
+      if (result) {
+        const updatedGroup = await ApiService.updateGroup(result.id, {
+          group: {
+            publicAddress: cAddress,
+            walletAddress: cWallet,
+            nonceKey: nonce?.toString(),
+          },
+          pools: [],
+        });
+        console.log(updatedGroup, "updated group?", cAddress, cWallet, nonce);
+        if (!updatedGroup.ok) throw Error;
+        const { name, id, createdBy } = result;
+        setCreatedGroup({
+          name: "",
+          description: "",
+        });
+        setAllSelectedPools([]);
+        router.push(
+          `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${cAddress}&groupId=${id}&createdBy=${createdBy}&activePools=${allSelectedPools.length}`
+        );
+      } else {
+        throw Error;
+      }
     } catch (error) {
+      console.log(error, "wats error?");
       presentToast("We could not create your group :(", "danger", banOutline);
     }
   };
