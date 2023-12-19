@@ -7,11 +7,15 @@ import { copy } from "ionicons/icons";
 
 export interface InviteBtnProps {
   groupId: string;
-  type?: 'button' | 'text';
+  type?: "button" | "text";
   text?: string;
 }
 
-const GenerateInviteBtn = ({ groupId, type ='text', text = 'Invite' }: InviteBtnProps) => {
+const GenerateInviteBtn = ({
+  groupId,
+  type = "text",
+  text = "Invite",
+}: InviteBtnProps) => {
   const url =
     import.meta.env.VITE_CLIENT_PRODUCTION_URL || "http://localhost:5173";
 
@@ -29,8 +33,8 @@ const GenerateInviteBtn = ({ groupId, type ='text', text = 'Invite' }: InviteBtn
     );
     handleCopyClick(`${url}/invite/${result[0].id}`);
   };
-  
-  if(type === 'button') {
+
+  if (type === "button") {
     return <IonButton onClick={handleGenerateInvite}>{text}</IonButton>;
   }
   return <IonText onClick={handleGenerateInvite}>{text}</IonText>;

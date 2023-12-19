@@ -111,29 +111,33 @@ export class GroupsService {
   }
 
   public static async update(id: string, updatedGroupFields: Partial<Group>, pools: any[], userId: string): Promise<any> {
+    console.log("INSIDE UPDATE", updatedGroupFields, pools, id)
     const existingPools = await dbClient("pools").select("challengeId").where("groupId", "=", id);
     // identify pools to be inserted (new ones) and removed (existing ones not in the updated array)
-    const newPools = pools.filter((pool) => !existingPools.some((existingPool) => existingPool.challengeId === pool.id || existingPool.challengeId === pool.challengeId));
-    const poolsToRemove = existingPools.filter((existingPool) => !pools.some((pool) => existingPool.challengeId === pool.id || existingPool.challengeId === pool.challengeId));
 
     const queryResult = await dbClient("groups").where("id", "=", id).update(updatedGroupFields);
 
-    // insert new pools
-    if (newPools.length > 0) {
-      const poolInsertData = newPools.map((pool) => ({
-        groupId: id,
-        createdBy: userId,
-        challengeId: pool.id,
-        createdAt: new Date()
-      }));
-      await dbClient("pools").insert(poolInsertData);
+    if (pools.length) {
+      const newPools = pools.filter((pool) => !existingPools.some((existingPool) => existingPool.challengeId === pool.id || existingPool.challengeId === pool.challengeId));
+      const poolsToRemove = existingPools.filter((existingPool) => !pools.some((pool) => existingPool.challengeId === pool.id || existingPool.challengeId === pool.challengeId));
+      // insert new pools
+      if (newPools.length > 0) {
+        const poolInsertData = newPools.map((pool) => ({
+          groupId: id,
+          createdBy: userId,
+          challengeId: pool.id,
+          createdAt: new Date()
+        }));
+        await dbClient("pools").insert(poolInsertData);
+      }
+
+      // remove pools that are not in the updated array
+      if (poolsToRemove.length > 0) {
+        const challengeIdsToRemove = poolsToRemove.map((existingPool) => existingPool.challengeId);
+        await dbClient("pools").where("groupId", "=", id).whereIn("challengeId", challengeIdsToRemove).del();
+      }
     }
 
-    // remove pools that are not in the updated array
-    if (poolsToRemove.length > 0) {
-      const challengeIdsToRemove = poolsToRemove.map((existingPool) => existingPool.challengeId);
-      await dbClient("pools").where("groupId", "=", id).whereIn("challengeId", challengeIdsToRemove).del();
-    }
 
     return queryResult;
   }

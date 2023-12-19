@@ -51,7 +51,7 @@ export interface GroupCreation {
     name?: string;
     createdBy: string
     description: string
-    publicAddress: string
+
 }
 
 export interface Invite {
