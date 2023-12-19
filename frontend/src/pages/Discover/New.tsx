@@ -13,15 +13,9 @@ import PageSearchBar from "@/components/PageSearchBar";
 import DiscoverTopBar from "./DiscoverTopBar";
 import { useEffect, useMemo, useRef, useState } from "react";
 import CreateGroupModal from "./CreateChallengeModal";
-import { Challenge } from "@/types/challenges";
+import { Challenge, GroupedChallenge } from "@/types/challenges";
 import ChallengeItemModal from "@/components/ChallengesModal/ChallengeItemModal";
-import { useAccount } from "wagmi";
 import { useSignInWallet } from "@/hooks/useSignInWallet";
-import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
-
-export type GroupedChallenge = {
-  [key: string]: Challenge[];
-};
 
 const New: React.FC<RouteComponentProps> = (routerProps) => {
   const { challenges, loading, setChallenges } = useGetChallenges();

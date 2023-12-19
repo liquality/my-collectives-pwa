@@ -1,16 +1,22 @@
-import { IonCol, IonContent, IonGrid, IonPage, IonRow } from "@ionic/react";
+import {
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonLabel,
+  IonPage,
+  IonRow,
+} from "@ionic/react";
 import Header from "@/components/Header";
 import { RouteComponentProps } from "react-router";
 import CollectiveTopBar from "@/components/TopBars/CollectiveTopBar";
 import PageSearchBar from "@/components/PageSearchBar";
 import useGetGroupById from "@/hooks/Groups/useGetGroupById";
 import useGetChallengesByGroupId from "@/hooks/Collective/useGetChallengesByGroupId";
-import PoolsGrid from "@/components/Mint/PoolsGrid";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 import { useSignInWallet } from "@/hooks/useSignInWallet";
-import { Challenge } from "@/types/challenges";
-import { useEffect, useState } from "react";
-import ChallengeItemCard from "@/components/Challenges/ChallengeItemCard";
+import { Challenge, GroupedChallenge } from "@/types/challenges";
+import { useEffect, useMemo, useState } from "react";
+import HorizontalSwipe from "@/components/Images/HorizontalSwipe";
 import ChallengeItemModal from "@/components/ChallengesModal/ChallengeItemModal";
 
 export interface CollectiveMintProps
@@ -34,13 +40,8 @@ const CollectiveMint: React.FC<CollectiveMintProps> = ({ match }) => {
     setSelectedChallenge(null);
   };
 
-  const onChallengeSelected = (challengeId: string) => {
-    const index = challenges.findIndex(
-      (challenge: any) => challenge.id === challengeId
-    );
-    if (index >= 0) {
-      setSelectedChallenge(challenges[index]);
-    }
+  const onChallengeSelected = (challenge: Challenge) => {
+    setSelectedChallenge(challenge);
   };
 
   useEffect(() => {
@@ -62,6 +63,15 @@ const CollectiveMint: React.FC<CollectiveMintProps> = ({ match }) => {
     }
   }, [selectedChallenge, user]);
 
+  const groupedChallenges: GroupedChallenge = useMemo(() => {
+    return (
+      challenges?.reduce((rv: GroupedChallenge, x: Challenge) => {
+        (rv[x["category"]] = rv[x["category"]] || []).push(x);
+        return rv;
+      }, {}) || {}
+    );
+  }, [challenges]);
+
   return (
     <IonPage>
       <Header title={group?.name} />
@@ -69,28 +79,33 @@ const CollectiveMint: React.FC<CollectiveMintProps> = ({ match }) => {
         <CollectiveTopBar>
           <PageSearchBar />
         </CollectiveTopBar>
-        <IonGrid>
-          {loading ? (
-            <PageLoadingIndicator />
-          ) : challenges ? (
-            <IonRow style={{ margin: "1rem" }}>
-              {challenges.map((challenge: any, index: number) => (
-                <IonCol key={index} size="12" sizeSm="6" sizeMd="4" sizeLg="3">
-                  <ChallengeItemCard
-                    {...challenge}
-                    onChallengeSelected={onChallengeSelected}
-                  />
-                </IonCol>
-              ))}
-            </IonRow>
-          ) : (
+        {loading ? (
+          <PageLoadingIndicator />
+        ) : challenges ? (
+          Object.keys(groupedChallenges).map((category: string) => (
+            <div key={category}>
+              <div className="spaced-on-sides">
+                <IonLabel className="ion-text-capitalize">
+                  {category} | {groupedChallenges[category]?.length}
+                </IonLabel>
+                <IonLabel color="primary">See All</IonLabel>
+              </div>
+              <HorizontalSwipe
+                imageData={groupedChallenges[category]}
+                setSelectedChallenge={onChallengeSelected}
+                loading={loading}
+              ></HorizontalSwipe>
+            </div>
+          ))
+        ) : (
+          <IonGrid>
             <IonRow className="ion-text-center">
               <IonCol>
                 <h3>No challenges found</h3>
               </IonCol>
             </IonRow>
-          )}
-        </IonGrid>
+          </IonGrid>
+        )}
         <ChallengeItemModal
           isOpen={itemModalIsOpen}
           challenges={challenges || []}
