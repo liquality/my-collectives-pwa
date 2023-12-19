@@ -84,8 +84,6 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
     );
   }, [challenges]);
 
-  console.log(groupedChallenges, "groupedChallenges");
-
   return (
     <IonPage>
       <IonContent className="ion-padding" color="light">
@@ -114,23 +112,21 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
           setResultChallenge={setResultChallenge}
         />
 
-        {Object.keys(groupedChallenges).map(
-          (category: string) => (
-            <div key={category}>
-              <div className="spaced-on-sides">
-                <IonLabel className="ion-text-capitalize">
-                  {category} | {groupedChallenges[category]?.length}
-                </IonLabel>
-                <IonLabel color="primary">See All</IonLabel>
-              </div>
-              <HorizontalSwipe
-                imageData={groupedChallenges[category]}
-                setSelectedChallenge={onChallengeSelected}
-                loading={loading}
-              ></HorizontalSwipe>
+        {Object.keys(groupedChallenges).map((category: string) => (
+          <div key={category}>
+            <div className="spaced-on-sides">
+              <IonLabel className="ion-text-capitalize">
+                {category} | {groupedChallenges[category]?.length}
+              </IonLabel>
+              <IonLabel color="primary">See All</IonLabel>
             </div>
-          )
-        )}
+            <HorizontalSwipe
+              imageData={groupedChallenges[category]}
+              setSelectedChallenge={onChallengeSelected}
+              loading={loading}
+            ></HorizontalSwipe>
+          </div>
+        ))}
 
         <ChallengeItemModal
           isOpen={itemModalIsOpen}

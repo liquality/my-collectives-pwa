@@ -27,13 +27,14 @@ const MintCollectiveContent: React.FC<RouteComponentProps> = (routerProps) => {
   const groupAddress = queryParams.get("groupAddress");
   const groupId = queryParams.get("groupId");
   const createdBy = queryParams.get("createdBy");
-  const isNewlyCreatedGroup = groupName && groupAddress && groupId && createdBy;
+  const activePoolsCount = Number(queryParams.get("activePools"));
+
+  const isNewlyCreatedGroup =
+    groupName && groupAddress && groupId && createdBy && activePoolsCount;
 
   const handleNavigateToCreateCollective = () => {
     router.push(pathConstants.mintPage.createCollective);
   };
-
-  console.log(routerProps.location.pathname, "routerprops?", routerProps);
 
   //If a new group has been created, push into exisitng groups array state to avoid re-fetching of groups
   useEffect(() => {
@@ -47,7 +48,7 @@ const MintCollectiveContent: React.FC<RouteComponentProps> = (routerProps) => {
         createdAt: new Date(),
         mintCount: 0,
         memberCount: 0,
-        activePoolsCount: 0,
+        activePoolsCount: activePoolsCount,
         poolsCount: 0,
         messagesCount: 0,
       };

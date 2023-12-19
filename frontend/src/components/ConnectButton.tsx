@@ -16,11 +16,13 @@ import React from "react";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { useAccount, useDisconnect } from "wagmi";
 import { Auth } from "@/utils";
+import { useDisplayEns } from "@/hooks/useDisplayEns";
 
 const ConnectButton: React.FC = () => {
   const { open } = useWeb3Modal();
   const { address, isConnecting, isDisconnected } = useAccount();
   const { disconnect } = useDisconnect();
+  const { ens } = useDisplayEns(address);
 
   const logout = () => {
     Auth.clearAccessToken();
@@ -51,7 +53,7 @@ const ConnectButton: React.FC = () => {
             id="logout-options-triggger"
           >
             <IonLabel className="address">
-              {shortenAddress(address || "")}
+              {ens ? ens : shortenAddress(address || "")}
             </IonLabel>
             <div className="divider"></div>
             <IonLabel className="balance">100 ETH</IonLabel>

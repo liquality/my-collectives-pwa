@@ -1,10 +1,12 @@
 import { Challenge } from "@/types/challenges";
 import { MintResult } from "@/types/mint";
-import { convertIpfsImageUrl, cutOffTooLongString } from "@/utils";
 import {
-  useIonRouter,
+  convertIpfsImageUrl,
+  cutOffTooLongString,
+  handleDisplayAddress,
+} from "@/utils";
+import {
   IonCard,
-  IonCardContent,
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
@@ -13,12 +15,8 @@ import {
   IonRow,
   IonCol,
   IonIcon,
-  IonLabel,
-  IonContent,
   IonButton,
-  IonInput,
 } from "@ionic/react";
-import { add, remove } from "ionicons/icons";
 import React, { useState } from "react";
 
 export interface MintItemResultProps {
@@ -64,7 +62,7 @@ const MintItemResult: React.FC<MintItemResultProps> = ({
                     {loadingImage ? (
                       <IonSkeletonText animated={true}></IonSkeletonText>
                     ) : (
-                      `Creator.eth`
+                      handleDisplayAddress(challenge.creatorOfMint ?? "")
                     )}
                   </IonCardTitle>
                   <IonCardSubtitle>
