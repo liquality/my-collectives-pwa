@@ -108,13 +108,13 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       if (result) {
         const updatedGroup = await ApiService.updateGroup(result.id, {
           group: {
-            publicAddress: cAddress + 1,
-            walletAddress: cWallet + 1,
+            publicAddress: cAddress,
+            walletAddress: cWallet,
             nonceKey: nonce,
           },
           pools: [],
         });
-        console.log(updatedGroup, "UPDATED GROUP?");
+        if (!updatedGroup.ok) throw Error;
 
         //TODO: in the backend or frontend, when a POOL is created, need to call createPool() from smart contract, which returns
         //the unique public address of that pool
