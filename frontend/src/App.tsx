@@ -91,10 +91,6 @@ const config = createConfig({
 createWeb3Modal({ wagmiConfig, projectId, chains });
 const App: React.FC = () => {
   const HideMenuOnRoutes = ["/invite", "/join"];
-  const HideTabMenuOnRoutes = [
-    "/invite",
-    "/join"
-  ];
   const AppRouterOutlet = (
     <IonRouterOutlet id="main-content">
       <Redirect exact path="/" to="/discover" />
@@ -132,7 +128,7 @@ const App: React.FC = () => {
     }
     return (
       <IonReactRouter>
-        <TabsMenu hideOn={HideTabMenuOnRoutes}>{AppRouterOutlet}</TabsMenu>
+        <TabsMenu hideOn={HideMenuOnRoutes}>{AppRouterOutlet}</TabsMenu>
       </IonReactRouter>
     );
   };
