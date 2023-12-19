@@ -15,7 +15,11 @@ import { Challenge } from "@/types/challenges";
 import SelectPoolModal from "../Mint/SelectPoolModal";
 import useGetChallengesByGroupId from "@/hooks/Collective/useGetChallengesByGroupId";
 import useGetGroupById from "@/hooks/Groups/useGetGroupById";
-import { convertIpfsImageUrl, cutOffTooLongString } from "@/utils";
+import {
+  convertIpfsImageUrl,
+  cutOffTooLongString,
+  handleDisplayAddress,
+} from "@/utils";
 import ApiService from "@/services/ApiService";
 
 export interface CreateCollectiveProps {
@@ -152,7 +156,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
                       <div className="ml-1">
                         <p> {cutOffTooLongString(pool?.name, 20)}</p>
                         <p className="creator-of-mint">
-                          {pool?.creatorOfMint ?? "creator.eth"}
+                          {handleDisplayAddress(pool?.creatorOfMint ?? "")}
                         </p>
                       </div>
                     </div>

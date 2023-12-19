@@ -1,7 +1,9 @@
+import { ethers } from "ethers";
 import { dbClient } from "../data";
 import { Challenge } from "../models/challenges";
 import { convertToDate, fetchReservoirData, getTokenMetadataFromZora } from "../utils";
 import { AuthService } from "./auth";
+const infuraRpcUrl = `https://mainnet.infura.io/v3/${process.env.INFURA_KEY}`;
 
 export class ChallengesService {
 
@@ -14,6 +16,8 @@ export class ChallengesService {
         const { mintingContractAddress, tokenId, network, category, expiration, honeyPotAddress } = data
         const tokenData = await fetchReservoirData(mintingContractAddress, network, tokenId)
         const user = await AuthService.find(userId)
+        const provider = new ethers.providers.JsonRpcProvider(infuraRpcUrl);
+
 
         const insertObject = {
             honeyPotAddress,
@@ -25,9 +29,9 @@ export class ChallengesService {
         };
 
         if (tokenData?.creatorOfMint) {
-            insertObject.creatorOfMint = tokenData.creatorOfMint;
+            insertObject.creatorOfMint = await provider.lookupAddress(tokenData.creatorOfMint) ?? tokenData.creatorOfMint;
         } else {
-            insertObject.creatorOfMint = user.publicAddress;
+            insertObject.creatorOfMint = await provider.lookupAddress(user.publicAddress) ?? user.publicAddress;
         }
 
         try {
@@ -62,7 +66,6 @@ export class ChallengesService {
 
             return null;
         } catch (error) {
-            console.log(error, 'wats err?')
             return null
         }
 

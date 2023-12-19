@@ -17,7 +17,12 @@ import { useSignInWallet } from "@/hooks/useSignInWallet";
 import { pathConstants } from "@/utils/routeNames";
 import { Challenge } from "@/types/challenges";
 import SelectPoolModal from "./SelectPoolModal";
-import { convertIpfsImageUrl, cutOffTooLongString, shortenAddress } from "@/utils";
+import {
+  convertIpfsImageUrl,
+  cutOffTooLongString,
+  handleDisplayAddress,
+  shortenAddress,
+} from "@/utils";
 import useToast from "@/hooks/useToast";
 import { banOutline } from "ionicons/icons";
 
@@ -86,11 +91,10 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       //the unique public address of that pool
       const { name, publicAddress, id, createdBy } = result;
       router.push(
-        `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${publicAddress}&groupId=${id}&createdBy=${createdBy}`
+        `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${publicAddress}&groupId=${id}&createdBy=${createdBy}&activePools=${allSelectedPools.length}`
       );
     } catch (error) {
       presentToast("We could not create your group :(", "danger", banOutline);
-      console.log(error, "error posting group");
     }
   };
 
@@ -152,7 +156,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
                       <div className="ml-1">
                         <p> {cutOffTooLongString(pool?.name, 20)}</p>
                         <p className="creator-of-mint">
-                          {shortenAddress(pool?.creatorOfMint || '') ?? "creator.eth"}
+                          {handleDisplayAddress(pool?.creatorOfMint || "")}
                         </p>
                       </div>
                     </div>
