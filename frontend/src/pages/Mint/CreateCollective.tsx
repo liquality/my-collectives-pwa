@@ -91,7 +91,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       //the unique public address of that pool
       const { name, publicAddress, id, createdBy } = result;
       router.push(
-        `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${publicAddress}&groupId=${id}&createdBy=${createdBy}`
+        `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${publicAddress}&groupId=${id}&createdBy=${createdBy}&activePools=${allSelectedPools.length}`
       );
     } catch (error) {
       presentToast("We could not create your group :(", "danger", banOutline);
