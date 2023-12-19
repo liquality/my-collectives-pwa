@@ -14,7 +14,6 @@ interface HorizontalSwipeProps {
 export default function HorizontalSwipe(props: HorizontalSwipeProps) {
   const { imageData, loading, setSelectedChallenge, selectedChallenge } = props;
 
-  console.log(loading, "loading??");
   return (
     <>
       {loading || !imageData ? (

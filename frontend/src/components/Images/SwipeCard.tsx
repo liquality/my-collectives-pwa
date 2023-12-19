@@ -5,6 +5,7 @@ import {
   convertDateToReadable,
   cutOffTooLongString,
   shortenAddress,
+  handleDisplayAddress,
 } from "@/utils";
 import {
   IonCard,
@@ -85,7 +86,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
           {loading ? (
             <IonSkeletonText animated={true}></IonSkeletonText>
           ) : (
-            shortenAddress(challenge.creatorOfMint || "") ?? "Creator.eth"
+            handleDisplayAddress(challenge.creatorOfMint || "")
           )}
         </IonCardTitle>
         <IonCardSubtitle>{cutOffTooLongString(name, 17)}</IonCardSubtitle>
