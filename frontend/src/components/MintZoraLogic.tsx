@@ -13,18 +13,22 @@ import {
 } from "wagmi";
 
 const useMintClient = () => {
-  const publicClient = usePublicClient();
+  try {
+    const publicClient = usePublicClient();
 
-  const { chain } = useNetwork();
-  //const { switchNetwork } = useSwitchNetwork();
-  //const result = switchNetwork?.(chainId); //TODO: debug this as it does not work
+    const { chain } = useNetwork();
+    //const { switchNetwork } = useSwitchNetwork();
+    //const result = switchNetwork?.(chainId); //TODO: debug this as it does not work
 
-  const mintClient = useMemo(
-    () => chain && createMintClient({ chain, publicClient }),
-    [chain, publicClient]
-  );
+    const mintClient = useMemo(
+      () => chain && createMintClient({ chain, publicClient }),
+      [chain, publicClient]
+    );
 
-  return mintClient;
+    return mintClient;
+  } catch (err) {
+    return null;
+  }
 };
 
 export const MintZoraLogic = (props: {
@@ -46,27 +50,33 @@ export const MintZoraLogic = (props: {
   const { address } = useAccount();
 
   useEffect(() => {
-    if (!mintClient || !address) return;
+    if (!mintClient || !address)
+      setParamError(
+        "Could not find token to mint, please switch network to chainId:" +
+          chainId
+      );
 
     const makeParams = async () => {
       // make the params for the prepare contract write hook
-      try {
-        const _params = await mintClient.makePrepareMintTokenParams({
-          minterAccount: address,
-          tokenAddress: tokenContract,
-          tokenId: tokenId ?? undefined,
-          mintArguments: {
-            mintToAddress: address,
-            quantityToMint,
-          },
-        });
-        setParams(_params);
-        setParamError("");
-      } catch (err) {
-        setParamError(
-          "Could not find token to mint, please switch network to chainId:" +
-            chainId
-        );
+      if (mintClient && address) {
+        try {
+          const _params = await mintClient.makePrepareMintTokenParams({
+            minterAccount: address,
+            tokenAddress: tokenContract,
+            tokenId: tokenId ?? undefined,
+            mintArguments: {
+              mintToAddress: address,
+              quantityToMint,
+            },
+          });
+          setParams(_params);
+          setParamError("");
+        } catch (err) {
+          setParamError(
+            "Could not find token to mint, please switch network to chainId:" +
+              chainId
+          );
+        }
       }
     };
 

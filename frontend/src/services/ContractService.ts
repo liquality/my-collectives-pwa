@@ -10,7 +10,7 @@ const ContractService = {
         const salt = generateSalt();
         console.log('Arguments passed: -->>>>', this.getProvider(),
             { tokenContracts, honeyPots: tokenContracts },
-            salt)
+            823472)
         const response = await MyCollectives.Collectives.create(
             this.getProvider(),
             { tokenContracts, honeyPots: tokenContracts }, //TODO: for now just use random honeypots address, can be changed later when MINT is implemented
