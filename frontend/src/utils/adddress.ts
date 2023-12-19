@@ -1,4 +1,3 @@
-import { fetchEns } from "./ensName";
 
 export function shortenAddress(address: string) {
   const _address = address || "";

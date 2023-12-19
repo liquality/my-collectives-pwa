@@ -95,7 +95,6 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       );
     } catch (error) {
       presentToast("We could not create your group :(", "danger", banOutline);
-      console.log(error, "error posting group");
     }
   };
 

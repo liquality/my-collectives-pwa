@@ -28,7 +28,6 @@ const MyMints: React.FC<MyMintsProps> = (routerProps) => {
   const [mintFilter, setMintFilter] = useState("");
   //TODO backend function fetch from user_rewards the poolIds that have been minted from a user
 
-  console.log(pools, "ools");
   const filteredMints = useMemo(() => {
     let filteredPools = pools || [];
 

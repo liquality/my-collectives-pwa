@@ -54,7 +54,6 @@ export class ChallengesController {
 
 
         } catch (err: any) {
-            console.log(err, 'wats err?')
             res.status(500).send({ error: err.message });
         }
     }

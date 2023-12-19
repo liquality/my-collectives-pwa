@@ -6,9 +6,7 @@ import {
   handleDisplayAddress,
 } from "@/utils";
 import {
-  useIonRouter,
   IonCard,
-  IonCardContent,
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
@@ -17,12 +15,8 @@ import {
   IonRow,
   IonCol,
   IonIcon,
-  IonLabel,
-  IonContent,
   IonButton,
-  IonInput,
 } from "@ionic/react";
-import { add, remove } from "ionicons/icons";
 import React, { useState } from "react";
 
 export interface MintItemResultProps {

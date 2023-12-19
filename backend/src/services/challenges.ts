@@ -66,7 +66,6 @@ export class ChallengesService {
 
             return null;
         } catch (error) {
-            console.log(error, 'wats err?')
             return null
         }
 

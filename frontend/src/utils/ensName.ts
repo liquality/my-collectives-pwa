@@ -1,8 +1,8 @@
 import { fetchEnsName } from '@wagmi/core'
 
-export async function fetchEns(address: `0x${string}`) {
+export async function fetchEns(address: `0x${string}`, chainId: number) {
     const ensName = await fetchEnsName({
-        address,
+        address, chainId
     })
     return ensName
 }

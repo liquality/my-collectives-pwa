@@ -65,8 +65,6 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     }
   };
 
-  console.log(mintingContractAddress, tokenId, chainId, "All of it");
-
   return (
     <IonGrid>
       <IonRow className="ion-justify-content-center">
