@@ -1,3 +1,5 @@
+import { fetchEns } from "./ensName";
+
 export function shortenAddress(address: string) {
   const _address = address || "";
   const prefix = _address.startsWith("0x") ? "0x" : "";
@@ -7,6 +9,14 @@ export function shortenAddress(address: string) {
     .substring(0, prefix ? 4 : 5)}...${_address.substring(
       isTerra ? _address.length - 6 : _address.length - 4
     )}`;
+}
+
+
+export function handleDisplayAddress(address: string) {
+  if (address.startsWith("0x")) {
+    return shortenAddress(address)
+  } else return address
+
 }
 
 export function convertIpfsImageUrl(url: string) {

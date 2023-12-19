@@ -3,6 +3,7 @@ import {
   convertDateToReadable,
   convertIpfsImageUrl,
   cutOffTooLongString,
+  handleDisplayAddress,
   shortenAddress,
 } from "@/utils";
 import { RouteComponentProps } from "react-router";
@@ -102,7 +103,7 @@ const MyMints: React.FC<MyMintsProps> = (routerProps) => {
                             {cutOffTooLongString(pool.name, 25)}
                           </p>
                           <p className="public-address">
-                            {shortenAddress(pool.creatorOfMint)}
+                            {handleDisplayAddress(pool.creatorOfMint)}
                           </p>
                           <div className="flexDirectionRow mint-icon">
                             <p className="public-address">

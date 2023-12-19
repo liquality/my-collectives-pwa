@@ -2,6 +2,7 @@ import { Challenge } from "@/types/challenges";
 import {
   convertIpfsImageUrl,
   cutOffTooLongString,
+  handleDisplayAddress,
   shortenAddress,
 } from "@/utils";
 import {
@@ -31,6 +32,7 @@ const PoolItemCard: React.FC<PoolItemCardProps> = ({
   mintingContractAddress,
   imageUrl,
   name,
+  creatorOfMint,
   chainId,
   category,
   totalMints,
@@ -74,7 +76,7 @@ const PoolItemCard: React.FC<PoolItemCardProps> = ({
           {loading ? (
             <IonSkeletonText animated={true}></IonSkeletonText>
           ) : (
-            `Creator.eth`
+            handleDisplayAddress(creatorOfMint ?? "")
           )}
         </IonCardTitle>
         <IonCardSubtitle>{cutOffTooLongString(name, 20)}</IonCardSubtitle>

@@ -3,6 +3,7 @@ import { MintResult } from "@/types/mint";
 import {
   convertIpfsImageUrl,
   cutOffTooLongString,
+  handleDisplayAddress,
   shortenAddress,
 } from "@/utils";
 import {
@@ -39,6 +40,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     mintingContractAddress,
     tokenId,
     chainId,
+    creatorOfMint,
   },
   setResult,
 }: MintItemContentProps) => {
@@ -92,7 +94,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
                 {loadingImage ? (
                   <IonSkeletonText animated={true}></IonSkeletonText>
                 ) : (
-                  `Creator.eth`
+                  handleDisplayAddress(creatorOfMint ?? "")
                 )}
               </IonCardTitle>
               <IonCardSubtitle>

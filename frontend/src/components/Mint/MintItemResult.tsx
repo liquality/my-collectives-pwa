@@ -1,6 +1,10 @@
 import { Challenge } from "@/types/challenges";
 import { MintResult } from "@/types/mint";
-import { convertIpfsImageUrl, cutOffTooLongString } from "@/utils";
+import {
+  convertIpfsImageUrl,
+  cutOffTooLongString,
+  handleDisplayAddress,
+} from "@/utils";
 import {
   useIonRouter,
   IonCard,
@@ -64,7 +68,7 @@ const MintItemResult: React.FC<MintItemResultProps> = ({
                     {loadingImage ? (
                       <IonSkeletonText animated={true}></IonSkeletonText>
                     ) : (
-                      `Creator.eth`
+                      handleDisplayAddress(challenge.creatorOfMint ?? "")
                     )}
                   </IonCardTitle>
                   <IonCardSubtitle>
