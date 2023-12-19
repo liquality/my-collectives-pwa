@@ -40,6 +40,7 @@ export class GroupsController {
 
   public create: RequestHandler = async (req, res) => {
     const { group, pools } = req.body;
+
     const user = await AuthService.find((req as any).auth?.sub);
     console.log(user, 'wats user?', (req as any).auth?.sub)
     if (!group.name) {
@@ -66,6 +67,7 @@ export class GroupsController {
   public update: RequestHandler = async (req, res) => {
     const { group, pools } = req.body;
     const { id } = req.params
+    console.log(id, group, pools, 'ID GROUP POOLS')
     const user = await AuthService.find((req as any).auth?.sub);
     if (!id) {
       res.status(400).send({ error: "GroupId is required" });

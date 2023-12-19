@@ -51,11 +51,18 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
     setLoading(false);
   }, [id, code]);
 
+  console.log(invite, "inv?");
+
   async function handleConnect() {
     setProcessing(true);
     if (claimInviteAvailable) {
       try {
-        //await ContractService.joinCollective(invite.id, )
+        await ContractService.joinCollective(
+          invite.code,
+          invite.groupWalletAddress,
+          invite.groupPublicAddress,
+          invite.groupNonceKey
+        );
         await InvitesService.claim(invite.id, address!);
         router.push(pathConstants.mintPage.myCollectives);
       } catch (error) {

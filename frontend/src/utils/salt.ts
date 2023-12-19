@@ -1,8 +1,8 @@
 import { BigNumberish, BigNumber } from 'ethers';
 import { etherUnits } from 'viem';
 
-export function generateSalt(length: number = 16): BigNumberish {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+export function generateSalt(length: number = 16): number {
+    const characters = '0123456789';
     const charactersLength = characters.length;
     let salt = '';
 
@@ -12,5 +12,5 @@ export function generateSalt(length: number = 16): BigNumberish {
     }
 
     // Assuming you want to convert the string salt to a BigNumberish
-    return BigNumber.from(`0x${Buffer.from(salt).toString('hex')}`);
+    return Number(salt)
 }

@@ -99,17 +99,24 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         group: groupObject,
         pools: allSelectedPools,
       });
+      console.log(result, "RESULT AFTER CREATING GROUP");
       if (result) {
         const updatedGroup = await ApiService.updateGroup(result.id, {
           group: {
             publicAddress: cAddress,
             walletAddress: cWallet,
-            nonceKey: nonce,
+            nonceKey: nonce?.toString(),
           },
           pools: [],
         });
+        console.log(updatedGroup, "updated group?", cAddress, cWallet, nonce);
         if (!updatedGroup.ok) throw Error;
         const { name, id, createdBy } = result;
+        setCreatedGroup({
+          name: "",
+          description: "",
+        });
+        setAllSelectedPools([]);
         router.push(
           `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${cAddress}&groupId=${id}&createdBy=${createdBy}&activePools=${allSelectedPools.length}`
         );
@@ -117,6 +124,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         throw Error;
       }
     } catch (error) {
+      console.log(error, "wats error?");
       presentToast("We could not create your group :(", "danger", banOutline);
     }
   };

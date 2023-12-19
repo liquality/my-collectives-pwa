@@ -111,6 +111,7 @@ export class GroupsService {
   }
 
   public static async update(id: string, updatedGroupFields: Partial<Group>, pools: any[], userId: string): Promise<any> {
+    console.log("INSIDE UPDATE", updatedGroupFields, pools, id)
     const existingPools = await dbClient("pools").select("challengeId").where("groupId", "=", id);
     // identify pools to be inserted (new ones) and removed (existing ones not in the updated array)
 
