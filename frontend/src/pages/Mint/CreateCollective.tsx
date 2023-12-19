@@ -89,28 +89,42 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       createdBy: user?.id,
       name: createGroup.name,
       description: createGroup.description,
-      publicAddress: Math.floor(Math.random() * 100).toString(), //TODO: hardcoded for now but will have to create the contract address from our factory
     };
 
     try {
       const tokenContracts = allSelectedPools.map(
         (item) => item.mintingContractAddress
       );
-      const createGroupContract = ContractService.createCollective(
+      const createdContract = await ContractService.createCollective(
         tokenContracts,
         tokenContracts
       );
-      console.log(createGroupContract, "create group contract?");
+      const { cWallet, cAddress, nonce } = createdContract;
+      console.log(createdContract, "create group contract?");
       const result = await ApiService.createGroup({
         group: groupObject,
         pools: allSelectedPools,
       });
-      //TODO: in the backend or frontend, when a POOL is created, need to call createPool() from smart contract, which returns
-      //the unique public address of that pool
-      const { name, publicAddress, id, createdBy } = result;
-      router.push(
-        `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${publicAddress}&groupId=${id}&createdBy=${createdBy}`
-      );
+      if (result) {
+        const updatedGroup = await ApiService.updateGroup(result.id, {
+          group: {
+            publicAddress: cAddress + 1,
+            walletAddress: cWallet + 1,
+            nonceKey: nonce,
+          },
+          pools: [],
+        });
+        console.log(updatedGroup, "UPDATED GROUP?");
+
+        //TODO: in the backend or frontend, when a POOL is created, need to call createPool() from smart contract, which returns
+        //the unique public address of that pool
+        const { name, id, createdBy } = result;
+        router.push(
+          `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${cAddress}&groupId=${id}&createdBy=${createdBy}`
+        );
+      } else {
+        throw Error;
+      }
     } catch (error) {
       presentToast("We could not create your group :(", "danger", banOutline);
       console.log(error, "error posting group");

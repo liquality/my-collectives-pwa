@@ -17,6 +17,7 @@ import { useAccount } from "wagmi";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { pathConstants } from "@/utils/routeNames";
 import { useSignInWallet } from "@/hooks/useSignInWallet";
+import ContractService from "@/services/ContractService";
 export interface InvitePageProps
   extends RouteComponentProps<{
     id?: string;
@@ -54,6 +55,7 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
     setProcessing(true);
     if (claimInviteAvailable) {
       try {
+        //await ContractService.joinCollective(invite.id, )
         await InvitesService.claim(invite.id, address!);
         router.push(pathConstants.mintPage.myCollectives);
       } catch (error) {
@@ -62,6 +64,8 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
     }
     setProcessing(false);
   }
+
+  console.log(invite, "wats invite?");
 
   useEffect(() => {
     if (user) {

@@ -16,7 +16,10 @@ export class InvitesService {
     "invites.createdAt",
     "groups.name as groupName",
     "groups.description as groupDescription",
-    "groups.publicAddress as groupAddress",
+    "groups.publicAddress as groupPublicAddress",
+    "groups.walletAddress as groupWalletAddress",
+    "groups.nonceKey as groupNonceKey",
+    "groups.salt as groupSalt",
     "users.publicAddress as userAddress",
   ];
 
