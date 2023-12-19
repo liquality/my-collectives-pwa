@@ -14,6 +14,7 @@ export type ChallengeImageCardProps = {
   onSwipe: (direction: string) => void;
   setIsDragging: Dispatch<SetStateAction<any>>;
   isDragging: boolean;
+  disableNav: boolean;
 };
 
 // Card component with destructured props
@@ -22,6 +23,7 @@ const ChallengeImageCard = ({
   isDragging,
   setIsDragging,
   onSwipe,
+  disableNav,
 }: ChallengeImageCardProps) => {
   const x = useMotionValue(0);
 
@@ -37,16 +39,18 @@ const ChallengeImageCard = ({
 
   return (
     <>
-      <motion.div
-        className="challenge-info-card-item"
-        style={{
-          y: drivenY,
-          rotate: drivenRotation,
-          x: drivenX,
-        }}
-      >
-        <ImageLoader src={url} className="challenge-info-img" />
-      </motion.div>
+      {
+        <motion.div
+          className="challenge-info-card-item"
+          style={{
+            y: drivenY,
+            rotate: drivenRotation,
+            x: drivenX,
+          }}
+        >
+          <ImageLoader src={url} className="challenge-info-img" />
+        </motion.div>
+      }
       <motion.div
         className={`challenge-info-card-item-element ${
           !isDragging ? "challenge-info-card-item-element-dragging" : ""
@@ -59,16 +63,17 @@ const ChallengeImageCard = ({
         onDragStart={() => setIsDragging(true)}
         onDragEnd={(_, info) => {
           setIsDragging(false);
+          if (!disableNav) {
+            const isOffBoundary =
+              info.offset.x > offsetBoundary || info.offset.x < -offsetBoundary;
 
-          const isOffBoundary =
-            info.offset.x > offsetBoundary || info.offset.x < -offsetBoundary;
-
-          if (isOffBoundary) {
-            const direction = info.offset.x > 0 ? "right" : "left";
-            onSwipe(direction);
+            if (isOffBoundary) {
+              const direction = info.offset.x > 0 ? "right" : "left";
+              onSwipe(direction);
+            }
           }
         }}
-        style={{ x }}
+        style={{ x: disableNav ? 0 : x }}
       ></motion.div>
     </>
   );

@@ -8,7 +8,6 @@ import {
   useIonRouter,
   IonContent,
 } from "@ionic/react";
-import { shortenAddress } from "@/utils";
 import { RouteComponentProps } from "react-router";
 import Header from "@/components/Header";
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
@@ -52,7 +51,6 @@ const MintCollectiveContent: React.FC<RouteComponentProps> = (routerProps) => {
         poolsCount: 0,
         messagesCount: 0,
       };
-
       setMyGroups((prevGroups) => [...(prevGroups || []), newGroup]);
       routerProps.history.replace(routerProps.location.pathname);
     }

@@ -1,5 +1,5 @@
 import PageTopBar from "@/components/PageTopBar";
-import useGetPoolsByGroupId from "@/hooks/Collective/useGetPoolsByGroupId";
+import useGetChallengesByGroupId from "@/hooks/Collective/useGetChallengesByGroupId";
 import { pathConstants } from "@/utils/routeNames";
 import { useParams } from "react-router";
 export interface DiscoverTopBarProps {
@@ -7,28 +7,28 @@ export interface DiscoverTopBarProps {
 }
 const CollectiveTopBar: React.FC<DiscoverTopBarProps> = ({ children }) => {
   const { groupId } = useParams<{ groupId: string }>();
-  const { pools, loading } = useGetPoolsByGroupId(groupId);
+  const { pools, loading } = useGetChallengesByGroupId(groupId);
 
   return (
     <PageTopBar
       tabs={[
         {
           label: `Mint | ${loading ? " " : pools?.length}`,
-          href: pathConstants.collectiveDetail.mints.replace(
+          href: pathConstants.collective.mints.replace(
             ":groupId",
             groupId
           ),
         },
         {
           label: "Chat",
-          href: pathConstants.collectiveDetail.chat.replace(
+          href: pathConstants.collective.chat.replace(
             ":groupId",
             groupId
           ),
         },
         {
           label: "Info",
-          href: pathConstants.collectiveDetail.info.replace(
+          href: pathConstants.collective.info.replace(
             ":groupId",
             groupId
           ),

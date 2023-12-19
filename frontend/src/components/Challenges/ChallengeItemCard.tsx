@@ -16,6 +16,7 @@ export interface ChallengeItemCardProps {
   tokenId: string;
   mintingContractAddress: string;
   imageUrl: string;
+  onChallengeSelected: (id: string) => void
 }
 
 const ChallengeItemCard: React.FC<ChallengeItemCardProps> = ({
@@ -23,16 +24,13 @@ const ChallengeItemCard: React.FC<ChallengeItemCardProps> = ({
   tokenId,
   mintingContractAddress,
   imageUrl,
+  onChallengeSelected
 }: ChallengeItemCardProps) => {
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loading, setLoading] = useState(true);
   const router = useIonRouter();
   const handleClick = () => {
-    if (!loading) {
-      router.push(
-        `/challenges/${id}`
-      );
-    }
+    onChallengeSelected(id)
   };
 
   return (

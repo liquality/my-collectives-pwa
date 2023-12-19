@@ -1,6 +1,7 @@
 import { Challenge } from "@/types/challenges";
 import { MintResult } from "@/types/mint";
 import {
+  convertDateToReadable,
   convertIpfsImageUrl,
   cutOffTooLongString,
   handleDisplayAddress,
@@ -33,10 +34,7 @@ export interface MintItemContentProps {
 
 const MintItemContent: React.FC<MintItemContentProps> = ({
   challenge: {
-    imageUrl,
-    name,
-    floorPrice,
-    groupCount,
+    imageUrl, name, floorPrice, groupCount, expiration,
     mintingContractAddress,
     tokenId,
     chainId,
@@ -85,7 +83,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
               ></IonSkeletonText>
             ) : null}
             <div className="challenge-time-chip challenge-time-chip-ontop">
-              28 mins left
+            {convertDateToReadable(expiration)}
             </div>
             <IonCardHeader>
               <IonCardTitle>
@@ -95,9 +93,9 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
                   handleDisplayAddress(creatorOfMint ?? "")
                 )}
               </IonCardTitle>
-              <IonCardSubtitle>
-                <div className="name">{cutOffTooLongString(name, 20)}</div>
-                <div className="cost">{floorPrice} ETH</div>
+              <IonCardSubtitle >
+                {<div className="name">{cutOffTooLongString(name, 30)}</div>}
+                
               </IonCardSubtitle>
             </IonCardHeader>
             <IonCardContent>
@@ -105,14 +103,6 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
                 <IonRow className="ion-justify-content-left ion-align-items-center">
                   <IonCol size="auto">
                     <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>
-                    <IonLabel>80</IonLabel>
-                  </IonCol>
-                  <IonCol size="auto">
-                    <IonIcon src="/assets/icons/people-tile.svg"></IonIcon>
-                    <IonLabel>{`${groupCount || 0}`}</IonLabel>
-                  </IonCol>
-                  <IonCol size="auto">
-                    <IonIcon src="/assets/icons/message-tile.svg"></IonIcon>
                     <IonLabel>80</IonLabel>
                   </IonCol>
                 </IonRow>

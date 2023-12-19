@@ -13,7 +13,7 @@ import { RouteComponentProps, useParams } from "react-router";
 import Header from "@/components/Header";
 import { Challenge } from "@/types/challenges";
 import SelectPoolModal from "../Mint/SelectPoolModal";
-import useGetPoolsByGroupId from "@/hooks/Collective/useGetPoolsByGroupId";
+import useGetChallengesByGroupId from "@/hooks/Collective/useGetChallengesByGroupId";
 import useGetGroupById from "@/hooks/Groups/useGetGroupById";
 import {
   convertIpfsImageUrl,
@@ -37,7 +37,7 @@ export interface ManageCollectivePageProps
 const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
   const { goBack } = useIonRouter();
   const { groupId } = useParams<{ groupId: string }>();
-  const { pools } = useGetPoolsByGroupId(groupId);
+  const { pools } = useGetChallengesByGroupId(groupId);
   const { group } = useGetGroupById(groupId);
   const [updatedGroup, setUpdatedGroup] = useState({
     name: "",
