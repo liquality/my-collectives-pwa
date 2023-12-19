@@ -93,7 +93,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         tokenContracts,
         tokenContracts
       );
-      const { cWallet, cAddress, nonce } = createdContract;
+      const { cWallet, cAddress, nonce, salt } = createdContract;
       console.log(createdContract, "create group contract?");
       const result = await ApiService.createGroup({
         group: groupObject,
@@ -105,6 +105,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
           group: {
             publicAddress: cAddress,
             walletAddress: cWallet,
+            salt: salt,
             nonceKey: nonce?.toString(),
           },
           pools: [],

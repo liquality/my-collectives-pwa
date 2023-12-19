@@ -20,7 +20,7 @@ const ContractService = {
         //TODO: store salt, nonce, cAddress, cWallet in db 
         console.log("!!!!! response => ", response);
 
-        return response
+        return { salt, ...response }
     },
     getProvider: function () {
         return new ethers.providers.Web3Provider((window as any).ethereum)
