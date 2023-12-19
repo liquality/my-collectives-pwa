@@ -7,7 +7,8 @@ export const pathConstants = {
         createCollective: "/mint/createCollective",
         noCollectives: "/mint/noCollectives",
         collectiveInvites: "/mint/collectiveInvites",
-        mymints: "/mint/mymints"
+        mymints: "/mint/mymints",
+        nftPage: "/mint/nft/:challengeId",
 
     },
     discover: {

@@ -19,6 +19,7 @@ import { pathConstants } from "@/utils/routeNames";
 import MyMints from "./MyMints";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 import CollectiveDetail from "./CollectiveDetail/CollectiveDetail";
+import NFTPage from "./NFTPage";
 
 const Mint: React.FC<RouteComponentProps> = ({ match }) => {
   const { myGroups, loading } = useGetMyGroups();
@@ -54,6 +55,8 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
               path={pathConstants.collective.collective}
               component={CollectiveDetail}
             />
+
+            <Route path={pathConstants.mintPage.nftPage} component={NFTPage} exact />
             <Route exact path={pathConstants.mintPage.mint}>
               <Redirect
                 to={

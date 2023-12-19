@@ -5,11 +5,14 @@ import { Challenge, ChallengeCreation } from "@/types/challenges";
 import { Auth } from "@/utils";
 const ApiService = {
   createGroup: async function (groupObject: any) {
-    return NetworkService.postResourceWithAuth("/v1/groups/", groupObject,);
+    return NetworkService.postResourceWithAuth("/v1/groups/", groupObject);
   },
 
   updateGroup: async function (groupId: string, groupObject: any) {
-    return NetworkService.putResourceWithAuth("/v1/groups/" + groupId, groupObject,);
+    return NetworkService.putResourceWithAuth(
+      "/v1/groups/" + groupId,
+      groupObject
+    );
   },
 
   //Includes groupId and public address
@@ -23,7 +26,6 @@ const ApiService = {
   readGroup: async function (groupId: string) {
     return NetworkService.getResourceWithAuth("/v1/groups/" + groupId);
   },
-
 
   readGroupByMemberAddress: async function (memberAddress: string) {
     return NetworkService.getResourceWithAuth(
@@ -44,9 +46,15 @@ const ApiService = {
     return NetworkService.getResourceWithAuth("/v1/challenges");
   },
 
+  readChallenge: async function (id: string) {
+    return NetworkService.getResourceWithAuth(`/v1/challenges/${id}`);
+  },
 
   createChallenges: async function (challengeObject: ChallengeCreation) {
-    return NetworkService.postResourceWithAuth("/v1/challenges", challengeObject);
+    return NetworkService.postResourceWithAuth(
+      "/v1/challenges",
+      challengeObject
+    );
   },
 
   getNumberOfMembersInGroup: async function (groupAddress: string) {
@@ -97,14 +105,15 @@ const ApiService = {
     });
   },
 
-  getLeaderboardMintActivity: async function (collectionAddress: string, network: string, tokenId: string) {
-    return NetworkService.getResourceWithAuth(`/v1/nft/mintactivity/${collectionAddress}/${network}/${tokenId}`);
+  getLeaderboardMintActivity: async function (
+    collectionAddress: string,
+    network: string,
+    tokenId: string
+  ) {
+    return NetworkService.getResourceWithAuth(
+      `/v1/nft/mintactivity/${collectionAddress}/${network}/${tokenId}`
+    );
   },
-
-
-
-
-
 };
 
 export default ApiService;
