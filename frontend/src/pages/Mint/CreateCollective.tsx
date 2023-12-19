@@ -21,15 +21,10 @@ import {
   convertIpfsImageUrl,
   cutOffTooLongString,
   handleDisplayAddress,
-  shortenAddress,
 } from "@/utils";
 import useToast from "@/hooks/useToast";
 import { banOutline } from "ionicons/icons";
-import * as MyCollectives from "@koderholic/my-collectives";
-import { usePublicClient } from "wagmi";
 
-import { Config } from "@koderholic/my-collectives";
-import { generateSalt } from "@/utils/salt";
 import ContractService from "@/services/ContractService";
 
 export interface CreateCollectiveProps {
@@ -48,9 +43,6 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
   });
   const [allSelectedPools, setAllSelectedPools] = useState<Challenge[]>([]);
   const { presentToast } = useToast();
-  const publicClient = usePublicClient();
-
-  console.log(publicClient, "PUBLIC CLIENT?");
 
   const page = useRef(undefined);
   const selectPoolModal = useRef<HTMLIonModalElement>(null);
@@ -92,6 +84,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       description: createGroup.description,
     };
 
+    //TODO: clean this up after MVP
     try {
       const tokenContracts = allSelectedPools.map(
         (item) => item.mintingContractAddress
@@ -116,9 +109,6 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
           pools: [],
         });
         if (!updatedGroup.ok) throw Error;
-
-        //TODO: in the backend or frontend, when a POOL is created, need to call createPool() from smart contract, which returns
-        //the unique public address of that pool
         const { name, id, createdBy } = result;
         router.push(
           `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${cAddress}&groupId=${id}&createdBy=${createdBy}&activePools=${allSelectedPools.length}`
