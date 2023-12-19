@@ -27,7 +27,7 @@ export interface ChallengeItemModalProps {
   presentingElement?: HTMLElement;
 }
 
-const initialInfoBreakpoint = 0.12;
+const initialInfoBreakpoint = 0.35;
 type CardSwipeDirection = "left" | "right";
 
 export const easeOutExpo = [0.16, 1, 0.3, 1];
@@ -62,7 +62,7 @@ const ChallengeItemModal = ({
   const [nextIndex, setNextIndex] = useState(1);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [applyRejectAnimation, setApplyRejectAnimation] = useState(false);
-
+  const [disableNav, setDisableNav] = useState(false);
   const infoSheetModalRef = useRef<HTMLIonModalElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -142,7 +142,13 @@ const ChallengeItemModal = ({
       }
     }
   }, [selectedChallengeId]);
-
+  useEffect(() => {
+    if (challenges.length <= 1) {
+      setDisableNav(true);
+    } else {
+      setDisableNav(false);
+    }
+  }, [challenges]);
   useEffect(() => {
     if (infoHeight > initialInfoBreakpoint) {
       setShowArrowDown(true);
@@ -181,27 +187,33 @@ const ChallengeItemModal = ({
         <IonGrid className="challenge-info-grid">
           <IonRow>
             <IonCol className="challenge-info-cards">
+              {disableNav ? null : (
+                <AnimatePresence>
+                  <motion.div
+                    variants={cardVariants}
+                    animate={
+                      !disableNav && applyRejectAnimation ? "" : "current"
+                    }
+                  >
+                    <ChallengeImageCard
+                      disableNav={disableNav}
+                      onSwipe={handleCardSwipe}
+                      url={convertIpfsImageUrl(
+                        challenges[nextIndex]?.imageUrl || ""
+                      )}
+                      setIsDragging={setIsDragging}
+                      isDragging={isDragging}
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              )}
               <AnimatePresence>
                 <motion.div
                   variants={cardVariants}
-                  animate={applyRejectAnimation ? "" : "current"}
+                  animate={!disableNav && applyRejectAnimation ? "exit" : ""}
                 >
                   <ChallengeImageCard
-                    onSwipe={handleCardSwipe}
-                    url={convertIpfsImageUrl(
-                      challenges[nextIndex]?.imageUrl || ""
-                    )}
-                    setIsDragging={setIsDragging}
-                    isDragging={isDragging}
-                  />
-                </motion.div>
-              </AnimatePresence>
-              <AnimatePresence>
-                <motion.div
-                  variants={cardVariants}
-                  animate={applyRejectAnimation ? "exit" : ""}
-                >
-                  <ChallengeImageCard
+                    disableNav={disableNav}
                     onSwipe={handleCardSwipe}
                     url={convertIpfsImageUrl(
                       challenges[currentIndex]?.imageUrl || ""
@@ -215,7 +227,11 @@ const ChallengeItemModal = ({
           </IonRow>
           <IonRow>
             <IonCol className="challenge-item-actions">
-              <IonButton color="danger" onClick={onClickReject}>
+              <IonButton
+                disabled={disableNav}
+                color="danger"
+                onClick={onClickReject}
+              >
                 <IonIcon icon={closeOutline}></IonIcon>
               </IonButton>
               <IonButton color="primary" onClick={onClickMint}>

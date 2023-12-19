@@ -22,11 +22,11 @@ export const pathConstants = {
         airdrops: "/rewards/airdrops",
         manage: "/manage/:groupId"
     },
-    collectiveDetail: {
-        collectiveDetail: "/collectiveDetail",
-        mints: "/collectiveDetail/:groupId/mints",
-        chat: "/collectiveDetail/:groupId/chat",
-        info: "/collectiveDetail/:groupId/info",
+    collective: {
+        collective: "/mint/collective",
+        mints: "/mint/collective/:groupId/mints",
+        chat: "/mint/collective/:groupId/chat",
+        info: "/mint/collective/:groupId/info",
     },
     invite: {
         index: "/invite"

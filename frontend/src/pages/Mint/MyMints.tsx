@@ -12,7 +12,7 @@ import MintTopBar from "@/components/TopBars/MintTopBar";
 
 import PageSearchBar from "@/components/PageSearchBar";
 import useGetGroupById from "@/hooks/Groups/useGetGroupById";
-import useGetPoolsByGroupId from "@/hooks/Collective/useGetPoolsByGroupId";
+import useGetChallengesByGroupId from "@/hooks/Collective/useGetChallengesByGroupId";
 import { useMemo, useState } from "react";
 
 export interface MyMintsProps
@@ -22,7 +22,7 @@ export interface MyMintsProps
 const MyMints: React.FC<MyMintsProps> = (routerProps) => {
   const { groupId } = routerProps.match.params;
   const { group } = useGetGroupById(groupId);
-  const { pools, loading } = useGetPoolsByGroupId(
+  const { pools, loading } = useGetChallengesByGroupId(
     "a29e1fc6-4e63-4970-b063-802bae62dfef"
   );
   const [mintFilter, setMintFilter] = useState("");

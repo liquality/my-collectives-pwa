@@ -37,3 +37,9 @@ export interface Pool {
     tokenId: string;
 }
 
+
+
+export type GroupedChallenge = {
+    [key: string]: Challenge[];
+  };
+  

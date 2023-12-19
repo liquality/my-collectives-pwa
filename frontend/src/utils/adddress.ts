@@ -57,13 +57,13 @@ export function convertDateToReadable(expiration: Date | string): string {
   const days = Math.floor(hours / 24);
 
   if (days > 0) {
-    return `${days} day${days === 1 ? '' : 's'} left...`;
+    return `${days} day${days === 1 ? '' : 's'} left`;
   } else if (hours > 0) {
-    return `${hours} hour${hours === 1 ? '' : 's'} left...`;
+    return `${hours} hour${hours === 1 ? '' : 's'} left`;
   } else if (minutes > 0) {
-    return `${minutes} minute${minutes === 1 ? '' : 's'} left...`;
+    return `${minutes} minute${minutes === 1 ? '' : 's'} left`;
   } else {
-    return `${seconds} second${seconds === 1 ? '' : 's'} left...`;
+    return `${seconds} second${seconds === 1 ? '' : 's'} left`;
   }
 }
 
