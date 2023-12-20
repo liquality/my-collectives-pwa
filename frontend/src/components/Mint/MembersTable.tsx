@@ -1,3 +1,4 @@
+import { shortenAddress } from "@/utils";
 import {
   IonGrid,
   IonRow,
@@ -8,12 +9,13 @@ import {
 } from "@ionic/react";
 import React, { useState } from "react";
 
-export interface MembersTableProps {}
+export interface MembersTableProps {
+  members: any[] | null;
+}
 
-const MembersTable: React.FC<MembersTableProps> = (
-  props: MembersTableProps
-) => {
-  const staticDummyArray = [1, 2, 3, 4];
+const MembersTable: React.FC<MembersTableProps> = ({
+  members,
+}: MembersTableProps) => {
   return (
     <IonGrid className="members-table">
       <IonRow className="ion-justify-content-between ">
@@ -28,10 +30,10 @@ const MembersTable: React.FC<MembersTableProps> = (
           <IonCardSubtitle>TOTAL</IonCardSubtitle>
         </IonCol>
       </IonRow>
-      {staticDummyArray.map((item, index) => (
+      {members?.map((member, index) => (
         <IonRow className="ion-justify-content-between " key={index}>
           <IonCol size="auto">
-            <IonLabel>0x1234...5678</IonLabel>
+            <IonLabel>{shortenAddress(member.publicAddress)}</IonLabel>
           </IonCol>
           <IonCol size="auto">
             <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>

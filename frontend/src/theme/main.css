@@ -731,32 +731,51 @@ ion-content.invite-page-link {
   word-wrap: break-word;
 }
 
-.chat-styles ion-text-area {
-  border-radius: 100px;
-  background-color: var(--light-purple-background);
-  min-height: 50px !important;
-
-  display: flex;
-  width: 100%;
-  padding: 6px 8px;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-  text-align: center;
-  padding-top: 5px;
+.chat-message-input {
+  padding-left: 1rem;  
+  border-radius: 6.25rem;
+  border: 1px solid var(--ion-color-primary, #7700d5);
 }
 
-.chat-styles ion-text-area:focus {
-  border-radius: 100px;
-  background-color: white;
-  min-height: 50px !important;
-  border: 1px solid var(--buttons-active, #7700d5) !important;
-  display: flex;
+
+.chat-container .chat-item {
   width: 100%;
-  padding: 6px 8px;
-  align-items: center;
-  text-align: center;
-  padding-top: 5px;
+}
+
+.chat-container .chat-item .message {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.chat-container .chat-item .message-detail {
+  white-space: nowrap;
+}
+.chat-container .chat-bubble {
+  font-feature-settings: "clig off, liga off" !important;
+  font-size: 0.875rem !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: 1.313rem !important;
+  letter-spacing: 0.031rem;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  position: relative;
+  padding: 0.75rem;
+  max-width: 80%;
+}
+
+.chat-container .chat-bubble.left {
+  background-color: #9747ff;
+  border-radius: 24px 24px 24px 0px;
+  color: #ffffff;
+  float: left;
+}
+
+.chat-container .chat-bubble.right {
+  background-color: #ebeaea;
+  border-radius: 24px 24px 0px 24px;
+  color: #000000;
+  float: right;
 }
 
 .info-card-container {
@@ -868,7 +887,7 @@ ion-content.invite-page-link {
 }
 
 ion-modal.challenge-item-modal,
-ion-modal.challenge-item-mint-modal  {
+ion-modal.challenge-item-mint-modal {
   --min-height: 85% !important;
 }
 

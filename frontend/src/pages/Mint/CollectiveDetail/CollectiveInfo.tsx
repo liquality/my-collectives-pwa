@@ -36,7 +36,7 @@ export interface CollectiveInfoProps
 
 const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
   const { groupId } = match.params;
-  const { group, loading } = useGetGroupById(groupId);
+  const { group, members, loading } = useGetGroupById(groupId);
   const [inviteLink, setInviteLink] = useState<string>("");
 
   return (
@@ -60,31 +60,31 @@ const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
                     style={{ fontSize: "0.9rem" }}
                     src="/assets/icons/mint-tile.svg"
                   ></IonIcon>
-                  <IonLabel>10</IonLabel>
+                  <IonLabel>{group?.mintCount || 0}</IonLabel>
                 </IonCol>
                 <IonCol size="auto">
                   <IonIcon
                     style={{ fontSize: "1rem" }}
                     src="/assets/icons/people-tile.svg"
                   ></IonIcon>
-                  <IonLabel>200</IonLabel>
+                  <IonLabel>{group?.memberCount || 0}</IonLabel>
                 </IonCol>
                 <IonCol size="auto">
                   <IonIcon
                     style={{ fontSize: "0.7rem", marginTop: 1 }}
                     src="/assets/icons/message-tile.svg"
                   ></IonIcon>
-                  <IonLabel>4</IonLabel>
+                  <IonLabel>{group?.messagesCount || 0}</IonLabel>
                 </IonCol>
               </IonRow>
             </IonCardContent>
           </IonCard>
           <IonCard className="info-card-container second-card">
             <IonRow className="ion-justify-content-between ion-align-items-center">
-              <IonCardTitle>Members | 200 </IonCardTitle>
+              <IonCardTitle>Members | {group?.memberCount || 0} </IonCardTitle>
               <IonText style={{ fontSize: "13px" }}>See All</IonText>
             </IonRow>
-            <MembersTable />
+            <MembersTable members={members} />
           </IonCard>
           <IonCard className="info-card-container third-card">
             <IonCardTitle>Collective Rewards | 6 </IonCardTitle>
