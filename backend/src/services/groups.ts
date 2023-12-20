@@ -101,7 +101,7 @@ export class GroupsService {
       .join("user_groups", "groups.id", "=", "user_groups.groupId")
       .join("users", "users.id", "=", "user_groups.userId")
       .where("groups.id", "=", id)
-      .select<Group[]>("user.id", "user.publicAddress");
+      .select<Group[]>("users.id", "users.publicAddress");
   }
 
   public static find(id: string): Promise<Group | null> {

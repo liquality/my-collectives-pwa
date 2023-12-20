@@ -28,6 +28,10 @@ const ApiService = {
     return NetworkService.getResourceWithAuth("/v1/groups/" + groupId);
   },
 
+  getGroupMembers: async function (groupId: string) {
+    return NetworkService.getResourceWithAuth(`/v1/groups/${groupId}/members`);
+  },
+
   readGroupByMemberAddress: async function (memberAddress: string) {
     return NetworkService.getResourceWithAuth(
       `/v1/groups/address/${memberAddress}`,
