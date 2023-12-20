@@ -77,9 +77,9 @@ const CollectiveChat: React.FC<CollectiveChatProps> = ({ match }) => {
         {group && !loading ? (
           <IonList lines="none" className="ion-padding chat-container">
             {messages.map((message, index) => {
-              // const isMyMessage =
-              //   message.userAddress === address || user.id === message.userId;
-              const isMyMessage = index % 2 === 0;
+              const isMyMessage =
+                message.userAddress === address || user.id === message.userId;
+              
               return (
                 <IonItem key={index}>
                   <div className="chat-item">
