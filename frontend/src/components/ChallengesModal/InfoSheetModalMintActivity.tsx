@@ -20,10 +20,10 @@ const InfoSheetModalMintActivity: React.FC<InfoSheetModalMintActivityProps> = (
   return (
     <IonGrid className="ion-padding">
       <IonRow>
-        <IonCol size="8" className="ion-text-uppercase">
+        <IonCol size="6" className="ion-text-uppercase">
           Contributors
         </IonCol>
-        <IonCol size="2" className="ion-text-uppercase">
+        <IonCol size="4" className="ion-text-uppercase">
           Amount
         </IonCol>
         <IonCol size="2" className="ion-text-uppercase">
@@ -32,8 +32,8 @@ const InfoSheetModalMintActivity: React.FC<InfoSheetModalMintActivityProps> = (
       </IonRow>
       {mintActivity?.map((mint: any) => (
         <IonRow>
-          <IonCol size="8">{shortenAddress(mint.address)} </IonCol>
-          <IonCol size="2">
+          <IonCol size="6">{shortenAddress(mint.address)} </IonCol>
+          <IonCol size="4">
             <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>{" "}
             {mint.totalCount}
           </IonCol>
