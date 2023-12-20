@@ -21,21 +21,23 @@ const InfoSheetModalMintActivity: React.FC<InfoSheetModalMintActivityProps> = (
     <IonGrid className="ion-padding">
       <IonRow>
         <IonCol size="8" className="ion-text-uppercase">
-          Collectors
+          Contributors
         </IonCol>
-        <IonCol size="4" className="ion-text-uppercase">
-          Mints
+        <IonCol size="2" className="ion-text-uppercase">
+          Amount
+        </IonCol>
+        <IonCol size="2" className="ion-text-uppercase">
+          Total
         </IonCol>
       </IonRow>
       {mintActivity?.map((mint: any) => (
         <IonRow>
           <IonCol size="8">{shortenAddress(mint.address)} </IonCol>
-          <IonCol size="4">
-            {" "}
+          <IonCol size="2">
             <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>{" "}
             {mint.totalCount}
           </IonCol>
-          {/* volume: {mint.amount?.totalNative ?? "?"} */}
+          <IonCol size="2">{mint.amount?.totalNative ?? "?"}</IonCol>
         </IonRow>
       ))}
     </IonGrid>
