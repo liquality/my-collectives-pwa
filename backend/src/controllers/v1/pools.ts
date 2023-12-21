@@ -11,7 +11,7 @@ export class PoolsController {
     } else {
       try {
         const pools = await PoolsService.findByGroup(groupId);
-        
+
         res.status(200).send(pools);
       } catch (err: any) {
         res.status(500).send({ error: err.message });
@@ -21,12 +21,12 @@ export class PoolsController {
 
   public findAll: RequestHandler = async (req, res) => {
     try {
-        const pools = await PoolsService.findAll();
+      const pools = await PoolsService.findAll();
 
-        res.status(200).send(pools);
-      } catch (err: any) {
-        res.status(500).send({ error: err.message });
-      }
+      res.status(200).send(pools);
+    } catch (err: any) {
+      res.status(500).send({ error: err.message });
+    }
   };
 
   public find: RequestHandler = async (req, res) => {

@@ -27,15 +27,17 @@ import { useSignInWallet } from "@/hooks/useSignInWallet";
 import GenerateInviteBtn from "@/components/GenerateInvite";
 import { pathConstants } from "@/utils/routeNames";
 import Header from "@/components/Header";
+import userGetRewardsSummary from "@/hooks/userGetRewardsSummary";
 
 const Summary: React.FC<RouteComponentProps> = (routerProps) => {
   //TODO: change parent tag to IonPage
 
   const { myGroups, loading, reload } = useGetMyGroups();
   const { user } = useSignInWallet();
+  const { summary, loading: loadingSummary } = userGetRewardsSummary();
   const router = useIonRouter();
 
-  const loadingAllData = !myGroups && loading;
+  const loadingAllData = !myGroups && loading && loadingSummary;
 
   const myCollectives = useMemo(() => {
     if (myGroups && user?.id) {
@@ -74,7 +76,9 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
               <IonRow>
                 <IonCol size="6">
                   <div className="rewards-summary-item">
-                    <div className="rewards-summary-amount">120</div>
+                    <div className="rewards-summary-amount">
+                      {summary?.invitesCount || 0}
+                    </div>
                     <div className="rewards-summary-description">
                       Succesful Invites
                     </div>
@@ -82,7 +86,9 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
                 </IonCol>
                 <IonCol size="6">
                   <div className="rewards-summary-item">
-                    <div className="rewards-summary-amount">47</div>
+                    <div className="rewards-summary-amount">
+                      {summary?.mintsAmount || 0}
+                    </div>
                     <div className="rewards-summary-description">Mints</div>
                   </div>
                 </IonCol>
@@ -90,13 +96,17 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
               <IonRow>
                 <IonCol size="6">
                   <div className="rewards-summary-item">
-                    <div className="rewards-summary-amount">4</div>
+                    <div className="rewards-summary-amount">
+                      {summary?.rewardsCount || 0}
+                    </div>
                     <div className="rewards-summary-description">Rewards</div>
                   </div>
                 </IonCol>
                 <IonCol size="6">
                   <div className="rewards-summary-item">
-                    <div className="rewards-summary-amount">0.056</div>
+                    <div className="rewards-summary-amount">
+                      {summary?.ethEarned || "0.00"}
+                    </div>
                     <div className="rewards-summary-description">
                       ETH Earned
                     </div>
