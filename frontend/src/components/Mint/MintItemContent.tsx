@@ -4,6 +4,7 @@ import {
   convertDateToReadable,
   convertIpfsImageUrl,
   cutOffTooLongString,
+  displayPrice,
   handleDisplayAddress,
   shortenAddress,
 } from "@/utils";
@@ -26,6 +27,9 @@ import {
 import { add, remove } from "ionicons/icons";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import MintZoraLogic from "../MintZoraLogic";
+import { SimulateContractParameters } from "viem";
+import { BigNumberish, ethers } from "ethers";
+import { useGetZoraSDKParams } from "@/hooks/useGetZoraSDKParams";
 
 export interface MintItemContentProps {
   challenge: Challenge;
@@ -34,7 +38,12 @@ export interface MintItemContentProps {
 
 const MintItemContent: React.FC<MintItemContentProps> = ({
   challenge: {
-    imageUrl, name, floorPrice, groupCount, expiration,
+    totalMints,
+    imageUrl,
+    name,
+    floorPrice,
+    groupCount,
+    expiration,
     mintingContractAddress,
     tokenId,
     chainId,
@@ -44,22 +53,28 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
 }: MintItemContentProps) => {
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loadingImage, setLoadingImage] = useState(true);
-  const [amount, setAmount] = useState(1);
+  const [quantityToMint, setQuantityToMint] = useState(1);
   const router = useIonRouter();
+  const { params } = useGetZoraSDKParams(
+    mintingContractAddress,
+    chainId,
+    quantityToMint,
+    tokenId ?? undefined
+  );
 
   const handleDetailsClick = () => {};
   const handleChangeCollectiveClick = () => {};
   const handleMintClick = () => {};
 
   const handlePlusClick = () => {
-    setAmount(amount + 1);
+    setQuantityToMint(quantityToMint + 1);
   };
 
   const handleMinusClick = () => {
-    if (amount > 2) {
-      setAmount(amount - 1);
+    if (quantityToMint > 2) {
+      setQuantityToMint(quantityToMint - 1);
     } else {
-      setAmount(1);
+      setQuantityToMint(1);
     }
   };
 
@@ -83,7 +98,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
               ></IonSkeletonText>
             ) : null}
             <div className="challenge-time-chip challenge-time-chip-ontop">
-            {convertDateToReadable(expiration)}
+              {convertDateToReadable(expiration)}
             </div>
             <IonCardHeader>
               <IonCardTitle>
@@ -93,9 +108,8 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
                   handleDisplayAddress(creatorOfMint ?? "")
                 )}
               </IonCardTitle>
-              <IonCardSubtitle >
+              <IonCardSubtitle>
                 {<div className="name">{cutOffTooLongString(name, 30)}</div>}
-                
               </IonCardSubtitle>
             </IonCardHeader>
             <IonCardContent>
@@ -103,7 +117,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
                 <IonRow className="ion-justify-content-left ion-align-items-center">
                   <IonCol size="auto">
                     <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>
-                    <IonLabel>80</IonLabel>
+                    <IonLabel>{totalMints}</IonLabel>
                   </IonCol>
                 </IonRow>
               </IonGrid>
@@ -126,7 +140,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
           <IonInput
             className="challenge-mint-amount"
             type="number"
-            value={amount}
+            value={quantityToMint}
           ></IonInput>
           <IonButton
             className="challenge-mint-amount-btn"
@@ -134,14 +148,14 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
             shape="round"
             size="small"
             onClick={handleMinusClick}
-            disabled={amount <= 1}
+            disabled={quantityToMint <= 1}
           >
             <IonIcon slot="icon-only" icon={remove}></IonIcon>
           </IonButton>
         </IonCol>
       </IonRow>
       <IonRow className="ion-justify-content-center">
-        <IonCol size="6">NFT & Fee: {floorPrice}</IonCol>
+        <IonCol size="6">NFT & Fee: {displayPrice(floorPrice, params)}</IonCol>
         <IonCol size="2">
           <IonButton fill="clear" size="small" onClick={handleDetailsClick}>
             Details
@@ -176,15 +190,8 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
             color="primary"
             shape="round"
           >
-            Mint {floorPrice} ETH
+            Mint {displayPrice(floorPrice, params)} ETH
           </IonButton>
-          {chainId && mintingContractAddress ? (
-            <MintZoraLogic
-              chainId={chainId}
-              tokenId={tokenId ?? undefined}
-              tokenContract={mintingContractAddress as `0x${string}`}
-            />
-          ) : null}
         </IonCol>
       </IonRow>
     </IonGrid>

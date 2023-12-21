@@ -13,7 +13,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { useEffect, useState } from "react";
 import InvitesService from "@/services/Invites";
 import { shortenAddress } from "@/utils/adddress";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { pathConstants } from "@/utils/routeNames";
 import { useSignInWallet } from "@/hooks/useSignInWallet";
@@ -34,6 +34,9 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
   const { open } = useWeb3Modal();
   const { user } = useSignInWallet();
   const claimInviteAvailable = invite && user && address;
+  const { chains, chain } = useNetwork();
+
+  console.log(chains, "CHAAAINS", chain, "CHAAIN");
 
   useEffect(() => {
     setLoading(true);
