@@ -92,12 +92,32 @@ export class GroupsService {
       .countDistinct({ activePoolsCount: dbClient.raw('CASE WHEN challenges.expiration > CURRENT_TIMESTAMP THEN pools.id ELSE NULL END') })
       .orderBy('groups.createdAt', 'desc');
 
-
-
     return result
   }
 
-
+public static async findByChallenge(challengeId: string): Promise<GroupAllInfo[]> {
+    const result: any[] = await dbClient('pools')
+      .leftJoin('groups', 'pools.groupId', '=', 'groups.id')
+      .leftJoin('challenges', 'challenges.id', '=', 'pools.challengeId')
+      .leftJoin('user_groups', 'groups.id', '=', 'user_groups.groupId')
+      .leftJoin('users', 'users.id', '=', 'user_groups.userId')
+      .where('challenges.id', '=', challengeId)
+      .groupBy('groups.id')
+      .select([
+        'groups.id',
+        'groups.name',
+        'groups.description',
+        'groups.publicAddress',
+        'groups.walletAddress',
+        'groups.nonceKey',
+        'groups.createdAt',
+        'groups.createdBy',
+        'groups.mintCount'
+      ])
+      .orderBy('groups.createdAt', 'desc');
+      
+    return result
+  }
 
   public static async findMembers(id: string): Promise<Group[]> {
     return dbClient("groups")
