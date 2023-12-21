@@ -1,7 +1,5 @@
 import { convertIpfsImageUrl, shortenAddress } from "@/utils";
 import {
-  IonImg,
-  useIonRouter,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -16,7 +14,7 @@ export interface ChallengeItemCardProps {
   tokenId: string;
   mintingContractAddress: string;
   imageUrl: string;
-  onChallengeSelected: (id: string) => void
+  onChallengeSelected: (id: string) => void;
 }
 
 const ChallengeItemCard: React.FC<ChallengeItemCardProps> = ({
@@ -24,13 +22,12 @@ const ChallengeItemCard: React.FC<ChallengeItemCardProps> = ({
   tokenId,
   mintingContractAddress,
   imageUrl,
-  onChallengeSelected
+  onChallengeSelected,
 }: ChallengeItemCardProps) => {
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loading, setLoading] = useState(true);
-  const router = useIonRouter();
   const handleClick = () => {
-    onChallengeSelected(id)
+    onChallengeSelected(id);
   };
 
   return (
