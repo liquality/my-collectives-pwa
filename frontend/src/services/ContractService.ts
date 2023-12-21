@@ -61,6 +61,11 @@ const ContractService = {
         const response = await MyCollectives.HoneyPot.get(this.getProvider(), salt, tokenContract)
         console.log("!!!!! response honey pot address => ", response)
         return response
+    },
+
+    async createPools(cAddress: string, cWallet: string, nonceKey: bigint, tokenContracts: string[], honeyPots: string[]) {
+        const response = await MyCollectives.Collective.createPools(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, { tokenContracts, honeyPots, })
+        console.log("!!!!! response => createPools for each ", response)
     }
 
 
