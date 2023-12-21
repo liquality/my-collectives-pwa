@@ -25,16 +25,35 @@ import {
   IonInput,
 } from "@ionic/react";
 import { add, remove } from "ionicons/icons";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import MintZoraLogic from "../MintZoraLogic";
 import { SimulateContractParameters } from "viem";
 import { BigNumberish, ethers } from "ethers";
 import { useGetZoraSDKParams } from "@/hooks/useGetZoraSDKParams";
+import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
+import ContractService from "@/services/ContractService";
 
 export interface MintItemContentProps {
   challenge: Challenge;
   setResult: Dispatch<SetStateAction<MintResult | null>>;
 }
+
+const staticMinterGroup = {
+  id: "5c58ca0f-65cf-4849-a413-729efab5842c",
+  name: "Some Goerli Minter WOW",
+  description: "hey",
+  publicAddress: "0x96492A84461aaB0B27610a0C5Bf314637617fe19",
+  walletAddress: "0x6566E005634c0B03F560DdEf4cc0D297E35C4d28",
+  nonceKey: BigInt(4496831648435611),
+  salt: "5542769413479739",
+  createdAt: "2023-12-21T15:42:35.094Z",
+  createdBy: "fd5847fb-60ca-4f30-9297-32a6cd35ed8e",
+  mintCount: 0,
+  memberCount: "1",
+  poolsCount: "1",
+  messagesCount: "0",
+  activePoolsCount: "1",
+};
 
 const MintItemContent: React.FC<MintItemContentProps> = ({
   challenge: {
@@ -45,6 +64,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     groupCount,
     expiration,
     mintingContractAddress,
+    honeyPotAddress,
     tokenId,
     chainId,
     creatorOfMint,
@@ -61,10 +81,42 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     quantityToMint,
     tokenId ?? undefined
   );
+  const { myGroups } = useGetMyGroups();
+
+  console.log(myGroups, "my groups");
+
+  useEffect(() => {}, [quantityToMint, params?.value]);
+  console.log(params, "params?");
 
   const handleDetailsClick = () => {};
   const handleChangeCollectiveClick = () => {};
-  const handleMintClick = () => {};
+
+  const handleMintClick = async () => {
+    if (params) {
+      console.log("Handle mint click!");
+      const { publicAddress, walletAddress, nonceKey } = staticMinterGroup;
+      console.log(
+        publicAddress,
+        walletAddress,
+        nonceKey,
+        params.value ?? BigInt(0),
+        mintingContractAddress,
+        honeyPotAddress,
+        "ALL OF MY PARAMS"
+      );
+      const mintResult = await ContractService.poolMint(
+        publicAddress,
+        walletAddress,
+        nonceKey,
+        params.value ?? BigInt(0),
+        mintingContractAddress,
+        honeyPotAddress
+      );
+      console.log(mintResult);
+
+      //setResult({success: true}) // only set result once minting is done
+    }
+  };
 
   const handlePlusClick = () => {
     setQuantityToMint(quantityToMint + 1);
@@ -186,7 +238,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
       <IonRow className="ion-justify-content-center">
         <IonCol size="auto">
           <IonButton
-            onClick={() => setResult({ success: true })}
+            onClick={() => handleMintClick()}
             color="primary"
             shape="round"
           >

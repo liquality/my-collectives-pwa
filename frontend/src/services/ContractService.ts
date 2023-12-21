@@ -50,6 +50,29 @@ const ContractService = {
         console.log("!!!!! response => createPools for each ", response)
     },
 
+    async poolMint(cAddress: string, cWallet: string, nonceKey: bigint, amount: bigint, tokenContract: string, poolHoneyPotAddress: string) {
+        const pool = await this.getPool(cAddress, cWallet, nonceKey, poolHoneyPotAddress)
+        console.log(pool, 'wats pool?')
+        const response = await MyCollectives.Pool.mint(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, {
+            recipient: await this.getProvider().getSigner().getAddress(),
+            tokenID: 1,
+            amount, //amount in WEI bigint
+            quantity: 1,
+            platform: MyCollectives.SupportedPlatforms.Zora,
+            tokenContract,
+            poolAddress: "",
+
+        })
+        // setPool(response.pools)
+        console.log("!!!!! response => ", response)
+    },
+
+    async getPool(cAddress: string, cWallet: string, nonceKey: bigint, honeyPot: string) {
+        console.log({ address: cAddress, wallet: cWallet, nonceKey }, honeyPot, 'params in getPool')
+        const response = await MyCollectives.Collective.getPoolByHoneyPot(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, honeyPot)
+        console.log("!!!!! response get pool by honeyPot => ", response)
+    },
+
 
     /*---------------------------------- HELPERS  ----------------------------------------*/
     stringToBytes16(_string: string): Uint8Array {
