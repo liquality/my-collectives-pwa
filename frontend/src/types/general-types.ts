@@ -12,10 +12,12 @@ export type Group = {
     id: string;
     name: string;
     description: string;
-    publicAddress: string | null;
+    publicAddress: string;
     createdAt: Date | null;
     createdBy: string;
     mintCount: number;
+    walletAddress: string
+    nonceKey: bigint,
     memberCount: number;
     poolsCount: number;
     messagesCount: number;

@@ -42,23 +42,6 @@ export interface MintItemContentProps {
   setResult: Dispatch<SetStateAction<MintResult | null>>;
 }
 
-const staticMinterGroup = {
-  id: "270130dc-facc-4ff6-be83-e6e1a9cd9a4a",
-  name: "Mockcontract2",
-  description: "fsdf",
-  publicAddress: "0xFb488620aC79829633659EE7E22F265b8eA0466E",
-  walletAddress: "0xe5BB4b7697D1D6c8a820e4FA2b9ff10520Cf1a79",
-  nonceKey: 6706625542922195,
-  salt: 3221021300130323,
-  createdAt: "2023-12-21T20:09:00.953Z",
-  createdBy: "fd5847fb-60ca-4f30-9297-32a6cd35ed8e",
-  mintCount: 0,
-  memberCount: "1",
-  poolsCount: "1",
-  messagesCount: "0",
-  activePoolsCount: "1",
-};
-
 const MintItemContent: React.FC<MintItemContentProps> = ({
   challenge,
   setResult,
@@ -97,10 +80,12 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     setShowGroupList(!showGroupList);
   };
 
+  console.log(selectedGroup, "selected group");
+
   const handleMintClick = async () => {
-    if (1 == 1) {
+    if (selectedGroup) {
       console.log("Handle mint click!");
-      const { publicAddress, walletAddress, nonceKey } = staticMinterGroup;
+      const { publicAddress, walletAddress, nonceKey } = selectedGroup;
       console.log(
         publicAddress,
         walletAddress,
@@ -108,7 +93,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
         0.0005, //  params.value ?? BigInt(0)
         mintingContractAddress,
         honeyPotAddress,
-        "ALL OF MY PARAMS"
+        "ALL OF MY PARAMS to ContractService.PoolMint()"
       );
       const mintResult = await ContractService.poolMint(
         publicAddress,
