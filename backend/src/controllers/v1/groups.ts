@@ -19,6 +19,22 @@ export class GroupsController {
     }
   };
 
+  public findByChallenge: RequestHandler = async (req, res) => {
+    const { challengeId } = req.params;
+
+    if (!challengeId) {
+      res.status(400).send({ error: "challenge is required" });
+    } else {
+      try {
+        const groups = await GroupsService.findByChallenge(challengeId);
+
+        res.status(200).send(groups);
+      } catch (err: any) {
+        res.status(500).send({ error: err.message });
+      }
+    }
+  };
+
   public find: RequestHandler = async (req, res) => {
     const { id } = req.params;
     if (!id) {
@@ -42,15 +58,12 @@ export class GroupsController {
     const { group, pools } = req.body;
 
     const user = await AuthService.find((req as any).auth?.sub);
-    console.log(user, 'wats user?', (req as any).auth?.sub)
+    console.log(user, "wats user?", (req as any).auth?.sub);
     if (!group.name) {
       res.status(400).send({ error: "name is required" });
     } else {
       try {
-
-        const createdGroup = await GroupsService.create(
-          group, pools, user.id
-        );
+        const createdGroup = await GroupsService.create(group, pools, user.id);
 
         if (!createdGroup) {
           throw new Error("Group not created");
@@ -58,7 +71,7 @@ export class GroupsController {
 
         res.status(200).send(createdGroup);
       } catch (err: any) {
-        console.error(err)
+        console.error(err);
         res.status(500).send({ error: err.message });
       }
     }
@@ -66,16 +79,18 @@ export class GroupsController {
 
   public update: RequestHandler = async (req, res) => {
     const { group, pools } = req.body;
-    const { id } = req.params
-    console.log(id, group, pools, 'ID GROUP POOLS')
+    const { id } = req.params;
+    console.log(id, group, pools, "ID GROUP POOLS");
     const user = await AuthService.find((req as any).auth?.sub);
     if (!id) {
       res.status(400).send({ error: "GroupId is required" });
     } else {
       try {
-
         const updatedGroup = await GroupsService.update(
-          id, group, pools, user.id
+          id,
+          group,
+          pools,
+          user.id
         );
 
         if (!updatedGroup) {
@@ -84,7 +99,7 @@ export class GroupsController {
 
         res.status(200).send({ ok: updatedGroup });
       } catch (err: any) {
-        console.error(err)
+        console.error(err);
         res.status(500).send({ error: err.message });
       }
     }

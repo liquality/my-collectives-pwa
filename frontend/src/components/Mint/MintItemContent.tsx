@@ -23,6 +23,8 @@ import {
   IonLabel,
   IonButton,
   IonInput,
+  IonItem,
+  IonList,
 } from "@ionic/react";
 import { add, remove } from "ionicons/icons";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -32,6 +34,8 @@ import { BigNumberish, ethers } from "ethers";
 import { useGetZoraSDKParams } from "@/hooks/useGetZoraSDKParams";
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
 import ContractService from "@/services/ContractService";
+import useGetGroupsByChallenge from "@/hooks/Groups/useGetGroupsByChallenge";
+import { Group } from "@/types/general-types";
 
 export interface MintItemContentProps {
   challenge: Challenge;
@@ -56,7 +60,10 @@ const staticMinterGroup = {
 };
 
 const MintItemContent: React.FC<MintItemContentProps> = ({
-  challenge: {
+  challenge,
+  setResult,
+}: MintItemContentProps) => {
+  const {
     totalMints,
     imageUrl,
     name,
@@ -68,11 +75,11 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     tokenId,
     chainId,
     creatorOfMint,
-  },
-  setResult,
-}: MintItemContentProps) => {
+  } = challenge;
+  const challengeId = (challenge as any).challengeId;
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loadingImage, setLoadingImage] = useState(true);
+  const [showGroupList, setShowGroupList] = useState(false);
   const [quantityToMint, setQuantityToMint] = useState(1);
   const router = useIonRouter();
   const { params } = useGetZoraSDKParams(
@@ -81,15 +88,14 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     quantityToMint,
     tokenId ?? undefined
   );
-  const { myGroups } = useGetMyGroups();
-
-  console.log(myGroups, "my groups");
-
+  const { groups, loading: loadingGroups } =
+    useGetGroupsByChallenge(challengeId);
   useEffect(() => {}, [quantityToMint, params?.value]);
-  console.log(params, "params?");
-
+  const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const handleDetailsClick = () => {};
-  const handleChangeCollectiveClick = () => {};
+  const handleChangeCollectiveClick = () => {
+    setShowGroupList(!showGroupList);
+  };
 
   const handleMintClick = async () => {
     if (1 == 1) {
@@ -117,6 +123,10 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
       //setResult({success: true}) // only set result once minting is done
     }
   };
+  const handleSelectGroup = (group: Group) => {
+    setSelectedGroup(group);
+    setShowGroupList(false);
+  };
 
   const handlePlusClick = () => {
     setQuantityToMint(quantityToMint + 1);
@@ -129,6 +139,12 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
       setQuantityToMint(1);
     }
   };
+
+  useEffect(() => {
+    if (!selectedGroup && groups && groups?.length > 0) {
+      setSelectedGroup(groups[0]);
+    }
+  }, [groups]);
 
   return (
     <IonGrid>
@@ -215,7 +231,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
         </IonCol>
       </IonRow>
       <IonRow className="ion-justify-content-center">
-        <IonCol size="6">Collective Name</IonCol>
+        <IonCol size="6">{selectedGroup?.name}</IonCol>
 
         <IonCol size="2">
           <IonButton
@@ -227,6 +243,24 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
           </IonButton>
         </IonCol>
       </IonRow>
+      {showGroupList ? (
+        <IonRow className="ion-justify-content-center">
+          <IonCol size="9">
+            <IonList lines="none">
+              {groups?.map((group, index) => (
+                <IonItem
+                  key={index}
+                  button
+                  disabled={group.id === selectedGroup?.id}
+                  onClick={() => handleSelectGroup(group)}
+                >
+                  <IonLabel>{group.name}</IonLabel>
+                </IonItem>
+              ))}
+            </IonList>
+          </IonCol>
+        </IonRow>
+      ) : null}
       <IonRow className="mint-content-bottom-ribbon ion-justify-content-center ion-align-items-center">
         <IonCol size="12">
           <IonButton fill="clear" size="small" className="ion-no-padding">

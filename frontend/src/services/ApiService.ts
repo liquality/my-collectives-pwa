@@ -119,6 +119,21 @@ const ApiService = {
       `/v1/nft/mintactivity/${collectionAddress}/${network}/${tokenId}`
     );
   },
+
+  getRewardsSummary: async function (
+  ) {
+    return NetworkService.getResourceWithAuth(
+      '/v1/user/rewards-summary'
+    );
+  },
+
+  getGroupsByChallenge: async function (
+    challengeId: string,
+    ) {
+      return NetworkService.getResourceWithAuth(
+        `/v1/groups/challenge/${challengeId}`
+      );
+    },
 };
 
 export default ApiService;
