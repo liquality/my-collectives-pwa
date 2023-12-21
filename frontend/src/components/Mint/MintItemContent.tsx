@@ -79,6 +79,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
   const challengeId = (challenge as any).challengeId;
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loadingImage, setLoadingImage] = useState(true);
+  const [showGroupList, setShowGroupList] = useState(false);
   const [quantityToMint, setQuantityToMint] = useState(1);
   const router = useIonRouter();
   const { params } = useGetZoraSDKParams(
@@ -92,7 +93,9 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
   useEffect(() => {}, [quantityToMint, params?.value]);
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const handleDetailsClick = () => {};
-  const handleChangeCollectiveClick = () => {};
+  const handleChangeCollectiveClick = () => {
+    setShowGroupList(!showGroupList);
+  };
 
   const handleMintClick = async () => {
     if (params) {
@@ -119,6 +122,10 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
 
       //setResult({success: true}) // only set result once minting is done
     }
+  };
+  const handleSelectGroup = (group: Group) => {
+    setSelectedGroup(group);
+    setShowGroupList(false);
   };
 
   const handlePlusClick = () => {
@@ -236,7 +243,24 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
           </IonButton>
         </IonCol>
       </IonRow>
-     
+      {showGroupList ? (
+        <IonRow className="ion-justify-content-center">
+          <IonCol size="9">
+            <IonList lines="none">
+              {groups?.map((group, index) => (
+                <IonItem
+                  key={index}
+                  button
+                  disabled={group.id === selectedGroup?.id}
+                  onClick={() => handleSelectGroup(group)}
+                >
+                  <IonLabel>{group.name}</IonLabel>
+                </IonItem>
+              ))}
+            </IonList>
+          </IonCol>
+        </IonRow>
+      ) : null}
       <IonRow className="mint-content-bottom-ribbon ion-justify-content-center ion-align-items-center">
         <IonCol size="12">
           <IonButton fill="clear" size="small" className="ion-no-padding">
