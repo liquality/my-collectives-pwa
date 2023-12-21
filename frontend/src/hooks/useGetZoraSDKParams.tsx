@@ -10,11 +10,9 @@ import { banOutline } from "ionicons/icons";
 const useMintClient = () => {
   try {
     const publicClient = usePublicClient();
-
     const { chain } = useNetwork();
     //const { switchNetwork } = useSwitchNetwork();
     //const result = switchNetwork?.(chainId); //TODO: debug this as it does not work
-
     const mintClient = useMemo(
       () => chain && createMintClient({ chain, publicClient }),
       [chain, publicClient]
@@ -26,10 +24,6 @@ const useMintClient = () => {
   }
 };
 
-/* interface ChatHistoryHookResult {
-    chatHistory: Message[] | null;
-    loading: boolean
-} */
 export function useGetZoraSDKParams(
   tokenContract: string,
   chainId: number,
@@ -38,8 +32,6 @@ export function useGetZoraSDKParams(
 ) {
   const mintClient = useMintClient();
 
-  // value will be set by the form
-
   // params for the prepare contract write hook
   const [params, setParams] = useState<SimulateContractParameters>();
   const [paramError, setParamError] = useState("");
@@ -47,6 +39,7 @@ export function useGetZoraSDKParams(
   const { address } = useAccount();
 
   useEffect(() => {
+    console.log(quantityToMint, "quantity?");
     if (!mintClient || !address)
       presentToast(
         "ParamError: Could not find token to mint, please switch network to chainId:" +
@@ -57,7 +50,7 @@ export function useGetZoraSDKParams(
 
     const makeParams = async () => {
       // make the params for the prepare contract write hook
-      if (tokenContract && chainId && !params) {
+      if (tokenContract && chainId) {
         if (mintClient && address) {
           try {
             const _params = await mintClient.makePrepareMintTokenParams({

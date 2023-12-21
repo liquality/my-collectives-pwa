@@ -79,6 +79,9 @@ export class GroupsService {
         'groups.name',
         'groups.description',
         'groups.publicAddress',
+        'groups.walletAddress',
+        'groups.nonceKey',
+        'groups.salt',
         'groups.createdAt',
         'groups.createdBy',
         'groups.mintCount'
