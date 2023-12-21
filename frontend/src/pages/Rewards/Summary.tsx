@@ -5,6 +5,8 @@ import {
   IonCardTitle,
   IonCol,
   IonContent,
+  IonGrid,
+  IonIcon,
   IonItem,
   IonLabel,
   IonPage,
@@ -35,15 +37,25 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
 
   const loadingAllData = !myGroups && loading;
 
-  const filterForUserCreatedGroups = useMemo(() => {
+  const myCollectives = useMemo(() => {
     if (myGroups && user?.id) {
       return myGroups.filter((group) => group.createdBy === user.id);
+    } else return [];
+  }, [myGroups, user?.id]);
+
+  const memberOfCollectives = useMemo(() => {
+    if (myGroups && user?.id) {
+      return myGroups.filter((group) => group.createdBy !== user.id);
     } else return [];
   }, [myGroups, user?.id]);
 
   const handleManageNavigation = (groupId: string) => {
     const url = pathConstants.rewards.manage.replace(":groupId", groupId);
     router.push(url, "root");
+  };
+
+  const handleLeaveGroup = (groupId: string) => {
+    // TODO: Implement
   };
 
   return (
@@ -57,79 +69,135 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
         {loadingAllData ? (
           <PageLoadingIndicator />
         ) : (
-          <div className="rewards-summary-page ">
-            <h4></h4>
-            <ul className="bullet-points">
-              <li>No styling yet as figma design is still WIP</li>
-              <li>Below is just the data we need:</li>
-            </ul>
-            <div className="pink-line mb-1"></div>
-            <IonCard className="info-card-container second-card ">
-              <IonCardTitle>
-                {" "}
-                My Created Collectives: {myGroups?.length}
-              </IonCardTitle>
+          <>
+            <IonGrid className="ion-no-padding">
+              <IonRow>
+                <IonCol size="6">
+                  <div className="rewards-summary-item">
+                    <div className="rewards-summary-amount">120</div>
+                    <div className="rewards-summary-description">
+                      Succesful Invites
+                    </div>
+                  </div>
+                </IonCol>
+                <IonCol size="6">
+                  <div className="rewards-summary-item">
+                    <div className="rewards-summary-amount">47</div>
+                    <div className="rewards-summary-description">Mints</div>
+                  </div>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol size="6">
+                  <div className="rewards-summary-item">
+                    <div className="rewards-summary-amount">4</div>
+                    <div className="rewards-summary-description">Rewards</div>
+                  </div>
+                </IonCol>
+                <IonCol size="6">
+                  <div className="rewards-summary-item">
+                    <div className="rewards-summary-amount">0.056</div>
+                    <div className="rewards-summary-description">
+                      ETH Earned
+                    </div>
+                  </div>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+            <IonGrid className="ion-no-padding">
+              <IonRow>
+                <IonCol>
+                  <div className="rewards-collective-card">
+                    <div className="rewards-collective-card-title">
+                      My Collectives | {myCollectives?.length}
+                    </div>
 
-              {filterForUserCreatedGroups?.map((group, index) => (
-                <div key={index}>
-                  <IonRow className="ion-justify-content-between ion-align-items-center">
-                    <IonCardTitle>{group.name} </IonCardTitle>
-                    <IonText style={{ fontSize: "13px" }}>
-                      {" "}
-                      <GenerateInviteBtn groupId={group.id} /> |{" "}
-                      <IonText onClick={() => handleManageNavigation(group.id)}>
-                        Manage{" "}
-                      </IonText>
-                    </IonText>
-                  </IonRow>
+                    {myCollectives?.map((group, index) => (
+                      <div key={index}>
+                        <IonRow className="ion-justify-content-between ion-align-items-center">
+                          <div className="rewards-collective-card-group-name">
+                            {group.name}{" "}
+                          </div>
+                          <div className="rewards-collective-card-group-actions">
+                            <GenerateInviteBtn groupId={group.id} /> |{" "}
+                            <IonText
+                              color="primary"
+                              style={{ pointer: "cursor" }}
+                              onClick={() => handleManageNavigation(group.id)}
+                            >
+                              Manage
+                            </IonText>
+                          </div>
+                        </IonRow>
 
-                  <IonRow className="ion-justify-content-between ion-align-items-center">
-                    <IonLabel>
-                      {" "}
-                      {shortenAddress(group.publicAddress || "")}
-                    </IonLabel>
-                    <IonLabel>
-                      {" "}
-                      Members: {group.memberCount} Mints: {group.mintCount}
-                    </IonLabel>
-                  </IonRow>
-                </div>
-              ))}
-            </IonCard>
+                        <IonRow className="ion-justify-content-between ion-align-items-center">
+                          <div className="rewards-collective-card-group-address">
+                            {shortenAddress(group.publicAddress || "")}
+                          </div>
+                          <div>
+                            <IonLabel className="rewards-collective-card-group-data">
+                              <IonIcon src="/assets/icons/people-tile.svg"></IonIcon>
+                              {group.memberCount}
+                            </IonLabel>
+                            <IonLabel className="rewards-collective-card-group-data">
+                              <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>
+                              {group.mintCount}
+                            </IonLabel>
+                          </div>
+                        </IonRow>
+                      </div>
+                    ))}
+                  </div>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <div className="rewards-collective-card">
+                    <div className="rewards-collective-card-title">
+                      Member of Collectives | {memberOfCollectives?.length}
+                    </div>
 
-            <IonCard className="info-card-container second-card ">
-              <IonCardTitle>
-                {" "}
-                My Created Collectives: {myGroups?.length}
-              </IonCardTitle>
-              Member of Collectives: {myGroups?.length}
-              {filterForUserCreatedGroups?.map((group, index) => (
-                <div key={index}>
-                  <IonRow className="ion-justify-content-between ion-align-items-center">
-                    <IonCardTitle>{group.name} </IonCardTitle>
-                    <IonText style={{ fontSize: "13px" }}>
-                      {" "}
-                      <GenerateInviteBtn groupId={group.id} /> | Leave
-                    </IonText>
-                  </IonRow>
+                    {memberOfCollectives?.map((group, index) => (
+                      <div key={index}>
+                        <IonRow className="ion-justify-content-between ion-align-items-center">
+                          <div className="rewards-collective-card-group-name">
+                            {group.name}{" "}
+                          </div>
+                          <div className="rewards-collective-card-group-actions">
+                            <GenerateInviteBtn groupId={group.id} /> |{" "}
+                            <IonText
+                              color="primary"
+                              style={{ pointer: "cursor" }}
+                              onClick={() => handleLeaveGroup(group.id)}
+                            >
+                              Leave
+                            </IonText>
+                          </div>
+                        </IonRow>
 
-                  <IonRow className="ion-justify-content-between ion-align-items-center">
-                    <IonLabel>
-                      {" "}
-                      {shortenAddress(group.publicAddress || "")}
-                    </IonLabel>
-                    <IonLabel>
-                      {" "}
-                      Members: {group.memberCount} Mints: {group.mintCount}
-                    </IonLabel>
-                  </IonRow>
-                </div>
-              ))}
-            </IonCard>
-          </div>
+                        <IonRow className="ion-justify-content-between ion-align-items-center">
+                          <div className="rewards-collective-card-group-address">
+                            {shortenAddress(group.publicAddress || "")}
+                          </div>
+                          <div>
+                            <IonLabel className="rewards-collective-card-group-data">
+                              <IonIcon src="/assets/icons/people-tile.svg"></IonIcon>
+                              {group.memberCount}
+                            </IonLabel>
+                            <IonLabel className="rewards-collective-card-group-data">
+                              <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>
+                              {group.mintCount}
+                            </IonLabel>
+                          </div>
+                        </IonRow>
+                      </div>
+                    ))}
+                  </div>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          </>
         )}
-
-        <div className="pink-line mb-1"></div>
       </IonContent>
     </IonPage>
   );

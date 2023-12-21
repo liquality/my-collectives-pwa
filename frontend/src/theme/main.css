@@ -732,11 +732,10 @@ ion-content.invite-page-link {
 }
 
 .chat-message-input {
-  padding-left: 1rem;  
+  padding-left: 1rem;
   border-radius: 6.25rem;
   border: 1px solid var(--ion-color-primary, #7700d5);
 }
-
 
 .chat-container .chat-item {
   width: 100%;
@@ -751,7 +750,7 @@ ion-content.invite-page-link {
   white-space: nowrap;
 }
 .chat-container .chat-bubble {
-  font-feature-settings: "clig off, liga off" !important;
+  font-feature-settings: "clig" off, "liga" off;
   font-size: 0.875rem !important;
   font-style: normal !important;
   font-weight: 400 !important;
@@ -1247,4 +1246,86 @@ img.challenge-info-img {
 
 .ml-1 {
   margin-left: 10px !important;
+}
+.rewards-summary-item {
+  margin: 0.2rem;
+  padding: 1.2rem 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  border-radius: 0.75rem;
+  background-color: #f8f0ff;
+}
+
+.rewards-summary-amount {
+  width: 100%;
+  color: var(--ion-color-primary);
+  font-size: 2.25rem;
+  font-weight: 400;
+  line-height: 2rem !important;
+}
+
+.rewards-summary-description {
+  text-transform: uppercase;
+  color: #000d35;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.047rem;
+}
+
+.rewards-collective-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  padding: 1.3rem 1rem;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+}
+
+.rewards-collective-card-title {
+  color: #3d4767;
+  font-feature-settings: "clig" off, "liga" off;
+  font-size: 1.063rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.313rem;
+  letter-spacing: 0.031rem;
+}
+.rewards-collective-card-group-name {
+  color: var(--ion-color-primary);
+  font-feature-settings: "clig" off, "liga" off;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.313rem;
+  letter-spacing: 0.031rem;
+}
+
+.rewards-collective-card-group-address {
+  color: #646f85;
+  font-size: 0.813rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.25rem;
+  letter-spacing: 0.047rem;
+}
+
+.rewards-collective-card-group-data {
+  margin-left: 0.5rem;
+  color: #000d35;
+  font-size: 0.688rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.25rem;
+}
+.rewards-collective-card-group-actions {
+  font-size: 0.813rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.25rem;
+  letter-spacing: 0.047rem;
+}
+.rewards-collective-card-group-data ion-icon {
+  margin-right: 0.1rem;
 }

@@ -1,19 +1,10 @@
 import { Challenge } from "@/types/challenges";
 import {
-  IonPage,
-  IonHeader,
   IonToolbar,
   IonButtons,
   IonButton,
-  IonTitle,
   IonContent,
-  IonItem,
-  IonInput,
-  IonAvatar,
-  IonImg,
   IonLabel,
-  IonList,
-  IonSearchbar,
   IonModal,
   IonCol,
   IonGrid,
@@ -22,11 +13,7 @@ import {
 } from "@ionic/react";
 import { ModalBreakpointChangeEventDetail } from "@ionic/core";
 import { Ref, forwardRef, useEffect, useRef, useState } from "react";
-import {
-  convertDateToReadable,
-  convertIpfsImageUrl,
-  shortenAddress,
-} from "@/utils";
+import { convertDateToReadable, shortenAddress } from "@/utils";
 import { closeOutline } from "ionicons/icons";
 import ImageLoader from "../Images/ImageLoader";
 import InfoSheetModalOverview from "./InfoSheetModalOverview";
@@ -51,7 +38,7 @@ const ChallengeItemInfoSheetModal = (
 ) => {
   const [breakpoint, setBreakpoint] = useState(initialBreakpoint);
   const [modalClassName, setModalClassName] = useState("");
-  const [activeInfoTab, setActiveInfoTab] = useState("overview");
+  const [activeInfoTab, setActiveInfoTab] = useState("details");
   const [fabBottom, setFabBottom] = useState("35%");
   useEffect(() => {
     if (breakpoint > initialBreakpoint) {
@@ -127,15 +114,11 @@ const ChallengeItemInfoSheetModal = (
           <IonRow className="ion-justify-content-start ion-align-items-center challenge-info-item-details">
             <IonCol size="auto">
               <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>
-              <IonLabel>80</IonLabel>
+              <IonLabel>{challenge.totalMints || 0}</IonLabel>
             </IonCol>
             <IonCol size="auto">
               <IonIcon src="/assets/icons/people-tile.svg"></IonIcon>
-              <IonLabel>80</IonLabel>
-            </IonCol>
-            <IonCol size="auto">
-              <IonIcon src="/assets/icons/message-tile.svg"></IonIcon>
-              <IonLabel>4</IonLabel>
+              <IonLabel>{challenge.groupcount || 0}</IonLabel>
             </IonCol>
           </IonRow>
         </IonGrid>
@@ -143,17 +126,10 @@ const ChallengeItemInfoSheetModal = (
           <IonButtons slot="start">
             <IonButton
               className="challenge-top-tab-button"
-              color={activeInfoTab === "overview" ? "primary" : "dark"}
-              onClick={() => setActiveInfoTab("overview")}
-            >
-              Overview
-            </IonButton>
-            <IonButton
-              className="challenge-top-tab-button"
               color={activeInfoTab === "details" ? "primary" : "dark"}
               onClick={() => setActiveInfoTab("details")}
             >
-              Details
+              Challenge Details
             </IonButton>
             <IonButton
               className="challenge-top-tab-button"
