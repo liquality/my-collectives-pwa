@@ -45,15 +45,22 @@ const ContractService = {
         let inviteSig = await provider.getSigner().signMessage(messageHashBinary);
         console.log("inviteSig >> ", inviteSig)
         alert(inviteSig)
-        console.log(MyCollectives.Collective, 'COLLECTIVE mycollective.collective', MyCollectives.Collectives)
         const response = await MyCollectives.Collective.join(provider, { address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteCodeBytes })
-        console.log("!!!!! response => ", response)
+        console.log("!!!!! response frontend contract service => ", response)
     },
 
     stringToBytes16(_string: string): Uint8Array {
         const bytes32 = ethers.utils.formatBytes32String(_string);
         const bytes16 = ethers.utils.arrayify(bytes32).slice(0, 16);
         return bytes16;
+    },
+
+    async createHoneyPot(tokenContract: string) {
+        MyCollectives.setConfig({} as Config)
+        const salt = generateSalt();
+        const response = await MyCollectives.HoneyPot.get(this.getProvider(), salt, tokenContract)
+        console.log("!!!!! response honey pot address => ", response)
+        return response
     }
 
 
