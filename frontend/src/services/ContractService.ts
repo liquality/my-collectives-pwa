@@ -51,6 +51,7 @@ const ContractService = {
     },
 
     async poolMint(cAddress: string, cWallet: string, nonceKey: bigint, amount: bigint, tokenContract: string, poolHoneyPotAddress: string) {
+        MyCollectives.setConfig({} as Config)
         const pool = await this.getPool(cAddress, cWallet, nonceKey, poolHoneyPotAddress)
         console.log(pool, 'wats pool?')
         const response = await MyCollectives.Pool.mint(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, {
@@ -68,8 +69,10 @@ const ContractService = {
     },
 
     async getPool(cAddress: string, cWallet: string, nonceKey: bigint, honeyPot: string) {
-        console.log({ address: cAddress, wallet: cWallet, nonceKey }, honeyPot, 'params in getPool')
-        const response = await MyCollectives.Collective.getPoolByHoneyPot(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, honeyPot)
+        MyCollectives.setConfig({} as Config)
+        console.log(await this.getProvider()._networkPromise, 'network?', await this.getProvider().getNetwork(), 'netwokr',)
+        console.log({ address: cAddress, wallet: cWallet, nonceKey }, honeyPot, 'params in getPool', await this.getProvider()._networkPromise.chainId, 'GET POOLL')
+        const response = await MyCollectives.Collective.getPoolByHoneyPot(await this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, honeyPot)
         console.log("!!!!! response get pool by honeyPot => ", response)
     },
 
