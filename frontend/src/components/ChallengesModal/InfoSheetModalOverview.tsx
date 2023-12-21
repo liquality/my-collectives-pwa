@@ -1,3 +1,4 @@
+import { Challenge } from "@/types/challenges";
 import {
   IonList,
   IonItem,
@@ -7,7 +8,15 @@ import {
   IonIcon,
 } from "@ionic/react";
 
-const InfoSheetModalOverview = () => {
+export interface InfoSheetModalMintActivityProps {
+  challenge: Challenge;
+}
+
+const InfoSheetModalOverview: React.FC<InfoSheetModalMintActivityProps> = (
+  props: InfoSheetModalMintActivityProps
+) => {
+  const { challenge } = props;
+  console.log(challenge, "wats challenge?");
   return (
     <IonList lines="full">
       <IonListHeader>
@@ -15,22 +24,20 @@ const InfoSheetModalOverview = () => {
       </IonListHeader>
       <IonItem>
         <div className="challenge-info-list-content">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
-          accumsan tellus iaculis orci interdum auctor. Donec purus purus,
-          dignissim quis lacus eget,.
+          {challenge?.description ?? challenge?.name}
         </div>
       </IonItem>
 
       <IonItem>
         <IonButton fill="clear" color="primary" href="#">
-          View On Explorer 
-          <IonIcon slot="end" src="/assets/icons/arrow-outside.svg"/>
+          View On Explorer
+          <IonIcon slot="end" src="/assets/icons/arrow-outside.svg" />
         </IonButton>
       </IonItem>
       <IonItem>
         <IonButton fill="clear" color="primary" href="#">
           View On Open Sea
-          <IonIcon slot="end" src="/assets/icons/arrow-outside.svg"/>
+          <IonIcon slot="end" src="/assets/icons/arrow-outside.svg" />
         </IonButton>
       </IonItem>
       <IonListHeader>

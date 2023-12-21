@@ -9,10 +9,9 @@ const ContractService = {
         MyCollectives.setConfig({} as Config);
 
         const salt = generateSalt();
-        console.log('Arguments passed: -->>>>', this.getProvider(),
-            { tokenContracts, honeyPots: tokenContracts },
-            823472)
-        const response = await MyCollectives.Collectives.create(
+
+        console.log(MyCollectives.HoneyPot, 'HONEYPOT VALUE')
+        const response = await MyCollectives.Collective.create(
             this.getProvider(),
             { tokenContracts, honeyPots: tokenContracts }, //TODO: for now just use random honeypots address, can be changed later when MINT is implemented
             salt
@@ -30,7 +29,11 @@ const ContractService = {
         MyCollectives.setConfig({} as Config)
         const provider = this.getProvider()
         const inviteCodeBytes = this.stringToBytes16(inviteCode)
-        console.log("inviteId >> ", inviteCode.toString(), 'BYTES:', inviteCodeBytes.toString())
+        const generatedId = ethers.utils.randomBytes(16);
+        console.log(generatedId, typeof generatedId, 'GENERATED')
+        console.log(inviteCodeBytes, typeof inviteCodeBytes, "NON-GENERATED")
+        console.log(MyCollectives, 'my collectives')
+
 
         // Hash the inviteId
         let messageHash = ethers.utils.solidityKeccak256(
@@ -42,7 +45,8 @@ const ContractService = {
         let inviteSig = await provider.getSigner().signMessage(messageHashBinary);
         console.log("inviteSig >> ", inviteSig)
         alert(inviteSig)
-        const response = await MyCollectives.Collectives.join(provider, { address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteCodeBytes })
+        console.log(MyCollectives.Collective, 'COLLECTIVE mycollective.collective', MyCollectives.Collectives)
+        const response = await MyCollectives.Collective.join(provider, { address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteCodeBytes })
         console.log("!!!!! response => ", response)
     },
 

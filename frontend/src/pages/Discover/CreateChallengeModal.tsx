@@ -209,7 +209,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
               <IonSelectOption value="arbitrum">Arbitrum</IonSelectOption>
               <IonSelectOption value="optimism">Optimism</IonSelectOption>
               <IonSelectOption value="base">Base</IonSelectOption>
-              <IonSelectOption value="polygon">Polygon</IonSelectOption>
+              <IonSelectOption value="goerli">Ethereum Goerli</IonSelectOption>
             </IonSelect>
           </IonItem>
 

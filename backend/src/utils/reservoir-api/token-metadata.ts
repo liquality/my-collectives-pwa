@@ -53,12 +53,12 @@ export async function prettifyERC721Data(nftList: any, price: string) {
 
 export async function prettifyERC1155Data(nftList: any, price: string) {
     const { name, chainId, tokenId, kind, supply, image, description } = nftList
-    const { floorAskPrice } = nftList.collection
+    const { floorAskPrice, name: collectionName } = nftList.collection
     const decimalPrice = floorAskPrice?.amount?.decimal
     var convertedWeiPrice = floorAskPrice?.amount?.raw ? ethers.utils.formatEther(floorAskPrice?.amount?.raw) : price
     const prettifiedList = {
         totalMints: supply,
-        name,
+        name: name ?? collectionName,
         chainId,
         tokenId,
         kind,

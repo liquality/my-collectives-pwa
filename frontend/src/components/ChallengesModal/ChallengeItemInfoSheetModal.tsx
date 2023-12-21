@@ -22,7 +22,11 @@ import {
 } from "@ionic/react";
 import { ModalBreakpointChangeEventDetail } from "@ionic/core";
 import { Ref, forwardRef, useEffect, useRef, useState } from "react";
-import { convertDateToReadable, convertIpfsImageUrl, shortenAddress } from "@/utils";
+import {
+  convertDateToReadable,
+  convertIpfsImageUrl,
+  shortenAddress,
+} from "@/utils";
 import { closeOutline } from "ionicons/icons";
 import ImageLoader from "../Images/ImageLoader";
 import InfoSheetModalOverview from "./InfoSheetModalOverview";
@@ -77,13 +81,13 @@ const ChallengeItemInfoSheetModal = (
   const renderActiveContent = () => {
     switch (activeInfoTab) {
       case "overview":
-        return <InfoSheetModalOverview />;
+        return <InfoSheetModalOverview challenge={challenge} />;
       case "details":
         return <InfoSheetModalDetails />;
       case "mintActivity":
         return <InfoSheetModalMintActivity challenge={challenge} />;
       default:
-        return <InfoSheetModalOverview />;
+        return <InfoSheetModalOverview challenge={challenge} />;
     }
   };
 
