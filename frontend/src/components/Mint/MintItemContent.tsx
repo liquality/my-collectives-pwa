@@ -47,6 +47,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
   setResult,
 }: MintItemContentProps) => {
   const {
+    id,
     totalMints,
     imageUrl,
     name,
@@ -59,7 +60,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     chainId,
     creatorOfMint,
   } = challenge;
-  const challengeId = (challenge as any).challengeId;
+
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loadingImage, setLoadingImage] = useState(true);
   const [showGroupList, setShowGroupList] = useState(false);
@@ -71,16 +72,13 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     quantityToMint,
     tokenId ?? undefined
   );
-  const { groups, loading: loadingGroups } =
-    useGetGroupsByChallenge(challengeId);
+  const { groups, loading: loadingGroups } = useGetGroupsByChallenge(id);
   useEffect(() => {}, [quantityToMint, params?.value]);
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const handleDetailsClick = () => {};
   const handleChangeCollectiveClick = () => {
     setShowGroupList(!showGroupList);
   };
-
-  console.log(selectedGroup, "selected group");
 
   const handleMintClick = async () => {
     if (selectedGroup) {

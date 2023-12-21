@@ -2,17 +2,18 @@ import { useState, useEffect } from "react";
 import { Group } from "@/types/general-types";
 import ApiService from "@/services/ApiService";
 
-export function useGetGroupsByChallenge(challangeId: string) {
+export function useGetGroupsByChallenge(challengeId: string) {
   const [groups, setGroups] = useState<Group[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchGroup = async () => {
       try {
-        if (!groups && challangeId) {
+        console.log(groups, 'challengeID', challengeId)
+        if (!groups && challengeId) {
           setLoading(true);
           const _groups: Group[] = await ApiService.getGroupsByChallenge(
-            challangeId
+            challengeId
           );
 
           setGroups(_groups);
@@ -24,7 +25,7 @@ export function useGetGroupsByChallenge(challangeId: string) {
       }
     };
     fetchGroup();
-  }, [groups, challangeId]);
+  }, [groups, challengeId]);
   return { groups, loading };
 }
 
