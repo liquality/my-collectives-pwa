@@ -39,14 +39,14 @@ export interface MintItemContentProps {
 }
 
 const staticMinterGroup = {
-  id: "5c58ca0f-65cf-4849-a413-729efab5842c",
-  name: "Some Goerli Minter WOW",
-  description: "hey",
-  publicAddress: "0x96492A84461aaB0B27610a0C5Bf314637617fe19",
-  walletAddress: "0x6566E005634c0B03F560DdEf4cc0D297E35C4d28",
-  nonceKey: BigInt(4496831648435611),
-  salt: "5542769413479739",
-  createdAt: "2023-12-21T15:42:35.094Z",
+  id: "270130dc-facc-4ff6-be83-e6e1a9cd9a4a",
+  name: "Mockcontract2",
+  description: "fsdf",
+  publicAddress: "0xFb488620aC79829633659EE7E22F265b8eA0466E",
+  walletAddress: "0xe5BB4b7697D1D6c8a820e4FA2b9ff10520Cf1a79",
+  nonceKey: 6706625542922195,
+  salt: 3221021300130323,
+  createdAt: "2023-12-21T20:09:00.953Z",
   createdBy: "fd5847fb-60ca-4f30-9297-32a6cd35ed8e",
   mintCount: 0,
   memberCount: "1",
@@ -92,14 +92,14 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
   const handleChangeCollectiveClick = () => {};
 
   const handleMintClick = async () => {
-    if (params) {
+    if (1 == 1) {
       console.log("Handle mint click!");
       const { publicAddress, walletAddress, nonceKey } = staticMinterGroup;
       console.log(
         publicAddress,
         walletAddress,
         nonceKey,
-        params.value ?? BigInt(0),
+        0.0005, //  params.value ?? BigInt(0)
         mintingContractAddress,
         honeyPotAddress,
         "ALL OF MY PARAMS"
@@ -107,8 +107,8 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
       const mintResult = await ContractService.poolMint(
         publicAddress,
         walletAddress,
-        nonceKey,
-        params.value ?? BigInt(0),
+        BigInt(nonceKey),
+        BigInt(ethers.utils.parseEther("0.0005").toString()), //params.value ?? BigInt(0),
         mintingContractAddress,
         honeyPotAddress
       );

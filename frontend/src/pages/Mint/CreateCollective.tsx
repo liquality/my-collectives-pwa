@@ -89,17 +89,25 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       const tokenContracts = allSelectedPools.map(
         (item) => item.mintingContractAddress
       );
+      const honeyAddresses = allSelectedPools.map(
+        (item) => item.honeyPotAddress
+      );
       const createdContract = await ContractService.createCollective(
         tokenContracts,
-        tokenContracts
+        honeyAddresses
+      );
+      console.log(
+        tokenContracts,
+        honeyAddresses,
+        "TokenContracts & honeyPotaddresses"
       );
       const { cWallet, cAddress, nonce, salt } = createdContract;
-      console.log(createdContract, "create group contract?");
+      console.log(createdContract, "CREATED CONTRACT FROM SDK");
       const result = await ApiService.createGroup({
         group: groupObject,
         pools: allSelectedPools,
       });
-      console.log(result, "RESULT AFTER CREATING GROUP");
+      console.log(result, "RESULT AFTER CREATING GROUP IN DB");
       if (result) {
         const updatedGroup = await ApiService.updateGroup(result.id, {
           group: {
@@ -110,7 +118,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
           },
           pools: [],
         });
-        console.log(updatedGroup, "updated group?", cAddress, cWallet, nonce);
+        console.log(updatedGroup, "updated group IN DB?");
         if (!updatedGroup.ok) throw Error;
         const { name, id, createdBy } = result;
         setCreatedGroup({
