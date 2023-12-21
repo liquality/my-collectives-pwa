@@ -4,6 +4,7 @@ import {
   convertDateToReadable,
   convertIpfsImageUrl,
   cutOffTooLongString,
+  displayPrice,
   handleDisplayAddress,
   shortenAddress,
 } from "@/utils";
@@ -37,6 +38,7 @@ export interface MintItemContentProps {
 
 const MintItemContent: React.FC<MintItemContentProps> = ({
   challenge: {
+    totalMints,
     imageUrl,
     name,
     floorPrice,
@@ -80,13 +82,6 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     }
   };
 
-  const displayPrice = () => {
-    if (params?.value) {
-      const ethValue = ethers.utils.formatEther(params.value);
-      return ethValue;
-    } else return floorPrice;
-  };
-
   return (
     <IonGrid>
       <IonRow className="ion-justify-content-center">
@@ -126,7 +121,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
                 <IonRow className="ion-justify-content-left ion-align-items-center">
                   <IonCol size="auto">
                     <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>
-                    <IonLabel>80</IonLabel>
+                    <IonLabel>{totalMints}</IonLabel>
                   </IonCol>
                 </IonRow>
               </IonGrid>
@@ -164,7 +159,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
         </IonCol>
       </IonRow>
       <IonRow className="ion-justify-content-center">
-        <IonCol size="6">NFT & Fee: {floorPrice}</IonCol>
+        <IonCol size="6">NFT & Fee: {displayPrice(floorPrice, params)}</IonCol>
         <IonCol size="2">
           <IonButton fill="clear" size="small" onClick={handleDetailsClick}>
             Details
@@ -199,7 +194,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
             color="primary"
             shape="round"
           >
-            Mint {displayPrice()} ETH
+            Mint {displayPrice(floorPrice, params)} ETH
           </IonButton>
         </IonCol>
       </IonRow>

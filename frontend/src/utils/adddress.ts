@@ -1,3 +1,5 @@
+import { ethers } from "ethers";
+import { SimulateContractParameters } from "viem";
 
 export function shortenAddress(address: string) {
   const _address = address || "";
@@ -66,4 +68,12 @@ export function convertDateToReadable(expiration: Date | string): string {
     return `${seconds} second${seconds === 1 ? '' : 's'} left`;
   }
 }
+
+export const displayPrice = (floorPrice: string, params?: SimulateContractParameters) => {
+  if (params?.value) {
+    const ethValue = ethers.utils.formatEther(params.value);
+    return ethValue;
+  } else return floorPrice;
+};
+
 
