@@ -37,7 +37,15 @@ const GenerateInviteBtn = ({
   if (type === "button") {
     return <IonButton onClick={handleGenerateInvite}>{text}</IonButton>;
   }
-  return <IonText onClick={handleGenerateInvite}>{text}</IonText>;
+  return (
+    <IonText
+      color="primary"
+      style={{ pointer: "cursor" }}
+      onClick={handleGenerateInvite}
+    >
+      {text}
+    </IonText>
+  );
 };
 
 export default GenerateInviteBtn;
