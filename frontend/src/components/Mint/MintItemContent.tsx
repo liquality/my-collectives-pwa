@@ -42,28 +42,12 @@ export interface MintItemContentProps {
   setResult: Dispatch<SetStateAction<MintResult | null>>;
 }
 
-const staticMinterGroup = {
-  id: "5c58ca0f-65cf-4849-a413-729efab5842c",
-  name: "Some Goerli Minter WOW",
-  description: "hey",
-  publicAddress: "0x96492A84461aaB0B27610a0C5Bf314637617fe19",
-  walletAddress: "0x6566E005634c0B03F560DdEf4cc0D297E35C4d28",
-  nonceKey: BigInt(4496831648435611),
-  salt: "5542769413479739",
-  createdAt: "2023-12-21T15:42:35.094Z",
-  createdBy: "fd5847fb-60ca-4f30-9297-32a6cd35ed8e",
-  mintCount: 0,
-  memberCount: "1",
-  poolsCount: "1",
-  messagesCount: "0",
-  activePoolsCount: "1",
-};
-
 const MintItemContent: React.FC<MintItemContentProps> = ({
   challenge,
   setResult,
 }: MintItemContentProps) => {
   const {
+    id,
     totalMints,
     imageUrl,
     name,
@@ -76,7 +60,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     chainId,
     creatorOfMint,
   } = challenge;
-  const challengeId = (challenge as any).challengeId;
+
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loadingImage, setLoadingImage] = useState(true);
   const [showGroupList, setShowGroupList] = useState(false);
@@ -88,8 +72,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     quantityToMint,
     tokenId ?? undefined
   );
-  const { groups, loading: loadingGroups } =
-    useGetGroupsByChallenge(challengeId);
+  const { groups, loading: loadingGroups } = useGetGroupsByChallenge(id);
   useEffect(() => {}, [quantityToMint, params?.value]);
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const handleDetailsClick = () => {};
@@ -98,23 +81,23 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
   };
 
   const handleMintClick = async () => {
-    if (params) {
+    if (selectedGroup) {
       console.log("Handle mint click!");
-      const { publicAddress, walletAddress, nonceKey } = staticMinterGroup;
+      const { publicAddress, walletAddress, nonceKey } = selectedGroup;
       console.log(
         publicAddress,
         walletAddress,
         nonceKey,
-        params.value ?? BigInt(0),
+        0.0005, //  params.value ?? BigInt(0)
         mintingContractAddress,
         honeyPotAddress,
-        "ALL OF MY PARAMS"
+        "ALL OF MY PARAMS to ContractService.PoolMint()"
       );
       const mintResult = await ContractService.poolMint(
         publicAddress,
         walletAddress,
-        nonceKey,
-        params.value ?? BigInt(0),
+        BigInt(nonceKey),
+        BigInt(ethers.utils.parseEther("0.0005").toString()), //params.value ?? BigInt(0),
         mintingContractAddress,
         honeyPotAddress
       );

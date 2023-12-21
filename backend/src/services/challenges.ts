@@ -18,7 +18,6 @@ export class ChallengesService {
         const user = await AuthService.find(userId)
         const provider = new ethers.providers.JsonRpcProvider(infuraRpcUrl);
 
-
         const insertObject = {
             honeyPotAddress,
             mintingContractAddress,
