@@ -104,7 +104,7 @@ const App: React.FC = () => {
       <Route path="/mint" component={Mint} />
 
       {/* Default route (not requiring authentication) */}
-      <Route exact path="/">
+      <Route exact path={"/" || ""}>
         <Redirect to="/discover" />
       </Route>
 
