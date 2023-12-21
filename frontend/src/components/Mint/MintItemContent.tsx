@@ -26,6 +26,9 @@ import {
 import { add, remove } from "ionicons/icons";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import MintZoraLogic from "../MintZoraLogic";
+import { SimulateContractParameters } from "viem";
+import { BigNumberish, ethers } from "ethers";
+import { useGetZoraSDKParams } from "@/hooks/useGetZoraSDKParams";
 
 export interface MintItemContentProps {
   challenge: Challenge;
@@ -34,7 +37,11 @@ export interface MintItemContentProps {
 
 const MintItemContent: React.FC<MintItemContentProps> = ({
   challenge: {
-    imageUrl, name, floorPrice, groupCount, expiration,
+    imageUrl,
+    name,
+    floorPrice,
+    groupCount,
+    expiration,
     mintingContractAddress,
     tokenId,
     chainId,
@@ -44,23 +51,40 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
 }: MintItemContentProps) => {
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loadingImage, setLoadingImage] = useState(true);
-  const [amount, setAmount] = useState(1);
+  const [quantityToMint, setQuantityToMint] = useState(1);
   const router = useIonRouter();
+  const { params } = useGetZoraSDKParams(
+    mintingContractAddress,
+    chainId,
+    quantityToMint,
+    tokenId ?? undefined
+  );
+
+  console.log(params, "MINT PARAMS?");
+
+  //const [params, setParams] = useState<SimulateContractParameters>();
 
   const handleDetailsClick = () => {};
   const handleChangeCollectiveClick = () => {};
   const handleMintClick = () => {};
 
   const handlePlusClick = () => {
-    setAmount(amount + 1);
+    setQuantityToMint(quantityToMint + 1);
   };
 
   const handleMinusClick = () => {
-    if (amount > 2) {
-      setAmount(amount - 1);
+    if (quantityToMint > 2) {
+      setQuantityToMint(quantityToMint - 1);
     } else {
-      setAmount(1);
+      setQuantityToMint(1);
     }
+  };
+
+  const displayPrice = () => {
+    if (params?.value) {
+      const ethValue = ethers.utils.formatEther(params.value);
+      return ethValue;
+    } else return floorPrice;
   };
 
   return (
@@ -83,7 +107,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
               ></IonSkeletonText>
             ) : null}
             <div className="challenge-time-chip challenge-time-chip-ontop">
-            {convertDateToReadable(expiration)}
+              {convertDateToReadable(expiration)}
             </div>
             <IonCardHeader>
               <IonCardTitle>
@@ -93,9 +117,8 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
                   handleDisplayAddress(creatorOfMint ?? "")
                 )}
               </IonCardTitle>
-              <IonCardSubtitle >
+              <IonCardSubtitle>
                 {<div className="name">{cutOffTooLongString(name, 30)}</div>}
-                
               </IonCardSubtitle>
             </IonCardHeader>
             <IonCardContent>
@@ -126,7 +149,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
           <IonInput
             className="challenge-mint-amount"
             type="number"
-            value={amount}
+            value={quantityToMint}
           ></IonInput>
           <IonButton
             className="challenge-mint-amount-btn"
@@ -134,7 +157,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
             shape="round"
             size="small"
             onClick={handleMinusClick}
-            disabled={amount <= 1}
+            disabled={quantityToMint <= 1}
           >
             <IonIcon slot="icon-only" icon={remove}></IonIcon>
           </IonButton>
@@ -176,15 +199,8 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
             color="primary"
             shape="round"
           >
-            Mint {floorPrice} ETH
+            Mint {displayPrice()} ETH
           </IonButton>
-          {chainId && mintingContractAddress ? (
-            <MintZoraLogic
-              chainId={chainId}
-              tokenId={tokenId ?? undefined}
-              tokenContract={mintingContractAddress as `0x${string}`}
-            />
-          ) : null}
         </IonCol>
       </IonRow>
     </IonGrid>
