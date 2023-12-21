@@ -12,10 +12,14 @@ import {
   IonRow,
 } from "@ionic/react";
 import { ModalBreakpointChangeEventDetail } from "@ionic/core";
-import { Ref, forwardRef, useEffect, useState } from "react";
-import { convertDateToReadable, shortenAddress } from "@/utils";
+import { Ref, forwardRef, useEffect, useRef, useState } from "react";
+import { convertDateToReadable, displayPrice, shortenAddress } from "@/utils";
+import { closeOutline } from "ionicons/icons";
+import ImageLoader from "../Images/ImageLoader";
+import InfoSheetModalOverview from "./InfoSheetModalOverview";
 import InfoSheetModalDetails from "./InfoSheetModalDetails";
 import InfoSheetModalMintActivity from "./InfoSheetModalMintActivity";
+import { useGetZoraSDKParams } from "@/hooks/useGetZoraSDKParams";
 
 const ChallengeItemInfoSheetModal = (
   {
@@ -37,6 +41,13 @@ const ChallengeItemInfoSheetModal = (
   const [modalClassName, setModalClassName] = useState("");
   const [activeInfoTab, setActiveInfoTab] = useState("details");
   const [fabBottom, setFabBottom] = useState("35%");
+
+  const { params } = useGetZoraSDKParams(
+    challenge.mintingContractAddress,
+    challenge.chainId,
+    1,
+    challenge.tokenId ?? undefined
+  );
   useEffect(() => {
     if (breakpoint > initialBreakpoint) {
       setModalClassName("expanded");
@@ -64,12 +75,14 @@ const ChallengeItemInfoSheetModal = (
 
   const renderActiveContent = () => {
     switch (activeInfoTab) {
+      case "overview":
+        return <InfoSheetModalOverview challenge={challenge} />;
       case "details":
         return <InfoSheetModalDetails />;
       case "mintActivity":
         return <InfoSheetModalMintActivity challenge={challenge} />;
       default:
-        return <InfoSheetModalDetails />;
+        return <InfoSheetModalOverview challenge={challenge} />;
     }
   };
 
@@ -144,7 +157,7 @@ const ChallengeItemInfoSheetModal = (
         shape="round"
         style={{ bottom: fabBottom }}
       >
-        Mint {challenge?.floorPrice} ETH
+        Mint {displayPrice(challenge.floorPrice, params)} ETH
       </IonButton>
     </IonModal>
   );

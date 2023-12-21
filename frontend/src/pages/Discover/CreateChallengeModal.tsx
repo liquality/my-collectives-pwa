@@ -16,10 +16,12 @@ import {
 } from "@ionic/react";
 import ApiService from "@/services/ApiService";
 import { Challenge } from "@/types/challenges";
-import { closeOutline } from "ionicons/icons";
+import { closeOutline, copyOutline } from "ionicons/icons";
 import { isAddress } from "viem";
 import useToast from "@/hooks/useToast";
 import { banOutline } from "ionicons/icons";
+import ContractService from "@/services/ContractService";
+import { handleCopyClick, shortenAddress } from "@/utils";
 
 export interface CreateChallengeModalProps {
   presentingElement?: HTMLElement;
@@ -80,8 +82,10 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
       mintingContractAddress: false,
       honeyPotAddress: false,
     });
+    dismiss();
   };
 
+  console.log(resultChallenge, "result chall");
   const handleCreateChallenge = async () => {
     try {
       const result = await ApiService.createChallenges(createdChallenge);
@@ -120,6 +124,25 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
       ...prevGroup,
       honeyPotAddress: value,
     }));
+  };
+
+  const generateHoneyPot = async () => {
+    const result = await ContractService.createHoneyPot(
+      createdChallenge.mintingContractAddress
+    );
+    setCreatedChallenge((prevGroup) => ({
+      ...prevGroup,
+      honeyPotAddress: result.honeyPot,
+    }));
+  };
+
+  const copy = () => {
+    handleCopyClick(createdChallenge.honeyPotAddress);
+    presentToast(
+      `You copied the honey pot address! Use it for your mints.`,
+      "primary",
+      copyOutline
+    );
   };
 
   return (
@@ -161,7 +184,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
           </IonItem>
 
           <IonItem lines="none">
-            <IonInput
+            {/*   <IonInput
               className={`${validAddresses.honeyPotAddress && "ion-valid"} ${
                 validAddresses.honeyPotAddress === false && "ion-invalid"
               } ${isHoneyTouched && "ion-touched"}`}
@@ -172,7 +195,22 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
               label-placement="floating"
               placeholder="Enter the address"
               onIonChange={(e) => handleSetHoneyPotAddress(e.detail.value!)}
-            ></IonInput>
+            ></IonInput> */}
+
+            <IonButton
+              onClick={() =>
+                !createdChallenge.honeyPotAddress ? generateHoneyPot() : copy()
+              }
+              shape="round"
+              disabled={!createdChallenge.mintingContractAddress}
+              color={
+                !createdChallenge.mintingContractAddress ? "medium" : "primary"
+              }
+            >
+              {!createdChallenge.honeyPotAddress
+                ? "Generate HoneyPot"
+                : shortenAddress(createdChallenge.honeyPotAddress)}
+            </IonButton>
           </IonItem>
 
           {/* TODO: field is optional 
@@ -209,7 +247,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
               <IonSelectOption value="arbitrum">Arbitrum</IonSelectOption>
               <IonSelectOption value="optimism">Optimism</IonSelectOption>
               <IonSelectOption value="base">Base</IonSelectOption>
-              <IonSelectOption value="polygon">Polygon</IonSelectOption>
+              <IonSelectOption value="goerli">Ethereum Goerli</IonSelectOption>
             </IonSelect>
           </IonItem>
 

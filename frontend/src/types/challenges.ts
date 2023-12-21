@@ -14,6 +14,7 @@ export interface Challenge {
     tokenId: null | string;
     category: string;
     name: string;
+    description?: string;
     kind: string;
     floorPrice: string;
     expiration: string;
@@ -41,5 +42,4 @@ export interface Pool {
 
 export type GroupedChallenge = {
     [key: string]: Challenge[];
-  };
-  
+};

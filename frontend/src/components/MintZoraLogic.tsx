@@ -35,16 +35,28 @@ export const MintZoraLogic = (props: {
   tokenId?: string;
   tokenContract: Address;
   chainId: number;
+  setParams: (params: SimulateContractParameters) => void;
+  params: SimulateContractParameters;
+  setQuantityToMint: (quantity: number) => void;
+  quantityToMint: number;
 }) => {
-  const { tokenId, tokenContract, chainId } = props;
+  const {
+    tokenId,
+    tokenContract,
+    chainId,
+    quantityToMint,
+    setQuantityToMint,
+    setParams,
+    params,
+  } = props;
   // call custom hook to get the mintClient
   const mintClient = useMintClient();
 
   // value will be set by the form
-  const [quantityToMint, setQuantityToMint] = useState<number>(1);
+  //const [quantityToMint, setQuantityToMint] = useState<number>(1);
 
   // params for the prepare contract write hook
-  const [params, setParams] = useState<SimulateContractParameters>();
+  //const [params, setParams] = useState<SimulateContractParameters>();
   const [paramError, setParamError] = useState("");
 
   const { address } = useAccount();

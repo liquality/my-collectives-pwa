@@ -1,3 +1,5 @@
+import { ethers } from "ethers";
+import { SimulateContractParameters } from "viem";
 
 export function shortenAddress(address: string) {
   const _address = address || "";
@@ -62,8 +64,17 @@ export function convertDateToReadable(expiration: Date | string): string {
     return `${hours} hour${hours === 1 ? '' : 's'} left`;
   } else if (minutes > 0) {
     return `${minutes} minute${minutes === 1 ? '' : 's'} left`;
-  } else {
+  } else if (seconds > 0) {
     return `${seconds} second${seconds === 1 ? '' : 's'} left`;
   }
+  else { return "expired " }
 }
+
+export const displayPrice = (floorPrice: string, params?: SimulateContractParameters) => {
+  if (params?.value) {
+    const ethValue = ethers.utils.formatEther(params.value);
+    return ethValue;
+  } else return floorPrice;
+};
+
 
