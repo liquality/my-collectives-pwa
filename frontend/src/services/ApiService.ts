@@ -126,6 +126,14 @@ const ApiService = {
       '/v1/user/rewards-summary'
     );
   },
+
+  getGroupsByChallenge: async function (
+    challengeId: string,
+    ) {
+      return NetworkService.getResourceWithAuth(
+        `/v1/groups/challenge/${challengeId}`
+      );
+    },
 };
 
 export default ApiService;
