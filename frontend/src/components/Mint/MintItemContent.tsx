@@ -62,10 +62,6 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     tokenId ?? undefined
   );
 
-  console.log(params, "MINT PARAMS?");
-
-  //const [params, setParams] = useState<SimulateContractParameters>();
-
   const handleDetailsClick = () => {};
   const handleChangeCollectiveClick = () => {};
   const handleMintClick = () => {};
