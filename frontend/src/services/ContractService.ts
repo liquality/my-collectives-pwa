@@ -59,13 +59,14 @@ const ContractService = {
             tokenID: 1,
             amount, //amount in WEI bigint
             quantity: 1,
-            platform: MyCollectives.SupportedPlatforms.Zora,
+            platform: MyCollectives.SupportedPlatforms.ZORA,
             tokenContract,
-            poolAddress: "",
+            poolAddress: poolHoneyPotAddress,
 
         })
-        // setPool(response.pools)
         console.log("!!!!! response => ", response)
+
+        return response
     },
 
     async getPool(cAddress: string, cWallet: string, nonceKey: bigint, honeyPot: string) {
