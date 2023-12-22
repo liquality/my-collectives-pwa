@@ -34,6 +34,8 @@ import useGetGroupsByChallenge from "@/hooks/Groups/useGetGroupsByChallenge";
 import { Group } from "@/types/general-types";
 import useToast from "@/hooks/useToast";
 import { PageLoadingIndicator } from "../PageLoadingIndicator";
+import { formatEther, parseEther } from "viem";
+import { calculateMintFeeAmount } from "@/utils/fee";
 
 export interface MintItemContentProps {
   challenge: Challenge;
@@ -81,14 +83,18 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     setShowGroupList(!showGroupList);
   };
   const [pendingMint, setPendingMint] = useState(false);
-  let zoraFee = BigInt(ethers.utils.parseEther("0.000777").toString());
-  let amountInWeiToPay =
-    platform === "Zora" && network === "goerli"
-      ? zoraFee //TODO: for mints that cost should be zoraFee + params.value but it doesnt work (contract reverts)
-      : BigInt(ethers.utils.parseEther("0.0005").toString());
+
+  let amountInWeiToPay = calculateMintFeeAmount(platform, network, params);
+  if (amountInWeiToPay) {
+    console.log(
+      amountInWeiToPay,
+      "AMOUNT IN WEI TO PAY",
+      formatEther(amountInWeiToPay)
+    );
+  }
 
   const handleMintClick = async () => {
-    if (selectedGroup && params) {
+    if (selectedGroup && amountInWeiToPay) {
       try {
         setPendingMint(true);
         const { publicAddress, walletAddress, nonceKey } = selectedGroup;
