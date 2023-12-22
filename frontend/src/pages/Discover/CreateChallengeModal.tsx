@@ -47,6 +47,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     chainId: "",
     tokenId: "", //can be left empty if tokenIds are unique (erc1155 vs erc721)
     category: "", //music, art or other
+    platform: "",
     network: "", // zora, arbitrum, polygon or base
     expiration: "",
     honeyPotAddress: "",
@@ -74,6 +75,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
       chainId: "",
       tokenId: "",
       category: "",
+      platform: "",
       network: "",
       expiration: "",
       honeyPotAddress: "",
@@ -127,9 +129,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
   };
 
   const generateHoneyPot = async () => {
-    const result = await ContractService.createHoneyPot(
-      createdChallenge.mintingContractAddress
-    );
+    const result = await ContractService.createHoneyPot();
     setCreatedChallenge((prevGroup) => ({
       ...prevGroup,
       honeyPotAddress: result.honeyPot,
@@ -145,6 +145,7 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     );
   };
 
+  console.log(createdChallenge, "created chall?");
   return (
     <IonModal
       initialBreakpoint={0.95}
@@ -248,6 +249,24 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
               <IonSelectOption value="optimism">Optimism</IonSelectOption>
               <IonSelectOption value="base">Base</IonSelectOption>
               <IonSelectOption value="goerli">Ethereum Goerli</IonSelectOption>
+            </IonSelect>
+          </IonItem>
+
+          <IonItem>
+            <IonSelect
+              value={createdChallenge.platform}
+              onIonChange={(e) =>
+                setCreatedChallenge((prevGroup) => ({
+                  ...prevGroup,
+                  platform: e.detail.value!,
+                }))
+              }
+              label="Platform"
+              placeholder="Platform"
+            >
+              <IonSelectOption value="Other">Other</IonSelectOption>
+              <IonSelectOption value="Sound">Sound</IonSelectOption>
+              <IonSelectOption value="Zora">Zora</IonSelectOption>
             </IonSelect>
           </IonItem>
 

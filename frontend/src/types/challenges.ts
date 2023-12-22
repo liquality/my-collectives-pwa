@@ -1,3 +1,5 @@
+import * as MyCollectives from "@koderholic/my-collectives";
+
 export interface ChallengeCreation {
     mintingContractAddress: string;
     chainId: string;
@@ -14,6 +16,7 @@ export interface Challenge {
     tokenId: null | string;
     category: string;
     name: string;
+    platform: MyCollectives.SupportedPlatforms
     description?: string;
     kind: string;
     floorPrice: string;

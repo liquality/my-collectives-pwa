@@ -37,9 +37,10 @@ const ContractService = {
 
 
 
-    async createHoneyPot(tokenContract: string) {
+    async createHoneyPot() {
         MyCollectives.setConfig({} as Config)
         const salt = generateSalt();
+
         const response = await MyCollectives.HoneyPot.get(this.getProvider(), salt)
         console.log("!!!!! response honey pot address => ", response)
         return response
@@ -50,7 +51,7 @@ const ContractService = {
         console.log("!!!!! response => createPools for each ", response)
     },
 
-    async poolMint(cAddress: string, cWallet: string, nonceKey: bigint, amount: bigint, tokenContract: string, poolHoneyPotAddress: string) {
+    async poolMint(cAddress: string, cWallet: string, nonceKey: bigint, amount: bigint, tokenContract: string, poolHoneyPotAddress: string, tokenId: number) {
         MyCollectives.setConfig({} as Config)
         console.log(cAddress, cWallet, nonceKey, poolHoneyPotAddress, 'ALL THE PARAMS FOR GETTING A POOL')
         const poolAddress = await this.getPool(cAddress, cWallet, nonceKey, poolHoneyPotAddress)
@@ -58,7 +59,7 @@ const ContractService = {
         console.log(poolAddress, 'poolresponse ID:', poolAddress)
         const response = await MyCollectives.Pool.mint(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, {
             recipient: await this.getProvider().getSigner().getAddress(),
-            tokenID: 22,
+            tokenID: tokenId ?? Number(generateSalt().toString().slice(2)),
             amount, //amount in WEI bigint
             quantity: 1,
             platform: MyCollectives.SupportedPlatforms.LOCAL,

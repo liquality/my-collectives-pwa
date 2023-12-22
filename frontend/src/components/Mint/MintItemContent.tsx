@@ -26,7 +26,7 @@ import {
   IonItem,
   IonList,
 } from "@ionic/react";
-import { add, remove } from "ionicons/icons";
+import { add, banOutline, remove } from "ionicons/icons";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import MintZoraLogic from "../MintZoraLogic";
 import { SimulateContractParameters } from "viem";
@@ -36,6 +36,8 @@ import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
 import ContractService from "@/services/ContractService";
 import useGetGroupsByChallenge from "@/hooks/Groups/useGetGroupsByChallenge";
 import { Group } from "@/types/general-types";
+import useToast from "@/hooks/useToast";
+import { PageLoadingIndicator } from "../PageLoadingIndicator";
 
 export interface MintItemContentProps {
   challenge: Challenge;
@@ -53,6 +55,8 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     name,
     floorPrice,
     groupCount,
+    network,
+    platform,
     expiration,
     mintingContractAddress,
     honeyPotAddress,
@@ -72,6 +76,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     quantityToMint,
     tokenId ?? undefined
   );
+  const { presentToast } = useToast();
   const { groups, loading: loadingGroups } = useGetGroupsByChallenge(id);
   useEffect(() => {}, [quantityToMint, params?.value]);
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
@@ -79,31 +84,49 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
   const handleChangeCollectiveClick = () => {
     setShowGroupList(!showGroupList);
   };
+  const [pendingMint, setPendingMint] = useState(false);
+
+  let amountInWeiToPay =
+    platform === "Zora" && network === "goerli"
+      ? BigInt(0.000777)
+      : BigInt(ethers.utils.parseEther("0.0005").toString());
 
   const handleMintClick = async () => {
     if (selectedGroup) {
-      console.log("Handle mint click!");
-      const { publicAddress, walletAddress, nonceKey } = selectedGroup;
-      console.log(
-        publicAddress,
-        walletAddress,
-        nonceKey,
-        0.0005, //  params.value ?? BigInt(0)
-        mintingContractAddress,
-        honeyPotAddress,
-        "ALL OF MY PARAMS to ContractService.PoolMint()"
-      );
-      const mintResult = await ContractService.poolMint(
-        publicAddress,
-        walletAddress,
-        BigInt(nonceKey),
-        BigInt(ethers.utils.parseEther("0.0005").toString()), //params.value ?? BigInt(0),
-        mintingContractAddress,
-        honeyPotAddress
-      );
-      console.log(mintResult);
-
-      //setResult({success: true}) // only set result once minting is done
+      try {
+        setPendingMint(true);
+        const { publicAddress, walletAddress, nonceKey } = selectedGroup;
+        console.log(
+          publicAddress,
+          walletAddress,
+          nonceKey,
+          0.0005, //  params.value ?? BigInt(0)
+          mintingContractAddress,
+          honeyPotAddress,
+          "ALL OF MY PARAMS to ContractService.PoolMint()"
+        );
+        const mintResult = await ContractService.poolMint(
+          publicAddress,
+          walletAddress,
+          BigInt(nonceKey),
+          amountInWeiToPay, //params.value ?? BigInt(0),
+          mintingContractAddress,
+          honeyPotAddress,
+          Number(tokenId)
+        );
+        console.log(mintResult);
+        if (mintResult) {
+          setPendingMint(false);
+          setResult({ success: true });
+        } else {
+          throw Error;
+        }
+      } catch (error) {
+        setPendingMint(false);
+        presentToast("Minting failed", "danger", banOutline);
+      }
+    } else {
+      presentToast("You need to select a collective!", "danger", banOutline);
     }
   };
   const handleSelectGroup = (group: Group) => {
@@ -131,51 +154,59 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
 
   return (
     <IonGrid>
-      <IonRow className="ion-justify-content-center">
-        <IonCol size="8" style={{ display: "flex", justifyContent: "center" }}>
-          <IonCard className="challenge-mint-card">
-            <img
-              className="challenge-mint-img"
-              alt="NFT Image"
-              style={{ display: loadingImage ? "none" : "block" }}
-              src={ipfsImageUrl}
-              onLoad={() => setLoadingImage(false)}
-              onError={() => setLoadingImage(false)}
-            />
-            {loadingImage ? (
-              <IonSkeletonText
-                className="challenge-mint-img-skeleton"
-                animated={true}
-              ></IonSkeletonText>
-            ) : null}
-            <div className="challenge-time-chip challenge-time-chip-ontop">
-              {convertDateToReadable(expiration)}
-            </div>
-            <IonCardHeader>
-              <IonCardTitle>
-                {loadingImage ? (
-                  <IonSkeletonText animated={true}></IonSkeletonText>
-                ) : (
-                  handleDisplayAddress(creatorOfMint ?? "")
-                )}
-              </IonCardTitle>
-              <IonCardSubtitle>
-                {<div className="name">{cutOffTooLongString(name, 30)}</div>}
-              </IonCardSubtitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <IonGrid className="">
-                <IonRow className="ion-justify-content-left ion-align-items-center">
-                  <IonCol size="auto">
-                    <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>
-                    <IonLabel>{totalMints}</IonLabel>
-                  </IonCol>
-                </IonRow>
-              </IonGrid>
-            </IonCardContent>
-          </IonCard>
-        </IonCol>
-      </IonRow>
+      {pendingMint ? (
+        <PageLoadingIndicator />
+      ) : (
+        <IonRow className="ion-justify-content-center">
+          <IonCol
+            size="8"
+            style={{ display: "flex", justifyContent: "center" }}
+          >
+            <IonCard className="challenge-mint-card">
+              <img
+                className="challenge-mint-img"
+                alt="NFT Image"
+                style={{ display: loadingImage ? "none" : "block" }}
+                src={ipfsImageUrl}
+                onLoad={() => setLoadingImage(false)}
+                onError={() => setLoadingImage(false)}
+              />
+              {loadingImage ? (
+                <IonSkeletonText
+                  className="challenge-mint-img-skeleton"
+                  animated={true}
+                ></IonSkeletonText>
+              ) : null}
+              <div className="challenge-time-chip challenge-time-chip-ontop">
+                {convertDateToReadable(expiration)}
+              </div>
+              <IonCardHeader>
+                <IonCardTitle>
+                  {loadingImage ? (
+                    <IonSkeletonText animated={true}></IonSkeletonText>
+                  ) : (
+                    handleDisplayAddress(creatorOfMint ?? "")
+                  )}
+                </IonCardTitle>
+                <IonCardSubtitle>
+                  {<div className="name">{cutOffTooLongString(name, 30)}</div>}
+                </IonCardSubtitle>
+              </IonCardHeader>
+              <IonCardContent>
+                <IonGrid className="">
+                  <IonRow className="ion-justify-content-left ion-align-items-center">
+                    <IonCol size="auto">
+                      <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>
+                      <IonLabel>{totalMints}</IonLabel>
+                    </IonCol>
+                  </IonRow>
+                </IonGrid>
+              </IonCardContent>
+            </IonCard>
+          </IonCol>
+        </IonRow>
+      )}
+
       <IonRow className="ion-justify-content-center ion-align-items-center">
         <IonCol size="8" className="challenge-mint-amount-container">
           <IonButton

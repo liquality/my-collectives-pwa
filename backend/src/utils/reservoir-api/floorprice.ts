@@ -10,10 +10,10 @@ export async function getFloorPrice(tokenId: string, network: string, collection
         const response = await axios.get(url, configHeaders);
         const data = response.data;
         if (tokenId) {
-            return data.sales[0].price.amount.decimal;
+            return data.sales[0]?.price.amount.decimal;
         }
         else {
-            return data.sales[0].price.amount.decimal;
+            return data.sales[0]?.price.amount.decimal;
         }
     } catch (error) {
         console.error('Error:', error);
