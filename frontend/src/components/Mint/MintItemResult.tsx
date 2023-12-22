@@ -18,6 +18,7 @@ import {
   IonButton,
 } from "@ionic/react";
 import React, { useState } from "react";
+import GenerateInviteBtn from "../GenerateInvite";
 
 export interface MintItemResultProps {
   challenge: Challenge;
@@ -30,6 +31,7 @@ const MintItemResult: React.FC<MintItemResultProps> = ({
   result,
   collective,
 }: MintItemResultProps) => {
+  console.log(collective, "collective?");
   const [loadingImage, setLoadingImage] = useState(true);
   return (
     <>
@@ -82,9 +84,11 @@ const MintItemResult: React.FC<MintItemResultProps> = ({
           </IonRow>
           <IonRow className="ion-justify-content-center ion-margin-bottom ">
             <IonCol size="auto">
-              <IonButton color="primary" shape="round">
+              <GenerateInviteBtn groupId={collective.id} />
+
+              {/*        <IonButton onClick={joinCollective} color="primary" shape="round">
                 Invite to Group
-              </IonButton>
+              </IonButton>  */}
             </IonCol>
           </IonRow>
           <IonRow className="ion-justify-content-center ion-margin-top">

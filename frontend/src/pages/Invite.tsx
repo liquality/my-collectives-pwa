@@ -52,6 +52,7 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
     setLoading(false);
   }, [id, code]);
 
+  console.log(invite, "wats invite?");
   async function handleConnect() {
     setProcessing(true);
     if (claimInviteAvailable) {
@@ -63,7 +64,12 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
           invite.groupNonceKey
         );
         await InvitesService.claim(invite.id, address!);
-        router.push(pathConstants.mintPage.myCollectives);
+        const url = pathConstants.collective.mints.replace(
+          ":groupId",
+          invite.groupId
+        );
+        console.log(url, "wats url?");
+        router.push(url);
       } catch (error) {
         console.log(error, "Error adding member");
       }
