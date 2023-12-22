@@ -47,9 +47,20 @@ const ContractService = {
         return response
     },
 
-    async createPools(cAddress: string, cWallet: string, nonceKey: bigint, tokenContracts: string[], honeyPots: string[]) {
-        const response = await MyCollectives.Collective.createPools(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, { tokenContracts, honeyPots, })
-        console.log("!!!!! response => createPools for each ", response)
+    async createPools(
+        cAddress: string,
+        cWallet: string,
+        nonceKey: bigint,
+        tokenContracts: string[],
+        honeyPots: string[]
+    ) {
+        const response = await MyCollectives.Collective.createPools(
+            this.getProvider(),
+            { address: cAddress, wallet: cWallet, nonceKey },
+            { tokenContracts, honeyPots }
+        );
+        console.log("!!!!! response => createPools for each ", response);
+        return response;
     },
 
     async poolMint(cAddress: string, cWallet: string, nonceKey: bigint, amount: bigint, tokenContract: string, poolHoneyPotAddress: string, quantity: number, tokenId: string | null, platform: MyCollectives.SupportedPlatforms) {
