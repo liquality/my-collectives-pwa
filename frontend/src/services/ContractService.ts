@@ -53,12 +53,12 @@ const ContractService = {
     async poolMint(cAddress: string, cWallet: string, nonceKey: bigint, amount: bigint, tokenContract: string, poolHoneyPotAddress: string) {
         MyCollectives.setConfig({} as Config)
         console.log(cAddress, cWallet, nonceKey, poolHoneyPotAddress, 'ALL THE PARAMS FOR GETTING A POOL')
-        const poolResponse = await this.getPool(cAddress, cWallet, nonceKey, poolHoneyPotAddress)
-        const poolAddress = poolResponse.pools["id"]
-        console.log(poolResponse, 'poolresponse ID:', poolAddress)
+        const poolAddress = await this.getPool(cAddress, cWallet, nonceKey, poolHoneyPotAddress)
+
+        console.log(poolAddress, 'poolresponse ID:', poolAddress)
         const response = await MyCollectives.Pool.mint(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, {
             recipient: await this.getProvider().getSigner().getAddress(),
-            tokenID: 1,
+            tokenID: 22,
             amount, //amount in WEI bigint
             quantity: 1,
             platform: MyCollectives.SupportedPlatforms.LOCAL,
