@@ -52,7 +52,7 @@ export class GroupsService {
 
         // Group has been created, now you can give invites, creator of group gets 10 invites
         if (groupResult) {
-          await giveUserInvitesForGroup(userId, groupResult['id'], 10);
+          await giveUserInvitesForGroup(userId, groupResult["id"], 10);
         }
 
         resolve(groupResult);
@@ -62,61 +62,66 @@ export class GroupsService {
     });
   }
 
-
-
-
-  public static async findByUserAddress(address: string): Promise<GroupAllInfo[]> {
-    const result: any[] = await dbClient('groups')
-      .leftJoin('user_groups', 'groups.id', '=', 'user_groups.groupId')
-      .leftJoin('users', 'users.id', '=', 'user_groups.userId')
-      .leftJoin('pools', 'pools.groupId', '=', 'groups.id')
-      .leftJoin('challenges', 'challenges.id', '=', 'pools.challengeId') // Join with challenges table
-      .leftJoin('messages', 'messages.groupId', '=', 'groups.id')
-      .where('users.publicAddress', '=', address)
-      .groupBy('groups.id')
+  public static async findByUserAddress(
+    address: string
+  ): Promise<GroupAllInfo[]> {
+    const result: any[] = await dbClient("groups")
+      .leftJoin("user_groups", "groups.id", "=", "user_groups.groupId")
+      .leftJoin("users", "users.id", "=", "user_groups.userId")
+      .leftJoin("pools", "pools.groupId", "=", "groups.id")
+      .leftJoin("challenges", "challenges.id", "=", "pools.challengeId") // Join with challenges table
+      .leftJoin("messages", "messages.groupId", "=", "groups.id")
+      .where("users.publicAddress", "=", address)
+      .groupBy("groups.id")
       .select([
-        'groups.id',
-        'groups.name',
-        'groups.description',
-        'groups.publicAddress',
-        'groups.walletAddress',
-        'groups.nonceKey',
-        'groups.salt',
-        'groups.createdAt',
-        'groups.createdBy',
-        'groups.mintCount'
+        "groups.id",
+        "groups.name",
+        "groups.description",
+        "groups.publicAddress",
+        "groups.walletAddress",
+        "groups.nonceKey",
+        "groups.salt",
+        "groups.createdAt",
+        "groups.createdBy",
+        "groups.mintCount",
       ])
-      .countDistinct({ memberCount: 'user_groups.userId' })
-      .countDistinct({ poolsCount: 'pools.id' })
-      .countDistinct({ messagesCount: 'messages.id' })
-      .countDistinct({ activePoolsCount: dbClient.raw('CASE WHEN challenges.expiration > CURRENT_TIMESTAMP THEN pools.id ELSE NULL END') })
-      .orderBy('groups.createdAt', 'desc');
+      .countDistinct({ memberCount: "user_groups.userId" })
+      .countDistinct({ poolsCount: "pools.id" })
+      .countDistinct({ messagesCount: "messages.id" })
+      .countDistinct({
+        activePoolsCount: dbClient.raw(
+          "CASE WHEN challenges.expiration > CURRENT_TIMESTAMP THEN pools.id ELSE NULL END"
+        ),
+      })
+      .orderBy("groups.createdAt", "desc");
 
-    return result
+    return result;
   }
 
-public static async findByChallenge(challengeId: string): Promise<GroupAllInfo[]> {
-    const result: any[] = await dbClient('pools')
-      .leftJoin('groups', 'pools.groupId', '=', 'groups.id')
-      .leftJoin('challenges', 'challenges.id', '=', 'pools.challengeId')
-      .leftJoin('user_groups', 'groups.id', '=', 'user_groups.groupId')
-      .leftJoin('users', 'users.id', '=', 'user_groups.userId')
-      .where('challenges.id', '=', challengeId)
-      .groupBy('groups.id')
+  public static async findByChallenge(
+    challengeId: string
+  ): Promise<GroupAllInfo[]> {
+    const result: any[] = await dbClient("pools")
+      .leftJoin("groups", "pools.groupId", "=", "groups.id")
+      .leftJoin("challenges", "challenges.id", "=", "pools.challengeId")
+      .leftJoin("user_groups", "groups.id", "=", "user_groups.groupId")
+      .leftJoin("users", "users.id", "=", "user_groups.userId")
+      .where("challenges.id", "=", challengeId)
+      .groupBy("groups.id")
       .select([
-        'groups.id',
-        'groups.name',
-        'groups.description',
-        'groups.publicAddress',
-        'groups.walletAddress',
-        'groups.nonceKey',
-        'groups.createdAt',
-        'groups.createdBy',
-        'groups.mintCount'
+        "groups.id",
+        "groups.name",
+        "groups.description",
+        "groups.publicAddress",
+        "groups.walletAddress",
+        "groups.nonceKey",
+        "groups.createdAt",
+        "groups.createdBy",
+        "groups.mintCount",
       ])
-      .orderBy('groups.createdAt', 'desc');
-      
-    return result
+      .orderBy("groups.createdAt", "desc");
+
+    return result;
   }
 
   public static async findMembers(id: string): Promise<Group[]> {
@@ -130,43 +135,73 @@ public static async findByChallenge(challengeId: string): Promise<GroupAllInfo[]
   public static find(id: string): Promise<Group | null> {
     return dbClient("groups")
       .where("id", "=", id)
-      .first<Group>("id", "name", "description", "publicAddress", "createdAt");
+      .first<Group>(
+        "id",
+        "name",
+        "description",
+        "publicAddress",
+        "walletAddress",
+        "nonceKey",
+        "createdAt"
+      );
   }
 
-  public static async update(id: string, updatedGroupFields: Partial<Group>, pools: any[], userId: string): Promise<any> {
-    console.log("INSIDE UPDATE", updatedGroupFields, pools, id)
-    const existingPools = await dbClient("pools").select("challengeId").where("groupId", "=", id);
+  public static async update(
+    id: string,
+    updatedGroupFields: Partial<Group>,
+    pools: any[],
+    userId: string
+  ): Promise<any> {
+    console.log("INSIDE UPDATE", updatedGroupFields, pools, id);
+    const existingPools = await dbClient("pools")
+      .select("challengeId")
+      .where("groupId", "=", id);
     // identify pools to be inserted (new ones) and removed (existing ones not in the updated array)
 
-    const queryResult = await dbClient("groups").where("id", "=", id).update(updatedGroupFields);
+    const queryResult = await dbClient("groups")
+      .where("id", "=", id)
+      .update(updatedGroupFields);
 
     if (pools.length) {
-      const newPools = pools.filter((pool) => !existingPools.some((existingPool) => existingPool.challengeId === pool.id || existingPool.challengeId === pool.challengeId));
-      const poolsToRemove = existingPools.filter((existingPool) => !pools.some((pool) => existingPool.challengeId === pool.id || existingPool.challengeId === pool.challengeId));
+      const newPools = pools.filter(
+        (pool) =>
+          !existingPools.some(
+            (existingPool) =>
+              existingPool.challengeId === pool.id ||
+              existingPool.challengeId === pool.challengeId
+          )
+      );
+      const poolsToRemove = existingPools.filter(
+        (existingPool) =>
+          !pools.some(
+            (pool) =>
+              existingPool.challengeId === pool.id ||
+              existingPool.challengeId === pool.challengeId
+          )
+      );
       // insert new pools
       if (newPools.length > 0) {
         const poolInsertData = newPools.map((pool) => ({
           groupId: id,
           createdBy: userId,
           challengeId: pool.id,
-          createdAt: new Date()
+          createdAt: new Date(),
         }));
         await dbClient("pools").insert(poolInsertData);
       }
 
       // remove pools that are not in the updated array
       if (poolsToRemove.length > 0) {
-        const challengeIdsToRemove = poolsToRemove.map((existingPool) => existingPool.challengeId);
-        await dbClient("pools").where("groupId", "=", id).whereIn("challengeId", challengeIdsToRemove).del();
+        const challengeIdsToRemove = poolsToRemove.map(
+          (existingPool) => existingPool.challengeId
+        );
+        await dbClient("pools")
+          .where("groupId", "=", id)
+          .whereIn("challengeId", challengeIdsToRemove)
+          .del();
       }
     }
-
 
     return queryResult;
   }
 }
-
-
-
-
-
