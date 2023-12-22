@@ -87,7 +87,6 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     dismiss();
   };
 
-  console.log(resultChallenge, "result chall");
   const handleCreateChallenge = async () => {
     try {
       const result = await ApiService.createChallenges(createdChallenge);
@@ -145,7 +144,6 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
     );
   };
 
-  console.log(createdChallenge, "created chall?");
   return (
     <IonModal
       initialBreakpoint={0.95}

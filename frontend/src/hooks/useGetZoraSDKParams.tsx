@@ -28,6 +28,7 @@ export function useGetZoraSDKParams(
   tokenContract: string,
   chainId: number,
   quantityToMint: number,
+  platform: string,
   tokenId?: string
 ) {
   const mintClient = useMintClient();
@@ -39,8 +40,7 @@ export function useGetZoraSDKParams(
   const { address } = useAccount();
 
   useEffect(() => {
-    console.log(quantityToMint, "quantity?");
-    if (!mintClient || !address)
+    if (!mintClient || (!address && platform === "Zora"))
       presentToast(
         "ParamError: Could not find token to mint, please switch network to chainId:" +
           chainId,
@@ -50,7 +50,7 @@ export function useGetZoraSDKParams(
 
     const makeParams = async () => {
       // make the params for the prepare contract write hook
-      if (tokenContract && chainId) {
+      if (tokenContract && chainId && platform === "Zora") {
         if (mintClient && address) {
           try {
             const _params = await mintClient.makePrepareMintTokenParams({

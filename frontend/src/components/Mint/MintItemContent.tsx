@@ -86,9 +86,12 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
   };
   const [pendingMint, setPendingMint] = useState(false);
 
+  let zoraFee = BigInt(ethers.utils.parseEther("0.000777").toString());
   let amountInWeiToPay =
     platform === "Zora" && network === "goerli"
-      ? BigInt(0.000777)
+      ? params?.value
+        ? zoraFee + params.value
+        : zoraFee
       : BigInt(ethers.utils.parseEther("0.0005").toString());
 
   const handleMintClick = async () => {
@@ -100,7 +103,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
           publicAddress,
           walletAddress,
           nonceKey,
-          0.0005, //  params.value ?? BigInt(0)
+          amountInWeiToPay, //  params.value ?? BigInt(0)
           mintingContractAddress,
           honeyPotAddress,
           "ALL OF MY PARAMS to ContractService.PoolMint()"
