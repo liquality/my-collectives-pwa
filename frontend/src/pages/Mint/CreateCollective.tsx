@@ -61,7 +61,6 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
   useEffect(() => {
     setPresentingElement(page.current);
   }, [pendingCreation]);
-  console.log(pendingCreation, "pending creation");
 
   const handlePoolSelection = (selectedPool: Challenge) => {
     if (allSelectedPools) {
@@ -80,10 +79,8 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     );
   };
 
-  console.log(allSelectedPools, "all selected pools");
   const handleCreateGroup = async () => {
     setPendingCreation(true);
-    console.log(pendingCreation, "should be true!");
     const groupObject: GroupCreation = {
       createdBy: user?.id,
       name: createGroup.name,

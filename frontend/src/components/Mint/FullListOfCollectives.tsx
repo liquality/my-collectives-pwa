@@ -26,11 +26,7 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
   const { user } = useSignInWallet();
 
   const handleClick = (group: any) => {
-    const url = pathConstants.collective.mints.replace(
-      ":groupId",
-      group.id
-    );
-    console.log(url, 'url')
+    const url = pathConstants.collective.mints.replace(":groupId", group.id);
     router.push(url);
   };
 

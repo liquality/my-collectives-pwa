@@ -36,8 +36,6 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
   const claimInviteAvailable = invite && user && address;
   const { chains, chain } = useNetwork();
 
-  console.log(chains, "CHAAAINS", chain, "CHAAIN");
-
   useEffect(() => {
     setLoading(true);
     if (id) {
@@ -53,8 +51,6 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
     }
     setLoading(false);
   }, [id, code]);
-
-  console.log(invite, "inv?");
 
   async function handleConnect() {
     setProcessing(true);
@@ -74,8 +70,6 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
     }
     setProcessing(false);
   }
-
-  console.log(invite, "wats invite?");
 
   useEffect(() => {
     if (user) {

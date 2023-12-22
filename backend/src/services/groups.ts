@@ -152,7 +152,6 @@ export class GroupsService {
     pools: any[],
     userId: string
   ): Promise<any> {
-    console.log("INSIDE UPDATE", updatedGroupFields, pools, id);
     const existingPools = await dbClient("pools")
       .select("challengeId")
       .where("groupId", "=", id);
