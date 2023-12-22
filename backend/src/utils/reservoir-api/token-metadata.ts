@@ -18,13 +18,13 @@ export async function fetchReservoirData(collectionAddress: string, network: str
         const response = await axios.get(url, configHeaders);
         const data = response.data;
         if (tokenId) {
-            const prettifiedList = await prettifyERC1155Data(data.tokens[0].token, price)
-            //console.log('Data: in erc 1155', data.tokens[0].token);
+            const prettifiedList = await prettifyERC1155Data(data.tokens[0]?.token, price)
+            console.log('Data: in erc 1155', data.tokens[0].token);
             return prettifiedList;
         }
         else {
             const prettifiedList = await prettifyERC721Data(data.tokens, price)
-            //console.log('Data: in erc 721', data.tokens)
+            console.log('Data: in erc 721', data.tokens)
             return prettifiedList;
         }
     } catch (error) {

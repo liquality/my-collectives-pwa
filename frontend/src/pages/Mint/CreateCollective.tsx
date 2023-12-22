@@ -26,6 +26,7 @@ import useToast from "@/hooks/useToast";
 import { banOutline } from "ionicons/icons";
 
 import ContractService from "@/services/ContractService";
+import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 
 export interface CreateCollectiveProps {
   presentingElement?: HTMLElement;
@@ -42,6 +43,8 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     description: "",
   });
   const [allSelectedPools, setAllSelectedPools] = useState<Challenge[]>([]);
+  const [pendingCreation, setPendingCreation] = useState(false);
+
   const { presentToast } = useToast();
 
   const page = useRef(undefined);
@@ -57,7 +60,8 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
 
   useEffect(() => {
     setPresentingElement(page.current);
-  }, []);
+  }, [pendingCreation]);
+  console.log(pendingCreation, "pending creation");
 
   const handlePoolSelection = (selectedPool: Challenge) => {
     if (allSelectedPools) {
@@ -78,6 +82,8 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
 
   console.log(allSelectedPools, "all selected pools");
   const handleCreateGroup = async () => {
+    setPendingCreation(true);
+    console.log(pendingCreation, "should be true!");
     const groupObject: GroupCreation = {
       createdBy: user?.id,
       name: createGroup.name,
@@ -126,6 +132,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
           description: "",
         });
         setAllSelectedPools([]);
+        setPendingCreation(false);
         router.push(
           `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${cAddress}&groupId=${id}&createdBy=${createdBy}&activePools=${allSelectedPools.length}`
         );
@@ -133,6 +140,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         throw Error;
       }
     } catch (error) {
+      setPendingCreation(false);
       console.log(error, "wats error?");
       presentToast("We could not create your group :(", "danger", banOutline);
     }
@@ -141,105 +149,110 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
   return (
     <IonPage>
       <Header title="Create Collective" />
+      {pendingCreation ? (
+        <IonContent>
+          <PageLoadingIndicator />
+        </IonContent>
+      ) : (
+        <IonContent>
+          <SelectPoolModal
+            trigger="open-add-pool-modal"
+            ref={selectPoolModal}
+            presentingElement={presentingElement}
+            dismiss={hideSelectPoolModal}
+            selectedPools={allSelectedPools}
+            handlePoolSelection={handlePoolSelection}
+          />
+          <IonList inset={true}>
+            <IonItem>
+              <IonInput
+                label="Collective Name"
+                label-placement="floating"
+                placeholder="Enter the name"
+                onIonInput={(e) =>
+                  setCreatedGroup((prevGroup) => ({
+                    ...prevGroup,
+                    name: e.detail.value!,
+                  }))
+                }
+              ></IonInput>
+            </IonItem>
 
-      <IonContent>
-        <SelectPoolModal
-          trigger="open-add-pool-modal"
-          ref={selectPoolModal}
-          presentingElement={presentingElement}
-          dismiss={hideSelectPoolModal}
-          selectedPools={allSelectedPools}
-          handlePoolSelection={handlePoolSelection}
-        />
-        <IonList inset={true}>
-          <IonItem>
-            <IonInput
-              label="Collective Name"
-              label-placement="floating"
-              placeholder="Enter the name"
-              onIonInput={(e) =>
-                setCreatedGroup((prevGroup) => ({
-                  ...prevGroup,
-                  name: e.detail.value!,
-                }))
-              }
-            ></IonInput>
-          </IonItem>
+            <IonItem>
+              <IonInput
+                label="Description"
+                label-placement="floating"
+                placeholder="Enter the description"
+                onIonInput={(e) =>
+                  setCreatedGroup((prevGroup) => ({
+                    ...prevGroup,
+                    description: e.detail.value!,
+                  }))
+                }
+              ></IonInput>
+            </IonItem>
+            <IonItem></IonItem>
+          </IonList>
 
-          <IonItem>
-            <IonInput
-              label="Description"
-              label-placement="floating"
-              placeholder="Enter the description"
-              onIonInput={(e) =>
-                setCreatedGroup((prevGroup) => ({
-                  ...prevGroup,
-                  description: e.detail.value!,
-                }))
-              }
-            ></IonInput>
-          </IonItem>
-          <IonItem></IonItem>
-        </IonList>
-
-        <IonList inset={true}>
-          {typeof allSelectedPools !== "undefined"
-            ? allSelectedPools?.map((pool, index) => (
-                <div className="grey-container" key={index}>
-                  <div className="flexDirectionRow space-between">
-                    <div className="flexDirectionRow">
-                      <img
-                        className="row-img"
-                        alt="group-avatar"
-                        src={convertIpfsImageUrl(pool.imageUrl)}
-                      />
-                      <div className="ml-1">
-                        <p> {cutOffTooLongString(pool?.name, 20)}</p>
-                        <p className="creator-of-mint">
-                          {handleDisplayAddress(pool?.creatorOfMint || "")}
-                        </p>
+          <IonList inset={true}>
+            {typeof allSelectedPools !== "undefined"
+              ? allSelectedPools?.map((pool, index) => (
+                  <div className="grey-container" key={index}>
+                    <div className="flexDirectionRow space-between">
+                      <div className="flexDirectionRow">
+                        <img
+                          className="row-img"
+                          alt="group-avatar"
+                          src={convertIpfsImageUrl(pool.imageUrl)}
+                        />
+                        <div className="ml-1">
+                          <p> {cutOffTooLongString(pool?.name, 20)}</p>
+                          <p className="creator-of-mint">
+                            {handleDisplayAddress(pool?.creatorOfMint || "")}
+                          </p>
+                        </div>
                       </div>
+                      <p
+                        className="small-purple-text"
+                        onClick={() => handleRemoval(pool)}
+                      >
+                        Remove
+                      </p>
                     </div>
-                    <p
-                      className="small-purple-text"
-                      onClick={() => handleRemoval(pool)}
-                    >
-                      Remove
-                    </p>
                   </div>
-                </div>
-              ))
-            : null}
+                ))
+              : null}
 
-          <IonButton
-            id="open-add-pool-modal"
-            fill="clear"
-            color="primary"
-            expand="block"
-          >
-            + Add Pool
-          </IonButton>
-        </IonList>
+            <IonButton
+              id="open-add-pool-modal"
+              fill="clear"
+              color="primary"
+              expand="block"
+            >
+              + Add Pool
+            </IonButton>
+          </IonList>
 
-        <div className="button-container">
-          <IonButton
-            onClick={handleCreateGroup}
-            shape="round"
-            disabled={isButtonDisabled}
-            color={isButtonDisabled ? "medium" : "primary"}
-          >
-            Create Collective
-          </IonButton>
-          <IonButton
-            onClick={cancel}
-            shape="round"
-            fill="clear"
-            color="primary"
-          >
-            Cancel
-          </IonButton>
-        </div>
-      </IonContent>
+          <div className="button-container">
+            <IonButton
+              onClick={handleCreateGroup}
+              shape="round"
+              disabled={isButtonDisabled}
+              color={isButtonDisabled ? "medium" : "primary"}
+            >
+              Create Collective
+            </IonButton>
+            <IonButton
+              onClick={cancel}
+              shape="round"
+              fill="clear"
+              color="primary"
+            >
+              Cancel
+            </IonButton>
+          </div>
+        </IonContent>
+      )}
     </IonPage>
   );
 };
