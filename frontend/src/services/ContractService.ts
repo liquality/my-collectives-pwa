@@ -62,7 +62,7 @@ const ContractService = {
         const generatedTokenId = Math.floor(Math.random() * (150 - 30 + 1)) + 30;
         console.log('TokenId', tokenId ? Number(tokenId) : generatedTokenId,)
 
-        console.log('All of the PARAMS: Pool.mint()', this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, {
+        console.log('All of the PARAMS: Pool.mint()', { address: cAddress, wallet: cWallet, nonceKey }, {
             recipient: await this.getProvider().getSigner().getAddress(),
             tokenID: tokenId ? Number(tokenId) : generatedTokenId,
             amount,

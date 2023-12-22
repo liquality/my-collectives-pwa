@@ -6,7 +6,6 @@ import {
   cutOffTooLongString,
   displayPrice,
   handleDisplayAddress,
-  shortenAddress,
 } from "@/utils";
 import {
   useIonRouter,
@@ -28,11 +27,8 @@ import {
 } from "@ionic/react";
 import { add, banOutline, remove } from "ionicons/icons";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import MintZoraLogic from "../MintZoraLogic";
-import { SimulateContractParameters } from "viem";
-import { BigNumberish, ethers } from "ethers";
+import { ethers } from "ethers";
 import { useGetZoraSDKParams } from "@/hooks/useGetZoraSDKParams";
-import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
 import ContractService from "@/services/ContractService";
 import useGetGroupsByChallenge from "@/hooks/Groups/useGetGroupsByChallenge";
 import { Group } from "@/types/general-types";
@@ -69,7 +65,6 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
   const [loadingImage, setLoadingImage] = useState(true);
   const [showGroupList, setShowGroupList] = useState(false);
   const [quantityToMint, setQuantityToMint] = useState(1);
-  const router = useIonRouter();
   const { params } = useGetZoraSDKParams(
     mintingContractAddress,
     chainId,
@@ -86,38 +81,18 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     setShowGroupList(!showGroupList);
   };
   const [pendingMint, setPendingMint] = useState(false);
-
   let zoraFee = BigInt(ethers.utils.parseEther("0.000777").toString());
-  if (params) {
-    console.log(zoraFee + params.value, "wat is params val?");
-  }
-
-  console.log(challenge, "Whole challenge");
-
   let amountInWeiToPay =
     platform === "Zora" && network === "goerli"
-      ? params?.value
-        ? zoraFee + params.value
-        : zoraFee
+      ? zoraFee //TODO: for mints that cost should be zoraFee + params.value but it doesnt work (contract reverts)
       : BigInt(ethers.utils.parseEther("0.0005").toString());
 
   const handleMintClick = async () => {
-    if (selectedGroup) {
+    if (selectedGroup && params) {
       try {
         setPendingMint(true);
         const { publicAddress, walletAddress, nonceKey } = selectedGroup;
-        console.log(
-          publicAddress,
-          walletAddress,
-          nonceKey,
-          amountInWeiToPay, //  params.value ?? BigInt(0)
-          mintingContractAddress,
-          honeyPotAddress,
-          quantityToMint,
-          tokenId,
-          platform,
-          "ALL OF MY PARAMS to ContractService.PoolMint()"
-        );
+
         const mintResult = await ContractService.poolMint(
           publicAddress,
           walletAddress,
