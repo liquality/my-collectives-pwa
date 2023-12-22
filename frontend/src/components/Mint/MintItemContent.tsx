@@ -87,11 +87,12 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
   };
   const [pendingMint, setPendingMint] = useState(false);
 
-  console.log(params, "params?");
   let zoraFee = BigInt(ethers.utils.parseEther("0.000777").toString());
   if (params) {
     console.log(zoraFee + params.value, "wat is params val?");
   }
+
+  console.log(challenge, "Whole challenge");
 
   let amountInWeiToPay =
     platform === "Zora" && network === "goerli"
@@ -112,6 +113,9 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
           amountInWeiToPay, //  params.value ?? BigInt(0)
           mintingContractAddress,
           honeyPotAddress,
+          quantityToMint,
+          tokenId,
+          platform,
           "ALL OF MY PARAMS to ContractService.PoolMint()"
         );
         const mintResult = await ContractService.poolMint(
@@ -121,7 +125,9 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
           amountInWeiToPay, //params.value ?? BigInt(0),
           mintingContractAddress,
           honeyPotAddress,
-          Number(tokenId)
+          quantityToMint,
+          tokenId,
+          platform
         );
         console.log(mintResult);
         if (mintResult) {

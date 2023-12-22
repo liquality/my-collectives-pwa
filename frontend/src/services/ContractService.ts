@@ -2,6 +2,7 @@ import { generateSalt } from "@/utils/salt";
 import { BigNumberish, ethers } from "ethers";
 import * as MyCollectives from "@koderholic/my-collectives";
 import { Config } from "@koderholic/my-collectives";
+import { parseEther } from "viem";
 
 const ContractService = {
     createCollective: async function (tokenContracts: string[], honeyPots: string[]) {
@@ -51,18 +52,32 @@ const ContractService = {
         console.log("!!!!! response => createPools for each ", response)
     },
 
-    async poolMint(cAddress: string, cWallet: string, nonceKey: bigint, amount: bigint, tokenContract: string, poolHoneyPotAddress: string, tokenId: number) {
+    async poolMint(cAddress: string, cWallet: string, nonceKey: bigint, amount: bigint, tokenContract: string, poolHoneyPotAddress: string, quantity: number, tokenId: string | null, platform: MyCollectives.SupportedPlatforms) {
         MyCollectives.setConfig({} as Config)
         console.log(cAddress, cWallet, nonceKey, poolHoneyPotAddress, 'ALL THE PARAMS FOR GETTING A POOL')
         const poolAddress = await this.getPool(cAddress, cWallet, nonceKey, poolHoneyPotAddress)
 
-        console.log(poolAddress, 'poolresponse ID:', poolAddress)
+
+        console.log(poolAddress, 'pooladdress & tokencontract', tokenContract)
+        const generatedTokenId = Math.floor(Math.random() * (150 - 30 + 1)) + 30;
+        console.log('TokenId', tokenId ? Number(tokenId) : generatedTokenId,)
+
+        console.log('All of the PARAMS: Pool.mint()', this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, {
+            recipient: await this.getProvider().getSigner().getAddress(),
+            tokenID: tokenId ? Number(tokenId) : generatedTokenId,
+            amount,
+            quantity,
+            platform: MyCollectives.SupportedPlatforms.ZORA,
+            tokenContract,
+            poolAddress: poolAddress
+
+        })
         const response = await MyCollectives.Pool.mint(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, {
             recipient: await this.getProvider().getSigner().getAddress(),
-            tokenID: tokenId ?? Number(generateSalt().toString().slice(2)),
+            tokenID: tokenId ? Number(tokenId) : generatedTokenId,
             amount, //amount in WEI bigint
-            quantity: 1,
-            platform: MyCollectives.SupportedPlatforms.LOCAL,
+            quantity,
+            platform: MyCollectives.SupportedPlatforms.ZORA,
             tokenContract,
             poolAddress: poolAddress
 
