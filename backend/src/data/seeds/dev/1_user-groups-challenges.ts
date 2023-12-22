@@ -130,7 +130,6 @@ export async function seed(knex: Knex): Promise<void> {
       },
 
       {
-        groupcount: "2",
         id: "00a955cb-91fd-4989-9757-9a6116eb43de",
         mintingContractAddress: "0x288fFC62c3f4142C618B7D109E0Cf0405766F25E",
         chainId: 5,
@@ -149,7 +148,6 @@ export async function seed(knex: Knex): Promise<void> {
         honeyPotAddress: "0xAcfb0De3cB9928E8e0779Acf5383dCc5512C69f7",
       },
       {
-        groupcount: "1",
         id: "49afc51a-99c7-472c-aab1-c22462c4c824",
         mintingContractAddress: "0xa3b59a1080f2ae8efbe902bb03c15cb342d648fd",
         chainId: 5,
@@ -168,7 +166,6 @@ export async function seed(knex: Knex): Promise<void> {
         honeyPotAddress: "0x9cd503fc301294A4Ac3a5cEa2C7fAB20E3d049e3",
       },
       {
-        groupcount: "2",
         id: "d89a8e47-993b-45bd-8d17-fbd0ae0cdecc",
         mintingContractAddress: "0xee5251d595655583bc42bb206763d75f977f14d9",
         chainId: 5,
