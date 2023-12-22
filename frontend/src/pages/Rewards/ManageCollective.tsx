@@ -21,6 +21,7 @@ import {
   handleDisplayAddress,
 } from "@/utils";
 import ApiService from "@/services/ApiService";
+import ContractService from "@/services/ContractService";
 
 export interface CreateCollectiveProps {
   presentingElement?: HTMLElement;
@@ -44,6 +45,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
     description: "",
   });
   const [allSelectedPools, setAllSelectedPools] = useState<Challenge[]>([]);
+  const [updatingGroup, setUpdatingGBroup] = useState(false);
   const selectPoolModal = useRef<HTMLIonModalElement>(null);
   const isButtonDisabled = !updatedGroup.description || !updatedGroup.name;
   const [presentingElement, setPresentingElement] = useState<
@@ -76,10 +78,34 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
 
   const handleUpdateGroup = async () => {
     try {
-      const result = await ApiService.updateGroup(groupId, {
-        group: updatedGroup,
-        pools: allSelectedPools,
-      });
+      if (group) {
+        // create pools that are not part of the current pools list
+        const poolsToCreate = allSelectedPools.filter(
+          (pool) => !pools?.includes((p: any) => pool.id === p.id)
+        );
+        const tokenContracts = poolsToCreate.map(
+          (item) => item.mintingContractAddress
+        );
+        const honeyAddresses = poolsToCreate.map(
+          (item) => item.honeyPotAddress
+        );
+        const createPoolsResult = await ContractService.createPools(
+          group?.publicAddress,
+          group?.walletAddress,
+          group?.nonceKey,
+          tokenContracts,
+          honeyAddresses
+        );
+
+        const updateGroupResult = await ApiService.updateGroup(groupId, {
+          group: updatedGroup,
+          pools: allSelectedPools,
+        });
+        console.log({
+          createPoolsResult,
+          updateGroupResult,
+        });
+      }
     } catch (error) {
       console.log(error, "error posting group");
     }
