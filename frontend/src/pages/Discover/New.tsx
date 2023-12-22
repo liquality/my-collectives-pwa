@@ -78,6 +78,7 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
     );
   }, [challenges]);
 
+  console.log(challenges, "challenges");
   return (
     <IonPage>
       <IonContent className="ion-padding" color="light">
