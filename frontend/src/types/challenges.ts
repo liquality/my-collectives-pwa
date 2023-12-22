@@ -1,4 +1,4 @@
-import * as MyCollectives from "@koderholic/my-collectives";
+import * as MyCollectives from "@liquality/my-collectives";
 
 export interface ChallengeCreation {
     mintingContractAddress: string;
