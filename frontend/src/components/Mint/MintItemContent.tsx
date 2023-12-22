@@ -74,6 +74,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     mintingContractAddress,
     chainId,
     quantityToMint,
+    platform,
     tokenId ?? undefined
   );
   const { presentToast } = useToast();
@@ -86,7 +87,12 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
   };
   const [pendingMint, setPendingMint] = useState(false);
 
+  console.log(params, "params?");
   let zoraFee = BigInt(ethers.utils.parseEther("0.000777").toString());
+  if (params) {
+    console.log(zoraFee + params.value, "wat is params val?");
+  }
+
   let amountInWeiToPay =
     platform === "Zora" && network === "goerli"
       ? params?.value

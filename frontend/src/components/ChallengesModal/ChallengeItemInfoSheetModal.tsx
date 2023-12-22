@@ -46,6 +46,7 @@ const ChallengeItemInfoSheetModal = (
     challenge.mintingContractAddress,
     challenge.chainId,
     1,
+    challenge.platform,
     challenge.tokenId ?? undefined
   );
   useEffect(() => {
