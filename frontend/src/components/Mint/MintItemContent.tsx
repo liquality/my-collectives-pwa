@@ -75,7 +75,9 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     tokenId ?? undefined
   );
   const { presentToast } = useToast();
-  const { groups, loading: loadingGroups } = useGetGroupsByChallenge(id);
+  const { groups, loading: loadingGroups } = useGetGroupsByChallenge(
+    id ? id : challenge?.challengeId ?? ""
+  );
   useEffect(() => {}, [quantityToMint, params?.value]);
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const handleDetailsClick = () => {};

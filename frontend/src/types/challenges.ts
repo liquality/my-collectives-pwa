@@ -26,6 +26,7 @@ export interface Challenge {
     imageUrl: string;
     groupCount?: number;
     network: string;
+    challengeId?: string,
     creatorOfMint: null | string;
     groupcount?: string
     honeyPotAddress: string;
