@@ -18,6 +18,7 @@ const ContractService = {
     },
 
 
+
     joinCollective: async function (inviteCode: string, cAddress: string, cWallet: string, nonceKey: bigint) {
         MyCollectives.setConfig({} as Config)
         const provider = this.getProvider()
@@ -32,6 +33,8 @@ const ContractService = {
         let inviteSig = await provider.getSigner().signMessage(messageHashBinary);
         console.log("inviteSig >> ", inviteSig)
         alert(inviteSig)
+
+        console.log({ address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteCodeBytes }, 'PARAMS FOR Collective.Join()')
         const response = await MyCollectives.Collective.join(provider, { address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteCodeBytes })
         console.log("!!!!! response frontend contract service => ", response)
     },

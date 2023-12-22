@@ -58,8 +58,8 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
       try {
         await ContractService.joinCollective(
           invite.code,
-          invite.groupWalletAddress,
           invite.groupPublicAddress,
+          invite.groupWalletAddress,
           invite.groupNonceKey
         );
         await InvitesService.claim(invite.id, address!);
