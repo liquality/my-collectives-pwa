@@ -67,7 +67,7 @@ const ContractService = {
             tokenID: tokenId ? Number(tokenId) : generatedTokenId,
             amount,
             quantity,
-            platform: MyCollectives.SupportedPlatforms.ZORA,
+            platform,
             tokenContract,
             poolAddress: poolAddress
 
@@ -77,7 +77,7 @@ const ContractService = {
             tokenID: tokenId ? Number(tokenId) : generatedTokenId,
             amount, //amount in WEI bigint
             quantity,
-            platform: MyCollectives.SupportedPlatforms.ZORA,
+            platform,
             tokenContract,
             poolAddress: poolAddress
 
