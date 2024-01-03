@@ -23,21 +23,49 @@ const ContractService = {
     joinCollective: async function (inviteCode: string, cAddress: string, cWallet: string, nonceKey: bigint) {
         MyCollectives.setConfig({} as Config)
         const provider = this.getProvider()
-        const inviteCodeBytes = this.stringToBytes16(inviteCode)
+        /* 
+                const isMemberResponse = await MyCollectives.Collective.isMember(provider, { address: cAddress, wallet: cWallet, nonceKey }, await provider.getSigner().getAddress())
+                console.log("!!!!! response => IS MEMBER ", isMemberResponse.isMember)
+                if (isMemberResponse.isMember) {
+                    return
+                } else {
+                    // const inviteCodeBytes = this.stringToBytes16(inviteCode)
+                    const inviteCodeBytes = ethers.utils.randomBytes(16);
+        
+                    // Hash the inviteId
+                    let messageHash = ethers.utils.solidityKeccak256(
+                        ["bytes16"],
+                        [inviteCodeBytes]
+                    );
+                    // Sign the inviteID hash to get the inviteSig from the initiator
+                    let messageHashBinary = ethers.utils.arrayify(messageHash);
+                    let inviteSig = await provider.getSigner().signMessage(messageHashBinary);
+                    console.log("inviteSig >> ", inviteSig)
+        
+                    console.log({ address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteCodeBytes }, 'PARAMS FOR Collective.Join()')
+                    const response = await MyCollectives.Collective.join(provider, { address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteCodeBytes })
+                    console.log("!!!!! response frontend contract service => ", response)
+                } */
+
+        const inviteId = ethers.utils.randomBytes(16);
+        console.log("inviteId >> ", inviteId.toString())
+
         // Hash the inviteId
         let messageHash = ethers.utils.solidityKeccak256(
             ["bytes16"],
-            [inviteCodeBytes]
+            [inviteId]
         );
         // Sign the inviteID hash to get the inviteSig from the initiator
         let messageHashBinary = ethers.utils.arrayify(messageHash);
         let inviteSig = await provider.getSigner().signMessage(messageHashBinary);
         console.log("inviteSig >> ", inviteSig)
-        alert(inviteSig)
+        console.log({ address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteId }, 'PARAMS FOR Collective.Join()')
 
-        console.log({ address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteCodeBytes }, 'PARAMS FOR Collective.Join()')
-        const response = await MyCollectives.Collective.join(provider, { address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteCodeBytes })
-        console.log("!!!!! response frontend contract service => ", response)
+        const response = await MyCollectives.Collective.join(provider, { address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteId })
+        console.log("!!!!! response => ", response)
+
+
+
     },
 
 
