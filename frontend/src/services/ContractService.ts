@@ -3,6 +3,7 @@ import { BigNumberish, ethers } from "ethers";
 import * as MyCollectives from "@liquality/my-collectives";
 import { Config } from "@liquality/my-collectives";
 import { parseEther } from "viem";
+import ApiService from "./ApiService";
 
 const ContractService = {
     createCollective: async function (tokenContracts: string[], honeyPots: string[]) {
@@ -66,7 +67,7 @@ const ContractService = {
         return response;
     },
 
-    async poolMint(cAddress: string, cWallet: string, nonceKey: bigint, amount: bigint, tokenContract: string, poolHoneyPotAddress: string, quantity: number, tokenId: string | null, platform: MyCollectives.SupportedPlatforms) {
+    async poolMint(cAddress: string, cWallet: string, nonceKey: bigint, amount: bigint, tokenContract: string, poolHoneyPotAddress: string, quantity: number, tokenId: string | null, platform: MyCollectives.SupportedPlatforms, groupId: string, groupMintCount: number) {
         MyCollectives.setConfig({} as Config)
         const poolAddress = await this.getPool(cAddress, cWallet, nonceKey, poolHoneyPotAddress)
         console.log(poolAddress, 'pooladdress & tokencontract', tokenContract)
@@ -94,6 +95,14 @@ const ContractService = {
 
         })
         console.log("!!!!! response poolmint => ", response)
+        //After a successfull mint, update the mintCount in the group to track rewards and leaderboard data
+        const updatedGroup = await ApiService.updateGroup(groupId, {
+            group: {
+                mintCount: groupMintCount + 1,
+            },
+            pools: [],
+        });
+
 
         return response
     },
