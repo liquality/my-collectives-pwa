@@ -203,4 +203,25 @@ export class GroupsService {
 
     return queryResult;
   }
+
+  public static async setTopContributorGroup(
+    group: Group,
+
+  ): Promise<any> {
+
+    /* 
+
+    1) Get full group info by groupId or send it in as param
+    2) Get all pools by that groupId
+    3) Iterate through pools and check if a pool is expired
+    4) Check if topContributor has already been set getTopContributor(pool.honeyPotAddress: string)
+    5) It it has, return null if it hasnt, proceed to step 6)
+    6) Get all groups that has that pool.challengeId
+    //TODO: create a group_challenge_rewards table, and track rewards for each group + challenge/pool 
+    7) Check if the groupWallet sent in has the most mintCount related to that pool (mintingContractAddress) compared to the other groups
+    8) If it has, then set topContributor to that group for that honeypot pool/challenge
+ 
+    */
+
+  }
 }
