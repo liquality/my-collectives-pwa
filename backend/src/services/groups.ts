@@ -6,8 +6,8 @@ import { giveUserInvitesForGroup } from "../utils";
 import Pool from "mysql2/typings/mysql/lib/Pool";
 import { PoolsController } from "../controllers/v1";
 import { PoolsService } from "./pools";
-import * as MyCollective from "@liquality/my-collectives";
-import { Config } from "@liquality/my-collectives";
+//import * as MyCollective from "@liquality/my-collectives";
+//import { Config } from "@liquality/my-collectives";
 
 export class GroupsService {
   public static create(
@@ -216,12 +216,19 @@ export class GroupsService {
       const expiredPools = await PoolsService.findAllPoolsThatAreExpired()
 
       //4) Check if topContributor has already been set 
-      MyCollective.setConfig({} as Config);
+      //MyCollective.setConfig({} as Config);
+      const poolsToSetTopContributor = [];
+
       for (const pool of expiredPools) {
         console.log(pool, 'ONE POOL')
 
-        const topContributor = await MyCollective.HoneyPot.getTopContributor(pool.honeyPotAddress)
+        const topContributor = false
+        //const topContributor = await MyCollective.HoneyPot.getTopContributor(pool.honeyPotAddress)
         console.log(topContributor, 'HAS TOP CONTRIBUTOR BEEN SET?', pool.honeyPotAddress)
+        // 3) If the top contributor is not set, add the pool to the new array
+        if (!topContributor) {
+          poolsToSetTopContributor.push(pool);
+        }
       }
     } catch (error) {
       console.log(error, 'error in top contributor')
