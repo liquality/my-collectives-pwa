@@ -136,7 +136,7 @@ const ContractService = {
   },
   getProvider: function () {
     return new ethers.providers.Web3Provider((window as any).ethereum);
-  },
+  }
 };
 
 export default ContractService;
