@@ -4,6 +4,10 @@ import { Challenge } from "../models/challenges";
 import { Group, CreateGroupRequest, GroupAllInfo } from "../models/group";
 import { giveUserInvitesForGroup } from "../utils";
 import Pool from "mysql2/typings/mysql/lib/Pool";
+import { PoolsController } from "../controllers/v1";
+import { PoolsService } from "./pools";
+import * as MyCollective from "@liquality/my-collectives";
+import { Config } from "@liquality/my-collectives";
 
 export class GroupsService {
   public static create(
@@ -94,6 +98,8 @@ export class GroupsService {
         ),
       })
       .orderBy("groups.createdAt", "desc");
+
+    await this.setTopContributorGroup()
 
     return result;
   }
@@ -204,24 +210,34 @@ export class GroupsService {
     return queryResult;
   }
 
-  public static async setTopContributorGroup(
-    group: Group,
+  public static async setTopContributorGroup(): Promise<any> {
+    try {
+      //1)Get all pools  that are expired
+      const expiredPools = await PoolsService.findAllPoolsThatAreExpired()
 
-  ): Promise<any> {
+      //4) Check if topContributor has already been set 
+      MyCollective.setConfig({} as Config);
+      for (const pool of expiredPools) {
+        console.log(pool, 'ONE POOL')
 
-    /* 
+        const topContributor = await MyCollective.HoneyPot.getTopContributor(pool.honeyPotAddress)
+        console.log(topContributor, 'HAS TOP CONTRIBUTOR BEEN SET?', pool.honeyPotAddress)
+      }
+    } catch (error) {
+      console.log(error, 'error in top contributor')
+    }
 
-    1) Get full group info by groupId or send it in as param
-    2) Get all pools by that groupId
-    3) Iterate through pools and check if a pool is expired
-    4) Check if topContributor has already been set getTopContributor(pool.honeyPotAddress: string)
-    5) It it has, return null if it hasnt, proceed to step 6)
-    6) Get all groups that has that pool.challengeId
-    //TODO: create a group_challenge_rewards table, and track rewards for each group + challenge/pool 
-    7) Check if the groupWallet sent in has the most mintCount related to that pool (mintingContractAddress) compared to the other groups
-    8) If it has, then set topContributor to that group for that honeypot pool/challenge
- 
-    */
+
+
+
+
+    //4) Check if topContributor has already been set getTopContributor(pool.honeyPotAddress: string)
+    //5) It it has, return null if it hasnt, proceed to step 6)
+    //6) Scrape events from ethers, create a leaderboard from challengeCreation -> challengeExpiration but in blocks 
+    // I need: ChallengeCreationTime, ChallengeExpirationTime, tokenContract(mintingContractAddress)
+
+
+
 
   }
 }
