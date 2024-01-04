@@ -6,6 +6,7 @@ import { giveUserInvitesForGroup } from "../utils";
 import Pool from "mysql2/typings/mysql/lib/Pool";
 import { PoolsController } from "../controllers/v1";
 import { PoolsService } from "./pools";
+import { getTopContributorFromEvents } from "../utils/events-query/top-contributor-zora";
 //import * as MyCollective from "@liquality/my-collectives";
 //import { Config } from "@liquality/my-collectives";
 
@@ -229,6 +230,8 @@ export class GroupsService {
         if (!topContributor) {
           poolsToSetTopContributor.push(pool);
         }
+        const topContributorAddress = await getTopContributorFromEvents()
+        //const response = await MyCollectives.HoneyPot.setTopContributor(web3, pool.honeyPotAddress, topContributorAddress)
       }
     } catch (error) {
       console.log(error, 'error in top contributor')
