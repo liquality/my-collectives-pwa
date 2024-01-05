@@ -101,7 +101,8 @@ export class GroupsService {
       })
       .orderBy("groups.createdAt", "desc");
 
-    await this.setTopContributorGroup()
+    //TODO move this function call to its own endpoint 
+    //await this.setTopContributorGroup()
 
     return result;
   }
