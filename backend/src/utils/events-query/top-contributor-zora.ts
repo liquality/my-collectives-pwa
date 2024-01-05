@@ -7,6 +7,7 @@ import {
 
 export async function getTopContributorFromEvents(challengeCreationTime: Date, challengeExpiryTime: Date, tokenContract: string, network: string) {
 
+    //TODO: add creation time when creating a challenge
     const createdBlock = await fetchBlockDataFromTimeStamp(new Date("2023-12-21 09:53:42.648-03"), network)
     const expiryBlock = await fetchBlockDataFromTimeStamp(challengeExpiryTime, network)
 
