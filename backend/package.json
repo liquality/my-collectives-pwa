@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "ts-node-dev ./src/index.ts",
-    "build": "tsc",
+    "build": "CI=false tsc",
     "migrate:make": "knex migrate:make --knexfile src/config/database.ts -x ts",
     "migrate:up": "knex migrate:up --knexfile src/config/database.ts",
     "migrate:down": "knex migrate:down --knexfile src/config/database.ts",
