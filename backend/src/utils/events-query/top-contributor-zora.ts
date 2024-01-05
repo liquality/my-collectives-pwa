@@ -30,29 +30,43 @@ export async function getZoraLeaderboardEvents(tokenContract: string, createdBlo
 }
 
 async function processLogEntriesForZoraLeaderboard(transferEvents: any[], contractAddress: string) {
-    const mintReferralCountMap: { [minter: string]: number } = {};
+    const mintReferralCountMap: { [minter: string]: { mintCount: number; blockNumber: number } } = {};
 
     for (const transferEventEntry of transferEvents) {
         const minter = transferEventEntry?.args?.sender;
-        const mintQuantity = transferEventEntry?.args?.quantity.toNumber();
-        console.log(transferEventEntry?.args, 'transfer event args MINTQUANTITY', mintQuantity, typeof mintQuantity)
+        const mintQuantity = transferEventEntry?.args?.quantity?.toNumber(); // Ensure mintQuantity is a number
+        console.log(transferEventEntry.blockNumber, 'transfer event args MINTQUANTITY', mintQuantity, typeof mintQuantity);
+
         // Check if the minter is defined in the args
         if (minter) {
             if (!mintReferralCountMap[minter]) {
-                mintReferralCountMap[minter] = mintQuantity ? mintQuantity + 1 : 1;
+                mintReferralCountMap[minter] = { mintCount: mintQuantity ? mintQuantity + 1 : 1, blockNumber: transferEventEntry.blockNumber };
             } else {
                 // If the minter is already in the map, increment the count by mintQuantity + 1
-                mintReferralCountMap[minter] += mintQuantity ? mintQuantity + 1 : 1;
+                mintReferralCountMap[minter].mintCount += mintQuantity ? mintQuantity + 1 : 1;
             }
         }
     }
+
     // Convert the map to an array of objects
     const returnObject = Object.keys(mintReferralCountMap).map((sender) => ({
         address: sender,
-        mintCount: mintReferralCountMap[sender],
+        blockNumber: mintReferralCountMap[sender].blockNumber,
+        mintCount: mintReferralCountMap[sender].mintCount,
     }));
-    return returnObject.sort((a, b) => b.mintCount - a.mintCount);
+
+    console.log(returnObject, 'return object');
+    return returnObject.sort((a, b) => {
+        if (b.mintCount !== a.mintCount) {
+            // Sort by mintCount in descending order
+            return b.mintCount - a.mintCount;
+        } else {
+            // If mintCounts are equal, sort by blockNumber in ascending order
+            return a.blockNumber - b.blockNumber;
+        }
+    });
 }
+
 
 
 

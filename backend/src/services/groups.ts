@@ -7,7 +7,7 @@ import Pool from "mysql2/typings/mysql/lib/Pool";
 import { PoolsController } from "../controllers/v1";
 import { PoolsService } from "./pools";
 import { getTopContributorFromEvents } from "../utils/events-query/top-contributor-zora";
-import { ethers } from "ethers";
+import { Contract, ethers } from "ethers";
 //import * as MyCollective from "@liquality/my-collectives";
 //import { Config } from "@liquality/my-collectives";
 
@@ -216,6 +216,10 @@ export class GroupsService {
     const infuraRpcUrl = `https://mainnet.infura.io/v3/${process.env.INFURA_KEY}`;
     const provider = new ethers.providers.JsonRpcProvider(infuraRpcUrl);
 
+    //generate random private key TODO: set an Liquality operator for setTopContributor later on
+    const randomWalletPrivateKey = ethers.Wallet.createRandom().privateKey
+
+
     try {
       //1)Get all pools  that are expired
       const expiredPools = await PoolsService.findAllPoolsThatAreExpired()
@@ -239,4 +243,6 @@ export class GroupsService {
     }
 
   }
+
 }
+

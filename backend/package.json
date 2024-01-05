@@ -22,7 +22,7 @@
   "dependencies": {
     "@moralisweb3/common-evm-utils": "^2.23.1",
     "@zoralabs/zdk": "^2.4.0",
-    "@liquality/my-collectives": "^2.0.0",
+    "@liquality/my-collectives": "^2.0.1",
     "axios": "^1.5.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
