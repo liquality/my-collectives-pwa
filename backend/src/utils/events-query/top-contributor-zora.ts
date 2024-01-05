@@ -11,7 +11,7 @@ export async function getTopContributorFromEvents(challengeCreationTime: Date, c
     const createdBlock = await fetchBlockDataFromTimeStamp(new Date("2023-12-21 09:53:42.648-03"), network)
     const expiryBlock = await fetchBlockDataFromTimeStamp(challengeExpiryTime, network)
 
-    await getZoraLeaderboardEvents(tokenContract, createdBlock, expiryBlock)
+    const leaderboard = await getZoraLeaderboardEvents(tokenContract, createdBlock, expiryBlock)
 
 
 
@@ -22,13 +22,11 @@ export async function getZoraLeaderboardEvents(tokenContract: string, createdBlo
     const GOERLI_RPC = "https://eth-goerli.g.alchemy.com/v2/";
     const provider = new ethers.providers.JsonRpcProvider(GOERLI_RPC + process.env.ALCHEMY_API_KEY_ARB); //TODO: try with a base contract
     const zoraContract = new Contract(tokenContract, MINT_REWARDS_ABI_ERC1155, provider);
-    const transferFilter = zoraContract.filters.TransferSingle();
-
+    const transferFilter = zoraContract.filters.Purchased();
     const transferEvents = await zoraContract.queryFilter(transferFilter, createdBlock, expiryBlock);
     console.log(
         `${transferEvents.length} events have been emitted by the contract with address ${tokenContract}`
     );
-    console.log(transferEvents, 'rewardevent')
     const processedEntries = await processLogEntriesForZoraLeaderboard(transferEvents, tokenContract);
     console.log(processedEntries, 'PROCCESSED ENTRIES?')
     //return processedEntries;
@@ -38,28 +36,32 @@ async function processLogEntriesForZoraLeaderboard(transferEvents: any[], contra
     const mintReferralCountMap: { [minter: string]: number } = {};
 
     for (const transferEventEntry of transferEvents) {
-        const minter = transferEventEntry?.args?.operator;
-        const addressWhoGetsTheMint = transferEventEntry?.args?.to;
+        const minter = transferEventEntry?.args?.sender;
+        const mintQuantity = transferEventEntry?.args?.quantity.toNumber();
+        console.log(transferEventEntry?.args, 'transfer event args MINTQUANTITY', mintQuantity, typeof mintQuantity)
 
         // Check if the minter is defined in the args
         if (minter) {
-            // If the minter is not in the map, initialize the count to 1
+            // If the minter is not in the map, initialize the count to 1 or mintQuantity + 1
             if (!mintReferralCountMap[minter]) {
-                mintReferralCountMap[minter] = 1;
+                mintReferralCountMap[minter] = mintQuantity ? mintQuantity + 1 : 1;
             } else {
-                // If the minter is already in the map, increment the count
-                mintReferralCountMap[minter]++;
+                // If the minter is already in the map, increment the count by mintQuantity + 1
+                mintReferralCountMap[minter] += mintQuantity ? mintQuantity + 1 : 1;
             }
         }
     }
+
     // Convert the map to an array of objects
-    const returnObject = Object.keys(mintReferralCountMap).map((operator) => ({
-        operator,
-        mintCount: mintReferralCountMap[operator],
+    const returnObject = Object.keys(mintReferralCountMap).map((sender) => ({
+        address: sender,
+        mintCount: mintReferralCountMap[sender],
     }));
 
-    return returnObject;
+    return returnObject.sort((a, b) => b.mintCount - a.mintCount);
+
 }
+
 
 
 async function fetchBlockDataFromTimeStamp(timeInDate: Date, network: string) {
