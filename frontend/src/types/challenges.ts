@@ -1,3 +1,5 @@
+import * as MyCollectives from "@liquality/my-collectives";
+
 export interface ChallengeCreation {
     mintingContractAddress: string;
     chainId: string;
@@ -14,6 +16,7 @@ export interface Challenge {
     tokenId: null | string;
     category: string;
     name: string;
+    platform: MyCollectives.SupportedPlatforms
     description?: string;
     kind: string;
     floorPrice: string;
@@ -23,6 +26,7 @@ export interface Challenge {
     imageUrl: string;
     groupCount?: number;
     network: string;
+    challengeId?: string,
     creatorOfMint: null | string;
     groupcount?: string
     honeyPotAddress: string;

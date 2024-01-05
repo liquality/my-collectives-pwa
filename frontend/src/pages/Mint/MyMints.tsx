@@ -9,7 +9,6 @@ import {
 import { RouteComponentProps } from "react-router";
 import Header from "@/components/Header";
 import MintTopBar from "@/components/TopBars/MintTopBar";
-
 import PageSearchBar from "@/components/PageSearchBar";
 import useGetGroupById from "@/hooks/Groups/useGetGroupById";
 import useGetChallengesByGroupId from "@/hooks/Collective/useGetChallengesByGroupId";

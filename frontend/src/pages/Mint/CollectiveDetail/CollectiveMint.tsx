@@ -36,6 +36,8 @@ const CollectiveMint: React.FC<CollectiveMintProps> = ({ match }) => {
     Challenge | undefined | null
   >();
 
+  console.log(challenges, "challegnes by groupID");
+
   const onCloseChallenteItemModal = () => {
     setSelectedChallenge(null);
   };

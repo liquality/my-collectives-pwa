@@ -13,7 +13,7 @@ export class ChallengesService {
 
     ): Promise<Challenge | null> {
         //TODO: change this to challenges data insert
-        const { mintingContractAddress, tokenId, network, category, expiration, honeyPotAddress } = data
+        const { mintingContractAddress, tokenId, network, category, expiration, honeyPotAddress, platform } = data
         const tokenData = await fetchReservoirData(mintingContractAddress, network, tokenId)
         const user = await AuthService.find(userId)
         const provider = new ethers.providers.JsonRpcProvider(infuraRpcUrl);
@@ -22,7 +22,9 @@ export class ChallengesService {
             honeyPotAddress,
             mintingContractAddress,
             network,
+            platform,
             category,
+            createdAt: new Date(),
             expiration: convertToDate(expiration),
             ...tokenData,
         };
@@ -44,6 +46,7 @@ export class ChallengesService {
                     "category",
                     "name",
                     "kind",
+                    "platform",
                     "floorPrice",
                     "expiration",
                     "expired",
@@ -93,6 +96,7 @@ export class ChallengesService {
                         "category",
                         "name",
                         "kind",
+                        "platform",
                         "floorPrice",
                         "expiration",
                         "expired",
@@ -140,6 +144,7 @@ export class ChallengesService {
                 "kind",
                 "floorPrice",
                 "expiration",
+                "platform",
                 "expired",
                 "totalMints",
                 "imageUrl",
@@ -176,6 +181,7 @@ export class ChallengesService {
                 "category",
                 "name",
                 "kind",
+                "platform",
                 "floorPrice",
                 "expiration",
                 "expired",

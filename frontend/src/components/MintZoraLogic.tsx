@@ -95,7 +95,6 @@ export const MintZoraLogic = (props: {
     makeParams();
   }, [mintClient, address, quantityToMint]);
 
-  console.log(params, "wat is params?");
   const {
     config,
     error: prepareError,
@@ -114,8 +113,6 @@ export const MintZoraLogic = (props: {
     isLoading: isPending,
     isSuccess,
   } = useWaitForTransaction({ hash: data?.hash });
-
-  console.log(write, "wats write?", data);
 
   return (
     <>

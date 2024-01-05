@@ -46,6 +46,8 @@ const MintCollectiveContent: React.FC<RouteComponentProps> = (routerProps) => {
         description: "",
         createdAt: new Date(),
         mintCount: 0,
+        walletAddress: "",
+        nonceKey: BigInt(0),
         memberCount: 0,
         activePoolsCount: activePoolsCount,
         poolsCount: 0,

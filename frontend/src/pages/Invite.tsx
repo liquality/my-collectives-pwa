@@ -36,8 +36,6 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
   const claimInviteAvailable = invite && user && address;
   const { chains, chain } = useNetwork();
 
-  console.log(chains, "CHAAAINS", chain, "CHAAIN");
-
   useEffect(() => {
     setLoading(true);
     if (id) {
@@ -54,28 +52,30 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
     setLoading(false);
   }, [id, code]);
 
-  console.log(invite, "inv?");
-
+  console.log(invite, "wats invite?");
   async function handleConnect() {
     setProcessing(true);
     if (claimInviteAvailable) {
       try {
         await ContractService.joinCollective(
           invite.code,
-          invite.groupWalletAddress,
           invite.groupPublicAddress,
+          invite.groupWalletAddress,
           invite.groupNonceKey
         );
         await InvitesService.claim(invite.id, address!);
-        router.push(pathConstants.mintPage.myCollectives);
+        const url = pathConstants.collective.mints.replace(
+          ":groupId",
+          invite.groupId
+        );
+        console.log(url, "wats url?");
+        router.push(url);
       } catch (error) {
         console.log(error, "Error adding member");
       }
     }
     setProcessing(false);
   }
-
-  console.log(invite, "wats invite?");
 
   useEffect(() => {
     if (user) {

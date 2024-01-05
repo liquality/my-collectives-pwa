@@ -32,7 +32,6 @@ export class NFTService {
     });
 
     const metadataResults = await Promise.all(metadataPromises);
-    console.log(metadataResults);
     return metadataResults;
   }
 
@@ -45,7 +44,6 @@ export class NFTService {
       address: contractAddress,
       tokenId: tokenId,
     });
-    console.log(response);
 
     return response.toJSON();
   }

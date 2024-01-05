@@ -46,6 +46,7 @@ const ChallengeItemInfoSheetModal = (
     challenge.mintingContractAddress,
     challenge.chainId,
     1,
+    challenge.platform,
     challenge.tokenId ?? undefined
   );
   useEffect(() => {
@@ -54,7 +55,7 @@ const ChallengeItemInfoSheetModal = (
     } else {
       setModalClassName("");
     }
-    if (breakpoint > 0.35) {
+    if (breakpoint > 0.25) {
       setFabBottom("27%");
     } else if (breakpoint > 0.55) {
       setFabBottom("45%");

@@ -20,7 +20,6 @@ const MintItemScreen: React.FC<MintItemScreenProps> = ({
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<MintResult | null>(null);
 
-  console.log(challenge, "CHALLENGE START");
   return (
     <IonContent>
       {result ? (
