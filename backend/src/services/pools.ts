@@ -69,6 +69,7 @@ export class PoolsService {
           'pools.groupId',
           'pools.challengeId',
           'pools.createdBy',
+          'challenges.createdAt',
           'challenges.id as challengeId',
           'challenges.name',
           'challenges.creatorOfMint',

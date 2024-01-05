@@ -221,8 +221,6 @@ export class GroupsService {
       const poolsToSetTopContributor = [];
 
       for (const pool of expiredPools) {
-        console.log(pool, 'ONE POOL')
-
         const topContributor = false
         //const topContributor = await MyCollective.HoneyPot.getTopContributor(pool.honeyPotAddress)
         console.log(topContributor, 'HAS TOP CONTRIBUTOR BEEN SET?', pool.honeyPotAddress)
@@ -230,7 +228,7 @@ export class GroupsService {
         if (!topContributor) {
           poolsToSetTopContributor.push(pool);
         }
-        const topContributorAddress = await getTopContributorFromEvents()
+        const topContributorAddress = await getTopContributorFromEvents(pool.createdAt, pool.expiration, pool.mintingContractAddress, pool.network)
         //const response = await MyCollectives.HoneyPot.setTopContributor(web3, pool.honeyPotAddress, topContributorAddress)
       }
     } catch (error) {
