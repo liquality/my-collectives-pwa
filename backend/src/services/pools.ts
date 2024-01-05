@@ -61,39 +61,38 @@ export class PoolsService {
     });
   }
 
-  //TODO: rewrite this function completly 
-  public static async findAll(): Promise<any[]> {
-    /*
-     
-        const pools = await dbClient("pools").select<Pool[]>(
-         "id",
-         "groupId",
-         "mintingContractAddress",
-         "chainId",
-         "tokenId",
-         "createdAt"
-       );
-       const meta = await getTokenMetadataFromZora(pools);
-       if (meta && meta.length > 0) {
-         return pools.map((pool) => {
-           const poolMeta = meta.find(
-             (meta) =>
-               meta.tokenId === pool.tokenId &&
-               meta.collectionAddress === pool.mintingContractAddress
-           );
-           const { imageUrl, name } = poolMeta || {};
-           return {
-             ...pool,
-             imageUrl: imageUrl || "",
-             name,
-           };
-         });
-       }
-   
-       return pools as PoolWithMeta[]; */
-    return []
-  }
+  public static async findAllPoolsThatAreExpired(): Promise<any[]> {
+    return dbClient.transaction(async (trx) => {
+      const poolsWithChallenges = await trx
+        .select(
+          'pools.id as poolId',
+          'pools.groupId',
+          'pools.challengeId',
+          'pools.createdBy',
+          'challenges.createdAt',
+          'challenges.id as challengeId',
+          'challenges.name',
+          'challenges.creatorOfMint',
+          'challenges.chainId',
+          'challenges.mintingContractAddress',
+          'challenges.network',
+          'challenges.kind',
+          'challenges.tokenId',
+          'challenges.imageUrl',
+          'challenges.category',
+          'challenges.platform',
+          'challenges.expiration',
+          'challenges.totalMints',
+          'challenges.expired',
+          'challenges.honeyPotAddress',
+        )
+        .from('pools')
+        .join('challenges', 'pools.challengeId', '=', 'challenges.id')
+        .where('challenges.expiration', '<=', new Date());
 
+      return poolsWithChallenges;
+    });
+  }
   //TODO: rewrite this function
   public static async find(id: string): Promise<PoolWithMeta | null> {
     /*  const pool = await dbClient("pools")

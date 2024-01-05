@@ -24,6 +24,7 @@ export class ChallengesService {
             network,
             platform,
             category,
+            createdAt: new Date(),
             expiration: convertToDate(expiration),
             ...tokenData,
         };
