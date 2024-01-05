@@ -7,7 +7,7 @@ import {
 
 export async function getTopContributorFromEvents(challengeCreationTime: Date, challengeExpiryTime: Date, tokenContract: string, network: string) {
 
-    //TODO: add creation time when creating a challenge
+    //TODO: add creation time from challenge
     const createdBlock = await fetchBlockDataFromTimeStamp(new Date("2023-12-21 09:53:42.648-03"), network)
     const expiryBlock = await fetchBlockDataFromTimeStamp(challengeExpiryTime, network)
 
@@ -24,13 +24,41 @@ export async function getZoraLeaderboardEvents(tokenContract: string, createdBlo
     const zoraContract = new Contract(tokenContract, MINT_REWARDS_ABI_ERC1155, provider);
     const transferFilter = zoraContract.filters.TransferSingle();
 
-    const rewardEvent = await zoraContract.queryFilter(transferFilter, createdBlock, expiryBlock);
+    const transferEvents = await zoraContract.queryFilter(transferFilter, createdBlock, expiryBlock);
     console.log(
-        `${rewardEvent.length} events have been emitted by the contract with address ${tokenContract}`
+        `${transferEvents.length} events have been emitted by the contract with address ${tokenContract}`
     );
-    console.log(rewardEvent, 'rewardevent')
-    //const processedEntries = await processLogEntriesForZoraLeaderboard(rewardEvent, tokenContract);
+    console.log(transferEvents, 'rewardevent')
+    const processedEntries = await processLogEntriesForZoraLeaderboard(transferEvents, tokenContract);
+    console.log(processedEntries, 'PROCCESSED ENTRIES?')
     //return processedEntries;
+}
+
+async function processLogEntriesForZoraLeaderboard(transferEvents: any[], contractAddress: string) {
+    const mintReferralCountMap: { [minter: string]: number } = {};
+
+    for (const transferEventEntry of transferEvents) {
+        const minter = transferEventEntry?.args?.operator;
+        const addressWhoGetsTheMint = transferEventEntry?.args?.to;
+
+        // Check if the minter is defined in the args
+        if (minter) {
+            // If the minter is not in the map, initialize the count to 1
+            if (!mintReferralCountMap[minter]) {
+                mintReferralCountMap[minter] = 1;
+            } else {
+                // If the minter is already in the map, increment the count
+                mintReferralCountMap[minter]++;
+            }
+        }
+    }
+    // Convert the map to an array of objects
+    const returnObject = Object.keys(mintReferralCountMap).map((operator) => ({
+        operator,
+        mintCount: mintReferralCountMap[operator],
+    }));
+
+    return returnObject;
 }
 
 
