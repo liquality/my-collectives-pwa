@@ -128,27 +128,27 @@ export async function seed(knex: Knex): Promise<void> {
 
 
       },
-
       {
-        id: "00a955cb-91fd-4989-9757-9a6116eb43de",
+        id: "79efbeea-433b-4390-ae06-0cabd9e22bc6",
         mintingContractAddress: "0x288fFC62c3f4142C618B7D109E0Cf0405766F25E",
         chainId: 5,
         tokenId: null,
-        category: "art",
+        category: "music",
         name: "MockTokenContract",
         kind: "erc721",
         platform: "Other",
         floorPrice: null,
-        expiration: "2023-12-30T12:58:16.707Z",
+        expiration: "2024-01-07T18:40:43.740Z",
         expired: null,
         totalMints: 14,
         imageUrl: null,
         network: "goerli",
         creatorOfMint: "0x587ce1a413d47dd1b9c8a54c949016c147f18d19",
-        honeyPotAddress: "0xAcfb0De3cB9928E8e0779Acf5383dCc5512C69f7",
+        honeyPotAddress: "0x09e2417a39302ecEbDdde2de2D80696383F44605",
       },
+
       {
-        id: "49afc51a-99c7-472c-aab1-c22462c4c824",
+        id: "573c7c6a-25b8-4c05-9edc-614091611c15",
         mintingContractAddress: "0xa3b59a1080f2ae8efbe902bb03c15cb342d648fd",
         chainId: 5,
         tokenId: "1",
@@ -157,36 +157,41 @@ export async function seed(knex: Knex): Promise<void> {
         kind: "erc1155",
         platform: "Zora",
         floorPrice: "0.00078",
-        expiration: "2023-12-29T15:12:32.714Z",
+        expiration: "2024-01-17T18:41:52.462Z",
         expired: null,
-        totalMints: 7,
+        totalMints: 8,
         imageUrl: null,
         network: "goerli",
         creatorOfMint: "0xe7910F0b83ad155737043c771E2594f74B0BB739",
-        honeyPotAddress: "0x9cd503fc301294A4Ac3a5cEa2C7fAB20E3d049e3",
+        honeyPotAddress: "0x2C27A1555ED439D7C7dDf369Af31dDee69a3267F",
       },
       {
-        id: "d89a8e47-993b-45bd-8d17-fbd0ae0cdecc",
+        id: "be82140f-dbdc-4238-9f25-fbd399b4c958",
         mintingContractAddress: "0xee5251d595655583bc42bb206763d75f977f14d9",
         chainId: 5,
         tokenId: "1",
-        category: "art",
+        category: "music",
         name: "Mint-fee-test-goerli-group-mints",
         kind: "erc1155",
         platform: "Zora",
-        floorPrice: null,
-        expiration: "2023-12-27T12:53:42.648Z",
+        floorPrice: "0.00088",
+        expiration: "2024-01-09T18:42:28.686Z",
         expired: null,
-        totalMints: 2,
+        totalMints: 12,
         imageUrl: null,
         network: "goerli",
         creatorOfMint: "0xe7910F0b83ad155737043c771E2594f74B0BB739",
-        honeyPotAddress: "0xCB28877bC2061E688439F34446C5210AEBF3c691",
+        honeyPotAddress: "0xB637601544dDf296737B527f7f4ba66e0b7a849A",
       },
+
 
     ]);
   });
+
+
 }
+
+
 
 
 
