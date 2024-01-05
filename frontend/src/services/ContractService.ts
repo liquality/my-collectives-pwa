@@ -9,9 +9,12 @@ const ContractService = {
     createCollective: async function (tokenContracts: string[], honeyPots: string[]) {
         MyCollectives.setConfig({} as Config);
         const salt = generateSalt();
+        console.log('mycollectives params:',
+            { tokenContracts, honeyPots: honeyPots },
+            salt, 'PROVIDEEER:', this.getProvider())
         const response = await MyCollectives.Collective.create(
             this.getProvider(),
-            { tokenContracts, honeyPots: honeyPots }, //TODO: for now just use random honeypots address, can be changed later when MINT is implemented
+            { tokenContracts, honeyPots: honeyPots },
             salt
         );
         console.log("!!!!! response create collective => ", response);
