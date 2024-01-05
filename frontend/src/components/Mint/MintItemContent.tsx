@@ -99,7 +99,13 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     if (selectedGroup && amountInWeiToPay) {
       try {
         setPendingMint(true);
-        const { publicAddress, walletAddress, nonceKey } = selectedGroup;
+        const {
+          publicAddress,
+          walletAddress,
+          nonceKey,
+          id: groupId,
+          mintCount: groupMintCount,
+        } = selectedGroup;
 
         const mintResult = await ContractService.poolMint(
           publicAddress,
@@ -110,7 +116,9 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
           honeyPotAddress,
           quantityToMint,
           tokenId,
-          platform
+          platform,
+          groupId,
+          groupMintCount
         );
         console.log(mintResult);
         if (mintResult) {

@@ -21,7 +21,7 @@ export class PoolsController {
 
   public findAll: RequestHandler = async (req, res) => {
     try {
-      const pools = await PoolsService.findAll();
+      const pools = await PoolsService.findAllPoolsThatAreExpired();
 
       res.status(200).send(pools);
     } catch (err: any) {
