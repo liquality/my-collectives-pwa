@@ -7,6 +7,7 @@ import Pool from "mysql2/typings/mysql/lib/Pool";
 import { PoolsController } from "../controllers/v1";
 import { PoolsService } from "./pools";
 import { getTopContributorFromEvents } from "../utils/events-query/top-contributor-zora";
+import { ethers } from "ethers";
 //import * as MyCollective from "@liquality/my-collectives";
 //import { Config } from "@liquality/my-collectives";
 
@@ -212,15 +213,16 @@ export class GroupsService {
   }
 
   public static async setTopContributorGroup(): Promise<any> {
+    const infuraRpcUrl = `https://mainnet.infura.io/v3/${process.env.INFURA_KEY}`;
+    const provider = new ethers.providers.JsonRpcProvider(infuraRpcUrl);
+
     try {
       //1)Get all pools  that are expired
       const expiredPools = await PoolsService.findAllPoolsThatAreExpired()
-
-      //4) Check if topContributor has already been set 
       //MyCollective.setConfig({} as Config);
       const poolsToSetTopContributor = [];
-
       for (const pool of expiredPools) {
+        //2) Check if topContributor has already been set 
         const topContributor = false
         //const topContributor = await MyCollective.HoneyPot.getTopContributor(pool.honeyPotAddress)
         console.log(topContributor, 'HAS TOP CONTRIBUTOR BEEN SET?', pool.honeyPotAddress)
@@ -228,24 +230,13 @@ export class GroupsService {
         if (!topContributor) {
           poolsToSetTopContributor.push(pool);
         }
+        //6) Scrape events from ethers, create a leaderboard and return top contributor
         const topContributorAddress = await getTopContributorFromEvents(pool.createdAt, pool.expiration, pool.mintingContractAddress, pool.network)
-        //const response = await MyCollectives.HoneyPot.setTopContributor(web3, pool.honeyPotAddress, topContributorAddress)
+        //const response = await MyCollectives.HoneyPot.setTopContributor(provider, pool.honeyPotAddress, topContributorAddress)
       }
     } catch (error) {
       console.log(error, 'error in top contributor')
     }
-
-
-
-
-
-    //4) Check if topContributor has already been set getTopContributor(pool.honeyPotAddress: string)
-    //5) It it has, return null if it hasnt, proceed to step 6)
-    //6) Scrape events from ethers, create a leaderboard from challengeCreation -> challengeExpiration but in blocks 
-    // I need: ChallengeCreationTime, ChallengeExpirationTime, tokenContract(mintingContractAddress)
-
-
-
 
   }
 }

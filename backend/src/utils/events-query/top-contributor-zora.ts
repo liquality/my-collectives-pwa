@@ -6,15 +6,13 @@ import {
 } from "../constants";
 
 export async function getTopContributorFromEvents(challengeCreationTime: Date, challengeExpiryTime: Date, tokenContract: string, network: string) {
-
     //TODO: add creation time from challenge
     const createdBlock = await fetchBlockDataFromTimeStamp(new Date("2023-12-21 09:53:42.648-03"), network)
     const expiryBlock = await fetchBlockDataFromTimeStamp(challengeExpiryTime, network)
 
     const leaderboard = await getZoraLeaderboardEvents(tokenContract, createdBlock, expiryBlock)
-
-
-
+    const topContributor = leaderboard[0]
+    return topContributor
 }
 
 export async function getZoraLeaderboardEvents(tokenContract: string, createdBlock: string, expiryBlock: string) {
@@ -28,8 +26,7 @@ export async function getZoraLeaderboardEvents(tokenContract: string, createdBlo
         `${transferEvents.length} events have been emitted by the contract with address ${tokenContract}`
     );
     const processedEntries = await processLogEntriesForZoraLeaderboard(transferEvents, tokenContract);
-    console.log(processedEntries, 'PROCCESSED ENTRIES?')
-    //return processedEntries;
+    return processedEntries;
 }
 
 async function processLogEntriesForZoraLeaderboard(transferEvents: any[], contractAddress: string) {
@@ -39,10 +36,8 @@ async function processLogEntriesForZoraLeaderboard(transferEvents: any[], contra
         const minter = transferEventEntry?.args?.sender;
         const mintQuantity = transferEventEntry?.args?.quantity.toNumber();
         console.log(transferEventEntry?.args, 'transfer event args MINTQUANTITY', mintQuantity, typeof mintQuantity)
-
         // Check if the minter is defined in the args
         if (minter) {
-            // If the minter is not in the map, initialize the count to 1 or mintQuantity + 1
             if (!mintReferralCountMap[minter]) {
                 mintReferralCountMap[minter] = mintQuantity ? mintQuantity + 1 : 1;
             } else {
@@ -51,24 +46,18 @@ async function processLogEntriesForZoraLeaderboard(transferEvents: any[], contra
             }
         }
     }
-
     // Convert the map to an array of objects
     const returnObject = Object.keys(mintReferralCountMap).map((sender) => ({
         address: sender,
         mintCount: mintReferralCountMap[sender],
     }));
-
     return returnObject.sort((a, b) => b.mintCount - a.mintCount);
-
 }
 
 
 
 async function fetchBlockDataFromTimeStamp(timeInDate: Date, network: string) {
-    console.log(network, 'wats network?')
     const timeInUnix = Math.floor(timeInDate.getTime() / 1000)
-    console.log(timeInUnix, 'time in unix')
-
     const apiUrl = `https://coins.llama.fi/block/${network}/${timeInUnix}`;
     try {
         const response = await axios.get(apiUrl);
