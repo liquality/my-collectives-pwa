@@ -37,7 +37,7 @@
 - To seed the database with test data, run: `npm run seed:run`
 
 ```bash
-  npm ci && npm start
+  npm ci && npm run start
 ```
 
 ## Environment Variables
