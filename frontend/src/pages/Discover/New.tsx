@@ -12,7 +12,7 @@ import { RouteComponentProps } from "react-router";
 import PageSearchBar from "@/components/PageSearchBar";
 import DiscoverTopBar from "./DiscoverTopBar";
 import { useEffect, useMemo, useRef, useState } from "react";
-import CreateGroupModal from "./CreateChallengeModal";
+import CreateChallengeModal from "./CreateChallengeModal";
 import { Challenge, GroupedChallenge } from "@/types/challenges";
 import ChallengeItemModal from "@/components/ChallengesModal/ChallengeItemModal";
 import { useSignInWallet } from "@/hooks/useSignInWallet";
@@ -24,6 +24,7 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
   const [itemModalIsOpen, setItemModalIsOpen] = useState(false);
   const { user } = useSignInWallet();
 
+  console.log(user, "wats user?");
   const [presentingElement, setPresentingElement] = useState<
     HTMLElement | undefined
   >(undefined);
@@ -86,26 +87,30 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
           <PageSearchBar />
         </DiscoverTopBar>
 
-        <IonFab slot="fixed" vertical="bottom" horizontal="end">
-          <IonFabButton
-            id="open-create-challenge-modal"
-            className="create-fab-button"
-            disabled={!user}
-          >
-            <IonIcon src="/assets/icons/add.svg"></IonIcon>
-            <IonLabel>Create Challenge</IonLabel>
-          </IonFabButton>
-        </IonFab>
-
-        <CreateGroupModal
-          trigger="open-create-challenge-modal"
-          ref={createChallengeModal}
-          presentingElement={presentingElement}
-          dismiss={hideCreateChallengeModal}
-          onSuccess={handleCreateChallenge}
-          resultChallenge={resultChallenge}
-          setResultChallenge={setResultChallenge}
-        />
+        {user?.isCreator ? (
+          <>
+            {" "}
+            <IonFab slot="fixed" vertical="bottom" horizontal="end">
+              <IonFabButton
+                id="open-create-challenge-modal"
+                className="create-fab-button"
+                disabled={!user}
+              >
+                <IonIcon src="/assets/icons/add.svg"></IonIcon>
+                <IonLabel>Create Challenge</IonLabel>
+              </IonFabButton>
+            </IonFab>
+            <CreateChallengeModal
+              trigger="open-create-challenge-modal"
+              ref={createChallengeModal}
+              presentingElement={presentingElement}
+              dismiss={hideCreateChallengeModal}
+              onSuccess={handleCreateChallenge}
+              resultChallenge={resultChallenge}
+              setResultChallenge={setResultChallenge}
+            />
+          </>
+        ) : null}
 
         {Object.keys(groupedChallenges).map((category: string) => (
           <div key={category}>

@@ -14,6 +14,7 @@ export class GroupsController {
 
         res.status(200).send(groups);
       } catch (err: any) {
+        console.log(err, 'ERROR?')
         res.status(500).send({ error: err.message });
       }
     }
@@ -41,7 +42,8 @@ export class GroupsController {
       res.status(400).send({ error: "id is required" });
     } else {
       try {
-        const group = await GroupsService.find(id);
+        const user = await AuthService.find((req as any).auth?.sub);
+        const group = await GroupsService.find(id, user.id);
 
         if (!group) {
           res.status(404).send({ error: "group not found" });
@@ -119,8 +121,28 @@ export class GroupsController {
           res.status(200).send(members);
         }
       } catch (err: any) {
+        console.log(err, 'wats err')
         res.status(500).send({ error: err.message });
       }
     }
   };
+
+  public toggleAdminStatus: RequestHandler = async (req, res) => {
+    const { groupId, userId: userIdForMember } = req.params;
+    const authenticatedUser = await AuthService.find((req as any).auth?.sub);
+
+    if (!groupId && !userIdForMember) {
+      res.status(400).send({ error: "id is required" });
+    } else {
+      try {
+        const toggled = await GroupsService.toggleAdminStatus(groupId, userIdForMember, authenticatedUser.id);
+        console.log(toggled, 'wats toggled?')
+        res.status(200).send(toggled);
+
+      } catch (err: any) {
+        console.log(err, 'wats err')
+        res.status(500).send({ error: err.message });
+      }
+    }
+  }
 }

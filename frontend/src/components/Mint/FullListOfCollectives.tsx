@@ -30,6 +30,8 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
     router.push(url);
   };
 
+  console.log("Full list of collectives:", myGroups);
+
   return (
     <div className="">
       {myGroups
@@ -49,7 +51,7 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
                           src={`https://api.multiavatar.com/${group.name}.png`}
                         />
                       </IonAvatar>
-                      {user?.id === group.createdBy ? (
+                      {group.admin ? (
                         <div className="admin-tag">ADMIN</div>
                       ) : null}
                     </div>

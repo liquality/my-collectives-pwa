@@ -3,9 +3,10 @@ export interface Group {
   name: string;
   description?: string;
   publicAddress: string;
-
+  createdBy: string;
   createdAt?: Date;
   updatedAt?: Date;
+  loggedInUserIsAdmin?: boolean
 }
 
 export interface GroupAllInfo {

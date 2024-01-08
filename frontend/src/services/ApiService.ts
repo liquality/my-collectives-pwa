@@ -24,6 +24,12 @@ const ApiService = {
     );
   },
 
+  toggleAdminStatus: async function (groupId: string, userId: string) {
+    return NetworkService.putResourceWithAuth(
+      `/v1/groups/toggle/${groupId}/${userId}`, {}
+    );
+  },
+
   readGroup: async function (groupId: string) {
     return NetworkService.getResourceWithAuth("/v1/groups/" + groupId);
   },
@@ -129,11 +135,11 @@ const ApiService = {
 
   getGroupsByChallenge: async function (
     challengeId: string,
-    ) {
-      return NetworkService.getResourceWithAuth(
-        `/v1/groups/challenge/${challengeId}`
-      );
-    },
+  ) {
+    return NetworkService.getResourceWithAuth(
+      `/v1/groups/challenge/${challengeId}`
+    );
+  },
 };
 
 export default ApiService;
