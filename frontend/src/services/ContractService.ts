@@ -149,9 +149,8 @@ const ContractService = {
 
     async leaveCollective(cAddress: string, cWallet: string, nonceKey: bigint) {
         this.initSDKConfig()
-
         const response = await MyCollectives.Collective.leave(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey })
-
+        console.log(response, 'response for leaving collective')
     },
 
 

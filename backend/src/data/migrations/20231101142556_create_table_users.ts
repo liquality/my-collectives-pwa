@@ -5,6 +5,7 @@ export async function up(knex: Knex): Promise<void> {
     table.uuid('id').primary().defaultTo(knex.fn.uuid());
     table.string("publicAddress").notNullable().unique();
     table.string("nonce").notNullable();
+    table.boolean("isCreator").defaultTo(false);
     table.timestamps({ useCamelCase: true });
   });
 }
