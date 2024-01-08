@@ -7,7 +7,7 @@ import ApiService from "./ApiService";
 
 const ContractService = {
     createCollective: async function (tokenContracts: string[], honeyPots: string[]) {
-        MyCollectives.setConfig({} as Config);
+        this.initSDKConfig()
         const salt = generateSalt();
         console.log('mycollectives params:',
             { tokenContracts, honeyPots: honeyPots },
@@ -24,7 +24,8 @@ const ContractService = {
 
 
     joinCollective: async function (inviteCode: string, cAddress: string, cWallet: string, nonceKey: bigint) {
-        MyCollectives.setConfig({} as Config)
+        this.initSDKConfig()
+
         const provider = this.getProvider()
         /* 
                 const isMemberResponse = await MyCollectives.Collective.isMember(provider, { address: cAddress, wallet: cWallet, nonceKey }, await provider.getSigner().getAddress())
@@ -74,7 +75,7 @@ const ContractService = {
 
 
     async createHoneyPot() {
-        MyCollectives.setConfig({} as Config)
+        this.initSDKConfig()
         const salt = generateSalt();
 
         const response = await MyCollectives.HoneyPot.get(this.getProvider(), salt)
@@ -99,7 +100,8 @@ const ContractService = {
     },
 
     async poolMint(cAddress: string, cWallet: string, nonceKey: bigint, amount: bigint, tokenContract: string, poolHoneyPotAddress: string, quantity: number, tokenId: string | null, platform: MyCollectives.SupportedPlatforms, groupId: string, groupMintCount: number) {
-        MyCollectives.setConfig({} as Config)
+        this.initSDKConfig()
+
         const poolAddress = await this.getPool(cAddress, cWallet, nonceKey, poolHoneyPotAddress)
         console.log(poolAddress, 'pooladdress & tokencontract', tokenContract)
         const generatedTokenId = Math.floor(Math.random() * (150 - 30 + 1)) + 30;
@@ -139,7 +141,7 @@ const ContractService = {
     },
 
     async getPool(cAddress: string, cWallet: string, nonceKey: bigint, honeyPot: string) {
-        MyCollectives.setConfig({} as Config)
+        this.initSDKConfig()
         const response = await MyCollectives.Collective.getPoolByHoneyPot(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, honeyPot)
         console.log("!!!!! response get pool by honeyPot => ", response)
         return response
@@ -154,6 +156,16 @@ const ContractService = {
     },
     getProvider: function () {
         return new ethers.providers.Web3Provider((window as any).ethereum)
+    },
+
+    initSDKConfig: function () {
+        return MyCollectives.setConfig({
+            RPC_URL: import.meta.env.VITE_RPC_URL,
+            PIMLICO_API_KEY: import.meta.env.VITE_PIMLICO_API_KEY,
+            BICONOMY_PAYMASTER: import.meta.env.VITE_BICONOMY_PAYMASTER,
+            BICONOMY_BUNDLER_API_KEY: import.meta.env.VITE_BICONOMY_BUNDLER_API_KEY,
+        } as Config)
+
     },
 
 
