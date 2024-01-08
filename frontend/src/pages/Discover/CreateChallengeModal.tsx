@@ -31,7 +31,7 @@ export interface CreateChallengeModalProps {
   resultChallenge: Challenge | null;
   setResultChallenge: (challenge: Challenge) => void;
 }
-const CreateGroupModal = forwardRef(function CreateGroupModal(
+const CreateChallengeModal = forwardRef(function CreateChallengeModal(
   {
     presentingElement,
     dismiss,
@@ -331,4 +331,4 @@ const CreateGroupModal = forwardRef(function CreateGroupModal(
   );
 });
 
-export default CreateGroupModal;
+export default CreateChallengeModal;

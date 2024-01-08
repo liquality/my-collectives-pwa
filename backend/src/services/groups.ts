@@ -77,6 +77,8 @@ export class GroupsService {
       .leftJoin("pools", "pools.groupId", "=", "groups.id")
       .leftJoin("challenges", "challenges.id", "=", "pools.challengeId") // Join with challenges table
       .leftJoin("messages", "messages.groupId", "=", "groups.id")
+      .groupBy("groups.id", "user_groups.admin") // Include "user_groups.admin" in the GROUP BY clause
+
       .where("users.publicAddress", "=", address)
       .groupBy("groups.id")
       .select([
@@ -90,6 +92,8 @@ export class GroupsService {
         "groups.createdAt",
         "groups.createdBy",
         "groups.mintCount",
+        "user_groups.admin"
+
       ])
       .countDistinct({ memberCount: "user_groups.userId" })
       .countDistinct({ poolsCount: "pools.id" })
@@ -100,6 +104,8 @@ export class GroupsService {
         ),
       })
       .orderBy("groups.createdAt", "desc");
+
+
 
     //TODO move this function call to its own endpoint 
     //await this.setTopContributorGroup()
@@ -126,7 +132,7 @@ export class GroupsService {
         "groups.nonceKey",
         "groups.createdAt",
         "groups.createdBy",
-        "groups.mintCount",
+        "groups.mintCount"
       ])
       .orderBy("groups.createdAt", "desc");
 
@@ -138,11 +144,45 @@ export class GroupsService {
       .join("user_groups", "groups.id", "=", "user_groups.groupId")
       .join("users", "users.id", "=", "user_groups.userId")
       .where("groups.id", "=", id)
-      .select<Group[]>("users.id", "users.publicAddress");
+      .select<Group[]>("users.id", "users.publicAddress", "user_groups.admin");
   }
 
-  public static find(id: string): Promise<Group | null> {
-    return dbClient("groups")
+  public static async toggleAdminStatus(groupId: string, userIdForMemberToToggle: string, authenticatedUserId: string): Promise<any> {
+    try {
+      console.log(userIdForMemberToToggle, 'authenticated', authenticatedUserId)
+      await dbClient.transaction(async (trx) => {
+        const existingUserGroupForToggledUser = await trx('user_groups')
+          .where({ groupId: groupId, userId: userIdForMemberToToggle })
+          .first();
+        const existingUserGroupForAuthedUser = await trx('user_groups')
+          .where({ groupId: groupId, userId: authenticatedUserId })
+          .first();
+        //Check if the authenticated user is a admin or creator/group
+        console.log(existingUserGroupForToggledUser, existingUserGroupForAuthedUser, 'wats this`')
+        if (existingUserGroupForToggledUser && existingUserGroupForAuthedUser.admin) {
+          // Toggle the admin status
+          const updatedAdminStatus = !existingUserGroupForToggledUser.admin;
+          await trx('user_groups')
+            .where({ groupId: groupId, userId: userIdForMemberToToggle })
+            .update({ admin: updatedAdminStatus });
+        } else {
+          throw Error
+        }
+      });
+    } catch (error) {
+      console.log(error, 'wats er')
+      return { success: false }
+    }
+    return { success: true }
+  }
+
+
+  public static async find(id: string, authenticatedUserId: string): Promise<Group | null> {
+    const existingUserGroupForAuthedUser = await dbClient('user_groups')
+      .where({ groupId: id, userId: authenticatedUserId })
+      .first();
+
+    const result = await dbClient("groups")
       .where("id", "=", id)
       .first<Group>(
         "id",
@@ -151,9 +191,13 @@ export class GroupsService {
         "publicAddress",
         "walletAddress",
         "nonceKey",
-        "createdAt"
+        "createdAt",
+        "createdBy"
       );
+    return { loggedInUserIsAdmin: existingUserGroupForAuthedUser.admin, ...result }
   }
+
+
 
   public static async update(
     id: string,
