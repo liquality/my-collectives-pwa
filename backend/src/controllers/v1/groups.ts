@@ -14,6 +14,7 @@ export class GroupsController {
 
         res.status(200).send(groups);
       } catch (err: any) {
+        console.log(err, 'ERROR?')
         res.status(500).send({ error: err.message });
       }
     }
@@ -119,6 +120,7 @@ export class GroupsController {
           res.status(200).send(members);
         }
       } catch (err: any) {
+        console.log(err, 'wats err')
         res.status(500).send({ error: err.message });
       }
     }

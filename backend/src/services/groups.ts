@@ -77,6 +77,8 @@ export class GroupsService {
       .leftJoin("pools", "pools.groupId", "=", "groups.id")
       .leftJoin("challenges", "challenges.id", "=", "pools.challengeId") // Join with challenges table
       .leftJoin("messages", "messages.groupId", "=", "groups.id")
+      .groupBy("groups.id", "user_groups.admin") // Include "user_groups.admin" in the GROUP BY clause
+
       .where("users.publicAddress", "=", address)
       .groupBy("groups.id")
       .select([
@@ -90,6 +92,8 @@ export class GroupsService {
         "groups.createdAt",
         "groups.createdBy",
         "groups.mintCount",
+        "user_groups.admin"
+
       ])
       .countDistinct({ memberCount: "user_groups.userId" })
       .countDistinct({ poolsCount: "pools.id" })
@@ -126,7 +130,7 @@ export class GroupsService {
         "groups.nonceKey",
         "groups.createdAt",
         "groups.createdBy",
-        "groups.mintCount",
+        "groups.mintCount"
       ])
       .orderBy("groups.createdAt", "desc");
 
@@ -138,8 +142,9 @@ export class GroupsService {
       .join("user_groups", "groups.id", "=", "user_groups.groupId")
       .join("users", "users.id", "=", "user_groups.userId")
       .where("groups.id", "=", id)
-      .select<Group[]>("users.id", "users.publicAddress");
+      .select<Group[]>("users.id", "users.publicAddress", "user_groups.admin"); // Corrected alias here
   }
+
 
   public static find(id: string): Promise<Group | null> {
     return dbClient("groups")
@@ -151,9 +156,12 @@ export class GroupsService {
         "publicAddress",
         "walletAddress",
         "nonceKey",
-        "createdAt"
+        "createdAt",
+        "createdBy"
       );
   }
+
+
 
   public static async update(
     id: string,
