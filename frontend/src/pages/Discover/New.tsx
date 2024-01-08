@@ -12,7 +12,7 @@ import { RouteComponentProps } from "react-router";
 import PageSearchBar from "@/components/PageSearchBar";
 import DiscoverTopBar from "./DiscoverTopBar";
 import { useEffect, useMemo, useRef, useState } from "react";
-import CreateGroupModal from "./CreateChallengeModal";
+import CreateChallengeModal from "./CreateChallengeModal";
 import { Challenge, GroupedChallenge } from "@/types/challenges";
 import ChallengeItemModal from "@/components/ChallengesModal/ChallengeItemModal";
 import { useSignInWallet } from "@/hooks/useSignInWallet";
@@ -97,7 +97,7 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
           </IonFabButton>
         </IonFab>
 
-        <CreateGroupModal
+        <CreateChallengeModal
           trigger="open-create-challenge-modal"
           ref={createChallengeModal}
           presentingElement={presentingElement}

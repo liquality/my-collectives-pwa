@@ -8,6 +8,9 @@ import {
   IonIcon,
   IonLabel,
   IonCardSubtitle,
+  IonAlert,
+  IonBackButton,
+  IonButton,
 } from "@ionic/react";
 import React, { useState } from "react";
 
@@ -61,6 +64,31 @@ const MembersTable: React.FC<MembersTableProps> = ({
           ) : null}
         </IonRow>
       ))}
+
+      <IonButton id="present-alert">Click Me</IonButton>
+      <IonAlert
+        header="Are you sure you want to make this member a admin?"
+        trigger="present-alert"
+        buttons={[
+          {
+            text: "Cancel",
+            role: "cancel",
+            handler: () => {
+              console.log("Alert canceled");
+            },
+          },
+          {
+            text: "Yes",
+            role: "confirm",
+            handler: () => {
+              console.log("Alert confirmed");
+            },
+          },
+        ]}
+        onDidDismiss={({ detail }) =>
+          console.log(`Dismissed with role: ${detail.role}`)
+        }
+      ></IonAlert>
     </IonGrid>
   );
 };
