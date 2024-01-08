@@ -1,3 +1,5 @@
+import { useSignInWallet } from "@/hooks/useSignInWallet";
+import { Group } from "@/types/general-types";
 import { shortenAddress } from "@/utils";
 import {
   IonGrid,
@@ -11,11 +13,16 @@ import React, { useState } from "react";
 
 export interface MembersTableProps {
   members: any[] | null;
+  group: Group;
 }
 
 const MembersTable: React.FC<MembersTableProps> = ({
   members,
+  group,
 }: MembersTableProps) => {
+  console.log(group, "wats group?");
+  const { user } = useSignInWallet();
+
   return (
     <IonGrid className="members-table">
       <IonRow className="ion-justify-content-between ">
@@ -25,10 +32,14 @@ const MembersTable: React.FC<MembersTableProps> = ({
         <IonCol size="auto">
           <IonCardSubtitle>Minted</IonCardSubtitle>
         </IonCol>
-
         <IonCol size="auto">
           <IonCardSubtitle>TOTAL</IonCardSubtitle>
         </IonCol>
+        {user?.id === group.createdBy ? (
+          <IonCol size="auto">
+            <IonCardSubtitle>Admin</IonCardSubtitle>
+          </IonCol>
+        ) : null}
       </IonRow>
       {members?.map((member, index) => (
         <IonRow className="ion-justify-content-between " key={index}>
@@ -43,6 +54,11 @@ const MembersTable: React.FC<MembersTableProps> = ({
           <IonCol size="auto">
             <IonLabel>0.0017 ETH</IonLabel>
           </IonCol>
+          {user?.id === group.createdBy ? (
+            <IonCol size="auto">
+              <IonLabel>{member.admin.toString()}</IonLabel>
+            </IonCol>
+          ) : null}
         </IonRow>
       ))}
     </IonGrid>
