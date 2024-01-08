@@ -125,4 +125,23 @@ export class GroupsController {
       }
     }
   };
+
+  public toggleAdminStatus: RequestHandler = async (req, res) => {
+    const { groupId, userId: userIdForMember } = req.params;
+    const authenticatedUser = await AuthService.find((req as any).auth?.sub);
+
+    if (!groupId && !userIdForMember) {
+      res.status(400).send({ error: "id is required" });
+    } else {
+      try {
+        const toggled = await GroupsService.toggleAdminStatus(groupId, userIdForMember, authenticatedUser.id);
+        console.log(toggled, 'wats toggled?')
+        res.status(200).send(toggled);
+
+      } catch (err: any) {
+        console.log(err, 'wats err')
+        res.status(500).send({ error: err.message });
+      }
+    }
+  }
 }

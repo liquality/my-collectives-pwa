@@ -10,3 +10,5 @@ groupsRouter.get("/challenge/:challengeId", authentication, ctrl.findByChallenge
 groupsRouter.get("/:id/members", authentication, ctrl.findMembers);
 groupsRouter.get("/:id", authentication, ctrl.find);
 groupsRouter.put("/:id", authentication, ctrl.update);
+groupsRouter.put("/toggle/:groupId/:userId", authentication, ctrl.toggleAdminStatus);
+

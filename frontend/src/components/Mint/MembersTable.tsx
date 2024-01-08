@@ -1,4 +1,5 @@
 import { useSignInWallet } from "@/hooks/useSignInWallet";
+import ApiService from "@/services/ApiService";
 import { Group } from "@/types/general-types";
 import { shortenAddress } from "@/utils";
 import {
@@ -59,36 +60,35 @@ const MembersTable: React.FC<MembersTableProps> = ({
           </IonCol>
           {user?.id === group.createdBy ? (
             <IonCol size="auto">
-              <IonLabel>{member.admin.toString()}</IonLabel>
+              <IonLabel id="present-alert">{member.admin.toString()}</IonLabel>
+              <IonAlert
+                header="Are you sure you want to make this member a admin?"
+                trigger="present-alert"
+                buttons={[
+                  {
+                    text: "Cancel",
+                    role: "cancel",
+                    handler: () => {
+                      console.log("Alert canceled");
+                    },
+                  },
+                  {
+                    text: "Yes",
+                    role: "confirm",
+                    handler: async () => {
+                      try {
+                        await ApiService.toggleAdminStatus(group.id, member.id);
+                      } catch (error) {
+                        console.log(error, "wats err");
+                      }
+                    },
+                  },
+                ]}
+              ></IonAlert>
             </IonCol>
           ) : null}
         </IonRow>
       ))}
-
-      <IonButton id="present-alert">Click Me</IonButton>
-      <IonAlert
-        header="Are you sure you want to make this member a admin?"
-        trigger="present-alert"
-        buttons={[
-          {
-            text: "Cancel",
-            role: "cancel",
-            handler: () => {
-              console.log("Alert canceled");
-            },
-          },
-          {
-            text: "Yes",
-            role: "confirm",
-            handler: () => {
-              console.log("Alert confirmed");
-            },
-          },
-        ]}
-        onDidDismiss={({ detail }) =>
-          console.log(`Dismissed with role: ${detail.role}`)
-        }
-      ></IonAlert>
     </IonGrid>
   );
 };

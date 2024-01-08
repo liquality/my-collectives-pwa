@@ -145,6 +145,34 @@ export class GroupsService {
       .select<Group[]>("users.id", "users.publicAddress", "user_groups.admin"); // Corrected alias here
   }
 
+  public static async toggleAdminStatus(groupId: string, userIdForMemberToToggle: string, authenticatedUserId: string): Promise<any> {
+    try {
+      await dbClient.transaction(async (trx) => {
+        const existingUserGroupForToggledUser = await trx('user_groups')
+          .where({ groupId, userIdForMemberToToggle })
+          .first();
+        const existingUserGroupForAuthedUser = await trx('user_groups')
+          .where({ groupId, authenticatedUserId })
+          .first();
+        console.log(groupId, userIdForMemberToToggle, 'existinggroup:', existingUserGroupForToggledUser, 'AUTHED USER GROUP:', existingUserGroupForAuthedUser)
+
+        //Check if the authenticated user is a admin or creator/group
+        if (existingUserGroupForToggledUser && existingUserGroupForAuthedUser.admin) {
+          // Toggle the admin status
+          const updatedAdminStatus = !existingUserGroupForToggledUser.admin;
+          await trx('user_groups')
+            .where({ groupId, userIdForMemberToToggle })
+            .update({ admin: updatedAdminStatus });
+        } else {
+          return { success: false }
+        }
+      });
+    } catch (error) {
+      return { success: false }
+    }
+    return { success: true }
+  }
+
 
   public static find(id: string): Promise<Group | null> {
     return dbClient("groups")
