@@ -1,22 +1,16 @@
 import {
-  IonButton,
   IonCard,
   IonCardContent,
   IonCardSubtitle,
   IonCardTitle,
   IonCol,
   IonContent,
-  IonGrid,
   IonIcon,
-  IonItem,
   IonLabel,
   IonPage,
   IonRow,
   IonText,
-  IonTitle,
 } from "@ionic/react";
-import { copy } from "ionicons/icons";
-
 import Header from "@/components/Header";
 import { RouteComponentProps, useLocation } from "react-router";
 import CollectiveTopBar from "@/components/TopBars/CollectiveTopBar";

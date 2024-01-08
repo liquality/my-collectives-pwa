@@ -72,7 +72,7 @@ export class AuthService {
   public static getNonce(publicAddress: string) {
     return dbClient("users")
       .where("publicAddress", "=", publicAddress)
-      .first("id", "nonce", "publicAddress");
+      .first("id", "nonce", "publicAddress", "isCreator");
   }
 
   public static find(id: string): Promise<UserRecord> {
@@ -82,6 +82,6 @@ export class AuthService {
   public static findByAddress(publicAddress: string): Promise<UserRecord> {
     return dbClient("users")
       .where("publicAddress", "=", publicAddress)
-      .first("id", "nonce", "publicAddress");
+      .first("id", "nonce", "publicAddress", "isCreator");
   }
 }

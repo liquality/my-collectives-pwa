@@ -1,8 +1,4 @@
 import {
-  IonButton,
-  IonCard,
-  IonCardSubtitle,
-  IonCardTitle,
   IonCol,
   IonContent,
   IonGrid,
@@ -15,7 +11,6 @@ import {
   useIonRouter,
 } from "@ionic/react";
 
-import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
 import { RouteComponentProps } from "react-router";
 import PageSearchBar from "@/components/PageSearchBar";
 import RewardsTopBar from "@/components/TopBars/RewardsTopBar";
@@ -197,7 +192,7 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
                             <IonText
                               color="primary"
                               style={{ pointer: "cursor" }}
-                              onClick={() => handleLeaveGroup(group.id)}
+                              onClick={() => handleLeaveGroup(group)}
                             >
                               Leave
                             </IonText>
