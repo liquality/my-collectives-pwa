@@ -18,7 +18,7 @@ import { banOutline } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 
 export interface MembersTableProps {
-  members: any[] | null;
+  members: any[];
   group: Group;
 }
 
@@ -26,11 +26,36 @@ const MembersTable: React.FC<MembersTableProps> = ({
   members,
   group,
 }: MembersTableProps) => {
-  console.log(group, "wats group?");
-  const { user } = useSignInWallet();
   const { presentToast } = useToast();
+  const [localMembers, setLocalMembers] = useState<any[]>(members);
 
-  useEffect(() => {}, [user]);
+  const handleToggleAdminStatus = async (memberId: string) => {
+    try {
+      const result = await ApiService.toggleAdminStatus(group.id, memberId);
+      console.log(result, "wats res?");
+      if (!result.success) {
+        presentToast(
+          "Could not change admin role. Be aware that you can't change the creators admin role.",
+          "danger",
+          banOutline
+        );
+      } else {
+        // Update local state with modified admin status
+        console.log("Update state");
+        setLocalMembers((prevMembers) =>
+          prevMembers.map((prevMember) =>
+            prevMember.id === memberId
+              ? { ...prevMember, admin: !prevMember.admin }
+              : prevMember
+          )
+        );
+      }
+    } catch (error) {
+      presentToast("Could not change admin role...", "danger", banOutline);
+      console.error("Error toggling admin status:", error);
+    }
+  };
+
   return (
     <IonGrid className="members-table">
       <IonRow className="ion-justify-content-between ">
@@ -43,14 +68,14 @@ const MembersTable: React.FC<MembersTableProps> = ({
         <IonCol size="auto">
           <IonCardSubtitle>TOTAL</IonCardSubtitle>
         </IonCol>
-        {user?.id === group.createdBy ? (
+        {group.loggedInUserIsAdmin ? (
           <IonCol size="auto">
             <IonCardSubtitle>Admin</IonCardSubtitle>
           </IonCol>
         ) : null}
       </IonRow>
-      {members?.map((member, index) => (
-        <IonRow className="ion-justify-content-between " key={index}>
+      {localMembers?.map((member) => (
+        <IonRow className="ion-justify-content-between" key={member.id}>
           <IonCol size="auto">
             <IonLabel>{shortenAddress(member.publicAddress)}</IonLabel>
           </IonCol>
@@ -62,11 +87,12 @@ const MembersTable: React.FC<MembersTableProps> = ({
           <IonCol size="auto">
             <IonLabel>0.0017 ETH</IonLabel>
           </IonCol>
-          {user?.id === group.createdBy ? (
+          {group.loggedInUserIsAdmin ? (
             <IonCol size="auto">
               <IonLabel id={`present-alert-${member.id}`}>
                 {member.admin.toString()}
               </IonLabel>
+              {/* TODO: add this alert to its own component */}
               <IonAlert
                 header="Are you sure you want to make this member a admin?"
                 trigger={`present-alert-${member.id}`}
@@ -81,30 +107,7 @@ const MembersTable: React.FC<MembersTableProps> = ({
                   {
                     text: "Yes",
                     role: "confirm",
-                    handler: async () => {
-                      try {
-                        const result = await ApiService.toggleAdminStatus(
-                          group.id,
-                          member.id
-                        );
-                        console.log(result, "wats res?");
-                        if (!result.success) {
-                          presentToast(
-                            "Could not change admin role. Be aware that you can't change the creators admin role.",
-                            "danger",
-                            banOutline
-                          );
-                        }
-                        member.admin = !member.admin;
-                      } catch (error) {
-                        presentToast(
-                          "Could not change admin role",
-                          "danger",
-                          banOutline
-                        );
-                        console.log(error, "wats err");
-                      }
-                    },
+                    handler: () => handleToggleAdminStatus(member.id),
                   },
                 ]}
               ></IonAlert>

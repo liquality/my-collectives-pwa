@@ -42,7 +42,8 @@ export class GroupsController {
       res.status(400).send({ error: "id is required" });
     } else {
       try {
-        const group = await GroupsService.find(id);
+        const user = await AuthService.find((req as any).auth?.sub);
+        const group = await GroupsService.find(id, user.id);
 
         if (!group) {
           res.status(404).send({ error: "group not found" });

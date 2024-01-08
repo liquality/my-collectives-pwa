@@ -37,14 +37,12 @@ export interface CollectiveInfoProps
 const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
   const { groupId } = match.params;
   const { group, members, loading } = useGetGroupById(groupId);
-  console.log(members, "all members?");
-  const [inviteLink, setInviteLink] = useState<string>("");
 
   return (
     <IonPage>
       <Header title={group?.name} />
 
-      {group && !loading ? (
+      {group && members && !loading ? (
         <IonContent className="ion-padding" color="light">
           <CollectiveTopBar>
             <PageSearchBar />
@@ -82,7 +80,7 @@ const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
           </IonCard>
           <IonCard className="info-card-container second-card">
             <IonRow className="ion-justify-content-between ion-align-items-center">
-              <IonCardTitle>Members | {group?.memberCount || 0} </IonCardTitle>
+              <IonCardTitle>Members | {members?.length || 0} </IonCardTitle>
               <IonText style={{ fontSize: "13px" }}>See All</IonText>
             </IonRow>
             <MembersTable group={group} members={members} />
@@ -93,7 +91,10 @@ const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
 
           <IonRow className="manage-group-row ion-padding ion-justify-content-between ion-align-items-center">
             <IonText>
-              Manage <IonText style={{ color: "grey" }}>|</IonText>{" "}
+              {group.loggedInUserIsAdmin ? "Manage " : null}
+              {group.loggedInUserIsAdmin ? (
+                <IonText style={{ color: "grey" }}>| </IonText>
+              ) : null}
               <GenerateInviteBtn groupId={group.id} />
             </IonText>
             <IonText>Leave Collective</IonText>

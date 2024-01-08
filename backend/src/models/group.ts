@@ -6,6 +6,7 @@ export interface Group {
   createdBy: string;
   createdAt?: Date;
   updatedAt?: Date;
+  loggedInUserIsAdmin?: boolean
 }
 
 export interface GroupAllInfo {

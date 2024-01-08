@@ -22,6 +22,7 @@ export type Group = {
     poolsCount: number;
     messagesCount: number;
     activePoolsCount: number;
+    loggedInUserIsAdmin?: boolean;
 };
 
 export type PoolWithChallenge = {

@@ -105,6 +105,8 @@ export class GroupsService {
       })
       .orderBy("groups.createdAt", "desc");
 
+
+
     //TODO move this function call to its own endpoint 
     //await this.setTopContributorGroup()
 
@@ -142,11 +144,12 @@ export class GroupsService {
       .join("user_groups", "groups.id", "=", "user_groups.groupId")
       .join("users", "users.id", "=", "user_groups.userId")
       .where("groups.id", "=", id)
-      .select<Group[]>("users.id", "users.publicAddress", "user_groups.admin"); // Corrected alias here
+      .select<Group[]>("users.id", "users.publicAddress", "user_groups.admin");
   }
 
   public static async toggleAdminStatus(groupId: string, userIdForMemberToToggle: string, authenticatedUserId: string): Promise<any> {
     try {
+      console.log(userIdForMemberToToggle, 'authenticated', authenticatedUserId)
       await dbClient.transaction(async (trx) => {
         const existingUserGroupForToggledUser = await trx('user_groups')
           .where({ groupId: groupId, userId: userIdForMemberToToggle })
@@ -154,12 +157,8 @@ export class GroupsService {
         const existingUserGroupForAuthedUser = await trx('user_groups')
           .where({ groupId: groupId, userId: authenticatedUserId })
           .first();
-
-        const group = this.find(groupId)
-        console.log(groupId, userIdForMemberToToggle, 'existinggroup:', existingUserGroupForToggledUser, 'AUTHED USER GROUP:', existingUserGroupForAuthedUser)
-
-        console.log(userIdForMemberToToggle, 'VS', authenticatedUserId)
-        //Check if the authenticated user is a admin or creator/group, an admin should not be able to change himself
+        //Check if the authenticated user is a admin or creator/group
+        console.log(existingUserGroupForToggledUser, existingUserGroupForAuthedUser, 'wats this`')
         if (existingUserGroupForToggledUser && existingUserGroupForAuthedUser.admin) {
           // Toggle the admin status
           const updatedAdminStatus = !existingUserGroupForToggledUser.admin;
@@ -178,8 +177,12 @@ export class GroupsService {
   }
 
 
-  public static find(id: string): Promise<Group | null> {
-    return dbClient("groups")
+  public static async find(id: string, authenticatedUserId: string): Promise<Group | null> {
+    const existingUserGroupForAuthedUser = await dbClient('user_groups')
+      .where({ groupId: id, userId: authenticatedUserId })
+      .first();
+
+    const result = await dbClient("groups")
       .where("id", "=", id)
       .first<Group>(
         "id",
@@ -191,6 +194,7 @@ export class GroupsService {
         "createdAt",
         "createdBy"
       );
+    return { loggedInUserIsAdmin: existingUserGroupForAuthedUser.admin, ...result }
   }
 
 
