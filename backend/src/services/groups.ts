@@ -149,25 +149,29 @@ export class GroupsService {
     try {
       await dbClient.transaction(async (trx) => {
         const existingUserGroupForToggledUser = await trx('user_groups')
-          .where({ groupId, userIdForMemberToToggle })
+          .where({ groupId: groupId, userId: userIdForMemberToToggle })
           .first();
         const existingUserGroupForAuthedUser = await trx('user_groups')
-          .where({ groupId, authenticatedUserId })
+          .where({ groupId: groupId, userId: authenticatedUserId })
           .first();
+
+        const group = this.find(groupId)
         console.log(groupId, userIdForMemberToToggle, 'existinggroup:', existingUserGroupForToggledUser, 'AUTHED USER GROUP:', existingUserGroupForAuthedUser)
 
-        //Check if the authenticated user is a admin or creator/group
+        console.log(userIdForMemberToToggle, 'VS', authenticatedUserId)
+        //Check if the authenticated user is a admin or creator/group, an admin should not be able to change himself
         if (existingUserGroupForToggledUser && existingUserGroupForAuthedUser.admin) {
           // Toggle the admin status
           const updatedAdminStatus = !existingUserGroupForToggledUser.admin;
           await trx('user_groups')
-            .where({ groupId, userIdForMemberToToggle })
+            .where({ groupId: groupId, userId: userIdForMemberToToggle })
             .update({ admin: updatedAdminStatus });
         } else {
-          return { success: false }
+          throw Error
         }
       });
     } catch (error) {
+      console.log(error, 'wats er')
       return { success: false }
     }
     return { success: true }

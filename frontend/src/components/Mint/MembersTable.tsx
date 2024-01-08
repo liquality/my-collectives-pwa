@@ -1,4 +1,5 @@
 import { useSignInWallet } from "@/hooks/useSignInWallet";
+import useToast from "@/hooks/useToast";
 import ApiService from "@/services/ApiService";
 import { Group } from "@/types/general-types";
 import { shortenAddress } from "@/utils";
@@ -13,7 +14,8 @@ import {
   IonBackButton,
   IonButton,
 } from "@ionic/react";
-import React, { useState } from "react";
+import { banOutline } from "ionicons/icons";
+import React, { useEffect, useState } from "react";
 
 export interface MembersTableProps {
   members: any[] | null;
@@ -26,7 +28,9 @@ const MembersTable: React.FC<MembersTableProps> = ({
 }: MembersTableProps) => {
   console.log(group, "wats group?");
   const { user } = useSignInWallet();
+  const { presentToast } = useToast();
 
+  useEffect(() => {}, [user]);
   return (
     <IonGrid className="members-table">
       <IonRow className="ion-justify-content-between ">
@@ -60,10 +64,12 @@ const MembersTable: React.FC<MembersTableProps> = ({
           </IonCol>
           {user?.id === group.createdBy ? (
             <IonCol size="auto">
-              <IonLabel id="present-alert">{member.admin.toString()}</IonLabel>
+              <IonLabel id={`present-alert-${member.id}`}>
+                {member.admin.toString()}
+              </IonLabel>
               <IonAlert
                 header="Are you sure you want to make this member a admin?"
-                trigger="present-alert"
+                trigger={`present-alert-${member.id}`}
                 buttons={[
                   {
                     text: "Cancel",
@@ -77,8 +83,25 @@ const MembersTable: React.FC<MembersTableProps> = ({
                     role: "confirm",
                     handler: async () => {
                       try {
-                        await ApiService.toggleAdminStatus(group.id, member.id);
+                        const result = await ApiService.toggleAdminStatus(
+                          group.id,
+                          member.id
+                        );
+                        console.log(result, "wats res?");
+                        if (!result.success) {
+                          presentToast(
+                            "Could not change admin role. Be aware that you can't change the creators admin role.",
+                            "danger",
+                            banOutline
+                          );
+                        }
+                        member.admin = !member.admin;
                       } catch (error) {
+                        presentToast(
+                          "Could not change admin role",
+                          "danger",
+                          banOutline
+                        );
                         console.log(error, "wats err");
                       }
                     },
