@@ -28,6 +28,10 @@ import GenerateInviteBtn from "@/components/GenerateInvite";
 import { pathConstants } from "@/utils/routeNames";
 import Header from "@/components/Header";
 import userGetRewardsSummary from "@/hooks/userGetRewardsSummary";
+import ContractService from "@/services/ContractService";
+import { Group } from "@/types/general-types";
+import useToast from "@/hooks/useToast";
+import { banOutline } from "ionicons/icons";
 
 const Summary: React.FC<RouteComponentProps> = (routerProps) => {
   //TODO: change parent tag to IonPage
@@ -36,6 +40,7 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
   const { user } = useSignInWallet();
   const { summary, loading: loadingSummary } = userGetRewardsSummary();
   const router = useIonRouter();
+  const { presentToast } = useToast();
 
   const loadingAllData = !myGroups && loading && loadingSummary;
 
@@ -56,8 +61,22 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
     router.push(url, "root");
   };
 
-  const handleLeaveGroup = (groupId: string) => {
+  const handleLeaveGroup = (group: Group) => {
     // TODO: Implement
+    try {
+      ContractService.leaveCollective(
+        group.publicAddress,
+        group.walletAddress,
+        group.nonceKey
+      );
+    } catch (error) {
+      console.log(error);
+      presentToast(
+        "Something went wrong when you tried to leave the collective. Please submit a bug report :)",
+        "danger",
+        banOutline
+      );
+    }
   };
 
   return (

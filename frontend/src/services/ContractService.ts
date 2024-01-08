@@ -147,6 +147,13 @@ const ContractService = {
         return response
     },
 
+    async leaveCollective(cAddress: string, cWallet: string, nonceKey: bigint) {
+        this.initSDKConfig()
+
+        const response = await MyCollectives.Collective.leave(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey })
+
+    },
+
 
     /*---------------------------------- HELPERS  ----------------------------------------*/
     stringToBytes16(_string: string): Uint8Array {
