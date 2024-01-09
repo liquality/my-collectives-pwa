@@ -27,7 +27,10 @@ const GenerateInviteBtn = ({
       groupId,
       user.id
     );
-    const contractResult = await ContractService.createInviteSig();
+    console.log(result, "result for invite");
+    const contractResult = await ContractService.createInviteSig(
+      result[0].code
+    );
     const { inviteSig, inviteId } = contractResult;
     const copyUrl = `${url}/invite/${result[0].id}/${inviteSig}/${inviteId}`;
     console.log(contractResult, "contract result");
