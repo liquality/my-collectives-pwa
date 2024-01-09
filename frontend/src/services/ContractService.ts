@@ -148,8 +148,6 @@ const ContractService = {
             },
             pools: [],
         });
-
-
         return response
     },
 
@@ -178,14 +176,12 @@ const ContractService = {
     },
 
     initSDKConfig: function () {
-
         return MyCollectives.setConfig({
             RPC_URL: import.meta.env.VITE_RPC_URL,
             PIMLICO_API_KEY: import.meta.env.VITE_PIMLICO_API_KEY,
             BICONOMY_PAYMASTER: import.meta.env.VITE_BICONOMY_PAYMASTER,
             BICONOMY_BUNDLER_API_KEY: import.meta.env.VITE_BICONOMY_BUNDLER_API_KEY,
             AA_PROVIDER: MyCollectives.AAProviders.PIMLICO,
-
         } as Config)
 
     },

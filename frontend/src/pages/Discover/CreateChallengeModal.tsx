@@ -279,7 +279,7 @@ const CreateChallengeModal = forwardRef(function CreateChallengeModal(
               label="Platform"
               placeholder="Platform"
             >
-              <IonSelectOption value="Other">Other</IonSelectOption>
+              <IonSelectOption value="Local">Other</IonSelectOption>
               <IonSelectOption value="Sound">Sound</IonSelectOption>
               <IonSelectOption value="Zora">Zora</IonSelectOption>
             </IonSelect>
