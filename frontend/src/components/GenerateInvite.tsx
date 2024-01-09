@@ -23,18 +23,37 @@ const GenerateInviteBtn = ({
   const { presentToast } = useToast();
   const { user } = useSignInWallet();
   const handleGenerateInvite = async () => {
-    presentToast(
-      `You generated and copied a invite link! Send it to someone you like :)`,
-      "primary",
-      copy
-    );
     const result = await InvitesService.getInviteByGroupIdAndUserId(
       groupId,
       user.id
     );
     const contractResult = await ContractService.createInviteSig();
     const { inviteSig, inviteId } = contractResult;
-    handleCopyClick(`${url}/invite/${result[0].id}/${inviteSig}/${inviteId}`);
+    const copyUrl = `${url}/invite/${result[0].id}/${inviteSig}/${inviteId}`;
+    console.log(contractResult, "contract result");
+    function refocusAndCopy() {
+      return new Promise((resolve, reject) => {
+        const _asyncCopyFn = async () => {
+          try {
+            handleCopyClick(copyUrl);
+            presentToast(
+              `You generated and copied a invite link! Send it to someone you like :)`,
+              "primary",
+              copy
+            );
+            resolve(copyUrl);
+          } catch (e) {
+            reject(e);
+          }
+          window.removeEventListener("focus", _asyncCopyFn);
+        };
+
+        window.addEventListener("focus", _asyncCopyFn);
+      });
+    }
+
+    // To call:
+    refocusAndCopy().then((r) => console.log("Returned value: ", r));
   };
 
   if (type === "button") {

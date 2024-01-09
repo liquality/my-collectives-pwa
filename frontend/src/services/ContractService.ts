@@ -1,16 +1,15 @@
 import { generateSalt } from "@/utils/salt";
-import { BigNumberish, ethers } from "ethers";
+import { BigNumberish, BytesLike, ethers, utils } from "ethers";
 import * as MyCollectives from "@liquality/my-collectives-sdk";
 import { Config } from "@liquality/my-collectives-sdk";
 import ApiService from "./ApiService";
+import { handleCopyClick } from "@/utils";
 
 const ContractService = {
     createCollective: async function (tokenContracts: string[], honeyPots: string[]) {
         this.initSDKConfig()
         const salt = generateSalt();
-        console.log('mycollectives params:',
-            { tokenContracts, honeyPots: honeyPots },
-            salt, 'PROVIDEEER:', this.getProvider())
+
         const response = await MyCollectives.Collective.create(
             this.getProvider(),
             { tokenContracts, honeyPots: honeyPots },
@@ -26,6 +25,9 @@ const ContractService = {
         this.initSDKConfig()
 
         const provider = this.getProvider()
+
+        const inviteIdAsUint8Array = utils.arrayify(inviteId);
+        console.log(inviteIdAsUint8Array, 'uint arr invitecode',)
         /* 
                 const isMemberResponse = await MyCollectives.Collective.isMember(provider, { address: cAddress, wallet: cWallet, nonceKey }, await provider.getSigner().getAddress())
                 console.log("!!!!! response => IS MEMBER ", isMemberResponse.isMember)
@@ -51,10 +53,10 @@ const ContractService = {
                 } */
 
 
-        console.log({ address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteId }, 'PARAMS FOR Collective.Join()')
+        console.log({ address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteIdAsUint8Array }, 'PARAMS FOR Collective.Join()')
         console.log(await provider.getSigner().getAddress(), 'PROVIDER/signer address2222')
 
-        const response = await MyCollectives.Collective.join(provider, { address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteId })
+        const response = await MyCollectives.Collective.join(provider, { address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteIdAsUint8Array })
         console.log("!!!!! response => ", response)
 
 
@@ -63,7 +65,8 @@ const ContractService = {
 
     async createInviteSig() {
         const inviteId = ethers.utils.randomBytes(16);
-        console.log("inviteId >> ", inviteId.toString())
+        console.log("inviteId array tostring >> ", Array.from(inviteId).toString());
+
 
         // Hash the inviteId
         let messageHash = ethers.utils.solidityKeccak256(
@@ -76,7 +79,9 @@ const ContractService = {
 
         let inviteSig = await this.getProvider().getSigner().signMessage(messageHashBinary); //TODO: the person INVITING should generate and sign this before getting the copyclip invite
         console.log("inviteSig >> ", inviteSig, inviteId)
-        return { inviteSig, inviteId }
+        const inviteIdInHex = ethers.utils.hexlify(inviteId).toString()
+
+        return { inviteSig: inviteSig.toString(), inviteId: inviteIdInHex }
     },
 
 
@@ -100,9 +105,6 @@ const ContractService = {
         honeyPots: string[]
     ) {
         this.initSDKConfig()
-
-        console.log(await this.getProvider().getNetwork(), { address: cAddress, wallet: cWallet, nonceKey },
-            { tokenContracts, honeyPots }, 'params for create pools')
         const response = await MyCollectives.Collective.createPools(
             this.getProvider(),
             { address: cAddress, wallet: cWallet, nonceKey },
@@ -171,6 +173,12 @@ const ContractService = {
         const bytes16 = ethers.utils.arrayify(bytes32).slice(0, 16);
         return bytes16;
     },
+
+    /*     bytes32ToString(bytes) {
+            return ethers.utils.toUtf8String(
+              ethers.utils.arrayify(hex).filter((n) => n != 0)
+            );
+          }; */
     getProvider: function () {
         return new ethers.providers.Web3Provider((window as any).ethereum)
     },
@@ -185,6 +193,16 @@ const ContractService = {
         } as Config)
 
     },
+
+    bytes16ToHex(bytes16: Uint8Array) {
+        if (!Array.isArray(bytes16) || bytes16.length !== 16) {
+            throw new Error("Invalid bytes16 format");
+        }
+
+        return "0x" + Array.from(bytes16).map(byte => byte.toString(16).padStart(2, "0")).join("");
+    }
+
+
 
 
 };

@@ -22,10 +22,13 @@ export interface InvitePageProps
   extends RouteComponentProps<{
     id?: string;
     code?: string;
+    inviteSig?: string;
+    inviteId?: string;
   }> {}
 
 const Invite: React.FC<InvitePageProps> = ({ match }) => {
-  const { id, code } = match.params;
+  const { id, code, inviteSig, inviteId } = match.params;
+  console.log(match.params, "match params in invite");
   const [invite, setInvite] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [processing, setProcessing] = useState<boolean>(false);
@@ -55,13 +58,14 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
   console.log(invite, "wats invite?");
   async function handleConnect() {
     setProcessing(true);
-    if (claimInviteAvailable) {
+    if (claimInviteAvailable && inviteSig && inviteId) {
       try {
         await ContractService.joinCollective(
-          invite.code,
+          inviteId,
           invite.groupPublicAddress,
           invite.groupWalletAddress,
-          invite.groupNonceKey
+          invite.groupNonceKey,
+          inviteSig
         );
         await InvitesService.claim(invite.id, address!);
         const url = pathConstants.collective.mints.replace(
