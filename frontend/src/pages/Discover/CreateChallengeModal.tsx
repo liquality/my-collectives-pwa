@@ -22,6 +22,7 @@ import useToast from "@/hooks/useToast";
 import { banOutline } from "ionicons/icons";
 import ContractService from "@/services/ContractService";
 import { handleCopyClick, shortenAddress } from "@/utils";
+import { create } from "domain";
 
 export interface CreateChallengeModalProps {
   presentingElement?: HTMLElement;
@@ -57,10 +58,19 @@ const CreateChallengeModal = forwardRef(function CreateChallengeModal(
     honeyPotAddress: false,
   });
 
-  const { mintingContractAddress, category, network, expiration } =
-    createdChallenge;
+  const {
+    mintingContractAddress,
+    category,
+    network,
+    expiration,
+    honeyPotAddress,
+  } = createdChallenge;
   let isButtonDisabled =
-    !mintingContractAddress || !category || !network || !expiration;
+    !mintingContractAddress ||
+    !category ||
+    !network ||
+    !expiration ||
+    !honeyPotAddress;
   const [validMintingContractAdress, setValidMintingContractAddress] =
     useState(false);
   const [validHoneyPotAddress, setValidHoneyPotAddress] = useState(false);
@@ -89,6 +99,7 @@ const CreateChallengeModal = forwardRef(function CreateChallengeModal(
 
   const handleCreateChallenge = async () => {
     try {
+      console.log(createdChallenge, "CREATED CHALLNGE");
       const result = await ApiService.createChallenges(createdChallenge);
       if (result?.id) {
         setResultChallenge(result);
@@ -116,7 +127,7 @@ const CreateChallengeModal = forwardRef(function CreateChallengeModal(
     }));
   };
 
-  const handleSetHoneyPotAddress = (value: string) => {
+  /*   const handleSetHoneyPotAddress = (value: string) => {
     setValidAddresses((prevGroup) => ({
       ...prevGroup,
       honeyPotAddress: isAddress(value),
@@ -125,15 +136,21 @@ const CreateChallengeModal = forwardRef(function CreateChallengeModal(
       ...prevGroup,
       honeyPotAddress: value,
     }));
-  };
+  }; */
 
   const generateHoneyPot = async () => {
     const result = await ContractService.createHoneyPot();
+    console.log(result, "wats result", result.honeyPot);
     setCreatedChallenge((prevGroup) => ({
       ...prevGroup,
       honeyPotAddress: result.honeyPot,
     }));
+    console.log(createdChallenge, "created challenge after:", {
+      ...createdChallenge,
+      honeyPotAddress: result.honeyPot,
+    });
   };
+  console.log(createdChallenge, "created challenge?");
 
   const copy = () => {
     handleCopyClick(createdChallenge.honeyPotAddress);

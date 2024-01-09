@@ -1,5 +1,6 @@
 import { useSignInWallet } from "@/hooks/useSignInWallet";
 import useToast from "@/hooks/useToast";
+import ContractService from "@/services/ContractService";
 import InvitesService from "@/services/Invites";
 import { handleCopyClick } from "@/utils";
 import { IonButton, IonText } from "@ionic/react";
@@ -31,7 +32,9 @@ const GenerateInviteBtn = ({
       groupId,
       user.id
     );
-    handleCopyClick(`${url}/invite/${result[0].id}`);
+    const contractResult = await ContractService.createInviteSig();
+    const { inviteSig, inviteId } = contractResult;
+    handleCopyClick(`${url}/invite/${result[0].id}/${inviteSig}/${inviteId}`);
   };
 
   if (type === "button") {

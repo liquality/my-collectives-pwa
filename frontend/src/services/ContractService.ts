@@ -1,7 +1,7 @@
 import { generateSalt } from "@/utils/salt";
 import { BigNumberish, ethers } from "ethers";
-import * as MyCollectives from "@liquality/my-collectives";
-import { Config } from "@liquality/my-collectives";
+import * as MyCollectives from "@liquality/my-collectives-sdk";
+import { Config } from "@liquality/my-collectives-sdk";
 import ApiService from "./ApiService";
 
 const ContractService = {
@@ -22,7 +22,7 @@ const ContractService = {
 
 
 
-    joinCollective: async function (inviteCode: string, cAddress: string, cWallet: string, nonceKey: bigint) {
+    joinCollective: async function (inviteId: string, cAddress: string, cWallet: string, nonceKey: bigint, inviteSig: string) {
         this.initSDKConfig()
 
         const provider = this.getProvider()
@@ -50,19 +50,9 @@ const ContractService = {
                     console.log("!!!!! response frontend contract service => ", response)
                 } */
 
-        const inviteId = ethers.utils.randomBytes(16);
-        console.log("inviteId >> ", inviteId.toString())
 
-        // Hash the inviteId
-        let messageHash = ethers.utils.solidityKeccak256(
-            ["bytes16"],
-            [inviteId]
-        );
-        // Sign the inviteID hash to get the inviteSig from the initiator
-        let messageHashBinary = ethers.utils.arrayify(messageHash);
-        let inviteSig = await provider.getSigner().signMessage(messageHashBinary);
-        console.log("inviteSig >> ", inviteSig)
         console.log({ address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteId }, 'PARAMS FOR Collective.Join()')
+        console.log(await provider.getSigner().getAddress(), 'PROVIDER/signer address2222')
 
         const response = await MyCollectives.Collective.join(provider, { address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteId })
         console.log("!!!!! response => ", response)
@@ -71,13 +61,33 @@ const ContractService = {
 
     },
 
+    async createInviteSig() {
+        const inviteId = ethers.utils.randomBytes(16);
+        console.log("inviteId >> ", inviteId.toString())
+
+        // Hash the inviteId
+        let messageHash = ethers.utils.solidityKeccak256(
+            ["bytes16"],
+            [inviteId]
+        );
+
+        // Sign the inviteID hash to get the inviteSig from the initiator
+        let messageHashBinary = ethers.utils.arrayify(messageHash);
+
+        let inviteSig = await this.getProvider().getSigner().signMessage(messageHashBinary); //TODO: the person INVITING should generate and sign this before getting the copyclip invite
+        console.log("inviteSig >> ", inviteSig, inviteId)
+        return { inviteSig, inviteId }
+    },
+
 
 
     async createHoneyPot() {
         this.initSDKConfig()
         const salt = generateSalt();
 
+        const createResponse = await MyCollectives.HoneyPot.create(this.getProvider(), salt)
         const response = await MyCollectives.HoneyPot.get(this.getProvider(), salt)
+
         console.log("!!!!! response honey pot address => ", response)
         return response
     },
@@ -89,6 +99,10 @@ const ContractService = {
         tokenContracts: string[],
         honeyPots: string[]
     ) {
+        this.initSDKConfig()
+
+        console.log(await this.getProvider().getNetwork(), { address: cAddress, wallet: cWallet, nonceKey },
+            { tokenContracts, honeyPots }, 'params for create pools')
         const response = await MyCollectives.Collective.createPools(
             this.getProvider(),
             { address: cAddress, wallet: cWallet, nonceKey },
@@ -111,7 +125,7 @@ const ContractService = {
             tokenID: tokenId ? Number(tokenId) : generatedTokenId,
             amount,
             quantity,
-            platform,
+            platform: platform === "Other" as MyCollectives.SupportedPlatforms ? MyCollectives.SupportedPlatforms.LOCAL : platform,
             tokenContract,
             poolAddress: poolAddress
 
@@ -121,7 +135,7 @@ const ContractService = {
             tokenID: tokenId ? Number(tokenId) : generatedTokenId,
             amount,// amount, //amount in WEI bigint
             quantity,
-            platform,
+            platform: platform === "Other" as MyCollectives.SupportedPlatforms ? MyCollectives.SupportedPlatforms.LOCAL : platform,
             tokenContract,
             poolAddress: poolAddress
 
@@ -164,11 +178,14 @@ const ContractService = {
     },
 
     initSDKConfig: function () {
+
         return MyCollectives.setConfig({
             RPC_URL: import.meta.env.VITE_RPC_URL,
             PIMLICO_API_KEY: import.meta.env.VITE_PIMLICO_API_KEY,
             BICONOMY_PAYMASTER: import.meta.env.VITE_BICONOMY_PAYMASTER,
             BICONOMY_BUNDLER_API_KEY: import.meta.env.VITE_BICONOMY_BUNDLER_API_KEY,
+            AA_PROVIDER: MyCollectives.AAProviders.PIMLICO,
+
         } as Config)
 
     },
