@@ -22,7 +22,7 @@ import { useSignInWallet } from "@/hooks/useSignInWallet";
 import GenerateInviteBtn from "@/components/GenerateInvite";
 import { pathConstants } from "@/utils/routeNames";
 import Header from "@/components/Header";
-import userGetRewardsSummary from "@/hooks/userGetRewardsSummary";
+import useGetRewardsSummary from "@/hooks/useGetRewardsSummary";
 import ContractService from "@/services/ContractService";
 import { Group } from "@/types/general-types";
 import useToast from "@/hooks/useToast";

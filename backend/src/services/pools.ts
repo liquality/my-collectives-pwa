@@ -30,68 +30,64 @@ export class PoolsService {
   }
 
   public static async findByGroup(groupId: string): Promise<Pool[]> {
-    return dbClient.transaction(async (trx) => {
-      const poolsWithChallenges = await trx
+    const poolsWithChallenges = await dbClient
         .select(
-          'pools.id as poolId',
-          'pools.groupId',
-          'pools.challengeId',
-          'pools.createdBy',
-          'challenges.id as challengeId',
-          'challenges.name',
-          'challenges.creatorOfMint',
-          'challenges.chainId',
-          'challenges.mintingContractAddress',
-          'challenges.network',
-          'challenges.kind',
-          'challenges.tokenId',
-          'challenges.imageUrl',
-          'challenges.category',
-          'challenges.platform',
-          'challenges.expiration',
-          'challenges.totalMints',
-          'challenges.expired',
-          'challenges.honeyPotAddress',
+          "pools.id as poolId",
+          "pools.groupId",
+          "pools.challengeId",
+          "pools.createdBy",
+          "challenges.id as challengeId",
+          "challenges.name",
+          "challenges.creatorOfMint",
+          "challenges.chainId",
+          "challenges.mintingContractAddress",
+          "challenges.network",
+          "challenges.kind",
+          "challenges.tokenId",
+          "challenges.imageUrl",
+          "challenges.category",
+          "challenges.platform",
+          "challenges.expiration",
+          "challenges.totalMints",
+          "challenges.expired",
+          "challenges.honeyPotAddress"
         )
-        .from('pools')
-        .where('pools.groupId', '=', groupId)
-        .join('challenges', 'pools.challengeId', '=', 'challenges.id');
+        .from("pools")
+        .where("pools.groupId", "=", groupId)
+        .join("challenges", "pools.challengeId", "=", "challenges.id");
 
       return poolsWithChallenges;
-    });
   }
 
   public static async findAllPoolsThatAreExpired(): Promise<any[]> {
-    return dbClient.transaction(async (trx) => {
-      const poolsWithChallenges = await trx
-        .select(
-          'pools.id as poolId',
-          'pools.groupId',
-          'pools.challengeId',
-          'pools.createdBy',
-          'challenges.createdAt',
-          'challenges.id as challengeId',
-          'challenges.name',
-          'challenges.creatorOfMint',
-          'challenges.chainId',
-          'challenges.mintingContractAddress',
-          'challenges.network',
-          'challenges.kind',
-          'challenges.tokenId',
-          'challenges.imageUrl',
-          'challenges.category',
-          'challenges.platform',
-          'challenges.expiration',
-          'challenges.totalMints',
-          'challenges.expired',
-          'challenges.honeyPotAddress',
-        )
-        .from('pools')
-        .join('challenges', 'pools.challengeId', '=', 'challenges.id')
-        .where('challenges.expiration', '<=', new Date());
+    const poolsWithChallenges = await dbClient
+      .select(
+        "pools.id as poolId",
+        "pools.groupId",
+        "pools.challengeId",
+        "pools.createdBy",
+        "challenges.createdAt",
+        "challenges.id as challengeId",
+        "challenges.name",
+        "challenges.creatorOfMint",
+        "challenges.chainId",
+        "challenges.mintingContractAddress",
+        "challenges.network",
+        "challenges.kind",
+        "challenges.tokenId",
+        "challenges.imageUrl",
+        "challenges.category",
+        "challenges.platform",
+        "challenges.expiration",
+        "challenges.totalMints",
+        "challenges.expired",
+        "challenges.honeyPotAddress"
+      )
+      .from("pools")
+      .join("challenges", "pools.challengeId", "=", "challenges.id")
+      .where("challenges.expiration", "<=", new Date());
 
-      return poolsWithChallenges;
-    });
+    return poolsWithChallenges;
   }
   //TODO: rewrite this function
   public static async find(id: string): Promise<PoolWithMeta | null> {

@@ -1,7 +1,7 @@
 import { generateSalt } from "@/utils/salt";
 import { BigNumberish, ethers } from "ethers";
-import * as MyCollectives from "@liquality/my-collectives";
-import { Config } from "@liquality/my-collectives";
+import * as MyCollectives from "@liquality/my-collectives-sdk";
+import { Config } from "@liquality/my-collectives-sdk";
 import ApiService from "./ApiService";
 
 const ContractService = {

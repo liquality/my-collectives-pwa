@@ -1,5 +1,6 @@
 import { BigNumber, utils } from "ethers";
 import { dbClient } from "../data";
+import { RewardsService } from "./rewards";
 
 export class UserService {
   public static async getMints(userId: string): Promise<any[]> {
@@ -33,6 +34,9 @@ export class UserService {
   }
 
   public static async getRewardsSummary(userId: string): Promise<any> {
+    const rewardsService = new RewardsService();
+    await rewardsService.syncPoolsData(userId);
+    
     const invites = await dbClient("invites")
       .join("users", "users.id", "=", "invites.userId")
       .join("groups", "groups.id", "=", "invites.groupId")
