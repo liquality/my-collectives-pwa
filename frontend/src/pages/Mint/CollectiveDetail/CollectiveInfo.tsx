@@ -32,6 +32,7 @@ const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
   const { groupId } = match.params;
   const { group, members, loading } = useGetGroupById(groupId);
 
+  console.log(group, "group");
   return (
     <IonPage>
       <Header title={group?.name} />
@@ -53,7 +54,7 @@ const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
                     style={{ fontSize: "0.9rem" }}
                     src="/assets/icons/mint-tile.svg"
                   ></IonIcon>
-                  <IonLabel>{group?.mintCount || 0}</IonLabel>
+                  <IonLabel>{group?.poolsCount || 0}</IonLabel>
                 </IonCol>
                 <IonCol size="auto">
                   <IonIcon
