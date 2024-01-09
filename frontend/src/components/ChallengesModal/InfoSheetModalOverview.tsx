@@ -16,7 +16,6 @@ const InfoSheetModalOverview: React.FC<InfoSheetModalMintActivityProps> = (
   props: InfoSheetModalMintActivityProps
 ) => {
   const { challenge } = props;
-  console.log(challenge, "wats challenge?");
   return (
     <IonList lines="full">
       <IonListHeader>

@@ -28,7 +28,6 @@ export interface InvitePageProps
 
 const Invite: React.FC<InvitePageProps> = ({ match }) => {
   const { id, code, inviteSig, inviteId } = match.params;
-  console.log(match.params, "match params in invite");
   const [invite, setInvite] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [processing, setProcessing] = useState<boolean>(false);
@@ -37,7 +36,6 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
   const { open } = useWeb3Modal();
   const { user } = useSignInWallet();
   const claimInviteAvailable = invite && user && address;
-  const { chains, chain } = useNetwork();
 
   useEffect(() => {
     setLoading(true);
@@ -55,7 +53,6 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
     setLoading(false);
   }, [id, code]);
 
-  console.log(invite, "wats invite?");
   async function handleConnect() {
     setProcessing(true);
     if (claimInviteAvailable && inviteSig && inviteId) {
@@ -72,7 +69,6 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
           ":groupId",
           invite.groupId
         );
-        console.log(url, "wats url?");
         router.push(url);
       } catch (error) {
         console.log(error, "Error adding member");

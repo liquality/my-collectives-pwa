@@ -1,9 +1,8 @@
 import { generateSalt } from "@/utils/salt";
-import { BigNumberish, BytesLike, ethers, utils } from "ethers";
+import { ethers, utils } from "ethers";
 import * as MyCollectives from "@liquality/my-collectives-sdk";
 import { Config } from "@liquality/my-collectives-sdk";
 import ApiService from "./ApiService";
-import { handleCopyClick } from "@/utils";
 
 const ContractService = {
     createCollective: async function (tokenContracts: string[], honeyPots: string[]) {
@@ -19,14 +18,11 @@ const ContractService = {
         return { salt, ...response }
     },
 
-
-
     joinCollective: async function (inviteId: string, cAddress: string, cWallet: string, nonceKey: bigint, inviteSig: string) {
         this.initSDKConfig()
         const provider = this.getProvider()
         const inviteIdAsUint8Array = utils.arrayify(inviteId);
         const isMemberResponse = await MyCollectives.Collective.isMember(provider, { address: cAddress, wallet: cWallet, nonceKey }, await provider.getSigner().getAddress())
-        console.log("!!!!! response => IS MEMBER ", isMemberResponse.isMember)
         if (isMemberResponse.isMember) {
             return
         } else {
@@ -39,7 +35,6 @@ const ContractService = {
     async createInviteSig(inviteCode: string) {
         //const inviteId = ethers.utils.randomBytes(16);
         const inviteCodeBytes = this.stringToBytes16(inviteCode)
-
         console.log("inviteId array tostring >> ", Array.from(inviteCodeBytes).toString());
         // Hash the inviteId
         let messageHash = ethers.utils.solidityKeccak256(
@@ -60,10 +55,8 @@ const ContractService = {
     async createHoneyPot() {
         this.initSDKConfig()
         const salt = generateSalt();
-
         const createResponse = await MyCollectives.HoneyPot.create(this.getProvider(), salt)
         const response = await MyCollectives.HoneyPot.get(this.getProvider(), salt)
-
         console.log("!!!!! response honey pot address => ", response)
         return response
     },
@@ -145,11 +138,6 @@ const ContractService = {
         return bytes16;
     },
 
-    /*     bytes32ToString(bytes) {
-            return ethers.utils.toUtf8String(
-              ethers.utils.arrayify(hex).filter((n) => n != 0)
-            );
-          }; */
     getProvider: function () {
         return new ethers.providers.Web3Provider((window as any).ethereum)
     },
@@ -164,17 +152,6 @@ const ContractService = {
         } as Config)
 
     },
-
-    bytes16ToHex(bytes16: Uint8Array) {
-        if (!Array.isArray(bytes16) || bytes16.length !== 16) {
-            throw new Error("Invalid bytes16 format");
-        }
-
-        return "0x" + Array.from(bytes16).map(byte => byte.toString(16).padStart(2, "0")).join("");
-    }
-
-
-
 
 };
 

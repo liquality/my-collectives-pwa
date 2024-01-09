@@ -24,7 +24,6 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
   const [itemModalIsOpen, setItemModalIsOpen] = useState(false);
   const { user } = useSignInWallet();
 
-  console.log(user, "wats user?");
   const [presentingElement, setPresentingElement] = useState<
     HTMLElement | undefined
   >(undefined);

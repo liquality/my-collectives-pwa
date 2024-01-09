@@ -85,15 +85,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
     setShowGroupList(!showGroupList);
   };
   const [pendingMint, setPendingMint] = useState(false);
-
   let amountInWeiToPay = calculateMintFeeAmount(platform, network, params);
-  if (amountInWeiToPay) {
-    console.log(
-      amountInWeiToPay,
-      "AMOUNT IN WEI TO PAY",
-      formatEther(amountInWeiToPay)
-    );
-  }
 
   const handleMintClick = async () => {
     if (selectedGroup && amountInWeiToPay) {

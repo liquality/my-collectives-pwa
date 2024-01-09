@@ -32,7 +32,6 @@ const MembersTable: React.FC<MembersTableProps> = ({
   const handleToggleAdminStatus = async (memberId: string) => {
     try {
       const result = await ApiService.toggleAdminStatus(group.id, memberId);
-      console.log(result, "wats res?");
       if (!result.success) {
         presentToast(
           "Could not change admin role. Be aware that you can't change the creators admin role.",
@@ -41,7 +40,6 @@ const MembersTable: React.FC<MembersTableProps> = ({
         );
       } else {
         // Update local state with modified admin status
-        console.log("Update state");
         setLocalMembers((prevMembers) =>
           prevMembers.map((prevMember) =>
             prevMember.id === memberId
@@ -94,7 +92,11 @@ const MembersTable: React.FC<MembersTableProps> = ({
               </IonLabel>
               {/* TODO: add this alert to its own component */}
               <IonAlert
-                header="Are you sure you want to make this member a admin?"
+                header={
+                  member.admin
+                    ? "Are you sure you want to make this member a admin?"
+                    : "Are you sure you want to remove this member as a admin?"
+                }
                 trigger={`present-alert-${member.id}`}
                 buttons={[
                   {

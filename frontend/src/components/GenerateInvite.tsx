@@ -27,36 +27,34 @@ const GenerateInviteBtn = ({
       groupId,
       user.id
     );
-    console.log(result, "result for invite");
     const contractResult = await ContractService.createInviteSig(
       result[0].code
     );
     const { inviteSig, inviteId } = contractResult;
     const copyUrl = `${url}/invite/${result[0].id}/${inviteSig}/${inviteId}`;
-    console.log(contractResult, "contract result");
-    function refocusAndCopy() {
-      return new Promise((resolve, reject) => {
-        const _asyncCopyFn = async () => {
-          try {
-            handleCopyClick(copyUrl);
-            presentToast(
-              `You generated and copied a invite link! Send it to someone you like :)`,
-              "primary",
-              copy
-            );
-            resolve(copyUrl);
-          } catch (e) {
-            reject(e);
-          }
-          window.removeEventListener("focus", _asyncCopyFn);
-        };
+    await refocusAndCopy(copyUrl);
+  };
 
-        window.addEventListener("focus", _asyncCopyFn);
-      });
-    }
-
-    // To call:
-    refocusAndCopy().then((r) => console.log("Returned value: ", r));
+  //TODO: maybe clean up this logic when you have time. It is needed to wrap the copy click in a promise because
+  //the DOM refocuses outside the window when you sign with metamask and cant copy the inv signatures
+  const refocusAndCopy = (copyUrl: string) => {
+    return new Promise((resolve, reject) => {
+      const _asyncCopyFn = async () => {
+        try {
+          handleCopyClick(copyUrl);
+          presentToast(
+            `You generated and copied a invite link! Send it to someone you like :)`,
+            "primary",
+            copy
+          );
+          resolve(copyUrl);
+        } catch (e) {
+          reject(e);
+        }
+        window.removeEventListener("focus", _asyncCopyFn);
+      };
+      window.addEventListener("focus", _asyncCopyFn);
+    });
   };
 
   if (type === "button") {

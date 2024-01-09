@@ -99,7 +99,6 @@ const CreateChallengeModal = forwardRef(function CreateChallengeModal(
 
   const handleCreateChallenge = async () => {
     try {
-      console.log(createdChallenge, "CREATED CHALLNGE");
       const result = await ApiService.createChallenges(createdChallenge);
       if (result?.id) {
         setResultChallenge(result);
@@ -140,17 +139,11 @@ const CreateChallengeModal = forwardRef(function CreateChallengeModal(
 
   const generateHoneyPot = async () => {
     const result = await ContractService.createHoneyPot();
-    console.log(result, "wats result", result.honeyPot);
     setCreatedChallenge((prevGroup) => ({
       ...prevGroup,
       honeyPotAddress: result.honeyPot,
     }));
-    console.log(createdChallenge, "created challenge after:", {
-      ...createdChallenge,
-      honeyPotAddress: result.honeyPot,
-    });
   };
-  console.log(createdChallenge, "created challenge?");
 
   const copy = () => {
     handleCopyClick(createdChallenge.honeyPotAddress);

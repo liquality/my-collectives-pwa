@@ -99,11 +99,6 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         tokenContracts,
         honeyAddresses
       );
-      console.log(
-        tokenContracts,
-        honeyAddresses,
-        "TokenContracts & honeyPotaddresses"
-      );
       const { cWallet, cAddress, nonce, salt } = createdContract;
       console.log(createdContract, "CREATED CONTRACT FROM SDK");
       const result = await ApiService.createGroup({

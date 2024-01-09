@@ -30,8 +30,6 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
     router.push(url);
   };
 
-  console.log("Full list of collectives:", myGroups);
-
   return (
     <div className="">
       {myGroups
