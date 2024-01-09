@@ -19,7 +19,6 @@ const MintItemScreen: React.FC<MintItemScreenProps> = ({
 }: MintItemScreenProps) => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<MintResult | null>(null);
-
   return (
     <IonContent>
       {result ? (

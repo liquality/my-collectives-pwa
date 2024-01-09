@@ -1,5 +1,6 @@
 import { useSignInWallet } from "@/hooks/useSignInWallet";
 import useToast from "@/hooks/useToast";
+import ContractService from "@/services/ContractService";
 import InvitesService from "@/services/Invites";
 import { handleCopyClick } from "@/utils";
 import { IonButton, IonText } from "@ionic/react";
@@ -22,16 +23,38 @@ const GenerateInviteBtn = ({
   const { presentToast } = useToast();
   const { user } = useSignInWallet();
   const handleGenerateInvite = async () => {
-    presentToast(
-      `You generated and copied a invite link! Send it to someone you like :)`,
-      "primary",
-      copy
-    );
     const result = await InvitesService.getInviteByGroupIdAndUserId(
       groupId,
       user.id
     );
-    handleCopyClick(`${url}/invite/${result[0].id}`);
+    const contractResult = await ContractService.createInviteSig(
+      result[0].code
+    );
+    const { inviteSig, inviteId } = contractResult;
+    const copyUrl = `${url}/invite/${result[0].id}/${inviteSig}/${inviteId}`;
+    await refocusAndCopy(copyUrl);
+  };
+
+  //TODO: maybe clean up this logic when you have time. It is needed to wrap the copy click in a promise because
+  //the DOM refocuses outside the window when you sign with metamask and cant copy the inv signatures
+  const refocusAndCopy = (copyUrl: string) => {
+    return new Promise((resolve, reject) => {
+      const _asyncCopyFn = async () => {
+        try {
+          handleCopyClick(copyUrl);
+          presentToast(
+            `You generated and copied a invite link! Send it to someone you like :)`,
+            "primary",
+            copy
+          );
+          resolve(copyUrl);
+        } catch (e) {
+          reject(e);
+        }
+        window.removeEventListener("focus", _asyncCopyFn);
+      };
+      window.addEventListener("focus", _asyncCopyFn);
+    });
   };
 
   if (type === "button") {

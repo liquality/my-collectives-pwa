@@ -22,10 +22,12 @@ export interface InvitePageProps
   extends RouteComponentProps<{
     id?: string;
     code?: string;
+    inviteSig?: string;
+    inviteId?: string;
   }> {}
 
 const Invite: React.FC<InvitePageProps> = ({ match }) => {
-  const { id, code } = match.params;
+  const { id, code, inviteSig, inviteId } = match.params;
   const [invite, setInvite] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [processing, setProcessing] = useState<boolean>(false);
@@ -34,7 +36,6 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
   const { open } = useWeb3Modal();
   const { user } = useSignInWallet();
   const claimInviteAvailable = invite && user && address;
-  const { chains, chain } = useNetwork();
 
   useEffect(() => {
     setLoading(true);
@@ -52,23 +53,22 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
     setLoading(false);
   }, [id, code]);
 
-  console.log(invite, "wats invite?");
   async function handleConnect() {
     setProcessing(true);
-    if (claimInviteAvailable) {
+    if (claimInviteAvailable && inviteSig && inviteId) {
       try {
         await ContractService.joinCollective(
-          invite.code,
+          inviteId,
           invite.groupPublicAddress,
           invite.groupWalletAddress,
-          invite.groupNonceKey
+          invite.groupNonceKey,
+          inviteSig
         );
         await InvitesService.claim(invite.id, address!);
         const url = pathConstants.collective.mints.replace(
           ":groupId",
           invite.groupId
         );
-        console.log(url, "wats url?");
         router.push(url);
       } catch (error) {
         console.log(error, "Error adding member");

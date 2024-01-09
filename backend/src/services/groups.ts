@@ -149,7 +149,6 @@ export class GroupsService {
 
   public static async toggleAdminStatus(groupId: string, userIdForMemberToToggle: string, authenticatedUserId: string): Promise<any> {
     try {
-      console.log(userIdForMemberToToggle, 'authenticated', authenticatedUserId)
       await dbClient.transaction(async (trx) => {
         const existingUserGroupForToggledUser = await trx('user_groups')
           .where({ groupId: groupId, userId: userIdForMemberToToggle })
@@ -158,7 +157,6 @@ export class GroupsService {
           .where({ groupId: groupId, userId: authenticatedUserId })
           .first();
         //Check if the authenticated user is a admin or creator/group
-        console.log(existingUserGroupForToggledUser, existingUserGroupForAuthedUser, 'wats this`')
         if (existingUserGroupForToggledUser && existingUserGroupForAuthedUser.admin) {
           // Toggle the admin status
           const updatedAdminStatus = !existingUserGroupForToggledUser.admin;
@@ -170,7 +168,6 @@ export class GroupsService {
         }
       });
     } catch (error) {
-      console.log(error, 'wats er')
       return { success: false }
     }
     return { success: true }

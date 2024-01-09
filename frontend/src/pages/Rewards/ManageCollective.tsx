@@ -53,6 +53,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
   >(undefined);
   const page = useRef(undefined);
 
+  console.log(pools, "wats pools?");
   useEffect(() => {
     if (pools && !allSelectedPools.length) {
       setAllSelectedPools(pools);
@@ -76,6 +77,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
     );
   };
 
+  console.log(allSelectedPools, "all selected pools");
   const handleUpdateGroup = async () => {
     try {
       if (group) {
@@ -89,6 +91,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
         const honeyAddresses = poolsToCreate.map(
           (item) => item.honeyPotAddress
         );
+
         const createPoolsResult = await ContractService.createPools(
           group?.publicAddress,
           group?.walletAddress,
