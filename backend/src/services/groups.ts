@@ -174,12 +174,32 @@ export class GroupsService {
   }
 
 
+  /*   public static async find(id: string, authenticatedUserId: string): Promise<Group | null> {
+      const existingUserGroupForAuthedUser = await dbClient('user_groups')
+        .where({ groupId: id, userId: authenticatedUserId })
+        .first();
+  
+      const result = await dbClient("groups")
+        .where("id", "=", id)
+        .first<Group>(
+          "id",
+          "name",
+          "description",
+          "publicAddress",
+          "walletAddress",
+          "nonceKey",
+          "createdAt",
+          "createdBy"
+        );
+      return { loggedInUserIsAdmin: existingUserGroupForAuthedUser.admin, ...result }
+    } */
+
   public static async find(id: string, authenticatedUserId: string): Promise<Group | null> {
     const existingUserGroupForAuthedUser = await dbClient('user_groups')
       .where({ groupId: id, userId: authenticatedUserId })
       .first();
 
-    const result = await dbClient("groups")
+    const result: Group | null = await dbClient("groups")
       .where("id", "=", id)
       .first<Group>(
         "id",
@@ -189,10 +209,39 @@ export class GroupsService {
         "walletAddress",
         "nonceKey",
         "createdAt",
-        "createdBy"
+        "createdBy",
+        "mintCount"
       );
-    return { loggedInUserIsAdmin: existingUserGroupForAuthedUser.admin, ...result }
+
+    if (result) {
+      const counts = await dbClient("groups")
+        .leftJoin("user_groups", "groups.id", "=", "user_groups.groupId")
+        .leftJoin("pools", "pools.groupId", "=", "groups.id")
+        .leftJoin("challenges", "challenges.id", "=", "pools.challengeId")
+        .leftJoin("messages", "messages.groupId", "=", "groups.id")
+        .groupBy("groups.id", "user_groups.admin")
+        .where("groups.id", "=", id)
+        .select([
+          dbClient.raw('count(distinct "user_groups"."userId") as "memberCount"'),
+          dbClient.raw('count(distinct pools.id) as "poolsCount"'),
+          dbClient.raw('count(distinct messages.id) as "messagesCount"'),
+          dbClient.raw('count(distinct CASE WHEN challenges.expiration > CURRENT_TIMESTAMP THEN pools.id ELSE NULL END) as "activePoolsCount"'),
+        ])
+        .first();
+
+      return {
+        loggedInUserIsAdmin: existingUserGroupForAuthedUser?.admin || false,
+        memberCount: counts.memberCount,
+        poolsCount: counts.poolsCount,
+        messagesCount: counts.messagesCount,
+        activePoolsCount: counts.activePoolsCount,
+        ...result,
+      };
+    }
+
+    return null;
   }
+
 
 
 
