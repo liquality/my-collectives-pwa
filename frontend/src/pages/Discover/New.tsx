@@ -117,7 +117,14 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
               <IonLabel className="ion-text-capitalize">
                 {category} | {groupedChallenges[category]?.length}
               </IonLabel>
-              <IonLabel color="primary">See All</IonLabel>
+              {challenges ? (
+                <IonLabel
+                  onClick={() => onChallengeSelected(challenges[0])}
+                  color="primary"
+                >
+                  See All
+                </IonLabel>
+              ) : null}
             </div>
             <HorizontalSwipe
               imageData={groupedChallenges[category]}
