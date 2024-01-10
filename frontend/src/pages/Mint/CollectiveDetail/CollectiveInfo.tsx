@@ -13,15 +13,14 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import Header from "@/components/Header";
-import { RouteComponentProps, useLocation } from "react-router";
+import { RouteComponentProps } from "react-router";
 import CollectiveTopBar from "@/components/TopBars/CollectiveTopBar";
 import PageSearchBar from "@/components/PageSearchBar";
-import { getLastIndexOfPath, pathConstants } from "@/utils/routeNames";
+import { pathConstants } from "@/utils/routeNames";
 import useGetGroupById from "@/hooks/Groups/useGetGroupById";
-import { handleCopyClick, shortenAddress } from "@/utils";
+import { shortenAddress } from "@/utils";
 import MembersTable from "@/components/Mint/MembersTable";
 import GenerateInviteBtn from "@/components/GenerateInvite";
-import { useState } from "react";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 
 export interface CollectiveInfoProps
