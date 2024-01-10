@@ -82,7 +82,6 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
         <div>
           {challenges
             ? filteredChallenges.map((pool: any, index: number) => {
-                console.log(pool, "pool mapped");
                 return (
                   <div key={index} className={`flexDirectionRow parent-hover`}>
                     <div
