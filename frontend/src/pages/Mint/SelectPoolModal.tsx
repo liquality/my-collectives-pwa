@@ -79,11 +79,19 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
         <IonTitle>Select Pool</IonTitle>
       </IonToolbar>
       <IonContent className="ion-padding" color="light">
-        <div className="mb-3">
-          <div className="">
-            {challenges
-              ? filteredChallenges.map((pool: any, index: number) => (
-                  <div key={index} className="flexDirectionRow parent-hover">
+        <div>
+          {challenges
+            ? filteredChallenges.map((pool: any, index: number) => {
+                return (
+                  <div
+                    key={index}
+                    className={
+                      `flexDirectionRow parent-hover` +
+                      (clickedPool?.id === pool.challengeId
+                        ? " selected-pool"
+                        : "")
+                    }
+                  >
                     <div
                       style={{ width: "100%" }}
                       className="collective-card generic-grey-card"
@@ -133,10 +141,11 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
                       </div>
                     </div>
                   </div>
-                ))
-              : null}
-          </div>
+                );
+              })
+            : null}
         </div>
+
         <div className="button-container">
           <IonButton
             onClick={handleSelectPool}
