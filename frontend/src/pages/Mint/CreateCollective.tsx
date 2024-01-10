@@ -44,6 +44,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
   });
   const [allSelectedPools, setAllSelectedPools] = useState<Challenge[]>([]);
   const [pendingCreation, setPendingCreation] = useState(false);
+  const [isDescriptionTouched, setIsDescriptionTouched] = useState(false);
 
   const { presentToast } = useToast();
 
@@ -170,8 +171,14 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
               ></IonInput>
             </IonItem>
 
-            <IonItem>
+            <IonItem lines="none">
               <IonInput
+                className={`${createGroup.description && "ion-valid"} ${
+                  !createGroup.description && "ion-invalid"
+                } ${isDescriptionTouched && "ion-touched"}`}
+                onIonBlur={() => setIsDescriptionTouched(true)}
+                errorText="Required field"
+                clearInput={true}
                 label="Description"
                 label-placement="floating"
                 placeholder="Enter the description"
