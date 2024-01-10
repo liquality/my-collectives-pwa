@@ -82,19 +82,17 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
         <div>
           {challenges
             ? filteredChallenges.map((pool: any, index: number) => {
+                console.log(pool, "pool mapped");
                 return (
-                  <div
-                    key={index}
-                    className={
-                      `flexDirectionRow parent-hover` +
-                      (clickedPool?.id === pool.challengeId
-                        ? " selected-pool"
-                        : "")
-                    }
-                  >
+                  <div key={index} className={`flexDirectionRow parent-hover`}>
                     <div
                       style={{ width: "100%" }}
-                      className="collective-card generic-grey-card"
+                      className={
+                        `collective-card generic-grey-card` +
+                        (clickedPool?.honeyPotAddress === pool.honeyPotAddress
+                          ? " selected-pool"
+                          : "")
+                      }
                       onClick={() => setClickedPool(pool)}
                     >
                       <div className="collective-data-container">
