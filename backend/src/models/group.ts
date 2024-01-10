@@ -1,5 +1,9 @@
 export interface Group {
   id: string;
+  memberCount?: number;
+  poolsCount?: number;
+  messagesCount?: number;
+  activePoolsCount?: number;
   name: string;
   description?: string;
   publicAddress: string;

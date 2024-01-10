@@ -22,6 +22,7 @@ import useToast from "@/hooks/useToast";
 import { banOutline } from "ionicons/icons";
 import ContractService from "@/services/ContractService";
 import { handleCopyClick, shortenAddress } from "@/utils";
+import { create } from "domain";
 
 export interface CreateChallengeModalProps {
   presentingElement?: HTMLElement;
@@ -57,10 +58,19 @@ const CreateChallengeModal = forwardRef(function CreateChallengeModal(
     honeyPotAddress: false,
   });
 
-  const { mintingContractAddress, category, network, expiration } =
-    createdChallenge;
+  const {
+    mintingContractAddress,
+    category,
+    network,
+    expiration,
+    honeyPotAddress,
+  } = createdChallenge;
   let isButtonDisabled =
-    !mintingContractAddress || !category || !network || !expiration;
+    !mintingContractAddress ||
+    !category ||
+    !network ||
+    !expiration ||
+    !honeyPotAddress;
   const [validMintingContractAdress, setValidMintingContractAddress] =
     useState(false);
   const [validHoneyPotAddress, setValidHoneyPotAddress] = useState(false);
@@ -116,7 +126,7 @@ const CreateChallengeModal = forwardRef(function CreateChallengeModal(
     }));
   };
 
-  const handleSetHoneyPotAddress = (value: string) => {
+  /*   const handleSetHoneyPotAddress = (value: string) => {
     setValidAddresses((prevGroup) => ({
       ...prevGroup,
       honeyPotAddress: isAddress(value),
@@ -125,7 +135,7 @@ const CreateChallengeModal = forwardRef(function CreateChallengeModal(
       ...prevGroup,
       honeyPotAddress: value,
     }));
-  };
+  }; */
 
   const generateHoneyPot = async () => {
     const result = await ContractService.createHoneyPot();
@@ -262,7 +272,7 @@ const CreateChallengeModal = forwardRef(function CreateChallengeModal(
               label="Platform"
               placeholder="Platform"
             >
-              <IonSelectOption value="Other">Other</IonSelectOption>
+              <IonSelectOption value="Local">Other</IonSelectOption>
               <IonSelectOption value="Sound">Sound</IonSelectOption>
               <IonSelectOption value="Zora">Zora</IonSelectOption>
             </IonSelect>

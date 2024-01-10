@@ -1,4 +1,4 @@
-import MyCollectives from "@liquality/my-collectives-sdk";
+import * as MyCollectives from "@liquality/my-collectives-sdk";
 
 export interface ChallengeCreation {
     mintingContractAddress: string;

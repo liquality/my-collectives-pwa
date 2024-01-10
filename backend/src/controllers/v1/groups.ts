@@ -14,7 +14,6 @@ export class GroupsController {
 
         res.status(200).send(groups);
       } catch (err: any) {
-        console.log(err, 'ERROR?')
         res.status(500).send({ error: err.message });
       }
     }
@@ -51,6 +50,7 @@ export class GroupsController {
           res.status(200).send(group);
         }
       } catch (err: any) {
+        console.log(err, 'wats err')
         res.status(500).send({ error: err.message });
       }
     }
@@ -60,7 +60,6 @@ export class GroupsController {
     const { group, pools } = req.body;
 
     const user = await AuthService.find((req as any).auth?.sub);
-    console.log(user, "wats user?", (req as any).auth?.sub);
     if (!group.name) {
       res.status(400).send({ error: "name is required" });
     } else {
@@ -82,7 +81,6 @@ export class GroupsController {
   public update: RequestHandler = async (req, res) => {
     const { group, pools } = req.body;
     const { id } = req.params;
-    console.log(id, group, pools, "ID GROUP POOLS");
     const user = await AuthService.find((req as any).auth?.sub);
     if (!id) {
       res.status(400).send({ error: "GroupId is required" });
@@ -121,7 +119,6 @@ export class GroupsController {
           res.status(200).send(members);
         }
       } catch (err: any) {
-        console.log(err, 'wats err')
         res.status(500).send({ error: err.message });
       }
     }
@@ -136,11 +133,9 @@ export class GroupsController {
     } else {
       try {
         const toggled = await GroupsService.toggleAdminStatus(groupId, userIdForMember, authenticatedUser.id);
-        console.log(toggled, 'wats toggled?')
         res.status(200).send(toggled);
 
       } catch (err: any) {
-        console.log(err, 'wats err')
         res.status(500).send({ error: err.message });
       }
     }

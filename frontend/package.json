@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "start": "npm run dev",
+    "start": "PORT=5173 npm run dev",
     "dev": "vite --host",
     "build": "tsc && vite build",
     "preview": "vite preview",
@@ -16,12 +16,12 @@
   "dependencies": {
     "@ionic/react": "^7.0.0",
     "@ionic/react-router": "^7.0.0",
-    "@liquality/my-collectives-sdk": "^2.1.2",
+    "@liquality/my-collectives-sdk": "2.1.2",
     "@types/react-router": "^5.1.20",
     "@types/react-router-dom": "^5.3.3",
     "@web3modal/wagmi": "^3.0.2",
     "@zoralabs/protocol-sdk": "^0.4.3",
-    "ethers": "^5",
+    "ethers": "5.7.2",
     "framer": "^2.4.1",
     "ionicons": "^7.0.0",
     "react": "^18.2.0",

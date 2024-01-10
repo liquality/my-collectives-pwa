@@ -97,7 +97,7 @@ const App: React.FC = () => {
       {/* Routes not requiring authentication */}
       <Route path="/login" render={() => <Login />} exact />
       <Route path="/invite/code/:code?" component={Invite} />
-      <Route path="/invite/:id?" component={Invite} />
+      <Route path="/invite/:id?/:inviteSig?/:inviteId?" component={Invite} />
       <Route path="/join" component={Join} />
       <Route path="/discover" component={Discover} />
       <Route path="/rewards" component={Rewards} />

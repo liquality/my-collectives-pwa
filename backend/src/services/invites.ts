@@ -115,7 +115,6 @@ export class InvitesService {
       .select(this.joinSelect)
       .limit(top);
     const results: Invite[] = await q;
-    console.log(results, 'wats Q?', q)
 
     return q
     /* return dbClient("invites")
