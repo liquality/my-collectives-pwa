@@ -44,6 +44,7 @@ import Mint from "./pages/Mint/Mint";
 import Join from "./pages/Join";
 import Rewards from "./pages/Rewards/Rewards";
 import { pathConstants } from "./utils/routeNames";
+import ManageCollective from "./pages/Rewards/ManageCollective";
 
 setupIonicReact({
   mode: "ios",
@@ -102,6 +103,7 @@ const App: React.FC = () => {
       <Route path="/discover" component={Discover} />
       <Route path="/rewards" component={Rewards} />
       <Route path="/mint" component={Mint} />
+      <Route path={pathConstants.rewards.manage} component={ManageCollective} />
 
       {/* Default route (not requiring authentication) */}
       <Route exact path={"/" || ""}>

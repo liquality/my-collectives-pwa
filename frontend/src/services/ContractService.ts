@@ -69,6 +69,9 @@ const ContractService = {
         honeyPots: string[]
     ) {
         this.initSDKConfig()
+        console.log(this.getProvider(),
+            { address: cAddress, wallet: cWallet, nonceKey },
+            { tokenContracts, honeyPots }, 'wwwwwaaa')
         const response = await MyCollectives.Collective.createPools(
             this.getProvider(),
             { address: cAddress, wallet: cWallet, nonceKey },

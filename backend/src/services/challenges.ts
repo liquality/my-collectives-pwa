@@ -164,18 +164,11 @@ export class ChallengesService {
         }));
 
         const sortedChallenges = updatedChallenges.sort((a, b) => {
-            const dateA = new Date(a?.expiration ?? 0); // Use 0 as a fallback timestamp if 'expiration' is undefined
+            const dateA = new Date(a?.expiration ?? 0);
             const dateB = new Date(b?.expiration ?? 0);
-
-            // Sort in ascending order (oldest first)
+            // sort in ascending order (youngest first)
             return dateB.getTime() - dateA.getTime()
-
-            // If you want to sort in descending order (newest first), use:
-            // return dateB.getTime() - dateA.getTime();
         });
-
-
-
         return sortedChallenges;
     }
 

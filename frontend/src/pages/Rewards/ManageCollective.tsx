@@ -92,7 +92,10 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
       if (group) {
         // create pools that are not part of the current pools list
         const poolsToCreate = allSelectedPools.filter(
-          (pool) => !pools?.includes((p: any) => pool.id === p.id)
+          (pool) =>
+            !pools?.includes(
+              (p: any) => pool.honeyPotAddress === p.honeyAddresses
+            )
         );
         const tokenContracts = poolsToCreate.map(
           (item) => item.mintingContractAddress
@@ -108,13 +111,14 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
           poolsToCreate
         );
 
-        const createPoolsResult = await ContractService.createPools(
+        /*     const createPoolsResult = await ContractService.createPools(
           group?.publicAddress,
           group?.walletAddress,
           group?.nonceKey,
           tokenContracts,
           honeyAddresses
         );
+        if(createPoolsResult.status === "failed") throw Error
 
         const updateGroupResult = await ApiService.updateGroup(groupId, {
           group: updatedGroup,
@@ -123,7 +127,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
         console.log({
           createPoolsResult,
           updateGroupResult,
-        });
+        }); */
       }
     } catch (error) {
       console.log(error, "error posting group");

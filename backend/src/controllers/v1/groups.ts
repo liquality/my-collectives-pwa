@@ -73,6 +73,7 @@ export class GroupsController {
         res.status(200).send(createdGroup);
       } catch (err: any) {
         console.error(err);
+        console.log(err, 'wats err')
         res.status(500).send({ error: err.message });
       }
     }
