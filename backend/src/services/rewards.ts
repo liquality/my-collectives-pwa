@@ -7,13 +7,12 @@ import {
 } from "../utils";
 import MyCollectives, { Config } from "@liquality/my-collectives-sdk";
 
-
 export class RewardsService {
   constructor() {
     MyCollectives.setConfig({} as Config);
   }
 
-  async getPoolData(memberAddress: string, poolsAddress: string) {
+  async getPoolParticipation(memberAddress: string, poolsAddress: string) {
     const participationResponse = await MyCollectives.Pool.getParticipation(
       poolsAddress,
       memberAddress
@@ -28,22 +27,23 @@ export class RewardsService {
           participationResponse.rewardAvailable
         ),
       };
-
-      // const totalContributions = await MyCollectives.Pool.getTotalContributions(
-      //   poolsAddress
-      // );
-      // const rewards = await MyCollectives.Pool.getPoolReward(poolsAddress);
-
       return participation;
-      // return {
-      //   poolsAddress,
-      //   participation,
-      //   totalContributions,
-      //   rewards,
-      // };
     }
 
     return null;
+  }
+
+  async getTotalContributions(poolsAddress: string) {
+    const totalContributions = await MyCollectives.Pool.getTotalContributions(
+      poolsAddress
+    );
+
+    return totalContributions;
+  }
+
+  async getRewards(poolsAddress: string) {
+    const rewards = await MyCollectives.Pool.getPoolReward(poolsAddress);
+    return rewards;
   }
 
   async syncPoolsData(userId: string) {
@@ -71,13 +71,13 @@ export class RewardsService {
 
     const userRewards = [];
     for (const pool of pools) {
-      const poolData = await this.getPoolData(
+      const poolParticipation = await this.getPoolParticipation(
         user.publicAddress,
         pool.publicAddress
       );
-      if (poolData) {
+      if (poolParticipation) {
         userRewards.push({
-          numberOfMints: poolData.contribution,
+          numberOfMints: poolParticipation.contribution,
           amountInEthEarned: pool.rewardAmount,
           userId: user.id,
           publicAddress: user.publicAddress,
