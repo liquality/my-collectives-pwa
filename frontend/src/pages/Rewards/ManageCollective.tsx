@@ -111,14 +111,14 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
           poolsToCreate
         );
 
-        /*     const createPoolsResult = await ContractService.createPools(
+        const createPoolsResult = await ContractService.createPools(
           group?.publicAddress,
           group?.walletAddress,
           group?.nonceKey,
           tokenContracts,
           honeyAddresses
         );
-        if(createPoolsResult.status === "failed") throw Error
+        if (createPoolsResult.status === "failed") throw Error;
 
         const updateGroupResult = await ApiService.updateGroup(groupId, {
           group: updatedGroup,
@@ -127,7 +127,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
         console.log({
           createPoolsResult,
           updateGroupResult,
-        }); */
+        });
       }
     } catch (error) {
       console.log(error, "error posting group");
