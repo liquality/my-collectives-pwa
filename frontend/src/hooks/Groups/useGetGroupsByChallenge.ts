@@ -9,7 +9,6 @@ export function useGetGroupsByChallenge(challengeId: string) {
   useEffect(() => {
     const fetchGroup = async () => {
       try {
-        console.log(groups, 'challengeID', challengeId)
         if (!groups && challengeId) {
           setLoading(true);
           const _groups: Group[] = await ApiService.getGroupsByChallenge(

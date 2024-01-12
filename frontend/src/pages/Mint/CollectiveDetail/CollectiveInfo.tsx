@@ -38,7 +38,6 @@ const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
     router.push(url, "root");
   };
 
-  console.log(group, "group");
   return (
     <IonPage>
       <Header title={group?.name} />

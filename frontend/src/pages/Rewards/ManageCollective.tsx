@@ -64,7 +64,6 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
   >(undefined);
   const page = useRef(undefined);
 
-  console.log(pools, "wats pools?");
   useEffect(() => {
     if (pools && !allSelectedAndCurrentPools.length) {
       setAllSelectedAndCurrentPools(pools);
@@ -91,7 +90,6 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
     );
   };
 
-  console.log(allSelectedAndCurrentPools, "all selected pools");
   const handleUpdateGroup = async () => {
     setPendingEdit(true);
 

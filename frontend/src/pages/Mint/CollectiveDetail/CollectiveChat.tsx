@@ -60,7 +60,6 @@ const CollectiveChat: React.FC<CollectiveChatProps> = ({ match }) => {
           groupId,
         };
         const postMessage = await ApiService.createMessage(message);
-        console.log({ postMessage });
       } catch (error) {
         console.error("Error sending message:", error);
       }
@@ -79,7 +78,7 @@ const CollectiveChat: React.FC<CollectiveChatProps> = ({ match }) => {
             {messages.map((message, index) => {
               const isMyMessage =
                 message.userAddress === address || user.id === message.userId;
-              
+
               return (
                 <IonItem key={index}>
                   <div className="chat-item">
@@ -125,11 +124,7 @@ const CollectiveChat: React.FC<CollectiveChatProps> = ({ match }) => {
             }
           }}
         >
-          <IonButton
-            disabled={!newMessage}
-            fill="clear"
-            slot="end"
-          >
+          <IonButton disabled={!newMessage} fill="clear" slot="end">
             <IonIcon
               slot="icon-only"
               icon={arrowUpCircle}
