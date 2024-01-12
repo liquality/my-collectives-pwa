@@ -564,6 +564,7 @@ ion-toolbar {
 
 .selected-pool {
   background-color: var(--light-purple-background);
+  border: 1px var(--primary-purple) solid;
 }
 
 .collective-card-name {

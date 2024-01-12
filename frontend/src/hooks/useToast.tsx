@@ -6,7 +6,7 @@ export default function useToast() {
   const presentToast = (msg: string, type: string, icon: string) => {
     const options: ToastOptions = {
       message: msg,
-      duration: 3500,
+      duration: 4500,
       position: "top",
       icon: icon,
       color: type,

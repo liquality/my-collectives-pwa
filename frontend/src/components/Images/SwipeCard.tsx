@@ -52,7 +52,6 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
   const ipfsImageUrl = convertIpfsImageUrl(imageUrl);
   const [loading, setLoading] = useState(true);
   const router = useIonRouter();
-  const location = useLocation();
 
   const handleClick = () => {
     if (!loading) {
@@ -64,7 +63,6 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
     }
   };
 
-  console.log(typeof convertDateToReadable(challenge.expiration), "expiryy?");
   return (
     <IonCard className="card-img-swiper" onClick={handleClick}>
       <div style={{ position: "relative" }}>
@@ -87,10 +85,10 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
           className="challenge-time-chip"
           style={{ position: "absolute", bottom: 5, left: 5, padding: 5 }}
         >
-          {convertDateToReadable(challenge.expiration) === "expired " ? null : (
+          {convertDateToReadable(expiration) === "expired " ? null : (
             <IonIcon src="/assets/icons/challenge-tile.svg"></IonIcon>
           )}{" "}
-          {convertDateToReadable(challenge.expiration)}{" "}
+          {convertDateToReadable(expiration)}{" "}
         </div>
       </div>
 
@@ -99,7 +97,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
           {loading ? (
             <IonSkeletonText animated={true}></IonSkeletonText>
           ) : (
-            handleDisplayAddress(challenge.creatorOfMint || "")
+            handleDisplayAddress(creatorOfMint || "")
           )}
         </IonCardTitle>
         <IonCardSubtitle>{cutOffTooLongString(name, 17)}</IonCardSubtitle>
@@ -109,18 +107,15 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
           <IonRow className="ion-justify-content-between ion-align-items-center">
             <IonCol size="auto">
               <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>
-              <IonLabel>{challenge.totalMints ?? "0"}</IonLabel>
+              <IonLabel>{totalMints ?? "0"}</IonLabel>
             </IonCol>
             <IonCol size="auto">
-              <IonIcon src="/assets/icons/challenge-tile.svg"></IonIcon>
-
               <IonLabel>
                 {" "}
-                {convertDateToReadable(challenge.expiration) ===
-                "expired " ? null : (
+                {convertDateToReadable(expiration) === "expired " ? null : (
                   <IonIcon src="/assets/icons/challenge-tile.svg"></IonIcon>
                 )}{" "}
-                {convertDateToReadable(challenge.expiration)}
+                {convertDateToReadable(expiration)}
               </IonLabel>
             </IonCol>
 
