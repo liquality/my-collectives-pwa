@@ -43,7 +43,6 @@ const OnboardingModal: React.FC = () => {
         }
       }
     };
-
     checkShowed();
   }, [isOpen]);
 

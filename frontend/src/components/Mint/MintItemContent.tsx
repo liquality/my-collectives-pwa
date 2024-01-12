@@ -121,7 +121,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
         }
       } catch (error) {
         setPendingMint(false);
-        presentToast("Minting failed", "danger", banOutline);
+        presentToast("Minting failed, reason:" + error, "danger", banOutline);
       }
     } else {
       presentToast("You need to select a collective!", "danger", banOutline);

@@ -87,7 +87,7 @@ const ContractService = {
         try {
             const poolAddress = await this.getPool(cAddress, cWallet, nonceKey, poolHoneyPotAddress)
             console.log(poolAddress, 'pooladdress & tokencontract', tokenContract)
-            if (poolAddress === zeroAddress) throw Error
+            if (poolAddress === zeroAddress) throw Error("Pool address does not exist");
             const generatedTokenId = Math.floor(Math.random() * (150 - 30 + 1)) + 30;
             console.log('TokenId', tokenId ? Number(tokenId) : generatedTokenId,)
 
@@ -112,7 +112,7 @@ const ContractService = {
 
             })
             console.log("!!!!! response poolmint => ", response)
-            if (response.status === "failed") throw Error
+            if (response.status === "failed") throw Error("Failed transaction")
             //After a successfull mint, update the mintCount in the group to track rewards and leaderboard data
             const updatedGroup = await ApiService.updateGroup(groupId, {
                 group: {
