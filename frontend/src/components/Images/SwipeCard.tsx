@@ -64,23 +64,36 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
     }
   };
 
+  console.log(typeof convertDateToReadable(challenge.expiration), "expiryy?");
   return (
     <IonCard className="card-img-swiper" onClick={handleClick}>
-      {" "}
-      <img
-        className="swiper-item-img"
-        alt="NFT Image"
-        style={{ display: loading ? "none" : "block" }}
-        src={ipfsImageUrl}
-        onLoad={() => setLoading(false)}
-        onError={() => setLoading(false)}
-      />
-      {loading ? (
-        <IonSkeletonText
-          className="swiper-item-img-skeleton"
-          animated={true}
-        ></IonSkeletonText>
-      ) : null}
+      <div style={{ position: "relative" }}>
+        <img
+          className="swiper-item-img"
+          alt="NFT Image"
+          style={{ display: loading ? "none" : "block" }}
+          src={ipfsImageUrl}
+          onLoad={() => setLoading(false)}
+          onError={() => setLoading(false)}
+        />
+        {loading ? (
+          <IonSkeletonText
+            className="swiper-item-img-skeleton"
+            animated={true}
+          ></IonSkeletonText>
+        ) : null}
+
+        <div
+          className="challenge-time-chip"
+          style={{ position: "absolute", bottom: 5, left: 5, padding: 5 }}
+        >
+          {convertDateToReadable(challenge.expiration) === "expired " ? null : (
+            <IonIcon src="/assets/icons/challenge-tile.svg"></IonIcon>
+          )}{" "}
+          {convertDateToReadable(challenge.expiration)}{" "}
+        </div>
+      </div>
+
       <IonCardHeader>
         <IonCardTitle>
           {loading ? (
@@ -99,9 +112,15 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
               <IonLabel>{challenge.totalMints ?? "0"}</IonLabel>
             </IonCol>
             <IonCol size="auto">
-              <IonIcon src="/assets/icons/people-tile.svg"></IonIcon>
+              <IonIcon src="/assets/icons/challenge-tile.svg"></IonIcon>
+
               <IonLabel>
-                {convertDateToReadable(challenge.expiration)}{" "}
+                {" "}
+                {convertDateToReadable(challenge.expiration) ===
+                "expired " ? null : (
+                  <IonIcon src="/assets/icons/challenge-tile.svg"></IonIcon>
+                )}{" "}
+                {convertDateToReadable(challenge.expiration)}
               </IonLabel>
             </IonCol>
 
