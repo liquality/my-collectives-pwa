@@ -43,9 +43,10 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     name: "",
     description: "",
   });
-  const [allSelectedPools, setAllSelectedPools] = useState<Challenge[]>([]);
+  const [allSelectedAndCurrentPools, setAllSelectedAndCurrentPools] = useState<
+    Challenge[]
+  >([]);
   const [pendingCreation, setPendingCreation] = useState(false);
-  const [isDescriptionTouched, setIsDescriptionTouched] = useState(false);
 
   const { presentToast } = useToast();
 
@@ -58,7 +59,9 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
   const [errorText, setErrorText] = useState("");
 
   const isButtonDisabled =
-    !createGroup.description || !createGroup.name || !allSelectedPools.length;
+    !createGroup.description ||
+    !createGroup.name ||
+    !allSelectedAndCurrentPools.length;
 
   function hideSelectPoolModal() {
     selectPoolModal.current?.dismiss();
@@ -69,8 +72,11 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
   }, [pendingCreation]);
 
   const handlePoolSelection = (selectedPool: Challenge) => {
-    if (allSelectedPools) {
-      setAllSelectedPools((prevGroups) => [...prevGroups, selectedPool]);
+    if (allSelectedAndCurrentPools) {
+      setAllSelectedAndCurrentPools((prevGroups) => [
+        ...prevGroups,
+        selectedPool,
+      ]);
     }
     hideSelectPoolModal();
   };
@@ -80,13 +86,16 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
   };
 
   const handleRemoval = (poolToRemove: Challenge) => {
-    setAllSelectedPools((prevGroups) =>
+    setAllSelectedAndCurrentPools((prevGroups) =>
       prevGroups?.filter((pool) => pool !== poolToRemove)
     );
   };
 
   const handleErrorText = async () => {
     setErrorText("Name, description and at least 1 pool is required!");
+    setTimeout(() => {
+      setErrorText("");
+    }, 5000);
   };
 
   const handleCreateGroup = async () => {
@@ -99,10 +108,10 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
 
     //TODO: clean this up after MVP
     try {
-      const tokenContracts = allSelectedPools.map(
+      const tokenContracts = allSelectedAndCurrentPools.map(
         (item) => item.mintingContractAddress
       );
-      const honeyAddresses = allSelectedPools.map(
+      const honeyAddresses = allSelectedAndCurrentPools.map(
         (item) => item.honeyPotAddress
       );
       const createdContract = await ContractService.createCollective(
@@ -113,7 +122,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       console.log(createdContract, "CREATED CONTRACT FROM SDK");
       const result = await ApiService.createGroup({
         group: groupObject,
-        pools: allSelectedPools,
+        pools: allSelectedAndCurrentPools,
       });
       if (!result) throw Error("Trouble creating group in DB");
       const updatedGroup = await ApiService.updateGroup(result.id, {
@@ -131,10 +140,10 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         name: "",
         description: "",
       });
-      setAllSelectedPools([]);
+      setAllSelectedAndCurrentPools([]);
       setPendingCreation(false);
       router.push(
-        `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${cAddress}&groupId=${id}&createdBy=${createdBy}&activePools=${allSelectedPools.length}`
+        `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${cAddress}&groupId=${id}&createdBy=${createdBy}&activePools=${allSelectedAndCurrentPools.length}`
       );
     } catch (error) {
       setPendingCreation(false);
@@ -161,7 +170,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
             ref={selectPoolModal}
             presentingElement={presentingElement}
             dismiss={hideSelectPoolModal}
-            selectedPools={allSelectedPools}
+            selectedPools={allSelectedAndCurrentPools}
             handlePoolSelection={handlePoolSelection}
           />
           <IonList inset={true}>
@@ -206,8 +215,8 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
           </IonList>
 
           <IonList inset={true}>
-            {typeof allSelectedPools !== "undefined"
-              ? allSelectedPools?.map((pool, index) => (
+            {typeof allSelectedAndCurrentPools !== "undefined"
+              ? allSelectedAndCurrentPools?.map((pool, index) => (
                   <div className="grey-container" key={index}>
                     <div className="flexDirectionRow space-between">
                       <div className="flexDirectionRow">

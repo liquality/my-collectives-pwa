@@ -60,21 +60,23 @@ const CollectiveList: React.FC<ChallengeItemCardProps> = ({
                       <p className="public-address">
                         {shortenAddress(group.publicAddress)}
                       </p>
-                      <p className="public-address">
+                      <div className="public-address">
                         {" "}
                         <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>{" "}
                         <IonLabel>{group.mintCount}</IonLabel>{" "}
                         <IonIcon
-                          style={{ fontSize: 15, marginTop: 5, marginLeft: 5 }}
+                          style={{
+                            marginLeft: 5,
+                          }}
                           src="/assets/icons/people-tile.svg"
                         ></IonIcon>{" "}
                         <IonLabel>{group.memberCount}</IonLabel>{" "}
                         <IonIcon
-                          style={{ fontSize: 12, marginTop: 3, marginLeft: 5 }}
+                          style={{ marginTop: 3, marginLeft: 5 }}
                           src="/assets/icons/message-tile.svg"
                         ></IonIcon>{" "}
                         <IonLabel>{group.messagesCount}</IonLabel>{" "}
-                      </p>
+                      </div>
                     </div>
                   </div>
                 </div>

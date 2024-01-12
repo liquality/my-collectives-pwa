@@ -51,7 +51,11 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
   });
   const { presentToast } = useToast();
 
-  const [allSelectedPools, setAllSelectedPools] = useState<Challenge[]>([]);
+  const [allSelectedAndCurrentPools, setAllSelectedAndCurrentPools] = useState<
+    Challenge[]
+  >([]);
+  const [newlySelectedPools, setNewlySelectedPools] = useState<Challenge[]>([]);
+
   const [updatingGroup, setUpdatingGBroup] = useState(false);
   const selectPoolModal = useRef<HTMLIonModalElement>(null);
   const isButtonDisabled = !updatedGroup.description || !updatedGroup.name;
@@ -62,8 +66,8 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
 
   console.log(pools, "wats pools?");
   useEffect(() => {
-    if (pools && !allSelectedPools.length) {
-      setAllSelectedPools(pools);
+    if (pools && !allSelectedAndCurrentPools.length) {
+      setAllSelectedAndCurrentPools(pools);
     }
     if (group) {
       setUpdatedGroup({
@@ -79,28 +83,23 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
   };
 
   const handleRemoval = (poolToRemove: Challenge) => {
-    setAllSelectedPools((prevGroups) =>
+    setAllSelectedAndCurrentPools((prevGroups) =>
       prevGroups.filter((pool) => pool !== poolToRemove)
     );
   };
 
-  console.log(allSelectedPools, "all selected pools");
+  console.log(allSelectedAndCurrentPools, "all selected pools");
   const handleUpdateGroup = async () => {
     setPendingEdit(true);
 
     try {
       if (group) {
         // create pools that are not part of the current pools list
-        const poolsToCreate = allSelectedPools.filter(
-          (pool) =>
-            !pools?.includes(
-              (p: any) => pool.honeyPotAddress === p.honeyAddresses
-            )
-        );
-        const tokenContracts = poolsToCreate.map(
+
+        const tokenContracts = newlySelectedPools.map(
           (item) => item.mintingContractAddress
         );
-        const honeyAddresses = poolsToCreate.map(
+        const honeyAddresses = newlySelectedPools.map(
           (item) => item.honeyPotAddress
         );
 
@@ -108,38 +107,46 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
           honeyAddresses,
           tokenContracts,
           "tokencontracts & honeyaddresses",
-          poolsToCreate
+          newlySelectedPools
         );
 
-        /*     const createPoolsResult = await ContractService.createPools(
+        const createPoolsResult = await ContractService.createPools(
           group?.publicAddress,
           group?.walletAddress,
           group?.nonceKey,
           tokenContracts,
           honeyAddresses
         );
-        if(createPoolsResult.status === "failed") throw Error
+        if (createPoolsResult.status === "failed")
+          throw Error("Transaction failed");
 
         const updateGroupResult = await ApiService.updateGroup(groupId, {
           group: updatedGroup,
-          pools: allSelectedPools,
+          pools: allSelectedAndCurrentPools,
         });
-        console.log({
-          createPoolsResult,
-          updateGroupResult,
-        }); */
+        if (!updateGroupResult) throw Error("Could not update collective");
+        setPendingEdit(false);
       }
     } catch (error) {
       console.log(error, "error posting group");
       setPendingEdit(false);
       console.log(error, "wats error?");
-      presentToast("We could not edit your group :(", "danger", banOutline);
+      presentToast(
+        "We could not edit your group :( reason:",
+        "danger",
+        banOutline
+      );
     }
   };
 
   const handlePoolSelection = (selectedPool: Challenge) => {
-    if (allSelectedPools) {
-      setAllSelectedPools((prevGroups) => [...prevGroups, selectedPool]);
+    if (allSelectedAndCurrentPools && newlySelectedPools) {
+      setAllSelectedAndCurrentPools((prevGroups) => [
+        ...prevGroups,
+        selectedPool,
+      ]);
+
+      setNewlySelectedPools((prevPools) => [...prevPools, selectedPool]);
     }
     hideSelectPoolModal();
   };
@@ -162,7 +169,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
             ref={selectPoolModal}
             presentingElement={presentingElement}
             dismiss={hideSelectPoolModal}
-            selectedPools={allSelectedPools}
+            selectedPools={allSelectedAndCurrentPools}
             handlePoolSelection={handlePoolSelection}
           />
           <IonList inset={true}>
@@ -199,8 +206,8 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
           </IonList>
 
           <IonList inset={true}>
-            {typeof allSelectedPools !== "undefined"
-              ? allSelectedPools?.map((pool, index) => (
+            {typeof allSelectedAndCurrentPools !== "undefined"
+              ? allSelectedAndCurrentPools?.map((pool, index) => (
                   <div className="grey-container" key={index}>
                     <div className="flexDirectionRow space-between">
                       <div className="flexDirectionRow">
