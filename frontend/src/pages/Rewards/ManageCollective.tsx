@@ -86,6 +86,9 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
     setAllSelectedAndCurrentPools((prevGroups) =>
       prevGroups.filter((pool) => pool !== poolToRemove)
     );
+    setNewlySelectedPools((prevGroups) =>
+      prevGroups.filter((pool) => pool !== poolToRemove)
+    );
   };
 
   console.log(allSelectedAndCurrentPools, "all selected pools");
