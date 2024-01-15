@@ -14,6 +14,7 @@ export class PoolsController {
 
         res.status(200).send(pools);
       } catch (err: any) {
+        console.log(err, 'error')
         res.status(500).send({ error: err.message });
       }
     }

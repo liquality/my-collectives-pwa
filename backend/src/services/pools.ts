@@ -32,29 +32,34 @@ export class PoolsService {
   public static async findByGroup(groupId: string): Promise<Pool[]> {
     const poolsWithChallenges = await dbClient
         .select(
-          "pools.id as poolId",
-          "pools.groupId",
-          "pools.challengeId",
-          "pools.createdBy",
-          "challenges.id as challengeId",
-          "challenges.name",
-          "challenges.creatorOfMint",
-          "challenges.chainId",
-          "challenges.mintingContractAddress",
-          "challenges.network",
-          "challenges.kind",
-          "challenges.tokenId",
-          "challenges.imageUrl",
-          "challenges.category",
-          "challenges.platform",
-          "challenges.expiration",
-          "challenges.totalMints",
-          "challenges.expired",
-          "challenges.honeyPotAddress"
+          'pools.id as poolId',
+          'pools.groupId',
+          'pools.challengeId',
+          'pools.publicAddress as poolPublicAddress',
+          'pools.createdBy',
+          'challenges.id as challengeId',
+          'challenges.name',
+          'challenges.creatorOfMint',
+          'challenges.chainId',
+          'challenges.mintingContractAddress',
+          'challenges.network',
+          'challenges.kind',
+          'challenges.tokenId',
+          'challenges.imageUrl',
+          'challenges.category',
+          'challenges.platform',
+          'challenges.expiration',
+          'challenges.totalMints',
+          'challenges.expired',
+          'challenges.honeyPotAddress',
+          'groups.publicAddress as groupPublicAddress',
+          'groups.nonceKey as groupNonceKey',
+          'groups.walletAddress as groupWalletAddress'
         )
-        .from("pools")
-        .where("pools.groupId", "=", groupId)
-        .join("challenges", "pools.challengeId", "=", "challenges.id");
+        .from('pools')
+        .where('pools.groupId', '=', groupId)
+        .join('challenges', 'pools.challengeId', '=', 'challenges.id')
+        .join('groups', 'pools.groupId', '=', 'groups.id');
 
       return poolsWithChallenges;
   }
