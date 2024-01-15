@@ -51,6 +51,12 @@ const ContractService = {
         return { inviteSig: inviteSig.toString(), inviteId: inviteIdInHex }
     },
 
+    async withdrawRewards(cAddress: string, cWallet: string, nonceKey: bigint, poolAddresses: string[]) {
+        const response = await MyCollectives.Pool.withdrawRewards(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, poolAddresses, await this.getProvider().getSigner().getAddress())
+        console.log("!!!!! response withdrawal => ", response)
+        return response
+    },
+
 
 
     async createHoneyPot() {
