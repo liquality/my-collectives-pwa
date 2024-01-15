@@ -1,11 +1,6 @@
 import { ethers } from "ethers";
 import { dbClient } from "../data";
-import {
-  convertToDate,
-  fetchReservoirData,
-  getTokenMetadataFromZora,
-} from "../utils";
-import MyCollectives, { Config } from "@liquality/my-collectives-sdk";
+import MyCollectives, { Config } from "@liquality/my-collectives-sdk-node";
 
 export class RewardsService {
   constructor() {
@@ -69,7 +64,7 @@ export class RewardsService {
       .join("challenges", "pools.challengeId", "=", "challenges.id")
       .where("challenges.expiration", ">", new Date());
 
-    const userRewards = [];
+    const userRewards: any[] = [];
     for (const pool of pools) {
       const poolParticipation = await this.getPoolParticipation(
         user.publicAddress,
