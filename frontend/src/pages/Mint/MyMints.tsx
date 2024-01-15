@@ -20,7 +20,6 @@ import PageSearchBar from "@/components/PageSearchBar";
 import useGetGroupById from "@/hooks/Groups/useGetGroupById";
 import useGetChallengesByGroupId from "@/hooks/Collective/useGetChallengesByGroupId";
 import { useMemo, useState } from "react";
-import ContractService from "@/services/ContractService";
 
 export interface MyMintsProps
   extends RouteComponentProps<{
@@ -34,10 +33,7 @@ const MyMints: React.FC<MyMintsProps> = (routerProps) => {
   );
   const [mintFilter, setMintFilter] = useState("");
 
-  console.log(pools, "wats pools?");
-
   //TODO backend function fetch from user_rewards the poolIds that have been minted from a user and all the groups
-
   const filteredMints = useMemo(() => {
     let filteredPools = pools || [];
 

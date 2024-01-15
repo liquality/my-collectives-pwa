@@ -45,8 +45,6 @@ const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
     router.push(url, "root");
   };
 
-  console.log(loadingWithdrawal);
-  console.log(group, "groups?");
   const handleWithDrawal = async () => {
     if (pools && group) {
       setLoadingWithdrawal(true);
