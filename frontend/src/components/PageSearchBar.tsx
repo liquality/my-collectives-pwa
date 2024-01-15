@@ -31,6 +31,8 @@ const PageSearchBar: React.FC<PageSearchBarProps> = ({
     }
   };
   const handleReloadIconClick = () => {
+    window.location.reload();
+
     if (onClickReload) {
       onClickReload();
     }

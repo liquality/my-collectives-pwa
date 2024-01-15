@@ -10,17 +10,17 @@ import {
   IonPage,
   IonRow,
   IonText,
+  useIonRouter,
 } from "@ionic/react";
 import Header from "@/components/Header";
-import { RouteComponentProps, useLocation } from "react-router";
+import { RouteComponentProps } from "react-router";
 import CollectiveTopBar from "@/components/TopBars/CollectiveTopBar";
 import PageSearchBar from "@/components/PageSearchBar";
-import { getLastIndexOfPath } from "@/utils/routeNames";
+import { pathConstants } from "@/utils/routeNames";
 import useGetGroupById from "@/hooks/Groups/useGetGroupById";
-import { handleCopyClick, shortenAddress } from "@/utils";
+import { shortenAddress } from "@/utils";
 import MembersTable from "@/components/Mint/MembersTable";
 import GenerateInviteBtn from "@/components/GenerateInvite";
-import { useState } from "react";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 
 export interface CollectiveInfoProps
@@ -31,8 +31,13 @@ export interface CollectiveInfoProps
 const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
   const { groupId } = match.params;
   const { group, members, loading } = useGetGroupById(groupId);
+  const router = useIonRouter();
 
-  console.log(group, "group");
+  const handleManageNavigation = () => {
+    const url = pathConstants.rewards.manage.replace(":groupId", groupId);
+    router.push(url, "root");
+  };
+
   return (
     <IonPage>
       <Header title={group?.name} />
@@ -86,7 +91,15 @@ const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
 
           <IonRow className="manage-group-row ion-padding ion-justify-content-between ion-align-items-center">
             <IonText>
-              {group.loggedInUserIsAdmin ? "Manage " : null}
+              {group.loggedInUserIsAdmin ? (
+                <IonText
+                  color="primary"
+                  style={{ pointer: "cursor" }}
+                  onClick={handleManageNavigation}
+                >
+                  Manage{" "}
+                </IonText>
+              ) : null}
               {group.loggedInUserIsAdmin ? (
                 <IonText style={{ color: "grey" }}>| </IonText>
               ) : null}

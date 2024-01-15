@@ -8,6 +8,7 @@ import {
   IonLabel,
   IonPage,
   useIonRouter,
+  IonText,
 } from "@ionic/react";
 import ApiService from "@/services/ApiService";
 import { GroupCreation } from "@/types/general-types";
@@ -42,7 +43,9 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     name: "",
     description: "",
   });
-  const [allSelectedPools, setAllSelectedPools] = useState<Challenge[]>([]);
+  const [allSelectedAndCurrentPools, setAllSelectedAndCurrentPools] = useState<
+    Challenge[]
+  >([]);
   const [pendingCreation, setPendingCreation] = useState(false);
 
   const { presentToast } = useToast();
@@ -52,7 +55,13 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
   const [presentingElement, setPresentingElement] = useState<
     HTMLElement | undefined
   >(undefined);
-  const isButtonDisabled = !createGroup.description || !createGroup.name;
+
+  const [errorText, setErrorText] = useState("");
+
+  const isButtonDisabled =
+    !createGroup.description ||
+    !createGroup.name ||
+    !allSelectedAndCurrentPools.length;
 
   function hideSelectPoolModal() {
     selectPoolModal.current?.dismiss();
@@ -63,8 +72,11 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
   }, [pendingCreation]);
 
   const handlePoolSelection = (selectedPool: Challenge) => {
-    if (allSelectedPools) {
-      setAllSelectedPools((prevGroups) => [...prevGroups, selectedPool]);
+    if (allSelectedAndCurrentPools) {
+      setAllSelectedAndCurrentPools((prevGroups) => [
+        ...prevGroups,
+        selectedPool,
+      ]);
     }
     hideSelectPoolModal();
   };
@@ -74,9 +86,16 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
   };
 
   const handleRemoval = (poolToRemove: Challenge) => {
-    setAllSelectedPools((prevGroups) =>
+    setAllSelectedAndCurrentPools((prevGroups) =>
       prevGroups?.filter((pool) => pool !== poolToRemove)
     );
+  };
+
+  const handleErrorText = async () => {
+    setErrorText("Name, description and at least 1 pool is required!");
+    setTimeout(() => {
+      setErrorText("");
+    }, 5000);
   };
 
   const handleCreateGroup = async () => {
@@ -89,10 +108,10 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
 
     //TODO: clean this up after MVP
     try {
-      const tokenContracts = allSelectedPools.map(
+      const tokenContracts = allSelectedAndCurrentPools.map(
         (item) => item.mintingContractAddress
       );
-      const honeyAddresses = allSelectedPools.map(
+      const honeyAddresses = allSelectedAndCurrentPools.map(
         (item) => item.honeyPotAddress
       );
       const createdContract = await ContractService.createCollective(
@@ -103,38 +122,37 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       console.log(createdContract, "CREATED CONTRACT FROM SDK");
       const result = await ApiService.createGroup({
         group: groupObject,
-        pools: allSelectedPools,
+        pools: allSelectedAndCurrentPools,
       });
-      console.log(result, "RESULT AFTER CREATING GROUP IN DB");
-      if (result) {
-        const updatedGroup = await ApiService.updateGroup(result.id, {
-          group: {
-            publicAddress: cAddress,
-            walletAddress: cWallet,
-            salt: salt,
-            nonceKey: nonce?.toString(),
-          },
-          pools: [],
-        });
-        console.log(updatedGroup, "updated group IN DB?");
-        if (!updatedGroup.ok) throw Error;
-        const { name, id, createdBy } = result;
-        setCreatedGroup({
-          name: "",
-          description: "",
-        });
-        setAllSelectedPools([]);
-        setPendingCreation(false);
-        router.push(
-          `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${cAddress}&groupId=${id}&createdBy=${createdBy}&activePools=${allSelectedPools.length}`
-        );
-      } else {
-        throw Error;
-      }
+      if (!result) throw Error("Trouble creating group in DB");
+      const updatedGroup = await ApiService.updateGroup(result.id, {
+        group: {
+          publicAddress: cAddress,
+          walletAddress: cWallet,
+          salt: salt,
+          nonceKey: nonce?.toString(),
+        },
+        pools: [],
+      });
+      if (!updatedGroup.ok) throw Error("Trouble updating group in DB");
+      const { name, id, createdBy } = result;
+      setCreatedGroup({
+        name: "",
+        description: "",
+      });
+      setAllSelectedAndCurrentPools([]);
+      setPendingCreation(false);
+      router.push(
+        `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${cAddress}&groupId=${id}&createdBy=${createdBy}&activePools=${allSelectedAndCurrentPools.length}`
+      );
     } catch (error) {
       setPendingCreation(false);
       console.log(error, "wats error?");
-      presentToast("We could not create your group :(", "danger", banOutline);
+      presentToast(
+        "We could not create your group :( Reason: " + error,
+        "danger",
+        banOutline
+      );
     }
   };
 
@@ -152,12 +170,13 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
             ref={selectPoolModal}
             presentingElement={presentingElement}
             dismiss={hideSelectPoolModal}
-            selectedPools={allSelectedPools}
+            selectedPools={allSelectedAndCurrentPools}
             handlePoolSelection={handlePoolSelection}
           />
           <IonList inset={true}>
             <IonItem>
               <IonInput
+                onIonBlur={() => (isButtonDisabled ? handleErrorText() : null)}
                 label="Collective Name"
                 label-placement="floating"
                 placeholder="Enter the name"
@@ -172,6 +191,13 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
 
             <IonItem>
               <IonInput
+                /*     className={`${createGroup.description && "ion-valid"} ${
+                  !createGroup.description && "ion-invalid"
+                } ${isDescriptionTouched && "ion-touched"}`}
+                onIonBlur={() => setIsDescriptionTouched(true)}
+                errorText="Required field"
+                clearInput={true} */
+                onIonBlur={() => (isButtonDisabled ? handleErrorText() : null)}
                 label="Description"
                 label-placement="floating"
                 placeholder="Enter the description"
@@ -183,12 +209,14 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
                 }
               ></IonInput>
             </IonItem>
-            <IonItem></IonItem>
+            <IonItem>
+              <IonText color="danger">{errorText}</IonText>
+            </IonItem>
           </IonList>
 
           <IonList inset={true}>
-            {typeof allSelectedPools !== "undefined"
-              ? allSelectedPools?.map((pool, index) => (
+            {typeof allSelectedAndCurrentPools !== "undefined"
+              ? allSelectedAndCurrentPools?.map((pool, index) => (
                   <div className="grey-container" key={index}>
                     <div className="flexDirectionRow space-between">
                       <div className="flexDirectionRow">

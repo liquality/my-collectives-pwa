@@ -9,7 +9,6 @@ const ApiService = {
   },
 
   updateGroup: async function (groupId: string, groupObject: any) {
-    console.log("inside network update", groupId, groupObject);
     return NetworkService.putResourceWithAuth(
       "/v1/groups/" + groupId,
       groupObject

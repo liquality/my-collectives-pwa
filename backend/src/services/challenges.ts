@@ -163,9 +163,13 @@ export class ChallengesService {
             return updatedChallenge;
         }));
 
-
-
-        return updatedChallenges;
+        const sortedChallenges = updatedChallenges.sort((a, b) => {
+            const dateA = new Date(a?.expiration ?? 0);
+            const dateB = new Date(b?.expiration ?? 0);
+            // sort in ascending order (youngest first)
+            return dateB.getTime() - dateA.getTime()
+        });
+        return sortedChallenges;
     }
 
 

@@ -22,6 +22,9 @@ import {
 } from "@/utils";
 import ApiService from "@/services/ApiService";
 import ContractService from "@/services/ContractService";
+import useToast from "@/hooks/useToast";
+import { banOutline } from "ionicons/icons";
+import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 
 export interface CreateCollectiveProps {
   presentingElement?: HTMLElement;
@@ -40,11 +43,19 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
   const { groupId } = useParams<{ groupId: string }>();
   const { pools } = useGetChallengesByGroupId(groupId);
   const { group } = useGetGroupById(groupId);
+  const [pendingEdit, setPendingEdit] = useState(false);
+
   const [updatedGroup, setUpdatedGroup] = useState({
     name: "",
     description: "",
   });
-  const [allSelectedPools, setAllSelectedPools] = useState<Challenge[]>([]);
+  const { presentToast } = useToast();
+
+  const [allSelectedAndCurrentPools, setAllSelectedAndCurrentPools] = useState<
+    Challenge[]
+  >([]);
+  const [newlySelectedPools, setNewlySelectedPools] = useState<Challenge[]>([]);
+
   const [updatingGroup, setUpdatingGBroup] = useState(false);
   const selectPoolModal = useRef<HTMLIonModalElement>(null);
   const isButtonDisabled = !updatedGroup.description || !updatedGroup.name;
@@ -53,10 +64,9 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
   >(undefined);
   const page = useRef(undefined);
 
-  console.log(pools, "wats pools?");
   useEffect(() => {
-    if (pools && !allSelectedPools.length) {
-      setAllSelectedPools(pools);
+    if (pools && !allSelectedAndCurrentPools.length) {
+      setAllSelectedAndCurrentPools(pools);
     }
     if (group) {
       setUpdatedGroup({
@@ -72,24 +82,33 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
   };
 
   const handleRemoval = (poolToRemove: Challenge) => {
-    setAllSelectedPools((prevGroups) =>
+    setAllSelectedAndCurrentPools((prevGroups) =>
+      prevGroups.filter((pool) => pool !== poolToRemove)
+    );
+    setNewlySelectedPools((prevGroups) =>
       prevGroups.filter((pool) => pool !== poolToRemove)
     );
   };
 
-  console.log(allSelectedPools, "all selected pools");
   const handleUpdateGroup = async () => {
+    setPendingEdit(true);
+
     try {
       if (group) {
         // create pools that are not part of the current pools list
-        const poolsToCreate = allSelectedPools.filter(
-          (pool) => !pools?.includes((p: any) => pool.id === p.id)
-        );
-        const tokenContracts = poolsToCreate.map(
+
+        const tokenContracts = newlySelectedPools.map(
           (item) => item.mintingContractAddress
         );
-        const honeyAddresses = poolsToCreate.map(
+        const honeyAddresses = newlySelectedPools.map(
           (item) => item.honeyPotAddress
+        );
+
+        console.log(
+          honeyAddresses,
+          tokenContracts,
+          "tokencontracts & honeyaddresses",
+          newlySelectedPools
         );
 
         const createPoolsResult = await ContractService.createPools(
@@ -99,24 +118,36 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
           tokenContracts,
           honeyAddresses
         );
+        if (createPoolsResult.status === "failed")
+          throw Error("Transaction failed");
 
         const updateGroupResult = await ApiService.updateGroup(groupId, {
           group: updatedGroup,
-          pools: allSelectedPools,
+          pools: allSelectedAndCurrentPools,
         });
-        console.log({
-          createPoolsResult,
-          updateGroupResult,
-        });
+        if (!updateGroupResult) throw Error("Could not update collective");
+        setPendingEdit(false);
       }
     } catch (error) {
       console.log(error, "error posting group");
+      setPendingEdit(false);
+      console.log(error, "wats error?");
+      presentToast(
+        "We could not edit your group :( reason:",
+        "danger",
+        banOutline
+      );
     }
   };
 
   const handlePoolSelection = (selectedPool: Challenge) => {
-    if (allSelectedPools) {
-      setAllSelectedPools((prevGroups) => [...prevGroups, selectedPool]);
+    if (allSelectedAndCurrentPools && newlySelectedPools) {
+      setAllSelectedAndCurrentPools((prevGroups) => [
+        ...prevGroups,
+        selectedPool,
+      ]);
+
+      setNewlySelectedPools((prevPools) => [...prevPools, selectedPool]);
     }
     hideSelectPoolModal();
   };
@@ -128,107 +159,112 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
   return (
     <IonPage>
       <Header title="Manage Collective" />
+      {pendingEdit ? (
+        <IonContent>
+          <PageLoadingIndicator />
+        </IonContent>
+      ) : (
+        <IonContent>
+          <SelectPoolModal
+            trigger="open-manage-collective-modal"
+            ref={selectPoolModal}
+            presentingElement={presentingElement}
+            dismiss={hideSelectPoolModal}
+            selectedPools={allSelectedAndCurrentPools}
+            handlePoolSelection={handlePoolSelection}
+          />
+          <IonList inset={true}>
+            <IonItem>
+              <IonInput
+                label={group?.name}
+                label-placement="floating"
+                placeholder="Enter the name"
+                value={updatedGroup.name}
+                onIonInput={(e) =>
+                  setUpdatedGroup((prevGroup) => ({
+                    ...prevGroup,
+                    name: e.detail.value!,
+                  }))
+                }
+              ></IonInput>
+            </IonItem>
 
-      <IonContent>
-        <SelectPoolModal
-          trigger="open-manage-collective-modal"
-          ref={selectPoolModal}
-          presentingElement={presentingElement}
-          dismiss={hideSelectPoolModal}
-          selectedPools={allSelectedPools}
-          handlePoolSelection={handlePoolSelection}
-        />
-        <IonList inset={true}>
-          <IonItem>
-            <IonInput
-              label={group?.name}
-              label-placement="floating"
-              placeholder="Enter the name"
-              value={updatedGroup.name}
-              onIonInput={(e) =>
-                setUpdatedGroup((prevGroup) => ({
-                  ...prevGroup,
-                  name: e.detail.value!,
-                }))
-              }
-            ></IonInput>
-          </IonItem>
+            <IonItem>
+              <IonInput
+                label={group?.description}
+                label-placement="floating"
+                placeholder="Enter the description"
+                value={updatedGroup.description}
+                onIonInput={(e) =>
+                  setUpdatedGroup((prevGroup) => ({
+                    ...prevGroup,
+                    description: e.detail.value!,
+                  }))
+                }
+              ></IonInput>
+            </IonItem>
+            <IonItem></IonItem>
+          </IonList>
 
-          <IonItem>
-            <IonInput
-              label={group?.description}
-              label-placement="floating"
-              placeholder="Enter the description"
-              value={updatedGroup.description}
-              onIonInput={(e) =>
-                setUpdatedGroup((prevGroup) => ({
-                  ...prevGroup,
-                  description: e.detail.value!,
-                }))
-              }
-            ></IonInput>
-          </IonItem>
-          <IonItem></IonItem>
-        </IonList>
-
-        <IonList inset={true}>
-          {typeof allSelectedPools !== "undefined"
-            ? allSelectedPools?.map((pool, index) => (
-                <div className="grey-container" key={index}>
-                  <div className="flexDirectionRow space-between">
-                    <div className="flexDirectionRow">
-                      <img
-                        className="row-img"
-                        alt="group-avatar"
-                        src={convertIpfsImageUrl(pool.imageUrl)}
-                      />
-                      <div className="ml-1">
-                        <p> {cutOffTooLongString(pool?.name, 20)}</p>
-                        <p className="creator-of-mint">
-                          {handleDisplayAddress(pool?.creatorOfMint ?? "")}
-                        </p>
+          <IonList inset={true}>
+            {typeof allSelectedAndCurrentPools !== "undefined"
+              ? allSelectedAndCurrentPools?.map((pool, index) => (
+                  <div className="grey-container" key={index}>
+                    <div className="flexDirectionRow space-between">
+                      <div className="flexDirectionRow">
+                        <img
+                          className="row-img"
+                          alt="group-avatar"
+                          src={convertIpfsImageUrl(pool.imageUrl)}
+                        />
+                        <div className="ml-1">
+                          <p> {cutOffTooLongString(pool?.name, 20)}</p>
+                          <p className="creator-of-mint">
+                            {handleDisplayAddress(pool?.creatorOfMint ?? "")}
+                          </p>
+                        </div>
                       </div>
+                      <p
+                        className="small-purple-text"
+                        onClick={() => handleRemoval(pool)}
+                      >
+                        Remove
+                      </p>
                     </div>
-                    <p
-                      className="small-purple-text"
-                      onClick={() => handleRemoval(pool)}
-                    >
-                      Remove
-                    </p>
                   </div>
-                </div>
-              ))
-            : null}
+                ))
+              : null}
 
-          <IonButton
-            id="open-manage-collective-modal"
-            fill="clear"
-            color="primary"
-            expand="block"
-          >
-            + Add Pool
-          </IonButton>
-        </IonList>
+            <IonButton
+              id="open-manage-collective-modal"
+              fill="clear"
+              color="primary"
+              expand="block"
+            >
+              + Add Pool
+            </IonButton>
+          </IonList>
 
-        <div className="button-container">
-          <IonButton
-            onClick={handleUpdateGroup}
-            shape="round"
-            disabled={isButtonDisabled}
-            color={isButtonDisabled ? "medium" : "primary"}
-          >
-            Edit Collective
-          </IonButton>
-          <IonButton
-            onClick={cancel}
-            shape="round"
-            fill="clear"
-            color="primary"
-          >
-            Cancel
-          </IonButton>
-        </div>
-      </IonContent>
+          <div className="button-container">
+            <IonButton
+              onClick={handleUpdateGroup}
+              shape="round"
+              disabled={isButtonDisabled}
+              color={isButtonDisabled ? "medium" : "primary"}
+            >
+              Edit Collective
+            </IonButton>
+            <IonButton
+              onClick={cancel}
+              shape="round"
+              fill="clear"
+              color="primary"
+            >
+              Cancel
+            </IonButton>
+          </div>
+        </IonContent>
+      )}
     </IonPage>
   );
 };

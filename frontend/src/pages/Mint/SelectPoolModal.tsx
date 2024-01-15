@@ -1,4 +1,4 @@
-import { useState, forwardRef, Ref, useMemo } from "react";
+import { useState, forwardRef, Ref, useMemo, useEffect } from "react";
 import {
   IonButton,
   IonContent,
@@ -12,6 +12,7 @@ import {
 import { Challenge } from "@/types/challenges";
 import useGetChallenges from "@/hooks/Challenges/useGetChallenges";
 import {
+  convertDateToReadable,
   convertIpfsImageUrl,
   cutOffTooLongString,
   shortenAddress,
@@ -79,14 +80,19 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
         <IonTitle>Select Pool</IonTitle>
       </IonToolbar>
       <IonContent className="ion-padding" color="light">
-        <div className="mb-3">
-          <div className="">
-            {challenges
-              ? filteredChallenges.map((pool: any, index: number) => (
-                  <div key={index} className="flexDirectionRow parent-hover">
+        <div>
+          {challenges
+            ? filteredChallenges.map((pool: any, index: number) => {
+                return (
+                  <div key={index} className={`flexDirectionRow parent-hover`}>
                     <div
                       style={{ width: "100%" }}
-                      className="collective-card generic-grey-card"
+                      className={
+                        `collective-card generic-grey-card` +
+                        (clickedPool?.honeyPotAddress === pool.honeyPotAddress
+                          ? " selected-pool"
+                          : "")
+                      }
                       onClick={() => setClickedPool(pool)}
                     >
                       <div className="collective-data-container">
@@ -105,38 +111,32 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
                             <p className="public-address">
                               {shortenAddress(pool.mintingContractAddress)}
                             </p>
-                            <p className="public-address">
-                              {" "}
+
+                            <div
+                              className="public-address"
+                              style={{ marginTop: 10 }}
+                            >
                               <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>{" "}
                               <IonLabel>{pool.totalMints}</IonLabel>{" "}
                               <IonIcon
-                                style={{
-                                  fontSize: 15,
-                                  marginTop: 5,
-                                  marginLeft: 5,
-                                }}
-                                src="/assets/icons/people-tile.svg"
+                                style={{ marginLeft: 10, fontSize: 11 }}
+                                src="/assets/icons/challenge-tile.svg"
                               ></IonIcon>{" "}
-                              <IonLabel>{pool.memberCount}</IonLabel>{" "}
-                              <IonIcon
-                                style={{
-                                  fontSize: 12,
-                                  marginTop: 3,
-                                  marginLeft: 5,
-                                }}
-                                src="/assets/icons/message-tile.svg"
-                              ></IonIcon>{" "}
-                              <IonLabel>{pool.messagesCount}</IonLabel>{" "}
-                            </p>
+                              <IonLabel>
+                                {" "}
+                                {convertDateToReadable(pool.expiration)}
+                              </IonLabel>{" "}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                ))
-              : null}
-          </div>
+                );
+              })
+            : null}
         </div>
+
         <div className="button-container">
           <IonButton
             onClick={handleSelectPool}
@@ -144,7 +144,7 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
             disabled={isButtonDisabled}
             color={isButtonDisabled ? "medium" : "primary"}
           >
-            Select
+            Add
           </IonButton>
           <IonButton
             onClick={dismiss}

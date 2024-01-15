@@ -562,6 +562,11 @@ ion-toolbar {
   background-color: var(--light-purple-background);
 }
 
+.selected-pool {
+  background-color: var(--light-purple-background);
+  border: 1px var(--primary-purple) solid;
+}
+
 .collective-card-name {
   color: var(--primary-purple);
   font-feature-settings: "clig" off, "liga" off;
