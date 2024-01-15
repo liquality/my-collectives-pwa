@@ -52,8 +52,13 @@ const ContractService = {
     },
 
     async withdrawRewards(cAddress: string, cWallet: string, nonceKey: bigint, honeyPotAddresses: string[]) {
-        const poolAddress = await this.getPool(cAddress, cWallet, nonceKey, honeyPotAddresses[0])
-        const response = await MyCollectives.Pool.withdrawRewards(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, [poolAddress], await this.getProvider().getSigner().getAddress())
+
+        const poolAddresses = await Promise.all(honeyPotAddresses.map(async (item: any) => {
+            return await this.getPool(cAddress, cWallet, nonceKey, item);
+        }));
+        console.log(poolAddresses, 'all of the pooladdresses')
+
+        const response = await MyCollectives.Pool.withdrawRewards(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, poolAddresses, await this.getProvider().getSigner().getAddress())
         console.log("!!!!! response withdrawal => ", response)
         return response
     },
