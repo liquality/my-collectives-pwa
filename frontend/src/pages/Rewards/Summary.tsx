@@ -22,7 +22,7 @@ import { useSignInWallet } from "@/hooks/useSignInWallet";
 import GenerateInviteBtn from "@/components/GenerateInvite";
 import { pathConstants } from "@/utils/routeNames";
 import Header from "@/components/Header";
-import userGetRewardsSummary from "@/hooks/userGetRewardsSummary";
+import useGetRewardsSummary from "@/hooks/useGetRewardsSummary";
 import ContractService from "@/services/ContractService";
 import { Group } from "@/types/general-types";
 import useToast from "@/hooks/useToast";
@@ -33,7 +33,7 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
 
   const { myGroups, loading, reload } = useGetMyGroups();
   const { user } = useSignInWallet();
-  const { summary, loading: loadingSummary } = userGetRewardsSummary();
+  const { summary, loading: loadingSummary } = useGetRewardsSummary();
   const router = useIonRouter();
   const { presentToast } = useToast();
 
