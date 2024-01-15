@@ -36,6 +36,7 @@ export class PoolsService {
           'pools.id as poolId',
           'pools.groupId',
           'pools.challengeId',
+          'pools.publicAddress as poolPublicAddress',
           'pools.createdBy',
           'challenges.id as challengeId',
           'challenges.name',
@@ -52,10 +53,14 @@ export class PoolsService {
           'challenges.totalMints',
           'challenges.expired',
           'challenges.honeyPotAddress',
+          'groups.publicAddress as groupPublicAddress',
+          'groups.nonceKey as groupNonceKey',
+          'groups.walletAddress as groupWalletAddress'
         )
         .from('pools')
         .where('pools.groupId', '=', groupId)
-        .join('challenges', 'pools.challengeId', '=', 'challenges.id');
+        .join('challenges', 'pools.challengeId', '=', 'challenges.id')
+        .join('groups', 'pools.groupId', '=', 'groups.id');
 
       return poolsWithChallenges;
     });

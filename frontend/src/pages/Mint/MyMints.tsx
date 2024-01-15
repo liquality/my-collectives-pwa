@@ -1,4 +1,11 @@
-import { IonPage, IonFab, IonContent, IonIcon, IonLabel } from "@ionic/react";
+import {
+  IonPage,
+  IonFab,
+  IonContent,
+  IonIcon,
+  IonLabel,
+  IonText,
+} from "@ionic/react";
 import {
   convertDateToReadable,
   convertIpfsImageUrl,
@@ -22,11 +29,11 @@ const MyMints: React.FC<MyMintsProps> = (routerProps) => {
   const { groupId } = routerProps.match.params;
   const { group } = useGetGroupById(groupId);
   const { pools, loading } = useGetChallengesByGroupId(
-    "a29e1fc6-4e63-4970-b063-802bae62dfef"
+    "245d7847-9d60-477a-970c-4c5e151736d8"
   );
   const [mintFilter, setMintFilter] = useState("");
-  //TODO backend function fetch from user_rewards the poolIds that have been minted from a user
 
+  //TODO backend function fetch from user_rewards the poolIds that have been minted from a user and all the groups
   const filteredMints = useMemo(() => {
     let filteredPools = pools || [];
 
@@ -53,35 +60,44 @@ const MyMints: React.FC<MyMintsProps> = (routerProps) => {
           <PageSearchBar />
         </MintTopBar>
 
-        <div className="flexDirectionRow  mt-3" style={{ width: "95%" }}>
-          <p className="public-address">Sort by:</p>
-          <p
-            onClick={() => setMintFilter("expiration")}
-            className={
-              mintFilter === "expiration"
-                ? "public-address-purple"
-                : "public-address"
-            }
+        <div className="space-between mt-3">
+          <div className="flexDirectionRow  " style={{ width: "95%" }}>
+            <p className="public-address">Sort by:</p>
+            <p
+              onClick={() => setMintFilter("expiration")}
+              className={
+                mintFilter === "expiration"
+                  ? "public-address-purple"
+                  : "public-address"
+              }
+            >
+              Expiration
+            </p>{" "}
+            <p className="public-address">|</p>
+            <p
+              onClick={() => setMintFilter("challenge")}
+              className={
+                mintFilter === "challenge"
+                  ? "public-address-purple"
+                  : "public-address"
+              }
+            >
+              Challenge
+            </p>{" "}
+          </div>
+          {/*   <IonText
+            color="primary"
+            style={{ pointer: "cursor" }}
+            onClick={handleWithDrawal}
           >
-            Expiration
-          </p>{" "}
-          <p className="public-address">|</p>
-          <p
-            onClick={() => setMintFilter("challenge")}
-            className={
-              mintFilter === "challenge"
-                ? "public-address-purple"
-                : "public-address"
-            }
-          >
-            Challenge
-          </p>{" "}
+            Withdraw{" "}
+          </IonText> */}
         </div>
 
         <div>
           {!loading && pools
             ? filteredMints.map((pool: any, index: number) => (
-                <div key={index} className="flexDirectionRow ">
+                <div key={index} className="flexDirectionRow">
                   <div
                     style={{ width: "100%", backgroundColor: "white" }}
                     className="collective-card generic-grey-card"

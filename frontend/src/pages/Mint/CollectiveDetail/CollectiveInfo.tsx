@@ -9,6 +9,7 @@ import {
   IonLabel,
   IonPage,
   IonRow,
+  IonSpinner,
   IonText,
   useIonRouter,
 } from "@ionic/react";
@@ -22,6 +23,9 @@ import { shortenAddress } from "@/utils";
 import MembersTable from "@/components/Mint/MembersTable";
 import GenerateInviteBtn from "@/components/GenerateInvite";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
+import ContractService from "@/services/ContractService";
+import useGetChallengesByGroupId from "@/hooks/Collective/useGetChallengesByGroupId";
+import { useState } from "react";
 
 export interface CollectiveInfoProps
   extends RouteComponentProps<{
@@ -31,11 +35,31 @@ export interface CollectiveInfoProps
 const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
   const { groupId } = match.params;
   const { group, members, loading } = useGetGroupById(groupId);
+  const { pools, loading: challengesLoading } =
+    useGetChallengesByGroupId(groupId);
   const router = useIonRouter();
+  const [loadingWithdrawal, setLoadingWithdrawal] = useState(false);
 
   const handleManageNavigation = () => {
     const url = pathConstants.rewards.manage.replace(":groupId", groupId);
     router.push(url, "root");
+  };
+
+  const handleWithDrawal = async () => {
+    if (pools && group) {
+      setLoadingWithdrawal(true);
+
+      const honeyAddresses = pools.map((item: any) => item.honeyPotAddress);
+      const response = await ContractService.withdrawRewards(
+        group.publicAddress,
+        group.walletAddress,
+        group.nonceKey,
+        honeyAddresses
+      );
+      if (response) {
+        setLoadingWithdrawal(false);
+      }
+    }
   };
 
   return (
@@ -92,14 +116,35 @@ const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
           <IonRow className="manage-group-row ion-padding ion-justify-content-between ion-align-items-center">
             <IonText>
               {group.loggedInUserIsAdmin ? (
-                <IonText
-                  color="primary"
-                  style={{ pointer: "cursor" }}
-                  onClick={handleManageNavigation}
-                >
-                  Manage{" "}
-                </IonText>
+                <>
+                  <IonText
+                    color="primary"
+                    style={{ pointer: "cursor" }}
+                    onClick={handleManageNavigation}
+                  >
+                    Manage{" "}
+                  </IonText>{" "}
+                  |{" "}
+                </>
               ) : null}
+              <IonText
+                color="primary"
+                style={{ pointer: "cursor" }}
+                onClick={handleWithDrawal}
+              >
+                {loadingWithdrawal ? (
+                  <IonSpinner
+                    style={{
+                      width: 13,
+                      height: 13,
+                    }}
+                    color="primary"
+                    name="circular"
+                  ></IonSpinner>
+                ) : (
+                  "Withdraw"
+                )}{" "}
+              </IonText>{" "}
               {group.loggedInUserIsAdmin ? (
                 <IonText style={{ color: "grey" }}>| </IonText>
               ) : null}
