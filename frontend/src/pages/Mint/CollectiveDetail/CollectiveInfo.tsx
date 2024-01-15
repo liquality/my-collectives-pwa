@@ -22,6 +22,8 @@ import { shortenAddress } from "@/utils";
 import MembersTable from "@/components/Mint/MembersTable";
 import GenerateInviteBtn from "@/components/GenerateInvite";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
+import ContractService from "@/services/ContractService";
+import useGetChallengesByGroupId from "@/hooks/Collective/useGetChallengesByGroupId";
 
 export interface CollectiveInfoProps
   extends RouteComponentProps<{
@@ -31,11 +33,26 @@ export interface CollectiveInfoProps
 const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
   const { groupId } = match.params;
   const { group, members, loading } = useGetGroupById(groupId);
+  const { pools, loading: challengesLoading } =
+    useGetChallengesByGroupId(groupId);
   const router = useIonRouter();
 
   const handleManageNavigation = () => {
     const url = pathConstants.rewards.manage.replace(":groupId", groupId);
     router.push(url, "root");
+  };
+
+  console.log(group, "groups?");
+  const handleWithDrawal = () => {
+    if (pools && group) {
+      const honeyAddresses = pools.map((item: any) => item.honeyPotAddress);
+      ContractService.withdrawRewards(
+        group.publicAddress,
+        group.walletAddress,
+        group.nonceKey,
+        honeyAddresses
+      );
+    }
   };
 
   return (
@@ -100,6 +117,13 @@ const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
                   Manage{" "}
                 </IonText>
               ) : null}
+              <IonText
+                color="primary"
+                style={{ pointer: "cursor" }}
+                onClick={handleWithDrawal}
+              >
+                Withdraw{" "}
+              </IonText>
               {group.loggedInUserIsAdmin ? (
                 <IonText style={{ color: "grey" }}>| </IonText>
               ) : null}

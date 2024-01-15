@@ -36,9 +36,6 @@ const MyMints: React.FC<MyMintsProps> = (routerProps) => {
 
   console.log(pools, "wats pools?");
 
-  const handleWithDrawal = () => {
-    ContractService.withdrawRewards();
-  };
   //TODO backend function fetch from user_rewards the poolIds that have been minted from a user and all the groups
 
   const filteredMints = useMemo(() => {
@@ -92,13 +89,13 @@ const MyMints: React.FC<MyMintsProps> = (routerProps) => {
               Challenge
             </p>{" "}
           </div>
-          <IonText
+          {/*   <IonText
             color="primary"
             style={{ pointer: "cursor" }}
             onClick={handleWithDrawal}
           >
             Withdraw{" "}
-          </IonText>
+          </IonText> */}
         </div>
 
         <div>
