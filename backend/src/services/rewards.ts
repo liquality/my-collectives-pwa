@@ -123,7 +123,9 @@ export class RewardsService {
   }
 
   public static async setTopContributorGroup(): Promise<any> {
-    const randomWalletPrivateKey = process.env.OPERATOR_PRIVATE_KEY || ""
+    let mnemonic = process.env.AUTHORIZED_OPERATOR_PHRASE || "YOUR MNEMONIC";
+    let privateKey = ethers.Wallet.fromMnemonic(mnemonic).privateKey
+    console.log(privateKey, 'privateKey')
     try {
       //1)Get all pools  that are expired
       const expiredPools = await PoolsService.findAllPoolsThatAreExpired()
@@ -141,7 +143,7 @@ export class RewardsService {
         //6) Scrape events from ethers, create a leaderboard and return top contributor
         const topContributorAddress = await getTopContributorFromEvents(pool.createdAt, pool.expiration, pool.mintingContractAddress, pool.network)
         console.log(topContributorAddress, 'TOP CONTRIBUTOR ADDRESS')
-        const response = await MyCollectives.HoneyPot.setTopContributor(randomWalletPrivateKey, pool.honeyPotAddress, topContributorAddress.address)
+        const response = await MyCollectives.HoneyPot.setTopContributor(privateKey, pool.honeyPotAddress, topContributorAddress.address)
         console.log(response, 'wat is response TOP CONTRIBUTOR')
       }
     } catch (error) {
