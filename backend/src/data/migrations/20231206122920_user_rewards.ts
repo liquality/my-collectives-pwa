@@ -16,6 +16,7 @@ export async function up(knex: Knex): Promise<void> {
     table.foreign("userId").references("users.id").onDelete("CASCADE");
     table.foreign("publicAddress").references("users.publicAddress").onDelete("CASCADE");
     table.unique(["userId", "groupId"]);
+    table.unique(["userId", "groupId", "poolId"]);
     table.unique(["poolId", "groupId"]);
 
     table.timestamps({ useCamelCase: true });

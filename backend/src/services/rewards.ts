@@ -20,6 +20,8 @@ export class RewardsService {
       memberAddress
     );
 
+    console.log(participationResponse, 'participation respons')
+
     if (participationResponse && participationResponse.participant != "") {
       const participation = {
         address: participationResponse.participant,
@@ -77,6 +79,8 @@ export class RewardsService {
         user.publicAddress,
         pool.publicAddress
       );
+
+      console.log(poolParticipation, 'pool participation')
       if (poolParticipation) {
         userRewards.push({
           numberOfMints: poolParticipation.contribution,
@@ -87,16 +91,19 @@ export class RewardsService {
           groupId: pool.groupId,
         });
       }
+
+      console.log(userRewards, 'userrewards array')
     }
 
     try {
-      const result = await dbClient.raw(
-        `? ON CONFLICT (publicAddress, poolId, groupId)
-              DO NOTHING
-              RETURNING *;`,
-        [dbClient("user_rewards").insert(userRewards)]
-      );
-
+      /*    const result = await dbClient.raw(
+           `? ON CONFLICT ("publicAddress", "poolId", "groupId")
+                 DO NOTHING
+                 RETURNING *;`,
+           [dbClient("user_rewards").insert(userRewards)]
+         );
+    */
+      const result = dbClient("user_rewards").insert(userRewards)
       console.debug("updated user_rewards:", result);
     } catch (error) {
       console.log(error, "user_rewards error");
