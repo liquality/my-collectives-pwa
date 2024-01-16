@@ -1,14 +1,20 @@
 import { ethers } from "ethers";
 import { dbClient } from "../data";
-import MyCollectives, { Config } from "@liquality/my-collectives-sdk-node";
+import { setConfig, Pool, AAProviders } from "@liquality/my-collectives-sdk-node";
 
 export class RewardsService {
   constructor() {
-    MyCollectives.setConfig({} as Config);
+    setConfig({
+      RPC_URL: process.env.RPC_URL || '',
+      PIMLICO_API_KEY: process.env.PIMLICO_API_KEY,
+      BICONOMY_PAYMASTER: process.env.BICONOMY_PAYMASTER,
+      BICONOMY_BUNDLER_API_KEY: process.env.BICONOMY_BUNDLER_API_KEY,
+      AA_PROVIDER: AAProviders.PIMLICO,
+    });
   }
 
   async getPoolParticipation(memberAddress: string, poolsAddress: string) {
-    const participationResponse = await MyCollectives.Pool.getParticipation(
+    const participationResponse = await Pool.getParticipation(
       poolsAddress,
       memberAddress
     );
@@ -29,15 +35,13 @@ export class RewardsService {
   }
 
   async getTotalContributions(poolsAddress: string) {
-    const totalContributions = await MyCollectives.Pool.getTotalContributions(
-      poolsAddress
-    );
+    const totalContributions = await Pool.getTotalContributions(poolsAddress);
 
     return totalContributions;
   }
 
   async getRewards(poolsAddress: string) {
-    const rewards = await MyCollectives.Pool.getPoolReward(poolsAddress);
+    const rewards = await Pool.getPoolReward(poolsAddress);
     return rewards;
   }
 
