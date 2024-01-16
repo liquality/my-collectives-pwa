@@ -133,7 +133,6 @@ export class RewardsService {
       const poolsToSetTopContributor = [];
       for (const pool of expiredPools) {
         //2) Check if topContributor has already been set 
-        //const topContributor = false
         const topContributor = await MyCollectives.HoneyPot.getTopContributor(pool.honeyPotAddress)
         console.log(topContributor, 'HAS TOP CONTRIBUTOR BEEN SET?', pool.honeyPotAddress)
         // 3) If the top contributor is not set, add the pool to the new array
