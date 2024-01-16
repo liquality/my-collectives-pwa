@@ -14,7 +14,7 @@ import { Contract, ethers } from "ethers";
 export class GroupsService {
   public static create(
     data: CreateGroupRequest,
-    pools: Challenge[],
+    pools: any[],
     userId: string
   ): Promise<Group | null> {
     return new Promise(async (resolve, reject) => {
@@ -51,7 +51,10 @@ export class GroupsService {
               groupId: groupResult?.id,
               createdBy: userId,
               challengeId: pool.id,
+              publicAddress: pool.publicAddress,
+              createdAt: new Date()
             }));
+            console.log(poolInsertData, 'poolInsertData')
             await trx("pools").insert(poolInsertData);
           }
         });

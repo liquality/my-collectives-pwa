@@ -91,6 +91,8 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     );
   };
 
+  console.log(allSelectedAndCurrentPools, "all selected pools");
+
   const handleErrorText = async () => {
     setErrorText("Name, description and at least 1 pool is required!");
     setTimeout(() => {
@@ -114,15 +116,39 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       const honeyAddresses = allSelectedAndCurrentPools.map(
         (item) => item.honeyPotAddress
       );
+
       const createdContract = await ContractService.createCollective(
         tokenContracts,
         honeyAddresses
       );
+
       const { cWallet, cAddress, nonce, salt } = createdContract;
+      //TODO call this iteravly thorugh the tokencontracts/honeyaddresses
+      //const poolAddress = ContractService.getPoolAddress(cAddress, cWallet, nonce,  )
+
+      const allSelectedAndCurrentPoolsWithPoolAddress = await Promise.all(
+        allSelectedAndCurrentPools.map(async (pool) => ({
+          ...pool,
+          publicAddress: await ContractService.getPoolAddress(
+            cAddress,
+            cWallet,
+            nonce as bigint,
+            pool.honeyPotAddress
+          ),
+        }))
+      );
+
+      console.log(
+        allSelectedAndCurrentPoolsWithPoolAddress,
+        "with pools allddress"
+      );
+
+      console.log("allSelectedAndCurrentPools = ", allSelectedAndCurrentPools);
+
       console.log(createdContract, "CREATED CONTRACT FROM SDK");
       const result = await ApiService.createGroup({
         group: groupObject,
-        pools: allSelectedAndCurrentPools,
+        pools: allSelectedAndCurrentPoolsWithPoolAddress,
       });
       if (!result) throw Error("Trouble creating group in DB");
       const updatedGroup = await ApiService.updateGroup(result.id, {

@@ -14,6 +14,7 @@ export class RewardsService {
   }
 
   async getPoolParticipation(memberAddress: string, poolsAddress: string) {
+    console.log(poolsAddress, 'poolsaddress?', memberAddress)
     const participationResponse = await Pool.getParticipation(
       poolsAddress,
       memberAddress
@@ -70,6 +71,8 @@ export class RewardsService {
 
     const userRewards: any[] = [];
     for (const pool of pools) {
+      console.log(user.publicAddress,
+        pool.publicAddress, 'pools address')
       const poolParticipation = await this.getPoolParticipation(
         user.publicAddress,
         pool.publicAddress

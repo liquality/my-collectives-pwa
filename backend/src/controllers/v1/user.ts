@@ -28,6 +28,7 @@ export class UserController {
         const summary = await UserService.getRewardsSummary(user.id);
         res.status(200).send(summary);
       } catch (err: any) {
+        console.log(err, 'wats err')
         res.status(500).send({ error: err.message });
       }
     }
