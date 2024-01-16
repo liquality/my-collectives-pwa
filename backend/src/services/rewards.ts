@@ -1,21 +1,25 @@
 import { ethers } from "ethers";
 import { dbClient } from "../data";
-import { setConfig, Pool, AAProviders } from "@liquality/my-collectives-sdk-node";
+import { setConfig, Pool, HoneyPot } from "@liquality/my-collectives-sdk-node";
+import { PoolsService } from "./pools";
+import { getTopContributorFromEvents } from "../utils/events-query/top-contributor-zora";
+import * as MyCollectives from "@liquality/my-collectives-sdk";
+import { Config } from "@liquality/my-collectives-sdk";
 
 export class RewardsService {
   constructor() {
-    setConfig({
+    MyCollectives.setConfig({
       RPC_URL: process.env.RPC_URL || '',
       PIMLICO_API_KEY: process.env.PIMLICO_API_KEY,
       BICONOMY_PAYMASTER: process.env.BICONOMY_PAYMASTER,
       BICONOMY_BUNDLER_API_KEY: process.env.BICONOMY_BUNDLER_API_KEY,
-      AA_PROVIDER: AAProviders.PIMLICO,
+      AA_PROVIDER: MyCollectives.AAProviders.PIMLICO,
     });
   }
 
   async getPoolParticipation(memberAddress: string, poolsAddress: string) {
     console.log(poolsAddress, 'poolsaddress?', memberAddress)
-    const participationResponse = await Pool.getParticipation(
+    const participationResponse = await MyCollectives.Pool.getParticipation(
       poolsAddress,
       memberAddress
     );
@@ -38,13 +42,13 @@ export class RewardsService {
   }
 
   async getTotalContributions(poolsAddress: string) {
-    const totalContributions = await Pool.getTotalContributions(poolsAddress);
+    const totalContributions = await MyCollectives.Pool.getTotalContributions(poolsAddress);
 
     return totalContributions;
   }
 
   async getRewards(poolsAddress: string) {
-    const rewards = await Pool.getPoolReward(poolsAddress);
+    const rewards = await MyCollectives.Pool.getPoolReward(poolsAddress);
     return rewards;
   }
 
@@ -73,14 +77,14 @@ export class RewardsService {
 
     const userRewards: any[] = [];
     for (const pool of pools) {
-      console.log(user.publicAddress,
-        pool.publicAddress, 'pools address')
+      /*      console.log(user.publicAddress,
+             pool.publicAddress, 'pools address') */
       const poolParticipation = await this.getPoolParticipation(
         user.publicAddress,
         pool.publicAddress
       );
 
-      console.log(poolParticipation, 'pool participation')
+      // console.log(poolParticipation, 'pool participation')
       if (poolParticipation) {
         userRewards.push({
           numberOfMints: poolParticipation.contribution,
@@ -92,7 +96,7 @@ export class RewardsService {
         });
       }
 
-      console.log(userRewards, 'userrewards array')
+      //console.log(userRewards, 'userrewards array')
     }
 
     try {
@@ -103,11 +107,53 @@ export class RewardsService {
            [dbClient("user_rewards").insert(userRewards)]
          );
     */
+      try {
+        const hej = await RewardsService.setTopContributorGroup()
+
+      } catch (error) {
+        console.log(error, 'error getting top contri')
+      }
+
       const result = dbClient("user_rewards").insert(userRewards)
-      console.debug("updated user_rewards:", result);
+      //console.debug("updated user_rewards:", result);
     } catch (error) {
       console.log(error, "user_rewards error");
       return { success: false };
     }
+  }
+
+  public static async setTopContributorGroup(): Promise<any> {
+    //const infuraRpcUrl = `https://mainnet.infura.io/v3/${process.env.INFURA_KEY}`;
+    const alchemyRpcUrl = "https://eth-goerli.g.alchemy.com/v2/Gokw3Vro1Nc-xYNOR5PMsTEF7l3yv0Cr"
+    //TODO multichain: get provider based on chainId user is on?
+    const provider = new ethers.providers.JsonRpcProvider(alchemyRpcUrl);
+
+    //generate random private key TODO: set an Liquality operator for setTopContributor later on
+    const randomWalletPrivateKey = ethers.Wallet.createRandom().privateKey
+
+
+    try {
+      //1)Get all pools  that are expired
+      const expiredPools = await PoolsService.findAllPoolsThatAreExpired()
+
+      const poolsToSetTopContributor = [];
+      for (const pool of expiredPools) {
+        //2) Check if topContributor has already been set 
+        //const topContributor = false
+        const topContributor = await MyCollectives.HoneyPot.getTopContributor(pool.honeyPotAddress)
+        console.log(topContributor, 'HAS TOP CONTRIBUTOR BEEN SET?', pool.honeyPotAddress)
+        // 3) If the top contributor is not set, add the pool to the new array
+        if (topContributor !== ethers.constants.AddressZero) {
+          poolsToSetTopContributor.push(pool);
+        }
+        //6) Scrape events from ethers, create a leaderboard and return top contributor
+        const topContributorAddress = await getTopContributorFromEvents(pool.createdAt, pool.expiration, pool.mintingContractAddress, pool.network)
+        const response = await MyCollectives.HoneyPot.setTopContributor(randomWalletPrivateKey, pool.honeyPotAddress, topContributorAddress.address)
+        console.log(response, 'wat is response TOP CONTRIBUTOR')
+      }
+    } catch (error) {
+      console.log(error, 'error in top contributor')
+    }
+
   }
 }
