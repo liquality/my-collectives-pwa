@@ -123,15 +123,7 @@ export class RewardsService {
   }
 
   public static async setTopContributorGroup(): Promise<any> {
-    //const infuraRpcUrl = `https://mainnet.infura.io/v3/${process.env.INFURA_KEY}`;
-    const alchemyRpcUrl = "https://eth-goerli.g.alchemy.com/v2/Gokw3Vro1Nc-xYNOR5PMsTEF7l3yv0Cr"
-    //TODO multichain: get provider based on chainId user is on?
-    const provider = new ethers.providers.JsonRpcProvider(alchemyRpcUrl);
-
-    //generate random private key TODO: set an Liquality operator for setTopContributor later on
-    const randomWalletPrivateKey = ethers.Wallet.createRandom().privateKey
-
-
+    const randomWalletPrivateKey = process.env.OPERATOR_PRIVATE_KEY || ""
     try {
       //1)Get all pools  that are expired
       const expiredPools = await PoolsService.findAllPoolsThatAreExpired()
@@ -148,6 +140,7 @@ export class RewardsService {
         }
         //6) Scrape events from ethers, create a leaderboard and return top contributor
         const topContributorAddress = await getTopContributorFromEvents(pool.createdAt, pool.expiration, pool.mintingContractAddress, pool.network)
+        console.log(topContributorAddress, 'TOP CONTRIBUTOR ADDRESS')
         const response = await MyCollectives.HoneyPot.setTopContributor(randomWalletPrivateKey, pool.honeyPotAddress, topContributorAddress.address)
         console.log(response, 'wat is response TOP CONTRIBUTOR')
       }
