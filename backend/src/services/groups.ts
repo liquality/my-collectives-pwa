@@ -108,11 +108,6 @@ export class GroupsService {
       })
       .orderBy("groups.createdAt", "desc");
 
-
-
-    //TODO move this function call to its own endpoint 
-    //await this.setTopContributorGroup()
-
     return result;
   }
 
@@ -308,37 +303,7 @@ export class GroupsService {
     return queryResult;
   }
 
-  public static async setTopContributorGroup(): Promise<any> {
-    const infuraRpcUrl = `https://mainnet.infura.io/v3/${process.env.INFURA_KEY}`;
-    const provider = new ethers.providers.JsonRpcProvider(infuraRpcUrl);
 
-    //generate random private key TODO: set an Liquality operator for setTopContributor later on
-    const randomWalletPrivateKey = ethers.Wallet.createRandom().privateKey
-
-
-    try {
-      //1)Get all pools  that are expired
-      const expiredPools = await PoolsService.findAllPoolsThatAreExpired()
-      //MyCollective.setConfig({} as Config);
-      const poolsToSetTopContributor = [];
-      for (const pool of expiredPools) {
-        //2) Check if topContributor has already been set 
-        const topContributor = false
-        //const topContributor = await MyCollective.HoneyPot.getTopContributor(pool.honeyPotAddress)
-        console.log(topContributor, 'HAS TOP CONTRIBUTOR BEEN SET?', pool.honeyPotAddress)
-        // 3) If the top contributor is not set, add the pool to the new array
-        if (!topContributor) {
-          poolsToSetTopContributor.push(pool);
-        }
-        //6) Scrape events from ethers, create a leaderboard and return top contributor
-        const topContributorAddress = await getTopContributorFromEvents(pool.createdAt, pool.expiration, pool.mintingContractAddress, pool.network)
-        //const response = await MyCollectives.HoneyPot.setTopContributor(provider, pool.honeyPotAddress, topContributorAddress)
-      }
-    } catch (error) {
-      console.log(error, 'error in top contributor')
-    }
-
-  }
 
 }
 
