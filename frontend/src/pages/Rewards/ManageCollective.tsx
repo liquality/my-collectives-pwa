@@ -112,18 +112,31 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
         );
 
         const createPoolsResult = await ContractService.createPools(
-          group?.publicAddress,
-          group?.walletAddress,
-          group?.nonceKey,
+          group.publicAddress,
+          group.walletAddress,
+          group.nonceKey,
           tokenContracts,
           honeyAddresses
         );
         if (createPoolsResult.status === "failed")
           throw Error("Transaction failed");
 
+        //Iterativly call getPoolAddress to get the poolAddress so we can store that in DB as well
+        const allSelectedAndCurrentPoolsWithPoolAddress = await Promise.all(
+          allSelectedAndCurrentPools.map(async (pool) => ({
+            ...pool,
+            publicAddress: await ContractService.getPoolAddress(
+              group.publicAddress,
+              group.walletAddress,
+              group.nonceKey,
+              pool.honeyPotAddress
+            ),
+          }))
+        );
+
         const updateGroupResult = await ApiService.updateGroup(groupId, {
           group: updatedGroup,
-          pools: allSelectedAndCurrentPools,
+          pools: allSelectedAndCurrentPoolsWithPoolAddress,
         });
         if (!updateGroupResult) throw Error("Could not update collective");
         setPendingEdit(false);

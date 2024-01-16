@@ -286,8 +286,10 @@ export class GroupsService {
           groupId: id,
           createdBy: userId,
           challengeId: pool.id,
+          publicAddress: pool.publicAddress,
           createdAt: new Date(),
         }));
+        console.log(poolInsertData, 'poolinsertdata')
         await dbClient("pools").insert(poolInsertData);
       }
 
