@@ -91,6 +91,8 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     );
   };
 
+  console.log(allSelectedAndCurrentPools, "all selected pools");
+
   const handleErrorText = async () => {
     setErrorText("Name, description and at least 1 pool is required!");
     setTimeout(() => {
@@ -105,7 +107,6 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
       name: createGroup.name,
       description: createGroup.description,
     };
-
     //TODO: clean this up after MVP
     try {
       const tokenContracts = allSelectedAndCurrentPools.map(
@@ -119,10 +120,22 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         honeyAddresses
       );
       const { cWallet, cAddress, nonce, salt } = createdContract;
-      console.log(createdContract, "CREATED CONTRACT FROM SDK");
+      //Iterativly call getPoolAddress to get the poolAddress so we can store that in DB as well
+      const allSelectedAndCurrentPoolsWithPoolAddress = await Promise.all(
+        allSelectedAndCurrentPools.map(async (pool) => ({
+          ...pool,
+          publicAddress: await ContractService.getPoolAddress(
+            cAddress,
+            cWallet,
+            nonce as bigint,
+            pool.honeyPotAddress
+          ),
+        }))
+      );
+
       const result = await ApiService.createGroup({
         group: groupObject,
-        pools: allSelectedAndCurrentPools,
+        pools: allSelectedAndCurrentPoolsWithPoolAddress,
       });
       if (!result) throw Error("Trouble creating group in DB");
       const updatedGroup = await ApiService.updateGroup(result.id, {
@@ -135,16 +148,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         pools: [],
       });
       if (!updatedGroup.ok) throw Error("Trouble updating group in DB");
-      const { name, id, createdBy } = result;
-      setCreatedGroup({
-        name: "",
-        description: "",
-      });
-      setAllSelectedAndCurrentPools([]);
-      setPendingCreation(false);
-      router.push(
-        `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${cAddress}&groupId=${id}&createdBy=${createdBy}&activePools=${allSelectedAndCurrentPools.length}`
-      );
+      successClearAndNavigate(result);
     } catch (error) {
       setPendingCreation(false);
       console.log(error, "wats error?");
@@ -154,6 +158,19 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         banOutline
       );
     }
+  };
+
+  const successClearAndNavigate = (result: any) => {
+    const { name, id, createdBy } = result;
+    setCreatedGroup({
+      name: "",
+      description: "",
+    });
+    setAllSelectedAndCurrentPools([]);
+    setPendingCreation(false);
+    router.push(
+      `${pathConstants.mintPage.myCollectives}/?groupName=${name}&groupAddress=${cAddress}&groupId=${id}&createdBy=${createdBy}&activePools=${allSelectedAndCurrentPools.length}`
+    );
   };
 
   return (

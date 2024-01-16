@@ -15,6 +15,8 @@ const ContractService = {
             { tokenContracts, honeyPots: honeyPots },
             salt
         );
+
+
         console.log("!!!!! response create collective => ", response);
         return { salt, ...response }
     },
@@ -54,7 +56,7 @@ const ContractService = {
     async withdrawRewards(cAddress: string, cWallet: string, nonceKey: bigint, honeyPotAddresses: string[]) {
 
         const poolAddresses = await Promise.all(honeyPotAddresses.map(async (item: any) => {
-            return await this.getPool(cAddress, cWallet, nonceKey, item);
+            return await this.getPoolAddress(cAddress, cWallet, nonceKey, item);
         }));
         console.log(poolAddresses, 'all of the pooladdresses')
 
@@ -97,7 +99,7 @@ const ContractService = {
     async poolMint(cAddress: string, cWallet: string, nonceKey: bigint, amount: bigint, tokenContract: string, poolHoneyPotAddress: string, quantity: number, tokenId: string | null, platform: MyCollectives.SupportedPlatforms, groupId: string, groupMintCount: number) {
         this.initSDKConfig()
         try {
-            const poolAddress = await this.getPool(cAddress, cWallet, nonceKey, poolHoneyPotAddress)
+            const poolAddress = await this.getPoolAddress(cAddress, cWallet, nonceKey, poolHoneyPotAddress)
             console.log(poolAddress, 'pooladdress & tokencontract', tokenContract)
             if (poolAddress === zeroAddress) throw Error("Pool address does not exist");
             const generatedTokenId = Math.floor(Math.random() * (150 - 30 + 1)) + 30;
@@ -140,7 +142,7 @@ const ContractService = {
 
     },
 
-    async getPool(cAddress: string, cWallet: string, nonceKey: bigint, honeyPot: string) {
+    async getPoolAddress(cAddress: string, cWallet: string, nonceKey: bigint, honeyPot: string) {
         this.initSDKConfig()
         const response = await MyCollectives.Collective.getPoolByHoneyPot(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, honeyPot)
         console.log("!!!!! response get pool by honeyPot => ", response)
