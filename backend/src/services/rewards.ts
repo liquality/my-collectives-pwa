@@ -143,9 +143,12 @@ export class RewardsService {
         console.log(pool.honeyPotAddress, 'honey pot address from pool')
         //6) Scrape events from ethers, create a leaderboard and return top contributor
         const topContributorAddress = await getTopContributorFromEvents(pool.createdAt, pool.expiration, pool.mintingContractAddress, pool.network)
-        console.log(privateKey, pool.honeyPotAddress, topContributorAddress.address, 'MY PARAAAMS')
-        const response = await MyCollectives.HoneyPot.setTopContributor(privateKey, pool.honeyPotAddress, topContributorAddress.address)
-        console.log(response, 'wat is response TOP CONTRIBUTOR')
+        if (topContributorAddress.address) {
+          console.log(privateKey, pool.honeyPotAddress, topContributorAddress.address, 'MY PARAAAMS')
+          const response = await MyCollectives.HoneyPot.setTopContributor(privateKey, pool.honeyPotAddress, topContributorAddress.address)
+          console.log(response, 'wat is response TOP CONTRIBUTOR')
+        }
+
       }
     } catch (error) {
       console.log(error, 'error in top contributor')
