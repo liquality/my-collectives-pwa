@@ -1,6 +1,5 @@
 import { ethers } from "ethers";
 import { dbClient } from "../data";
-import { setConfig, Pool, HoneyPot } from "@liquality/my-collectives-sdk-node";
 import { PoolsService } from "./pools";
 import { getTopContributorFromEvents } from "../utils/events-query/top-contributor-zora";
 import * as MyCollectives from "@liquality/my-collectives-sdk";
@@ -144,9 +143,14 @@ export class RewardsService {
         //6) Scrape events from ethers, create a leaderboard and return top contributor
         const topContributorAddress = await getTopContributorFromEvents(pool.createdAt, pool.expiration, pool.mintingContractAddress, pool.network)
         if (topContributorAddress.address) {
-          console.log(privateKey, pool.honeyPotAddress, topContributorAddress.address, 'MY PARAAAMS')
-          const response = await MyCollectives.HoneyPot.setTopContributor(privateKey, pool.honeyPotAddress, topContributorAddress.address)
-          console.log(response, 'wat is response TOP CONTRIBUTOR')
+          const setTopContributorResponse = await MyCollectives.HoneyPot.setTopContributor(privateKey, pool.honeyPotAddress, topContributorAddress.address)
+          console.log(setTopContributorResponse, 'wat is response TOP CONTRIBUTOR')
+          if (setTopContributorResponse.txHash) {
+            //TODO: find collective by topcontributor.address, if it exists, send the reward
+            const sendRewardsResponse = await MyCollectives.HoneyPot.sendReward(privateKey, pool.honeyPotAddress)
+            const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
+
+          }
         }
 
       }
