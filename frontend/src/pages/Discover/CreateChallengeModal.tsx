@@ -52,6 +52,7 @@ const CreateChallengeModal = forwardRef(function CreateChallengeModal(
     network: "", // zora, arbitrum, polygon or base
     expiration: "",
     honeyPotAddress: "",
+    salt: 0,
   });
   const [validAddresses, setValidAddresses] = useState({
     mintingContractAddress: false,
@@ -89,6 +90,7 @@ const CreateChallengeModal = forwardRef(function CreateChallengeModal(
       network: "",
       expiration: "",
       honeyPotAddress: "",
+      salt: 0,
     });
     setValidAddresses({
       mintingContractAddress: false,
@@ -142,6 +144,7 @@ const CreateChallengeModal = forwardRef(function CreateChallengeModal(
     setCreatedChallenge((prevGroup) => ({
       ...prevGroup,
       honeyPotAddress: result.honeyPot,
+      salt: result.salt,
     }));
   };
 

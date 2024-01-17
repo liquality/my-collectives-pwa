@@ -25,6 +25,7 @@ export async function getZoraLeaderboardEvents(tokenContract: string, createdBlo
     console.log(
         `${transferEvents.length} events have been emitted by the contract with address ${tokenContract}`
     );
+    console.log()
     const processedEntries = await processLogEntriesForZoraLeaderboard(transferEvents, tokenContract);
     return processedEntries;
 }

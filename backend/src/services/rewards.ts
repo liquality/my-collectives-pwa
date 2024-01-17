@@ -129,6 +129,7 @@ export class RewardsService {
     try {
       //1)Get all pools  that are expired
       const expiredPools = await PoolsService.findAllPoolsThatAreExpired()
+      console.log(expiredPools, 'expired pools', expiredPools.length)
 
       const poolsToSetTopContributor = [];
       for (const pool of expiredPools) {
@@ -139,9 +140,10 @@ export class RewardsService {
         if (topContributor !== ethers.constants.AddressZero) {
           poolsToSetTopContributor.push(pool);
         }
+        console.log(pool.honeyPotAddress, 'honey pot address from pool')
         //6) Scrape events from ethers, create a leaderboard and return top contributor
         const topContributorAddress = await getTopContributorFromEvents(pool.createdAt, pool.expiration, pool.mintingContractAddress, pool.network)
-        console.log(topContributorAddress, 'TOP CONTRIBUTOR ADDRESS')
+        console.log(privateKey, pool.honeyPotAddress, topContributorAddress.address, 'MY PARAAAMS')
         const response = await MyCollectives.HoneyPot.setTopContributor(privateKey, pool.honeyPotAddress, topContributorAddress.address)
         console.log(response, 'wat is response TOP CONTRIBUTOR')
       }
