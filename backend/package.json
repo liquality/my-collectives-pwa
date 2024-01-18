@@ -21,7 +21,6 @@
   "license": "ISC",
   "dependencies": {
     "@liquality/my-collectives-sdk": "^2.1.14",
-    "@liquality/my-collectives-sdk-node": "^1.0.0",
     "@moralisweb3/common-evm-utils": "^2.23.1",
     "@zoralabs/zdk": "^2.4.0",
     "axios": "^1.5.1",

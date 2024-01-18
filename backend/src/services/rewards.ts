@@ -1,10 +1,9 @@
 import { ethers } from "ethers";
 import { dbClient } from "../data";
-import { setConfig, Pool, HoneyPot } from "@liquality/my-collectives-sdk-node";
 import { PoolsService } from "./pools";
 import { getTopContributorFromEvents } from "../utils/events-query/top-contributor-zora";
 import * as MyCollectives from "@liquality/my-collectives-sdk";
-import { Config } from "@liquality/my-collectives-sdk";
+
 
 export class RewardsService {
   constructor() {
@@ -131,7 +130,7 @@ export class RewardsService {
       const expiredPools = await PoolsService.findAllPoolsThatAreExpired()
       console.log(expiredPools, 'expired pools', expiredPools.length)
 
-      const poolsToSetTopContributor = [];
+      const poolsToSetTopContributor: string[] = [];
       for (const pool of expiredPools) {
         //2) Check if topContributor has already been set 
         const topContributor = await MyCollectives.HoneyPot.getTopContributor(pool.honeyPotAddress)
