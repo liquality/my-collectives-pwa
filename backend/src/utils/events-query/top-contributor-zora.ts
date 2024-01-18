@@ -6,8 +6,8 @@ import {
 } from "../constants";
 
 export async function getTopContributorFromEvents(challengeCreationTime: Date, challengeExpiryTime: Date, tokenContract: string, network: string) {
-    //TODO: add creation time from challenge
-    const createdBlock = await fetchBlockDataFromTimeStamp(new Date("2023-12-21 09:53:42.648-03"), network)
+    //TODO: add creation time from challenge new Date("2023-12-21 09:53:42.648-03")
+    const createdBlock = await fetchBlockDataFromTimeStamp(challengeCreationTime, network)
     const expiryBlock = await fetchBlockDataFromTimeStamp(challengeExpiryTime, network)
 
     const leaderboard = await getZoraLeaderboardEvents(tokenContract, createdBlock, expiryBlock)

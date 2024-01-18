@@ -147,8 +147,8 @@ export class RewardsService {
           console.log(setTopContributorResponse, 'wat is response TOP CONTRIBUTOR')
           if (setTopContributorResponse.txHash) {
             //TODO: find collective by topcontributor.address, if it exists, send the reward
-            const sendRewardsResponse = await MyCollectives.HoneyPot.sendReward(privateKey, pool.honeyPotAddress)
-            const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
+            //const sendRewardsResponse = await MyCollectives.HoneyPot.sendReward(privateKey, pool.honeyPotAddress)
+            //const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
 
           }
         }
