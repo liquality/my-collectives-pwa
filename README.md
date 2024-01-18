@@ -1,0 +1,2 @@
+
+Establishing a collective hub within the realm of web3, our initiative serves as a centralized space for groups to unite around a shared goal, with or without the need for a multisig requirement. The primary objective is to empower individuals within a group to collectively maintain a unified on-chain identity while retaining the autonomy to take independent actions, without relying on multisig structures for decision-making.
