@@ -138,17 +138,25 @@ export class RewardsService {
         // 3) If the top contributor is not set, add the pool to the new array
         if (topContributor !== ethers.constants.AddressZero) {
           poolsToSetTopContributor.push(pool);
+          /*         console.log(privateKey, 'honeypot111:', pool.honeyPotAddress, 'publicaddress:111', pool.publicAddress,)
+                  const sendRewardsResponse = await MyCollectives.HoneyPot.sendReward(privateKey, pool.honeyPotAddress)
+                  console.log(sendRewardsResponse, 'send rewards response111')
+                  const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
+                  console.log(distributeRewardsResponse, 'distribute rewards response111') */
         }
         console.log(pool.honeyPotAddress, 'honey pot address from pool')
         //6) Scrape events from ethers, create a leaderboard and return top contributor
         const topContributorAddress = await getTopContributorFromEvents(pool.createdAt, pool.expiration, pool.mintingContractAddress, pool.network)
-        if (topContributorAddress.address) {
+        if (topContributorAddress?.address) {
           const setTopContributorResponse = await MyCollectives.HoneyPot.setTopContributor(privateKey, pool.honeyPotAddress, topContributorAddress.address)
           console.log(setTopContributorResponse, 'wat is response TOP CONTRIBUTOR')
           if (setTopContributorResponse.txHash) {
             //TODO: find collective by topcontributor.address, if it exists, send the reward
-            //const sendRewardsResponse = await MyCollectives.HoneyPot.sendReward(privateKey, pool.honeyPotAddress)
-            //const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
+            console.log(privateKey, 'honeypot:', pool.honeyPotAddress, 'publicaddress:', pool.publicAddress,)
+            const sendRewardsResponse = await MyCollectives.HoneyPot.sendReward(privateKey, pool.honeyPotAddress)
+            console.log(sendRewardsResponse, 'send rewards response')
+            const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
+            console.log(distributeRewardsResponse, 'distribute rewards response')
 
           }
         }
