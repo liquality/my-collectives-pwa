@@ -120,6 +120,12 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         honeyAddresses
       );
       const { cWallet, cAddress, nonce, salt } = createdContract;
+      console.log(
+        cAddress,
+        cWallet,
+        nonce as bigint,
+        "all of the things before getPoolAddress is called"
+      );
       //Iterativly call getPoolAddress to get the poolAddress so we can store that in DB as well
       const allSelectedAndCurrentPoolsWithPoolAddress = await Promise.all(
         allSelectedAndCurrentPools.map(async (pool) => ({
@@ -148,7 +154,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
         pools: [],
       });
       if (!updatedGroup.ok) throw Error("Trouble updating group in DB");
-      successClearAndNavigate(result);
+      successClearAndNavigate(result, cAddress);
     } catch (error) {
       setPendingCreation(false);
       console.log(error, "wats error?");
@@ -160,7 +166,7 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
     }
   };
 
-  const successClearAndNavigate = (result: any) => {
+  const successClearAndNavigate = (result: any, cAddress: string) => {
     const { name, id, createdBy } = result;
     setCreatedGroup({
       name: "",
@@ -295,3 +301,5 @@ const CreateCollective: React.FC<RouteComponentProps> = ({ match }) => {
 };
 
 export default CreateCollective;
+
+//INSERT INTO products VALUES (1, 'Cheese', 9.99);

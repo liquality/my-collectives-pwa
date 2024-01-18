@@ -30,6 +30,7 @@ export interface Challenge {
     creatorOfMint: null | string;
     groupcount?: string
     honeyPotAddress: string;
+    salt: bigint;
 }
 
 

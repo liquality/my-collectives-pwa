@@ -20,6 +20,8 @@ export async function up(knex: Knex): Promise<void> {
         table.integer("totalMints").nullable()
         table.boolean("expired").nullable();
         table.string("honeyPotAddress").nullable()
+        table.bigint("salt").nullable()
+
         table.unique(["tokenId", "mintingContractAddress", "creatorOfMint", "chainId"])
         table.timestamps({ useCamelCase: true });
     });

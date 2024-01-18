@@ -144,6 +144,7 @@ const ContractService = {
 
     async getPoolAddress(cAddress: string, cWallet: string, nonceKey: bigint, honeyPot: string) {
         this.initSDKConfig()
+        console.log({ address: cAddress, wallet: cWallet, nonceKey }, honeyPot, 'params in getPoolByHoneyPoot')
         const response = await MyCollectives.Collective.getPoolByHoneyPot(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, honeyPot)
         console.log("!!!!! response get pool by honeyPot => ", response)
         return response
