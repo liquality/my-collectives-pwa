@@ -117,7 +117,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
           setPendingMint(false);
           setResult({ success: true });
         } else {
-          throw Error;
+          throw Error("Transaction was not successfull");
         }
       } catch (error) {
         setPendingMint(false);
