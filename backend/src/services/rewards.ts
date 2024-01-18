@@ -138,11 +138,11 @@ export class RewardsService {
         // 3) If the top contributor is not set, add the pool to the new array
         if (topContributor !== ethers.constants.AddressZero) {
           poolsToSetTopContributor.push(pool);
-          console.log(privateKey, 'honeypot111:', pool.honeyPotAddress, 'publicaddress:111', pool.publicAddress,)
-          const sendRewardsResponse = await MyCollectives.HoneyPot.sendReward(privateKey, pool.honeyPotAddress)
-          console.log(sendRewardsResponse, 'send rewards response111')
-          const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
-          console.log(distributeRewardsResponse, 'distribute rewards response111')
+          /*         console.log(privateKey, 'honeypot111:', pool.honeyPotAddress, 'publicaddress:111', pool.publicAddress,)
+                  const sendRewardsResponse = await MyCollectives.HoneyPot.sendReward(privateKey, pool.honeyPotAddress)
+                  console.log(sendRewardsResponse, 'send rewards response111')
+                  const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
+                  console.log(distributeRewardsResponse, 'distribute rewards response111') */
         }
         console.log(pool.honeyPotAddress, 'honey pot address from pool')
         //6) Scrape events from ethers, create a leaderboard and return top contributor
