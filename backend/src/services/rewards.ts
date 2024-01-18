@@ -72,8 +72,8 @@ export class RewardsService {
       )
       .from("pools")
       .join("challenges", "pools.challengeId", "=", "challenges.id")
-      .where("challenges.expiration", ">", new Date());
-
+      .where(dbClient.raw("challenges.expiration > ?", [dbClient.fn.now()]));
+    
     const userRewards: any[] = [];
     for (const pool of pools) {
       /*      console.log(user.publicAddress,
@@ -83,7 +83,7 @@ export class RewardsService {
         pool.publicAddress
       );
 
-      // console.log(poolParticipation, 'pool participation')
+      console.log(poolParticipation, 'pool participation')
       if (poolParticipation) {
         userRewards.push({
           numberOfMints: poolParticipation.contribution,
@@ -107,7 +107,9 @@ export class RewardsService {
          );
     */
       try {
-        const hej = await RewardsService.setTopContributorGroup()
+//        it will need a privatekey and throws Error: invalid mnemonic
+
+        //const hej = await RewardsService.setTopContributorGroup()
 
       } catch (error) {
         console.log(error, 'error getting top contri')
