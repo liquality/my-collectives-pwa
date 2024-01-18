@@ -112,8 +112,8 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
           groupId,
           groupMintCount
         );
-        console.log(mintResult);
-        if (mintResult) {
+        console.log(mintResult, "mintresult");
+        if (mintResult?.status === "success") {
           setPendingMint(false);
           setResult({ success: true });
         } else {
