@@ -8,13 +8,11 @@ export async function up(knex: Knex): Promise<void> {
     table.string("numberOfMints").nullable(); //increment this value after user has minted something in our app
     table.string("amountInEthEarned").nullable(); //increment this value after listening to withdrawalReward()→ emits an event (participant: userWhoGetTheReward, amount)
     table.uuid("userId").notNullable();
-    table.string("publicAddress").nullable().unique();
     table.uuid("poolId").nullable();
     table.uuid("groupId").nullable();
     table.foreign("poolId").references("pools.id").onDelete("CASCADE");
     table.foreign("groupId").references("groups.id").onDelete("CASCADE");
     table.foreign("userId").references("users.id").onDelete("CASCADE");
-    table.foreign("publicAddress").references("users.publicAddress").onDelete("CASCADE");
     table.unique(["userId", "groupId"]);
     table.unique(["userId", "groupId", "poolId"]);
     table.unique(["poolId", "groupId"]);
