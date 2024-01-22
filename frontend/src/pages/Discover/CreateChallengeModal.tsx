@@ -214,10 +214,10 @@ const CreateChallengeModal = forwardRef(function CreateChallengeModal(
                 !createdChallenge.honeyPotAddress ? generateHoneyPot() : copy()
               }
               shape="round"
-              disabled={!createdChallenge.mintingContractAddress}
-              color={
+              /* disabled={!createdChallenge.mintingContractAddress} */
+              /*    color={
                 !createdChallenge.mintingContractAddress ? "medium" : "primary"
-              }
+              } */
             >
               {!createdChallenge.honeyPotAddress
                 ? "Generate HoneyPot"

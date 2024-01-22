@@ -20,7 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@liquality/my-collectives-sdk": "^2.1.16",
+    "@liquality/my-collectives-sdk": "^2.1.17",
     "@moralisweb3/common-evm-utils": "^2.23.1",
     "@zoralabs/zdk": "^2.4.0",
     "axios": "^1.5.1",
