@@ -4,11 +4,10 @@ import { PoolsService } from "./pools";
 import { getTopContributorFromEvents } from "../utils/events-query/top-contributor-zora";
 import * as MyCollectives from "@liquality/my-collectives-sdk";
 
-
 export class RewardsService {
   constructor() {
     MyCollectives.setConfig({
-      RPC_URL: process.env.RPC_URL || '',
+      RPC_URL: process.env.RPC_URL || "",
       PIMLICO_API_KEY: process.env.PIMLICO_API_KEY,
       BICONOMY_PAYMASTER: process.env.BICONOMY_PAYMASTER,
       BICONOMY_BUNDLER_API_KEY: process.env.BICONOMY_BUNDLER_API_KEY,
@@ -17,15 +16,16 @@ export class RewardsService {
   }
 
   async getPoolParticipation(memberAddress: string, poolsAddress: string) {
-    console.log(poolsAddress, 'poolsaddress?', memberAddress)
+    console.log(poolsAddress, "poolsaddress?", memberAddress);
     const participationResponse = await MyCollectives.Pool.getParticipation(
       poolsAddress,
       memberAddress
     );
 
-    console.log(participationResponse, 'participation respons')
-
-    if (participationResponse && participationResponse.participant != "") {
+    if (
+      participationResponse?.participant.toLowerCase() ===
+      memberAddress.toLowerCase()
+    ) {
       const participation = {
         address: participationResponse.participant,
         contribution: participationResponse.contribution?.toString(),
@@ -34,6 +34,7 @@ export class RewardsService {
           participationResponse.rewardAvailable
         ),
       };
+      console.log(participation, "participation response");
       return participation;
     }
 
@@ -41,7 +42,9 @@ export class RewardsService {
   }
 
   async getTotalContributions(poolsAddress: string) {
-    const totalContributions = await MyCollectives.Pool.getTotalContributions(poolsAddress);
+    const totalContributions = await MyCollectives.Pool.getTotalContributions(
+      poolsAddress
+    );
 
     return totalContributions;
   }
@@ -72,12 +75,10 @@ export class RewardsService {
       )
       .from("pools")
       .join("challenges", "pools.challengeId", "=", "challenges.id")
-      .where("challenges.expiration", ">", new Date());
+      .where(dbClient.raw("challenges.expiration > ?", [dbClient.fn.now()]));
 
     const userRewards: any[] = [];
     for (const pool of pools) {
-      /*      console.log(user.publicAddress,
-             pool.publicAddress, 'pools address') */
       const poolParticipation = await this.getPoolParticipation(
         user.publicAddress,
         pool.publicAddress
@@ -89,7 +90,6 @@ export class RewardsService {
           numberOfMints: poolParticipation.contribution,
           amountInEthEarned: pool.rewardAmount,
           userId: user.id,
-          publicAddress: user.publicAddress,
           poolId: pool.poolId,
           groupId: pool.groupId,
         });
@@ -100,36 +100,40 @@ export class RewardsService {
     }
 
     try {
-      /*    const result = await dbClient.raw(
-           `? ON CONFLICT ("publicAddress", "poolId", "groupId")
-                 DO NOTHING
-                 RETURNING *;`,
-           [dbClient("user_rewards").insert(userRewards)]
-         );
-    */
-      try {
-        const hej = await RewardsService.setTopContributorGroup()
-
-      } catch (error) {
-        console.log(error, 'error getting top contri')
-      }
-
-      const result = dbClient("user_rewards").insert(userRewards)
-      //console.debug("updated user_rewards:", result);
+      await dbClient.transaction(async (trx) => {
+        // remove existing data
+        await trx("user_rewards")
+          .whereIn('userId', userRewards.map(i => i.userId))
+          .whereIn('poolId', userRewards.map(i => i.poolId))
+          .whereIn('groupId', userRewards.map(i => i.groupId))
+          .del();
+        //insert new data
+        const result = await trx("user_rewards").insert(userRewards);
+        console.debug("user_rewards result:", result);
+        return { success: true };
+      });
     } catch (error) {
-      console.log(error, "user_rewards error");
+      console.error("user_rewards error:", error);
+      return { success: false };
+    }
+
+    try {
+      const topContripResult = await RewardsService.setTopContributorGroup();
+      console.debug("setTopContributorGroup:", topContripResult);
+    } catch (error) {
+      console.log(error, "setTopContributorGroup error");
       return { success: false };
     }
   }
 
   public static async setTopContributorGroup(): Promise<any> {
     let mnemonic = process.env.AUTHORIZED_OPERATOR_PHRASE || "YOUR MNEMONIC";
-    let privateKey = ethers.Wallet.fromMnemonic(mnemonic).privateKey
-    console.log(privateKey, 'privateKey')
+    let privateKey = ethers.Wallet.fromMnemonic(mnemonic).privateKey;
+    console.log(privateKey, "privateKey");
     try {
       //1)Get all pools  that are expired
-      const expiredPools = await PoolsService.findAllPoolsThatAreExpired()
-      console.log(expiredPools, 'expired pools', expiredPools.length)
+      const expiredPools = await PoolsService.findAllPoolsThatAreExpired();
+      console.log(expiredPools, "expired pools", expiredPools.length);
 
       for (const pool of expiredPools) {
         //2) Check if topContributor has already been set 
@@ -161,8 +165,7 @@ export class RewardsService {
 
       }
     } catch (error) {
-      console.log(error, 'error in top contributor')
+      console.log(error, "error in top contributor");
     }
-
   }
 }

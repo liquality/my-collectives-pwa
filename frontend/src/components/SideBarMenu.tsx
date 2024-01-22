@@ -8,21 +8,22 @@ import {
   IonMenuToggle,
   IonList,
   IonItem,
-  IonLabel,
-  IonListHeader,
-  IonIcon,
-  useIonRouter,
+  IonLabel
 } from "@ionic/react";
 import React from "react";
 import useIsActiveRoute from "@/hooks/useIsActiveRoute";
+import { pathConstants } from "@/utils/routeNames";
+import MenuIcon from "./MenuIcon";
 
 export interface SideBarMenuProps {
-  hideOn?: string[]
+  hideOn?: string[];
 }
-const SideBarMenu: React.FC<SideBarMenuProps> = ({ hideOn }: SideBarMenuProps ) => {
+const SideBarMenu: React.FC<SideBarMenuProps> = ({
+  hideOn,
+}: SideBarMenuProps) => {
   const isActive = useIsActiveRoute();
-  if(hideOn?.some(path => isActive(path))) {
-    return null
+  if (hideOn?.some((path) => isActive(path))) {
+    return null;
   }
 
   return (
@@ -43,9 +44,9 @@ const SideBarMenu: React.FC<SideBarMenuProps> = ({ hideOn }: SideBarMenuProps ) 
             routerDirection="root"
             color={isActive("/discover") ? "light" : ""}
           >
-            <IonIcon
-              color={isActive("/discover") ? "primary" : ""}
-              src="/assets/icons/discover.svg"
+            <MenuIcon
+              icon="discover"
+              route={pathConstants.discover.discover}
               slot="start"
             />
             <IonLabel color={isActive("/discover") ? "primary" : ""}>
@@ -58,9 +59,9 @@ const SideBarMenu: React.FC<SideBarMenuProps> = ({ hideOn }: SideBarMenuProps ) 
             routerLink="/mint"
             routerDirection="root"
           >
-            <IonIcon
-              color={isActive("/mint") ? "primary" : ""}
-              src="/assets/icons/mint.svg"
+            <MenuIcon
+              icon="mint"
+              route={pathConstants.mintPage.mint}
               slot="start"
             />
             <IonLabel color={isActive("/mint") ? "primary" : ""}>Mint</IonLabel>
@@ -71,9 +72,9 @@ const SideBarMenu: React.FC<SideBarMenuProps> = ({ hideOn }: SideBarMenuProps ) 
             routerLink="/rewards"
             routerDirection="root"
           >
-            <IonIcon
-              color={isActive("/rewards") ? "primary" : ""}
-              src="/assets/icons/rewards.svg"
+            <MenuIcon
+              icon="rewards"
+              route={pathConstants.rewards.index}
               slot="start"
             />
             <IonLabel color={isActive("/rewards") ? "primary" : ""}>

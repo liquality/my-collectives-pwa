@@ -437,7 +437,7 @@ ion-toolbar {
 }
 
 .app-page-top-bar ion-buttons ion-button:first-child {
-  --padding-start: 0.8rem !important;
+  --padding-start: 0.1rem !important;
 }
 
 .app-page-top-tab-button:hover,
