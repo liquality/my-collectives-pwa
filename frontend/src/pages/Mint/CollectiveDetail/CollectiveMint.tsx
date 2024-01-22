@@ -76,7 +76,7 @@ const CollectiveMint: React.FC<CollectiveMintProps> = ({ match }) => {
 
   return (
     <IonPage>
-      <Header title={group?.name} />
+      <Header title={group?.name} goBack={true}/>
       <IonContent className="ion-padding" color="light">
         <CollectiveTopBar>
           <PageSearchBar />

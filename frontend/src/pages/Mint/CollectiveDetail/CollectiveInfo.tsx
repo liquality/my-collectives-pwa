@@ -64,7 +64,7 @@ const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
 
   return (
     <IonPage>
-      <Header title={group?.name} />
+      <Header title={group?.name} goBack={true}/>
 
       {group && members && !loading ? (
         <IonContent className="ion-padding" color="light">
