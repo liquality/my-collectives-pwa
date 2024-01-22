@@ -22,6 +22,7 @@ export class RewardsService {
       memberAddress
     );
 
+    console.log(participationResponse, '>>>>> participationResponse')
     if (
       participationResponse?.participant.toLowerCase() ===
       memberAddress.toLowerCase()
@@ -34,7 +35,7 @@ export class RewardsService {
           participationResponse.rewardAvailable
         ),
       };
-      console.log(participation, "participation response");
+      console.log(participation, "inside participation");
       return participation;
     }
 
@@ -74,8 +75,8 @@ export class RewardsService {
         "challenges.totalMints"
       )
       .from("pools")
-      .join("challenges", "pools.challengeId", "=", "challenges.id")
-      .where(dbClient.raw("challenges.expiration > ?", [dbClient.fn.now()]));
+      .join("challenges", "pools.challengeId", "=", "challenges.id");
+    //.where(dbClient.raw("challenges.expiration > ?", [dbClient.fn.now()]));
 
     const userRewards: any[] = [];
     for (const pool of pools) {
@@ -84,11 +85,13 @@ export class RewardsService {
         pool.publicAddress
       );
 
+      console.log(pools, 'all pools')
+
       console.log(poolParticipation, 'pool participation')
       if (poolParticipation) {
         userRewards.push({
           numberOfMints: poolParticipation.contribution,
-          amountInEthEarned: pool.rewardAmount,
+          amountInEthEarned: poolParticipation.rewardAmount,
           userId: user.id,
           poolId: pool.poolId,
           groupId: pool.groupId,
@@ -118,8 +121,8 @@ export class RewardsService {
     }
 
     try {
-      const topContripResult = await RewardsService.setTopContributorGroup();
-      console.debug("setTopContributorGroup:", topContripResult);
+      //const topContripResult = await RewardsService.setTopContributorGroup();
+      // console.debug("setTopContributorGroup:", topContripResult);
     } catch (error) {
       console.log(error, "setTopContributorGroup error");
       return { success: false };

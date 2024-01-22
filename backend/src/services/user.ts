@@ -36,7 +36,7 @@ export class UserService {
   public static async getRewardsSummary(userId: string): Promise<any> {
     const rewardsService = new RewardsService();
     await rewardsService.syncPoolsData(userId);
-    
+
     const invites = await dbClient("invites")
       .join("users", "users.id", "=", "invites.userId")
       .join("groups", "groups.id", "=", "invites.groupId")
@@ -46,8 +46,17 @@ export class UserService {
 
     const userRewards = await dbClient("user_rewards")
       .join("users", "users.id", "=", "user_rewards.userId")
+      .join("pools", "pools.id", "=", "user_rewards.poolId")
+      .join("challenges", "challenges.id", "=", "pools.challengeId")
       .where("user_rewards.userId", "=", userId)
-      .count("user_rewards.userId");
+      .select(
+        "user_rewards.*",
+        "users.*",
+        "pools.publicAddress as poolPublicAddress",
+        "challenges.honeyPotAddress as challengeHoneyPotAddress",
+        "challenges.expiration as challengeExpiration"
+      );
+    console.log(userRewards, '<<<<<< user rewards table');
 
     const rewards = await dbClient("user_rewards")
       .join("users", "users.id", "=", "user_rewards.userId")
@@ -69,6 +78,7 @@ export class UserService {
       mintsAmount,
       rewardsCount: parseInt(`${userRewards[0].count || 0}`),
       invitesCount: parseInt(`${invites[0].count || 0}`),
+      user_rewards: userRewards
     };
   }
 }

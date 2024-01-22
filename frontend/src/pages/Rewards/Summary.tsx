@@ -34,6 +34,7 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
   const { myGroups, loading, reload } = useGetMyGroups();
   const { user } = useSignInWallet();
   const { summary, loading: loadingSummary } = useGetRewardsSummary();
+  console.log(summary, "wats summarY?");
   const router = useIonRouter();
   const { presentToast } = useToast();
 
