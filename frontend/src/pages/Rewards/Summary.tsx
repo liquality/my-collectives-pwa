@@ -91,7 +91,14 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
     if (summary) {
       const currentDate = new Date();
 
+      console.log(currentDate, "current data");
+
       const filteredUserRewards = summary.user_rewards.filter((reward: any) => {
+        console.log(
+          new Date(reward.challengeExpiration),
+          "wats diis??",
+          new Date(reward.challengeExpiration) < currentDate
+        );
         return (
           reward.groupId === groupId &&
           new Date(reward.challengeExpiration) < currentDate

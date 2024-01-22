@@ -56,7 +56,6 @@ export class UserService {
         "challenges.honeyPotAddress as challengeHoneyPotAddress",
         "challenges.expiration as challengeExpiration"
       );
-    console.log(userRewards, '<<<<<< user rewards table');
 
     const rewards = await dbClient("user_rewards")
       .join("users", "users.id", "=", "user_rewards.userId")

@@ -130,7 +130,6 @@ export class RewardsService {
   public static async setTopContributorGroup(): Promise<any> {
     let mnemonic = process.env.AUTHORIZED_OPERATOR_PHRASE || "YOUR MNEMONIC";
     let privateKey = ethers.Wallet.fromMnemonic(mnemonic).privateKey;
-    console.log(privateKey, "privateKey");
     try {
       //1)Get all pools  that are expired
       const expiredPools = await PoolsService.findAllPoolsThatAreExpired();
@@ -143,7 +142,10 @@ export class RewardsService {
           console.log(topContributor, 'HAS TOP CONTRIBUTOR BEEN SET?', pool.honeyPotAddress)
           // 3) If the top contributor is set, do nothing
           if (topContributor !== ethers.constants.AddressZero) {
+            const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
+            console.log(distributeRewardsResponse, 'distribute rewards response')
             return null
+
           } else {
             //6) Scrape events from ethers, create a leaderboard and return top contributor
             const topContributorAddress = await getTopContributorFromEvents(pool.createdAt, pool.expiration, pool.mintingContractAddress, pool.network)
@@ -151,9 +153,14 @@ export class RewardsService {
               const setTopContributorResponse = await MyCollectives.HoneyPot.setTopContributor(privateKey, pool.honeyPotAddress, topContributorAddress.address)
               console.log(setTopContributorResponse, 'wat is response TOP CONTRIBUTOR')
               if (setTopContributorResponse.txHash) {
-                //TODO: find collective by topcontributor.address, if it exists, send the reward
+
                 console.log(privateKey, 'honeypot:', pool.honeyPotAddress, 'publicaddress:', pool.publicAddress,)
                 //The honeypot smart contract holds the zora rewards from minting, send them from the honeypot
+                //TODO tomorrow 23 januari: see if the honeypot contract has money, if it has send the reward & distribute
+                //to pools 
+                /*    const poolInfo = await MyCollectives.Pool.getPoolInfo(pool.publicAddress)
+                   if(poolInfo) */
+
                 const sendRewardsResponse = await MyCollectives.HoneyPot.sendReward(privateKey, pool.honeyPotAddress)
                 console.log(sendRewardsResponse, 'send rewards response')
                 //Send the reward to the poolAddress
