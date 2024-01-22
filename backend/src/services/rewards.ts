@@ -85,9 +85,7 @@ export class RewardsService {
         pool.publicAddress
       );
 
-      console.log(pools, 'all pools')
 
-      console.log(poolParticipation, 'pool participation')
       if (poolParticipation) {
         userRewards.push({
           numberOfMints: poolParticipation.contribution,
@@ -99,7 +97,7 @@ export class RewardsService {
       }
 
 
-      console.log(userRewards, 'userrewards array')
+
     }
 
     try {
@@ -121,8 +119,8 @@ export class RewardsService {
     }
 
     try {
-      //const topContripResult = await RewardsService.setTopContributorGroup();
-      // console.debug("setTopContributorGroup:", topContripResult);
+      const topContripResult = await RewardsService.setTopContributorGroup();
+      console.debug("setTopContributorGroup:", topContripResult);
     } catch (error) {
       console.log(error, "setTopContributorGroup error");
       return { success: false };
@@ -137,36 +135,38 @@ export class RewardsService {
       //1)Get all pools  that are expired
       const expiredPools = await PoolsService.findAllPoolsThatAreExpired();
       console.log(expiredPools, "expired pools", expiredPools.length);
+      if (!expiredPools.length) return null
+      else {
+        for (const pool of expiredPools) {
+          //2) Check if topContributor has already been set 
+          const topContributor = await MyCollectives.HoneyPot.getTopContributor(pool.honeyPotAddress)
+          console.log(topContributor, 'HAS TOP CONTRIBUTOR BEEN SET?', pool.honeyPotAddress)
+          // 3) If the top contributor is set, do nothing
+          if (topContributor !== ethers.constants.AddressZero) {
+            return null
+          } else {
+            //6) Scrape events from ethers, create a leaderboard and return top contributor
+            const topContributorAddress = await getTopContributorFromEvents(pool.createdAt, pool.expiration, pool.mintingContractAddress, pool.network)
+            if (topContributorAddress?.address) {
+              const setTopContributorResponse = await MyCollectives.HoneyPot.setTopContributor(privateKey, pool.honeyPotAddress, topContributorAddress.address)
+              console.log(setTopContributorResponse, 'wat is response TOP CONTRIBUTOR')
+              if (setTopContributorResponse.txHash) {
+                //TODO: find collective by topcontributor.address, if it exists, send the reward
+                console.log(privateKey, 'honeypot:', pool.honeyPotAddress, 'publicaddress:', pool.publicAddress,)
+                //The honeypot smart contract holds the zora rewards from minting, send them from the honeypot
+                const sendRewardsResponse = await MyCollectives.HoneyPot.sendReward(privateKey, pool.honeyPotAddress)
+                console.log(sendRewardsResponse, 'send rewards response')
+                //Send the reward to the poolAddress
+                const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
+                console.log(distributeRewardsResponse, 'distribute rewards response')
 
-      for (const pool of expiredPools) {
-        //2) Check if topContributor has already been set 
-        const topContributor = await MyCollectives.HoneyPot.getTopContributor(pool.honeyPotAddress)
-        console.log(topContributor, 'HAS TOP CONTRIBUTOR BEEN SET?', pool.honeyPotAddress)
-        // 3) If the top contributor is set, do nothing
-        if (topContributor !== ethers.constants.AddressZero) {
-          return null
-        } else {
-          //6) Scrape events from ethers, create a leaderboard and return top contributor
-          const topContributorAddress = await getTopContributorFromEvents(pool.createdAt, pool.expiration, pool.mintingContractAddress, pool.network)
-          if (topContributorAddress?.address) {
-            const setTopContributorResponse = await MyCollectives.HoneyPot.setTopContributor(privateKey, pool.honeyPotAddress, topContributorAddress.address)
-            console.log(setTopContributorResponse, 'wat is response TOP CONTRIBUTOR')
-            if (setTopContributorResponse.txHash) {
-              //TODO: find collective by topcontributor.address, if it exists, send the reward
-              console.log(privateKey, 'honeypot:', pool.honeyPotAddress, 'publicaddress:', pool.publicAddress,)
-              //The honeypot smart contract holds the zora rewards from minting, send them from the honeypot
-              const sendRewardsResponse = await MyCollectives.HoneyPot.sendReward(privateKey, pool.honeyPotAddress)
-              console.log(sendRewardsResponse, 'send rewards response')
-              //Send the reward to the poolAddress
-              const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
-              console.log(distributeRewardsResponse, 'distribute rewards response')
-
+              }
             }
           }
         }
-
-
       }
+
+
     } catch (error) {
       console.log(error, "error in top contributor");
     }
