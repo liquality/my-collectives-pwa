@@ -24,14 +24,29 @@ import {
 export interface HeaderProps {
   title?: string;
   children?: React.ReactNode;
+  goBack?: boolean
 }
-const Header = ({ title, children }: HeaderProps) => {
+
+const BackButton = () => {
   const router = useIonRouter();
   return (
-    /*     <IonHeader className="ion-padding ion-no-border app-header">
+    <IonButton className="header-back-button" 
+    fill="clear" color="dark" onClick={() => router.goBack()}>
+      <IonIcon icon={chevronBackOutline} />
+    </IonButton>
+  );
+};
+const Header = ({ title, children, goBack }: HeaderProps) => {
+  return (
+    <IonHeader slot="start" className="ion-padding ion-no-border app-header">
       <IonToolbar>
         {isPlatform("desktop") ? (
-          <IonLabel className="header-title-text">{title} bää</IonLabel>
+          <>
+            <IonButtons slot="start">
+              {goBack && <BackButton />}
+            </IonButtons>
+            <IonLabel className="header-title-text">{title}</IonLabel>
+          </>
         ) : (
           <IonLabel className="app-title-text">MyCollective.tech</IonLabel>
         )}
@@ -42,28 +57,31 @@ const Header = ({ title, children }: HeaderProps) => {
       {!isPlatform("desktop") && (
         <div className="header-title-container">
           <div className="ion-padding-no-border page-header-title">
+          {goBack && <BackButton />}
             {title ? (
-              <IonLabel className="header-title-text">{title} bäääEE</IonLabel>
+              <>
+                <IonLabel className="header-title-text">{title}</IonLabel>
+              </>
             ) : null}
           </div>
         </div>
       )}
       {children}
-    </IonHeader> */
-
-    <IonHeader slot="start" className="ion-padding ion-no-border app-header ">
-      <IonToolbar>
-        <IonButtons slot="start">
-          <IonButton color="dark" onClick={() => router.goBack()}>
-            <IonIcon icon={chevronBackOutline} />
-          </IonButton>
-        </IonButtons>
-        <IonTitle>{title}</IonTitle>
-        <IonButtons slot="end">
-          <ConnectButton />
-        </IonButtons>
-      </IonToolbar>
     </IonHeader>
+
+    // <IonHeader slot="start" className="ion-padding ion-no-border app-header ">
+    //   <IonToolbar>
+    //     <IonButtons slot="start">
+    //       <IonButton color="dark" onClick={() => router.goBack()}>
+    //         <IonIcon icon={chevronBackOutline} />
+    //       </IonButton>
+    //     </IonButtons>
+    //     <IonTitle>{title}</IonTitle>
+    //     <IonButtons slot="end">
+    //       <ConnectButton />
+    //     </IonButtons>
+    //   </IonToolbar>
+    // </IonHeader>
   );
 };
 

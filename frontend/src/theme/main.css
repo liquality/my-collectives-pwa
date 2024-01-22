@@ -224,8 +224,15 @@ ion-toolbar {
 }
 
 .page-header-title {
+  display: flex;
+  align-items: center;
   margin-top: auto;
   font-size: 2.5rem;
+}
+
+.page-header-title .header-back-button {
+  --padding-start: 0px !important;
+  --padding-bottom: 1.5rem !important;
 }
 
 .row-img {
@@ -1333,4 +1340,15 @@ img.challenge-info-img {
 }
 .rewards-collective-card-group-data ion-icon {
   margin-right: 0.1rem;
+}
+
+
+.onboarding-slide {
+  width: 100% !important;
+  height: 100% !important;
+  padding: 1rem 0.3rem;
+}
+
+.onboarding-swiper {
+  height: 70% !important;
 }

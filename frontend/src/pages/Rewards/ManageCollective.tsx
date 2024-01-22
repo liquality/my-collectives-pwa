@@ -171,7 +171,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
 
   return (
     <IonPage>
-      <Header title="Manage Collective" />
+      <Header title="Manage Collective" goBack={true}/>
       {pendingEdit ? (
         <IonContent>
           <PageLoadingIndicator />
