@@ -8,34 +8,17 @@ import {
 } from "@/utils";
 import useToast from "@/hooks/useToast";
 import { copy } from "ionicons/icons";
+import useGetChallengesByCreator from "@/hooks/useGetChallengesByCreator";
 
 export interface CreatorManagementProps {}
-
-const myChallenges = [
-  {
-    groupcount: "1",
-    id: "031a7481-0cdc-4a4c-98b5-2ec5d99d6551",
-    mintingContractAddress: "0x0ca749904757abce70c76ef53b833cf657f59e7e",
-    chainId: 5,
-    tokenId: "1",
-    category: "music",
-    name: "0x0ca749904757abce70c76ef53b833cf657f59e7e",
-    kind: "erc1155",
-    platform: "Zora",
-    floorPrice: "0.00188",
-    expiration: "2024-01-23T16:58:43.497Z",
-    expired: null,
-    totalMints: 5,
-    imageUrl: null,
-    network: "goerli",
-    creatorOfMint: null,
-    honeyPotAddress: "0xab2cf161C61b4a79E263bC52F4f0197f2D8016CF",
-  },
-];
 
 const CreatorManagement = (props: CreatorManagementProps) => {
   const isActive = useIsActiveRoute();
   const { presentToast } = useToast();
+  const { myChallenges, loading: loadingMyChallenges } =
+    useGetChallengesByCreator();
+
+  console.log(myChallenges, "mychallenges");
 
   const handleCopy = (honeyPotAddress: string) => {
     handleCopyClick(honeyPotAddress);
@@ -48,48 +31,50 @@ const CreatorManagement = (props: CreatorManagementProps) => {
 
   return (
     <IonRow>
-      <IonCol>
-        <div className="rewards-collective-card">
-          <div className="rewards-collective-card-title">
-            My Challenges | {myChallenges.length}
-          </div>
-
-          {myChallenges?.map((challenge, index) => (
-            <div key={index}>
-              <IonRow className="ion-justify-content-between ion-align-items-center">
-                <div className="rewards-collective-card-group-name">
-                  {shortenAddress(challenge.honeyPotAddress || "")}
-                </div>
-                <div className="rewards-collective-card-group-actions">
-                  <IonText
-                    color="primary"
-                    style={{ pointer: "cursor" }}
-                    onClick={() => handleCopy(challenge.honeyPotAddress)}
-                  >
-                    Copy
-                  </IonText>
-                </div>
-              </IonRow>
-
-              <IonRow className="ion-justify-content-between ion-align-items-center">
-                <div className="rewards-collective-card-group-address">
-                  {convertDateToReadable(challenge.expiration)}
-                </div>
-                <div>
-                  <IonLabel className="rewards-collective-card-group-data">
-                    <IonIcon src="/assets/icons/people-tile.svg"></IonIcon>
-                    {challenge.groupcount}
-                  </IonLabel>
-                  <IonLabel className="rewards-collective-card-group-data">
-                    <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>
-                    {challenge.totalMints}
-                  </IonLabel>
-                </div>
-              </IonRow>
+      {loadingMyChallenges ? null : (
+        <IonCol>
+          <div className="rewards-collective-card">
+            <div className="rewards-collective-card-title">
+              My HoneyPots | {myChallenges?.length}
             </div>
-          ))}
-        </div>
-      </IonCol>
+
+            {myChallenges?.map((challenge: any, index: number) => (
+              <div key={index}>
+                <IonRow className="ion-justify-content-between ion-align-items-center">
+                  <div className="rewards-collective-card-group-name">
+                    {shortenAddress(challenge.honeyPotAddress || "")}
+                  </div>
+                  <div className="rewards-collective-card-group-actions">
+                    <IonText
+                      color="primary"
+                      style={{ pointer: "cursor" }}
+                      onClick={() => handleCopy(challenge.honeyPotAddress)}
+                    >
+                      Copy
+                    </IonText>
+                  </div>
+                </IonRow>
+
+                <IonRow className="ion-justify-content-between ion-align-items-center">
+                  <div className="rewards-collective-card-group-address">
+                    {convertDateToReadable(challenge.expiration)}
+                  </div>
+                  <div>
+                    <IonLabel className="rewards-collective-card-group-data">
+                      <IonIcon src="/assets/icons/people-tile.svg"></IonIcon>
+                      {challenge.groupcount}
+                    </IonLabel>
+                    <IonLabel className="rewards-collective-card-group-data">
+                      <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>
+                      {challenge.totalMints}
+                    </IonLabel>
+                  </div>
+                </IonRow>
+              </div>
+            ))}
+          </div>
+        </IonCol>
+      )}
     </IonRow>
   );
 };
