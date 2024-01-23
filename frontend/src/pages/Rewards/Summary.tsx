@@ -28,6 +28,7 @@ import ContractService from "@/services/ContractService";
 import { Group } from "@/types/general-types";
 import useToast from "@/hooks/useToast";
 import { banOutline, flowerOutline } from "ionicons/icons";
+import CreatorManagement from "@/components/Rewards/CreatorManagement";
 
 const Summary: React.FC<RouteComponentProps> = (routerProps) => {
   //TODO: change parent tag to IonPage
@@ -37,7 +38,6 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
   const { summary, loading: loadingSummary } = useGetRewardsSummary();
   const [loadingWithdrawal, setLoadingWithdrawal] = useState(false);
 
-  console.log(summary, "wats summarY?");
   const router = useIonRouter();
   const { presentToast } = useToast();
 
@@ -61,15 +61,7 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
   };
 
   const handleWithdrawRewards = async (group: any) => {
-    console.log(
-      group,
-      "wats group?",
-      getHoneyPotAddressesByGroupId(group.id),
-      "array of string honeypots"
-    );
-
     setLoadingWithdrawal(true);
-
     const response = await ContractService.withdrawRewards(
       group.publicAddress,
       group.walletAddress,
@@ -119,7 +111,6 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
         group.nonceKey
       );
     } catch (error) {
-      console.log(error);
       presentToast(
         "Something went wrong when you tried to leave the collective. Please submit a bug report :)",
         "danger",
@@ -296,6 +287,7 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
                   </div>
                 </IonCol>
               </IonRow>
+              {user?.isCreator ? <CreatorManagement /> : null}
             </IonGrid>
           </>
         )}

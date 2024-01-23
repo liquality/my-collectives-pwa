@@ -57,5 +57,30 @@ export class ChallengesController {
             res.status(500).send({ error: err.message });
         }
     }
+
+    public findAllByCreator: RequestHandler = async (req, res) => {
+        const user = await AuthService.find((req as any).auth?.sub);
+        try {
+            if (user.id) {
+                const challenges = await ChallengesService.findAllByCreator(user.id);
+                console.log(challenges, 'challenges by creator')
+
+                if (!challenges) {
+                    throw new Error("Could not find challenges by creator");
+                }
+                res.status(200).send(challenges);
+            }
+            else {
+
+                res.status(401).send({ error: "Could not authenticate for creating challenges" });
+            }
+
+
+        } catch (err: any) {
+            console.log(err, ' error challenges by creator')
+
+            res.status(500).send({ error: err.message });
+        }
+    }
 };
 
