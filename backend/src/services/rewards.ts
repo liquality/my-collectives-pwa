@@ -16,13 +16,11 @@ export class RewardsService {
   }
 
   async getPoolParticipation(memberAddress: string, poolsAddress: string) {
-    console.log(poolsAddress, "poolsaddress?", memberAddress);
     const participationResponse = await MyCollectives.Pool.getParticipation(
       poolsAddress,
       memberAddress
     );
 
-    console.log(participationResponse, '>>>>> participationResponse')
     if (
       participationResponse?.participant.toLowerCase() ===
       memberAddress.toLowerCase()
@@ -35,7 +33,6 @@ export class RewardsService {
           participationResponse.rewardAvailable
         ),
       };
-      console.log(participation, "inside participation");
       return participation;
     }
 
@@ -110,7 +107,6 @@ export class RewardsService {
           .del();
         //insert new data
         const result = await trx("user_rewards").insert(userRewards);
-        console.debug("user_rewards result:", result);
         return { success: true };
       });
     } catch (error) {
@@ -133,42 +129,43 @@ export class RewardsService {
     try {
       //1)Get all pools  that are expired
       const expiredPools = await PoolsService.findAllPoolsThatAreExpired();
-      console.log(expiredPools, "expired pools", expiredPools.length);
+      console.log("How many expired pools ? >>>>", expiredPools.length);
       if (!expiredPools.length) return null
       else {
         for (const pool of expiredPools) {
           //2) Check if topContributor has already been set 
           const topContributor = await MyCollectives.HoneyPot.getTopContributor(pool.honeyPotAddress)
-          console.log(topContributor, 'HAS TOP CONTRIBUTOR BEEN SET?', pool.honeyPotAddress)
+          //const topContributor = ethers.constants.AddressZero
+          console.log("Topcontributor ? >>>>", topContributor, 'HoneyPot address >>>> ', pool.honeyPotAddress);
+
           // 3) If the top contributor is set, do nothing
-          if (topContributor !== ethers.constants.AddressZero) {
+          if (topContributor === ethers.constants.AddressZero) {
+            //6) Scrape events from ethers, create a leaderboard and return top contributor
+            const topContributorAddress = await getTopContributorFromEvents(pool.createdAt, pool.expiration, pool.mintingContractAddress, pool.network)
+            if (topContributorAddress?.address) {
+              const honeyPotHasBalance = await RewardsService.getHoneyPotContractBalance(pool.honeyPotAddress)
+              console.log(honeyPotHasBalance, 'honey pot balance')
+              if (honeyPotHasBalance) {
+                const setTopContributorResponse = await MyCollectives.HoneyPot.setTopContributor(privateKey, pool.honeyPotAddress, topContributorAddress.address)
+                console.log(setTopContributorResponse, 'wat is response TOP CONTRIBUTOR')
+                if (setTopContributorResponse.txHash) {
+                  console.log(privateKey, 'honeypot:', pool.honeyPotAddress, 'publicaddress:', pool.publicAddress,)
+                  //The honeypot smart contract holds the zora rewards from minting, 
+                  //first check if it has balance, then send them from the honeypot
+                  const sendRewardsResponse = await MyCollectives.HoneyPot.sendReward(privateKey, pool.honeyPotAddress)
+                  console.log(sendRewardsResponse, 'send rewards response')
+                  //Send the reward to the poolAddress
+                  const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
+                  console.log(distributeRewardsResponse, 'distribute rewards response')
+                } else return null
+              }
+            } else return null
+
+          } else {
             //const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
             //console.log(distributeRewardsResponse, 'distribute rewards response')
             return null
 
-          } else {
-            //6) Scrape events from ethers, create a leaderboard and return top contributor
-            const topContributorAddress = await getTopContributorFromEvents(pool.createdAt, pool.expiration, pool.mintingContractAddress, pool.network)
-            if (topContributorAddress?.address) {
-              const setTopContributorResponse = await MyCollectives.HoneyPot.setTopContributor(privateKey, pool.honeyPotAddress, topContributorAddress.address)
-              console.log(setTopContributorResponse, 'wat is response TOP CONTRIBUTOR')
-              if (setTopContributorResponse.txHash) {
-
-                console.log(privateKey, 'honeypot:', pool.honeyPotAddress, 'publicaddress:', pool.publicAddress,)
-                //The honeypot smart contract holds the zora rewards from minting, send them from the honeypot
-                //TODO tomorrow 23 january: see if the honeypot contract has money, if it has send the reward & distribute
-                //to pools 
-                /*    const poolInfo = await MyCollectives.Pool.getPoolInfo(pool.publicAddress)
-                   if(poolInfo) */
-
-                const sendRewardsResponse = await MyCollectives.HoneyPot.sendReward(privateKey, pool.honeyPotAddress)
-                console.log(sendRewardsResponse, 'send rewards response')
-                //Send the reward to the poolAddress
-                const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
-                console.log(distributeRewardsResponse, 'distribute rewards response')
-
-              }
-            }
           }
         }
       }
@@ -177,5 +174,16 @@ export class RewardsService {
     } catch (error) {
       console.log(error, "error in top contributor");
     }
+  }
+
+  public static async getHoneyPotContractBalance(honeyPotAddress: string): Promise<boolean> {
+    //TODO make it multichain
+    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+    const balanceInWei = await provider.getBalance(honeyPotAddress);
+    const balanceInEth = ethers.utils.formatEther(balanceInWei)
+    console.log(balanceInEth, 'balance in eth')
+    if (Number(balanceInEth) > 0) {
+      return true
+    } else return false
   }
 }
