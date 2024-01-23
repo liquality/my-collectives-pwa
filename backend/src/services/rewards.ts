@@ -142,8 +142,8 @@ export class RewardsService {
           console.log(topContributor, 'HAS TOP CONTRIBUTOR BEEN SET?', pool.honeyPotAddress)
           // 3) If the top contributor is set, do nothing
           if (topContributor !== ethers.constants.AddressZero) {
-            const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
-            console.log(distributeRewardsResponse, 'distribute rewards response')
+            //const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
+            //console.log(distributeRewardsResponse, 'distribute rewards response')
             return null
 
           } else {
@@ -156,7 +156,7 @@ export class RewardsService {
 
                 console.log(privateKey, 'honeypot:', pool.honeyPotAddress, 'publicaddress:', pool.publicAddress,)
                 //The honeypot smart contract holds the zora rewards from minting, send them from the honeypot
-                //TODO tomorrow 23 januari: see if the honeypot contract has money, if it has send the reward & distribute
+                //TODO tomorrow 23 january: see if the honeypot contract has money, if it has send the reward & distribute
                 //to pools 
                 /*    const poolInfo = await MyCollectives.Pool.getPoolInfo(pool.publicAddress)
                    if(poolInfo) */
