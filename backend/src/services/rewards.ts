@@ -92,9 +92,6 @@ export class RewardsService {
           groupId: pool.groupId,
         });
       }
-
-
-
     }
 
     try {
@@ -137,7 +134,6 @@ export class RewardsService {
           const topContributor = await MyCollectives.HoneyPot.getTopContributor(pool.honeyPotAddress)
           //const topContributor = ethers.constants.AddressZero
           console.log("Topcontributor ? >>>>", topContributor, 'HoneyPot address >>>> ', pool.honeyPotAddress);
-
           // 3) If the top contributor is set, do nothing
           if (topContributor === ethers.constants.AddressZero) {
             //6) Scrape events from ethers, create a leaderboard and return top contributor
@@ -160,10 +156,7 @@ export class RewardsService {
                 } else return null
               }
             } else return null
-
           } else {
-            //const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
-            //console.log(distributeRewardsResponse, 'distribute rewards response')
             return null
 
           }
