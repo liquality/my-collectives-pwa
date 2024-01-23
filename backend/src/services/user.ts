@@ -48,7 +48,8 @@ export class UserService {
       .join("users", "users.id", "=", "user_rewards.userId")
       .join("pools", "pools.id", "=", "user_rewards.poolId")
       .join("challenges", "challenges.id", "=", "pools.challengeId")
-      .where("user_rewards.userId", "=", userId)
+      .whereNull("user_rewards.claimedAt")
+      .andWhere("user_rewards.userId", "=", userId)
       .select(
         "user_rewards.*",
         "users.*",
