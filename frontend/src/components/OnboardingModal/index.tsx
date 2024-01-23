@@ -19,6 +19,11 @@ import { useState, useEffect } from "react";
 const OnboardingModal: React.FC = () => {
   const [swiperInstance, setSwiperInstance] = useState<SwiperInterface>();
   const [isOpen, setIsOpen] = useState(false);
+  const [slideIndex, setSlideIndex] = useState(0);
+
+  swiperInstance?.on("activeIndexChange", (swiper) => {
+    setSlideIndex(swiper?.realIndex || 0);
+  });
   const dismiss = () => {
     localStorage.setItem("groupMints.onboardingShowed", "true");
     setIsOpen(false);
@@ -118,19 +123,21 @@ const OnboardingModal: React.FC = () => {
               </Swiper>
             </IonCol>
           </IonRow>
-          <IonRow className="ion-justify-content-center">
-            <IonCol size="auto" className="ion-align-self-center">
-              <IonButton
-                fill="outline"
-                shape="round"
-                disabled={(swiperInstance?.activeIndex || 0) >= 2}
-                onClick={() => swiperInstance?.slideNext()}
-                strong={true}
-              >
-                Next
-              </IonButton>
-            </IonCol>
-          </IonRow>
+          {slideIndex < 2 && (
+            <IonRow className="ion-justify-content-center">
+              <IonCol size="auto" className="ion-align-self-center">
+                <IonButton
+                  fill="outline"
+                  shape="round"
+                  onClick={() => swiperInstance?.slideNext()}
+                  strong={true}
+                >
+                  Next
+                </IonButton>
+              </IonCol>
+            </IonRow>
+          )}
+
           <IonRow className="ion-justify-content-center">
             <IonCol size="auto" className="ion-align-self-center">
               <IonButton
@@ -139,7 +146,7 @@ const OnboardingModal: React.FC = () => {
                 onClick={() => dismiss()}
                 strong={true}
               >
-                Skip
+                {slideIndex < 2 ? "Skip" : "OK"}
               </IonButton>
             </IonCol>
           </IonRow>
