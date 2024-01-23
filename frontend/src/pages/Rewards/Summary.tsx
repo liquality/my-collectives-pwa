@@ -27,7 +27,7 @@ import useGetRewardsSummary from "@/hooks/useGetRewardsSummary";
 import ContractService from "@/services/ContractService";
 import { Group } from "@/types/general-types";
 import useToast from "@/hooks/useToast";
-import { banOutline } from "ionicons/icons";
+import { banOutline, flowerOutline } from "ionicons/icons";
 
 const Summary: React.FC<RouteComponentProps> = (routerProps) => {
   //TODO: change parent tag to IonPage
@@ -78,6 +78,11 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
     );
     if (response.status === "success") {
       setLoadingWithdrawal(false);
+      presentToast(
+        "You successfully withdrew your rewards!",
+        "primary",
+        flowerOutline
+      );
     } else {
       presentToast(
         "Something went wrong when you tried to withdraw your rewards. Please contact support",

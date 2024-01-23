@@ -118,12 +118,6 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
                 {convertDateToReadable(expiration)}
               </IonLabel>
             </IonCol>
-
-            {selectedChallenge?.id === challenge?.id ? (
-              <IonCol size="auto">
-                <IonLabel>SELECTED</IonLabel>
-              </IonCol>
-            ) : null}
           </IonRow>
         </IonGrid>
       </IonCardContent>
