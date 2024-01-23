@@ -7,11 +7,11 @@ import {
 
 export async function getTopContributorFromEvents(challengeCreationTime: Date, challengeExpiryTime: Date, tokenContract: string, network: string) {
     //TODO: add creation time from challenge new Date("2023-12-21 09:53:42.648-03")
-    //const createdBlock = await fetchBlockDataFromTimeStamp(challengeCreationTime, network)
-    //const expiryBlock = await fetchBlockDataFromTimeStamp(challengeExpiryTime, network)
-    const createdBlock = await fetchBlockDataFromTimeStamp(new Date("2024-01-18 15:58:42.648-03"), network)
-    const expiryBlock = await fetchBlockDataFromTimeStamp(new Date(), network)
-
+    const createdBlock = await fetchBlockDataFromTimeStamp(challengeCreationTime, network)
+    const expiryBlock = await fetchBlockDataFromTimeStamp(challengeExpiryTime, network)
+    /*  const createdBlock = await fetchBlockDataFromTimeStamp(new Date("2024-01-18 15:58:42.648-03"), network)
+     const expiryBlock = await fetchBlockDataFromTimeStamp(new Date(), network)
+  */
 
     const leaderboard = await getZoraLeaderboardEvents(tokenContract, createdBlock, expiryBlock)
     const topContributor = leaderboard[0]

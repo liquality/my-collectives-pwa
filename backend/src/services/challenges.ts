@@ -3,7 +3,7 @@ import { dbClient } from "../data";
 import { Challenge } from "../models/challenges";
 import { convertToDate, fetchReservoirData, getTokenMetadataFromZora } from "../utils";
 import { AuthService } from "./auth";
-const infuraRpcUrl = `https://mainnet.infura.io/v3/${process.env.INFURA_KEY}`;
+const infuraRpcUrl = `https://goerli.infura.io/v3/${process.env.INFURA_KEY}`;
 
 export class ChallengesService {
 
@@ -30,10 +30,11 @@ export class ChallengesService {
             ...tokenData,
         };
 
+        //Comment out ENS support as it doesnt work on testnet when testing
         if (tokenData?.creatorOfMint) {
-            insertObject.creatorOfMint = await provider.lookupAddress(tokenData.creatorOfMint) ?? tokenData.creatorOfMint;
+            //insertObject.creatorOfMint = await provider.lookupAddress(tokenData.creatorOfMint) ?? tokenData.creatorOfMint;
         } else {
-            insertObject.creatorOfMint = await provider.lookupAddress(user.publicAddress) ?? user.publicAddress;
+            //insertObject.creatorOfMint = await provider.lookupAddress(user.publicAddress) ?? user.publicAddress;
         }
 
         try {

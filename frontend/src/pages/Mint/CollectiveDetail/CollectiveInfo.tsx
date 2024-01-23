@@ -38,33 +38,15 @@ const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
   const { pools, loading: challengesLoading } =
     useGetChallengesByGroupId(groupId);
   const router = useIonRouter();
-  const [loadingWithdrawal, setLoadingWithdrawal] = useState(false);
 
   const handleManageNavigation = () => {
     const url = pathConstants.rewards.manage.replace(":groupId", groupId);
     router.push(url, "root");
   };
 
-  const handleWithDrawal = async () => {
-    if (pools && group) {
-      setLoadingWithdrawal(true);
-
-      const honeyAddresses = pools.map((item: any) => item.honeyPotAddress);
-      const response = await ContractService.withdrawRewards(
-        group.publicAddress,
-        group.walletAddress,
-        group.nonceKey,
-        honeyAddresses
-      );
-      if (response) {
-        setLoadingWithdrawal(false);
-      }
-    }
-  };
-
   return (
     <IonPage>
-      <Header title={group?.name} goBack={true}/>
+      <Header title={group?.name} goBack={true} />
 
       {group && members && !loading ? (
         <IonContent className="ion-padding" color="light">
@@ -127,24 +109,7 @@ const CollectiveInfo: React.FC<CollectiveInfoProps> = ({ match }) => {
                   |{" "}
                 </>
               ) : null}
-              <IonText
-                color="primary"
-                style={{ pointer: "cursor" }}
-                onClick={handleWithDrawal}
-              >
-                {loadingWithdrawal ? (
-                  <IonSpinner
-                    style={{
-                      width: 13,
-                      height: 13,
-                    }}
-                    color="primary"
-                    name="circular"
-                  ></IonSpinner>
-                ) : (
-                  "Withdraw"
-                )}{" "}
-              </IonText>{" "}
+
               {group.loggedInUserIsAdmin ? (
                 <IonText style={{ color: "grey" }}>| </IonText>
               ) : null}
