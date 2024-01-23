@@ -1,8 +1,13 @@
 import useIsActiveRoute from "@/hooks/useIsActiveRoute";
 import { IonCol, IonIcon, IonLabel, IonRow, IonText } from "@ionic/react";
 import { useEffect, useState } from "react";
-import GenerateInviteBtn from "../GenerateInvite";
-import { shortenAddress } from "@/utils";
+import {
+  convertDateToReadable,
+  handleCopyClick,
+  shortenAddress,
+} from "@/utils";
+import useToast from "@/hooks/useToast";
+import { copy } from "ionicons/icons";
 
 export interface CreatorManagementProps {}
 
@@ -30,6 +35,16 @@ const myChallenges = [
 
 const CreatorManagement = (props: CreatorManagementProps) => {
   const isActive = useIsActiveRoute();
+  const { presentToast } = useToast();
+
+  const handleCopy = (honeyPotAddress: string) => {
+    handleCopyClick(honeyPotAddress);
+    presentToast(
+      "You successfully copied your honey pot address!",
+      "primary",
+      copy
+    );
+  };
 
   return (
     <IonRow>
@@ -43,23 +58,22 @@ const CreatorManagement = (props: CreatorManagementProps) => {
             <div key={index}>
               <IonRow className="ion-justify-content-between ion-align-items-center">
                 <div className="rewards-collective-card-group-name">
-                  honeyPotAddress
+                  {shortenAddress(challenge.honeyPotAddress || "")}
                 </div>
                 <div className="rewards-collective-card-group-actions">
-                  <GenerateInviteBtn groupId={challenge.id} /> |{" "}
                   <IonText
                     color="primary"
                     style={{ pointer: "cursor" }}
-                    onClick={() => console.log("hej")}
+                    onClick={() => handleCopy(challenge.honeyPotAddress)}
                   >
-                    Manage
+                    Copy
                   </IonText>
                 </div>
               </IonRow>
 
               <IonRow className="ion-justify-content-between ion-align-items-center">
                 <div className="rewards-collective-card-group-address">
-                  {shortenAddress(challenge.honeyPotAddress || "")}
+                  {convertDateToReadable(challenge.expiration)}
                 </div>
                 <div>
                   <IonLabel className="rewards-collective-card-group-data">
