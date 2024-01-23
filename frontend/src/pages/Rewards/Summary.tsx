@@ -28,6 +28,7 @@ import ContractService from "@/services/ContractService";
 import { Group } from "@/types/general-types";
 import useToast from "@/hooks/useToast";
 import { banOutline, flowerOutline } from "ionicons/icons";
+import CreatorManagement from "@/components/Rewards/CreatorManagement";
 
 const Summary: React.FC<RouteComponentProps> = (routerProps) => {
   //TODO: change parent tag to IonPage
@@ -296,6 +297,7 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
                   </div>
                 </IonCol>
               </IonRow>
+              <CreatorManagement />
             </IonGrid>
           </>
         )}
