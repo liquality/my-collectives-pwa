@@ -72,12 +72,25 @@ export class UserService {
       return acc;
     }, BigNumber.from(0));
 
+    const honeypotBalances = await Promise.all(
+      userRewards.map(async (reward) => {
+        const honeyPotBalance = await RewardsService.getHoneyPotContractBalance(
+          reward.challengeHoneyPotAddress
+        );
+        return {
+          address: reward.challengeHoneyPotAddress,
+          balance: honeyPotBalance?.balanceInEth,
+        };
+      })
+    );
+
     return {
       ethEarned: utils.formatUnits(ethEarned, "ether"),
       mintsAmount,
       rewardsCount: parseInt(`${userRewards[0].count || 0}`),
       invitesCount: parseInt(`${invites[0].count || 0}`),
-      user_rewards: userRewards
+      user_rewards: userRewards,
+      honeypotBalances,
     };
   }
 }
