@@ -43,7 +43,7 @@ const CollectiveChat: React.FC<CollectiveChatProps> = ({ match }) => {
     if (chatHistory) {
       setMessages(chatHistory);
     }
-    socket.on("messageCreation", (data) => {
+    socket.on("messageCreation", (data: any) => {
       setMessages((prevMessages) => [...prevMessages, data]);
     });
 
