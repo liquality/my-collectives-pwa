@@ -71,18 +71,23 @@ export class UserService {
       acc = acc.add(BigNumber.from(amount));
       return acc;
     }, BigNumber.from(0));
+    let honeypotBalances: any = [];
 
-    const honeypotBalances = await Promise.all(
-      userRewards.map(async (reward) => {
-        const honeyPotBalance = await RewardsService.getHoneyPotContractBalance(
-          reward.challengeHoneyPotAddress
-        );
-        return {
-          address: reward.challengeHoneyPotAddress,
-          balance: honeyPotBalance?.balanceInEth,
-        };
-      })
-    );
+    try {
+      honeypotBalances = await Promise.all(
+        userRewards.map(async (reward) => {
+          const honeyPotBalance = await RewardsService.getHoneyPotContractBalance(
+            reward.challengeHoneyPotAddress
+          );
+          return {
+            address: reward.challengeHoneyPotAddress,
+            balance: honeyPotBalance?.balanceInEth,
+          };
+        })
+      );
+    } catch (error) {
+      console.error(error, "Getting HonyPot Balances")
+    }
 
     return {
       ethEarned: utils.formatUnits(ethEarned, "ether"),
