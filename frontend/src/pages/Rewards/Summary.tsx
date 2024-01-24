@@ -18,7 +18,7 @@ import RewardsTopBar from "@/components/TopBars/RewardsTopBar";
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 import { shortenAddress } from "@/utils";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSignInWallet } from "@/hooks/useSignInWallet";
 import GenerateInviteBtn from "@/components/GenerateInvite";
 import { pathConstants } from "@/utils/routeNames";
@@ -29,6 +29,8 @@ import { Group } from "@/types/general-types";
 import useToast from "@/hooks/useToast";
 import { banOutline, flowerOutline } from "ionicons/icons";
 import CreatorManagement from "@/components/Rewards/CreatorManagement";
+import WithdrawalButton from "@/components/WithdrawalButton";
+import { ethers } from "ethers";
 
 const Summary: React.FC<RouteComponentProps> = (routerProps) => {
   //TODO: change parent tag to IonPage
@@ -37,7 +39,6 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
   const { user } = useSignInWallet();
   const { summary, loading: loadingSummary } = useGetRewardsSummary();
   const [loadingWithdrawal, setLoadingWithdrawal] = useState(false);
-
   const router = useIonRouter();
   const { presentToast } = useToast();
 
@@ -54,6 +55,26 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
       return myGroups.filter((group) => group.createdBy !== user.id);
     } else return [];
   }, [myGroups, user?.id]);
+
+  const honeyPotHasBalance = (address: string) => {
+    return !!summary?.honeypotBalances.find(
+      (h: any) =>
+        h.address.toLowerCase() === address.toLowerCase() &&
+        ethers.BigNumber.from(h.balance).gt(0)
+    );
+  };
+
+  const showWithdrawal = (groupId: string) => {
+    const currentDate = new Date();
+    return !!summary.user_rewards.find((reward: any) => {
+      return (
+        new Date(reward.challengeExpiration) < currentDate &&
+        reward.groupId === groupId &&
+        !reward.claimedAt &&
+        honeyPotHasBalance(reward.challengeHoneyPotAddress)
+      );
+    });
+  };
 
   const handleManageNavigation = (groupId: string) => {
     const url = pathConstants.rewards.manage.replace(":groupId", groupId);
@@ -188,29 +209,14 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
                             {group.name}{" "}
                           </div>
                           <div className="rewards-collective-card-group-actions">
-                            {getHoneyPotAddressesByGroupId(group.id).length ? (
-                              <>
-                                {loadingWithdrawal ? (
-                                  <IonSpinner
-                                    style={{
-                                      width: 13,
-                                      height: 13,
-                                    }}
-                                    color="primary"
-                                    name="circular"
-                                  ></IonSpinner>
-                                ) : (
-                                  <IonText
-                                    color="primary"
-                                    style={{ cursor: "pointer" }}
-                                    onClick={() => handleWithdrawRewards(group)}
-                                  >
-                                    Withdraw
-                                  </IonText>
-                                )}
-                                {" | "}
-                              </>
-                            ) : null}
+                            {getHoneyPotAddressesByGroupId(group.id).length
+                              ? 
+                                showWithdrawal(group.id) && 
+                                <WithdrawalButton
+                                  loadingWithdrawal={loadingWithdrawal}
+                                  handleWithdrawRewards={handleWithdrawRewards}
+                                />
+                              : null}
                             <GenerateInviteBtn groupId={group.id} /> |{" "}
                             <IonText
                               color="primary"

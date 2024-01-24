@@ -81,7 +81,7 @@ export class UserService {
           );
           return {
             address: reward.challengeHoneyPotAddress,
-            balance: honeyPotBalance?.balanceInEth,
+            balance: honeyPotBalance?.balanceInWei.toString(),
           };
         })
       );
