@@ -82,7 +82,6 @@ export class RewardsService {
         pool.publicAddress
       );
 
-
       if (poolParticipation) {
         userRewards.push({
           numberOfMints: poolParticipation.contribution,
@@ -97,13 +96,40 @@ export class RewardsService {
     try {
       await dbClient.transaction(async (trx) => {
         // remove existing data
-        await trx("user_rewards")
-          .whereIn('userId', userRewards.map(i => i.userId))
-          .whereIn('poolId', userRewards.map(i => i.poolId))
-          .whereIn('groupId', userRewards.map(i => i.groupId))
-          .del();
+        const deleted = await trx("user_rewards")
+          .whereIn(
+            "userId",
+            userRewards.map((i) => i.userId)
+          )
+          .whereIn(
+            "poolId",
+            userRewards.map((i) => i.poolId)
+          )
+          .whereIn(
+            "groupId",
+            userRewards.map((i) => i.groupId)
+          )
+          .whereNull("claimedAt")
+          .del([
+            "numberOfMints",
+            "amountInEthEarned",
+            "userId",
+            "poolId",
+            "groupId",
+          ]);
         //insert new data
-        const result = await trx("user_rewards").insert(userRewards);
+        console.log("deleted", deleted);
+        const result = await trx("user_rewards").insert(
+          userRewards.filter((r) => {
+            return (deleted as Array<any>).includes((d: any) => {
+              return (
+                d.userId != r.userId &&
+                d.poolId != r.poolId &&
+                d.groupId != r.groupId
+              );
+            });
+          })
+        );
         return { success: true };
       });
     } catch (error) {
@@ -127,58 +153,123 @@ export class RewardsService {
       //1)Get all pools  that are expired
       const expiredPools = await PoolsService.findAllPoolsThatAreExpired();
       console.log("How many expired pools ? >>>>", expiredPools.length);
-      if (!expiredPools.length) return null
+      if (!expiredPools.length) return null;
       else {
         for (const pool of expiredPools) {
-          //2) Check if topContributor has already been set 
-          const topContributor = await MyCollectives.HoneyPot.getTopContributor(pool.honeyPotAddress)
+          //2) Check if topContributor has already been set
+          const topContributor = await MyCollectives.HoneyPot.getTopContributor(
+            pool.honeyPotAddress
+          );
           //const topContributor = ethers.constants.AddressZero
-          console.log("Topcontributor ? >>>>", topContributor, 'HoneyPot address >>>> ', pool.honeyPotAddress);
+          console.log(
+            "Topcontributor ? >>>>",
+            topContributor,
+            "HoneyPot address >>>> ",
+            pool.honeyPotAddress
+          );
           // 3) If the top contributor is set, do nothing
           if (topContributor === ethers.constants.AddressZero) {
             //6) Scrape events from ethers, create a leaderboard and return top contributor
-            const topContributorAddress = await getTopContributorFromEvents(pool.createdAt, pool.expiration, pool.mintingContractAddress, pool.network)
+            const topContributorAddress = await getTopContributorFromEvents(
+              pool.createdAt,
+              pool.expiration,
+              pool.mintingContractAddress,
+              pool.network
+            );
             if (topContributorAddress?.address) {
-              const honeyPotHasBalance = await RewardsService.getHoneyPotContractBalance(pool.honeyPotAddress)
-              console.log(honeyPotHasBalance, 'honey pot balance')
-              
-              if (Number(honeyPotHasBalance?.balanceInEth || 0) > 0) {
-                const setTopContributorResponse = await MyCollectives.HoneyPot.setTopContributor(privateKey, pool.honeyPotAddress, topContributorAddress.address)
-                console.log(setTopContributorResponse, 'wat is response TOP CONTRIBUTOR')
-                if (setTopContributorResponse.txHash) {
-                  console.log(privateKey, 'honeypot:', pool.honeyPotAddress, 'publicaddress:', pool.publicAddress,)
-                  //The honeypot smart contract holds the zora rewards from minting, 
-                  //first check if it has balance, then send them from the honeypot
-                  const sendRewardsResponse = await MyCollectives.HoneyPot.sendReward(privateKey, pool.honeyPotAddress)
-                  console.log(sendRewardsResponse, 'send rewards response')
-                  //Send the reward to the poolAddress
-                  const distributeRewardsResponse = await MyCollectives.Pool.distributeRewards(privateKey, pool.publicAddress)
-                  console.log(distributeRewardsResponse, 'distribute rewards response')
-                } else return null
-              }
-            } else return null
-          } else {
-            return null
+              const honeyPotHasBalance =
+                await RewardsService.getHoneyPotContractBalance(
+                  pool.honeyPotAddress
+                );
+              console.log(honeyPotHasBalance, "honey pot balance");
 
+              if (Number(honeyPotHasBalance?.balanceInEth || 0) > 0) {
+                const setTopContributorResponse =
+                  await MyCollectives.HoneyPot.setTopContributor(
+                    privateKey,
+                    pool.honeyPotAddress,
+                    topContributorAddress.address
+                  );
+                console.log(
+                  setTopContributorResponse,
+                  "wat is response TOP CONTRIBUTOR"
+                );
+                if (setTopContributorResponse.txHash) {
+                  console.log(
+                    privateKey,
+                    "honeypot:",
+                    pool.honeyPotAddress,
+                    "publicaddress:",
+                    pool.publicAddress
+                  );
+                  //The honeypot smart contract holds the zora rewards from minting,
+                  //first check if it has balance, then send them from the honeypot
+                  const sendRewardsResponse =
+                    await MyCollectives.HoneyPot.sendReward(
+                      privateKey,
+                      pool.honeyPotAddress
+                    );
+                  console.log(sendRewardsResponse, "send rewards response");
+                  //Send the reward to the poolAddress
+                  const distributeRewardsResponse =
+                    await MyCollectives.Pool.distributeRewards(
+                      privateKey,
+                      pool.publicAddress
+                    );
+                  console.log(
+                    distributeRewardsResponse,
+                    "distribute rewards response"
+                  );
+                } else return null;
+              }
+            } else return null;
+          } else {
+            return null;
           }
         }
       }
-
-
     } catch (error) {
       console.log(error, "error in top contributor");
     }
   }
 
-  public static async getHoneyPotContractBalance(honeyPotAddress: string): Promise<any> {
+  public static async getHoneyPotContractBalance(
+    honeyPotAddress: string
+  ): Promise<any> {
     //TODO make it multichain
     const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
     const balanceInWei = await provider.getBalance(honeyPotAddress);
-    const balanceInEth = ethers.utils.formatEther(balanceInWei)
-    console.log(balanceInEth, 'balance in eth')
+    const balanceInEth = ethers.utils.formatEther(balanceInWei);
+    console.log(balanceInEth, "balance in eth");
     return {
       balanceInWei,
-      balanceInEth
+      balanceInEth,
+    };
+  }
+
+  public static async saveClaimedRewards(
+    userId: string,
+    groupId: string,
+    honeyPotAddresses: string[]
+  ): Promise<void> {
+    try {
+      const poolsData = await dbClient
+        .select("pools.id as poolId", "pools.groupId", "pools.challengeId")
+        .from("pools")
+        .whereIn("challenges.honeyPotAddress", honeyPotAddresses)
+        .where("pools.groupId", "=", groupId)
+        .join("challenges", "pools.challengeId", "=", "challenges.id")
+        .join("groups", "pools.groupId", "=", "groups.id");
+
+      const poolIds = poolsData.map((p) => p.poolId);
+      console.log({ poolIds, userId, groupId });
+      await dbClient("user_rewards")
+        .where("userId", "=", userId)
+        .andWhere("groupId", "=", groupId)
+        .whereIn("poolId", poolIds)
+        .update("claimedAt", dbClient.fn.now());
+    } catch (error) {
+      console.error(error);
     }
   }
 }

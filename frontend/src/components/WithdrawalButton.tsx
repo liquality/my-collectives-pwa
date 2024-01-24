@@ -1,17 +1,19 @@
+import { Group } from "@/types/general-types";
 import { IonSpinner, IonText } from "@ionic/react";
 import { group } from "console";
 import { useEffect, useState } from "react";
 
 export interface WithdrawalButtonProps {
+  group: Group;
   loadingWithdrawal: boolean;
-  handleWithdrawRewards: (group: any) => void;
+  handleWithdrawRewards: (group: Group) => void;
 }
 
 const WithdrawalButton: React.FC<WithdrawalButtonProps> = ({
+  group,
   loadingWithdrawal,
-  handleWithdrawRewards
+  handleWithdrawRewards,
 }) => {
-  const [canWithdraw, setCanWithdraw] = useState(false);
   useEffect(() => {}, [loadingWithdrawal]);
   return (
     <>

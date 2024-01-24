@@ -31,6 +31,7 @@ import { banOutline, flowerOutline } from "ionicons/icons";
 import CreatorManagement from "@/components/Rewards/CreatorManagement";
 import WithdrawalButton from "@/components/WithdrawalButton";
 import { ethers } from "ethers";
+import ApiService from "@/services/ApiService";
 
 const Summary: React.FC<RouteComponentProps> = (routerProps) => {
   //TODO: change parent tag to IonPage
@@ -39,10 +40,25 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
   const { user } = useSignInWallet();
   const { summary, loading: loadingSummary } = useGetRewardsSummary();
   const [loadingWithdrawal, setLoadingWithdrawal] = useState(false);
+  const [honeyPotAddresses, setHoneyPotAddresses] = useState<any>({});
   const router = useIonRouter();
   const { presentToast } = useToast();
 
   const loadingAllData = !myGroups && loading && loadingSummary;
+
+  const getHoneyPotAddressesByGroupId = (groupId: string) => {
+    const currentDate = new Date();
+    const addresses =
+      summary?.user_rewards
+        .filter((reward: any) => {
+          return (
+            reward.groupId === groupId &&
+            currentDate < new Date(reward.challengeExpiration)
+          );
+        })
+        .map((reward: any) => reward.challengeHoneyPotAddress) || [];
+    return addresses;
+  };
 
   const myCollectives = useMemo(() => {
     if (myGroups && user?.id) {
@@ -56,6 +72,21 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
     } else return [];
   }, [myGroups, user?.id]);
 
+  useEffect(() => {
+    if (myGroups && user?.id && summary) {
+      const _honeyPotAddresses = myCollectives
+        .map((group) => ({
+          groupId: group.id,
+          honeyPotAddresses: getHoneyPotAddressesByGroupId(group.id),
+        }))
+        .reduce((prev: any, curr: any) => {
+          prev[curr.groupId] = curr.honeyPotAddresses;
+          return prev;
+        }, {});
+      setHoneyPotAddresses(_honeyPotAddresses);
+    }
+  }, [myCollectives, summary]);
+
   const honeyPotHasBalance = (address: string) => {
     return !!summary?.honeypotBalances.find(
       (h: any) =>
@@ -68,7 +99,7 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
     const currentDate = new Date();
     return !!summary.user_rewards.find((reward: any) => {
       return (
-        new Date(reward.challengeExpiration) < currentDate &&
+        currentDate < new Date(reward.challengeExpiration) &&
         reward.groupId === groupId &&
         !reward.claimedAt &&
         honeyPotHasBalance(reward.challengeHoneyPotAddress)
@@ -81,15 +112,22 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
     router.push(url, "root");
   };
 
-  const handleWithdrawRewards = async (group: any) => {
+  const handleWithdrawRewards = async (group: Group) => {
     setLoadingWithdrawal(true);
+    
+    console.log("honeyPotAddresses", honeyPotAddresses[group.id]);
     const response = await ContractService.withdrawRewards(
-      group.publicAddress,
-      group.walletAddress,
+      group.publicAddress || '',
+      group.walletAddress || '',
       group.nonceKey,
-      getHoneyPotAddressesByGroupId(group.id)
+      honeyPotAddresses
     );
     if (response.status === "success") {
+      // update inside the database
+      await ApiService.saveClaimedRewards(group.id, honeyPotAddresses[group.id]);
+      let updateAddresses = {...honeyPotAddresses};
+      delete updateAddresses[group.id];
+      setHoneyPotAddresses(updateAddresses);
       setLoadingWithdrawal(false);
       presentToast(
         "You successfully withdrew your rewards!",
@@ -103,24 +141,6 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
         banOutline
       );
     }
-  };
-
-  const getHoneyPotAddressesByGroupId = (groupId: string) => {
-    if (summary) {
-      const currentDate = new Date();
-      const filteredUserRewards = summary.user_rewards.filter((reward: any) => {
-        return (
-          reward.groupId === groupId &&
-          new Date(reward.challengeExpiration) < currentDate
-        );
-      });
-
-      const honeyPotAddresses = filteredUserRewards.map(
-        (reward: any) => reward.challengeHoneyPotAddress
-      );
-      return honeyPotAddresses;
-    }
-    return [];
   };
 
   const handleLeaveGroup = (group: Group) => {
@@ -209,13 +229,16 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
                             {group.name}{" "}
                           </div>
                           <div className="rewards-collective-card-group-actions">
-                            {getHoneyPotAddressesByGroupId(group.id).length
-                              ? 
-                                showWithdrawal(group.id) && 
-                                <WithdrawalButton
-                                  loadingWithdrawal={loadingWithdrawal}
-                                  handleWithdrawRewards={handleWithdrawRewards}
-                                />
+                            {honeyPotAddresses[group.id]
+                              ? showWithdrawal(group.id) && (
+                                  <WithdrawalButton
+                                    group={group}
+                                    loadingWithdrawal={loadingWithdrawal}
+                                    handleWithdrawRewards={
+                                      handleWithdrawRewards
+                                    }
+                                  />
+                                )
                               : null}
                             <GenerateInviteBtn groupId={group.id} /> |{" "}
                             <IonText
