@@ -120,7 +120,7 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
       group.publicAddress || '',
       group.walletAddress || '',
       group.nonceKey,
-      honeyPotAddresses
+      honeyPotAddresses[group.id]
     );
     if (response.status === "success") {
       // update inside the database
