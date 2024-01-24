@@ -141,7 +141,8 @@ export class RewardsService {
             if (topContributorAddress?.address) {
               const honeyPotHasBalance = await RewardsService.getHoneyPotContractBalance(pool.honeyPotAddress)
               console.log(honeyPotHasBalance, 'honey pot balance')
-              if (honeyPotHasBalance) {
+              
+              if (Number(honeyPotHasBalance?.balanceInEth || 0) > 0) {
                 const setTopContributorResponse = await MyCollectives.HoneyPot.setTopContributor(privateKey, pool.honeyPotAddress, topContributorAddress.address)
                 console.log(setTopContributorResponse, 'wat is response TOP CONTRIBUTOR')
                 if (setTopContributorResponse.txHash) {
@@ -169,14 +170,15 @@ export class RewardsService {
     }
   }
 
-  public static async getHoneyPotContractBalance(honeyPotAddress: string): Promise<boolean> {
+  public static async getHoneyPotContractBalance(honeyPotAddress: string): Promise<any> {
     //TODO make it multichain
     const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
     const balanceInWei = await provider.getBalance(honeyPotAddress);
     const balanceInEth = ethers.utils.formatEther(balanceInWei)
     console.log(balanceInEth, 'balance in eth')
-    if (Number(balanceInEth) > 0) {
-      return true
-    } else return false
+    return {
+      balanceInWei,
+      balanceInEth
+    }
   }
 }

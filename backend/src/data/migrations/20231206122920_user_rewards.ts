@@ -16,6 +16,7 @@ export async function up(knex: Knex): Promise<void> {
     table.unique(["userId", "groupId"]);
     table.unique(["userId", "groupId", "poolId"]);
     table.unique(["poolId", "groupId"]);
+    table.dateTime("claimedAt").nullable();
 
     table.timestamps({ useCamelCase: true });
   });
