@@ -3,7 +3,7 @@ import path from "path";
 import dotenv from "dotenv";
 
 dotenv.config({ path: path.resolve(__dirname, "..", "..", ".env") });
-const env = process.env.NODE_ENV || "production";
+const env = process.env.NODE_ENV || "development";
 const config: { [key: string]: Knex.Config } = {
   development: {
     client: "pg",
