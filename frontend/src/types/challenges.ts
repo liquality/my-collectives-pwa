@@ -1,4 +1,5 @@
 import * as MyCollectives from "@liquality/my-collectives-sdk";
+import { BigNumberish } from "ethers";
 
 export interface ChallengeCreation {
     mintingContractAddress: string;
@@ -30,7 +31,7 @@ export interface Challenge {
     creatorOfMint: null | string;
     groupcount?: string
     honeyPotAddress: string;
-    salt: bigint;
+    salt: BigNumberish;
 }
 
 

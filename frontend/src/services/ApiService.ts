@@ -56,6 +56,10 @@ const ApiService = {
     return NetworkService.getResourceWithAuth("/v1/challenges");
   },
 
+  readChallengesByCreator: async function () {
+    return NetworkService.getResourceWithAuth("/v1/challenges/creator");
+  },
+
   readChallenge: async function (id: string) {
     return NetworkService.getResourceWithAuth(`/v1/challenges/${id}`);
   },

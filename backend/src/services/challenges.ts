@@ -30,10 +30,11 @@ export class ChallengesService {
             ...tokenData,
         };
 
-        //Comment out ENS support as it doesnt work on testnet when testing
+        //TODO Comment out ENS support as it doesnt work on testnet when testing
         if (tokenData?.creatorOfMint) {
             //insertObject.creatorOfMint = await provider.lookupAddress(tokenData.creatorOfMint) ?? tokenData.creatorOfMint;
         } else {
+            insertObject.creatorOfMint = user.publicAddress
             //insertObject.creatorOfMint = await provider.lookupAddress(user.publicAddress) ?? user.publicAddress;
         }
 
@@ -59,15 +60,11 @@ export class ChallengesService {
                     "honeyPotAddress"
                 ]
             );
-
-
-
             if (result.length > 0) {
                 return result[0];
             } else if (!result[0].imageUrl || !result[0].totalMints || !result[0].name) {
                 return null //TODO: add error handling; we could not fetch necessary NFT API Data
             }
-
             return null;
         } catch (error) {
             return null
@@ -85,8 +82,6 @@ export class ChallengesService {
                 totalMints: tokenData?.totalMints,
                 name: tokenData?.name
             };
-
-
             try {
                 const result = await dbClient("challenges").update(
                     insertObject,
@@ -211,5 +206,45 @@ export class ChallengesService {
             return challenge as any;
         }
         return null;
+    }
+
+
+    public static async findAllByCreator(userId: string): Promise<any[] | null> {
+        const user = await AuthService.find(userId)
+
+        const challenges = await dbClient("challenges")
+            .select(
+                "challenges.id",
+                "mintingContractAddress",
+                "chainId",
+                "tokenId",
+                "category",
+                "challenges.name", // Specify the table alias or table name
+                "kind",
+                "floorPrice",
+                "expiration",
+                "platform",
+                "expired",
+                "totalMints",
+                "imageUrl",
+                "network",
+                "creatorOfMint",
+                "honeyPotAddress",
+                dbClient.raw('COUNT(groups.id) as groupCount')
+            )
+            .where("creatorOfMint", "=", user.publicAddress)
+            .leftJoin("pools", "challenges.id", "pools.challengeId")
+            .leftJoin("groups", "pools.groupId", "groups.id")
+            .groupBy("challenges.id")
+            .orderBy("challenges.id", "asc");
+
+
+        const sortedChallenges = challenges.sort((a, b) => {
+            const dateA = new Date(a?.expiration ?? 0);
+            const dateB = new Date(b?.expiration ?? 0);
+            // sort in ascending order (youngest first)
+            return dateB.getTime() - dateA.getTime()
+        });
+        return sortedChallenges;
     }
 }
