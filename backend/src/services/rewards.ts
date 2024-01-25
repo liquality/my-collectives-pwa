@@ -20,6 +20,7 @@ export class RewardsService {
       poolsAddress,
       memberAddress
     );
+    console.log(participationResponse, 'participation resposne')
 
     if (
       participationResponse?.participant.toLowerCase() ===
@@ -82,6 +83,8 @@ export class RewardsService {
         pool.publicAddress
       );
 
+      console.log(poolParticipation, 'wats pool participation?')
+
       if (poolParticipation) {
         userRewards.push({
           numberOfMints: poolParticipation.contribution,
@@ -94,44 +97,54 @@ export class RewardsService {
     }
 
     try {
-      await dbClient.transaction(async (trx) => {
-        // remove existing data
-        const deleted = await trx("user_rewards")
-          .whereIn(
-            "userId",
-            userRewards.map((i) => i.userId)
-          )
-          .whereIn(
-            "poolId",
-            userRewards.map((i) => i.poolId)
-          )
-          .whereIn(
-            "groupId",
-            userRewards.map((i) => i.groupId)
-          )
-          .whereNull("claimedAt")
-          .del([
-            "numberOfMints",
-            "amountInEthEarned",
-            "userId",
-            "poolId",
-            "groupId",
-          ]);
-        //insert new data
-        console.log("deleted", deleted);
-        const result = await trx("user_rewards").insert(
-          userRewards.filter((r) => {
-            return (deleted as Array<any>).includes((d: any) => {
-              return (
-                d.userId != r.userId &&
-                d.poolId != r.poolId &&
-                d.groupId != r.groupId
+      /*       await dbClient.transaction(async (trx) => {
+              // remove existing data
+              const deleted = await trx("user_rewards")
+                .whereIn(
+                  "userId",
+                  userRewards.map((i) => i.userId)
+                )
+                .whereIn(
+                  "poolId",
+                  userRewards.map((i) => i.poolId)
+                )
+                .whereIn(
+                  "groupId",
+                  userRewards.map((i) => i.groupId)
+                )
+                .whereNull("claimedAt")
+                .del([
+                  "numberOfMints",
+                  "amountInEthEarned",
+                  "userId",
+                  "poolId",
+                  "groupId",
+                ]);
+              //insert new data
+              console.log("deleted", deleted);
+              const result = await trx("user_rewards").insert(
+                userRewards.filter((r) => {
+                  return (deleted as Array<any>).includes((d: any) => {
+                    return (
+                      d.userId != r.userId &&
+                      d.poolId != r.poolId &&
+                      d.groupId != r.groupId
+                    );
+                  });
+                })
               );
-            });
-          })
-        );
+              return { success: true };
+            }); */
+      await dbClient.transaction(async (trx) => {
+        // Upsert new data
+        const result = await trx("user_rewards")
+          .insert(userRewards)
+          .onConflict(["userId", "poolId", "groupId"])
+          .merge();
+
         return { success: true };
       });
+
     } catch (error) {
       console.error("user_rewards error:", error);
       return { success: false };

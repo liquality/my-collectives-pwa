@@ -18,6 +18,7 @@ export function useSignInWallet() {
     },
 
 
+
     onError: async (error, variables) =>
       //TODO: handle some error here
       console.log(error, 'Error signing message')

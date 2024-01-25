@@ -95,6 +95,11 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
     );
   };
 
+  console.log(
+    honeyPotHasBalance("0x9Eb40653adeda1084835741c16b10f6fee305988"),
+    "honey pot has balance?"
+  );
+
   const showWithdrawal = (groupId: string) => {
     const currentDate = new Date();
     return !!summary.user_rewards.find((reward: any) => {
@@ -114,18 +119,21 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
 
   const handleWithdrawRewards = async (group: Group) => {
     setLoadingWithdrawal(true);
-    
+
     console.log("honeyPotAddresses", honeyPotAddresses[group.id]);
     const response = await ContractService.withdrawRewards(
-      group.publicAddress || '',
-      group.walletAddress || '',
+      group.publicAddress || "",
+      group.walletAddress || "",
       group.nonceKey,
       honeyPotAddresses[group.id]
     );
     if (response.status === "success") {
       // update inside the database
-      await ApiService.saveClaimedRewards(group.id, honeyPotAddresses[group.id]);
-      let updateAddresses = {...honeyPotAddresses};
+      await ApiService.saveClaimedRewards(
+        group.id,
+        honeyPotAddresses[group.id]
+      );
+      let updateAddresses = { ...honeyPotAddresses };
       delete updateAddresses[group.id];
       setHoneyPotAddresses(updateAddresses);
       setLoadingWithdrawal(false);
