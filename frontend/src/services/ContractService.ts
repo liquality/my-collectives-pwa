@@ -53,13 +53,11 @@ const ContractService = {
         return { inviteSig: inviteSig.toString(), inviteId: inviteIdInHex }
     },
 
-    async withdrawRewards(cAddress: string, cWallet: string, nonceKey: bigint, honeyPotAddresses: string[]) {
+    async withdrawRewards(cAddress: string, cWallet: string, nonceKey: bigint, poolAddresses: string[]) {
+        this.initSDKConfig()
 
-        const poolAddresses = await Promise.all(honeyPotAddresses.map(async (item: any) => {
-            return await this.getPoolAddress(cAddress, cWallet, nonceKey, item);
-        }));
-        console.log(poolAddresses, 'all of the pooladdresses')
-
+        console.log(this.getProvider(), 'this got provider?')
+        console.log({ address: cAddress, wallet: cWallet, nonceKey }, poolAddresses, 'all withdrawal params')
         const response = await MyCollectives.Pool.withdrawRewards(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, poolAddresses, await this.getProvider().getSigner().getAddress())
         console.log("!!!!! response withdrawal => ", response)
         return response

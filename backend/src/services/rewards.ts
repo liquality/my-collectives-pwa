@@ -20,6 +20,7 @@ export class RewardsService {
       poolsAddress,
       memberAddress
     );
+    console.log(participationResponse, 'participation resposne')
 
     if (
       participationResponse?.participant.toLowerCase() ===
@@ -82,6 +83,8 @@ export class RewardsService {
         pool.publicAddress
       );
 
+      console.log(poolParticipation, 'wats pool participation?')
+
       if (poolParticipation) {
         userRewards.push({
           numberOfMints: poolParticipation.contribution,
@@ -94,44 +97,54 @@ export class RewardsService {
     }
 
     try {
-      await dbClient.transaction(async (trx) => {
-        // remove existing data
-        const deleted = await trx("user_rewards")
-          .whereIn(
-            "userId",
-            userRewards.map((i) => i.userId)
-          )
-          .whereIn(
-            "poolId",
-            userRewards.map((i) => i.poolId)
-          )
-          .whereIn(
-            "groupId",
-            userRewards.map((i) => i.groupId)
-          )
-          .whereNull("claimedAt")
-          .del([
-            "numberOfMints",
-            "amountInEthEarned",
-            "userId",
-            "poolId",
-            "groupId",
-          ]);
-        //insert new data
-        console.log("deleted", deleted);
-        const result = await trx("user_rewards").insert(
-          userRewards.filter((r) => {
-            return (deleted as Array<any>).includes((d: any) => {
-              return (
-                d.userId != r.userId &&
-                d.poolId != r.poolId &&
-                d.groupId != r.groupId
+      /*       await dbClient.transaction(async (trx) => {
+              // remove existing data
+              const deleted = await trx("user_rewards")
+                .whereIn(
+                  "userId",
+                  userRewards.map((i) => i.userId)
+                )
+                .whereIn(
+                  "poolId",
+                  userRewards.map((i) => i.poolId)
+                )
+                .whereIn(
+                  "groupId",
+                  userRewards.map((i) => i.groupId)
+                )
+                .whereNull("claimedAt")
+                .del([
+                  "numberOfMints",
+                  "amountInEthEarned",
+                  "userId",
+                  "poolId",
+                  "groupId",
+                ]);
+              //insert new data
+              console.log("deleted", deleted);
+              const result = await trx("user_rewards").insert(
+                userRewards.filter((r) => {
+                  return (deleted as Array<any>).includes((d: any) => {
+                    return (
+                      d.userId != r.userId &&
+                      d.poolId != r.poolId &&
+                      d.groupId != r.groupId
+                    );
+                  });
+                })
               );
-            });
-          })
-        );
+              return { success: true };
+            }); */
+      await dbClient.transaction(async (trx) => {
+        // Upsert new data
+        const result = await trx("user_rewards")
+          .insert(userRewards)
+          .onConflict(["userId", "poolId", "groupId"])
+          .merge();
+
         return { success: true };
       });
+
     } catch (error) {
       console.error("user_rewards error:", error);
       return { success: false };
@@ -160,7 +173,6 @@ export class RewardsService {
           const topContributor = await MyCollectives.HoneyPot.getTopContributor(
             pool.honeyPotAddress
           );
-          //const topContributor = ethers.constants.AddressZero
           console.log(
             "Topcontributor ? >>>>",
             topContributor,
@@ -247,6 +259,20 @@ export class RewardsService {
     };
   }
 
+  public static async getPoolAddressBalance(
+    poolAddress: string
+  ): Promise<any> {
+    //TODO make it multichain
+    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+    const balanceInWei = await provider.getBalance(poolAddress);
+    const balanceInEth = ethers.utils.formatEther(balanceInWei);
+    console.log(balanceInEth, "balance in eth inside pool balance");
+    return {
+      balanceInWei,
+      balanceInEth,
+    };
+  }
+
   public static async saveClaimedRewards(
     userId: string,
     groupId: string,
@@ -260,7 +286,6 @@ export class RewardsService {
         .where("pools.groupId", "=", groupId)
         .join("challenges", "pools.challengeId", "=", "challenges.id")
         .join("groups", "pools.groupId", "=", "groups.id");
-
       const poolIds = poolsData.map((p) => p.poolId);
       console.log({ poolIds, userId, groupId });
       await dbClient("user_rewards")

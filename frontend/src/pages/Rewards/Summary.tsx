@@ -87,8 +87,9 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
     }
   }, [myCollectives, summary]);
 
-  const honeyPotHasBalance = (address: string) => {
-    return !!summary?.honeypotBalances.find(
+  console.log(summary, "summary");
+  const poolAddressHasBalance = (address: string) => {
+    return !!summary?.poolsAddressBalances.find(
       (h: any) =>
         h.address.toLowerCase() === address.toLowerCase() &&
         ethers.BigNumber.from(h.balance).gt(0)
@@ -99,10 +100,10 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
     const currentDate = new Date();
     return !!summary.user_rewards.find((reward: any) => {
       return (
-        currentDate < new Date(reward.challengeExpiration) &&
+        currentDate > new Date(reward.challengeExpiration) &&
         reward.groupId === groupId &&
         !reward.claimedAt &&
-        honeyPotHasBalance(reward.challengeHoneyPotAddress)
+        poolAddressHasBalance(reward.poolPublicAddress)
       );
     });
   };
@@ -114,18 +115,28 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
 
   const handleWithdrawRewards = async (group: Group) => {
     setLoadingWithdrawal(true);
-    
-    console.log("honeyPotAddresses", honeyPotAddresses[group.id]);
+    const matchingUserRewards = summary.user_rewards.filter(
+      (reward: any) => reward.groupId === group.id
+    );
+
+    // Extract poolPublicAddresses from the matching user rewards
+    const poolPublicAddresses = matchingUserRewards.map(
+      (reward: any) => reward.poolPublicAddress
+    );
+
     const response = await ContractService.withdrawRewards(
-      group.publicAddress || '',
-      group.walletAddress || '',
+      group.publicAddress,
+      group.walletAddress,
       group.nonceKey,
-      honeyPotAddresses[group.id]
+      poolPublicAddresses
     );
     if (response.status === "success") {
       // update inside the database
-      await ApiService.saveClaimedRewards(group.id, honeyPotAddresses[group.id]);
-      let updateAddresses = {...honeyPotAddresses};
+      await ApiService.saveClaimedRewards(
+        group.id,
+        honeyPotAddresses[group.id]
+      );
+      let updateAddresses = { ...honeyPotAddresses };
       delete updateAddresses[group.id];
       setHoneyPotAddresses(updateAddresses);
       setLoadingWithdrawal(false);

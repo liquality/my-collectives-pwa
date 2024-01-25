@@ -71,16 +71,16 @@ export class UserService {
       acc = acc.add(BigNumber.from(amount));
       return acc;
     }, BigNumber.from(0));
-    let honeypotBalances: any = [];
+    let poolsAddressBalances: any = [];
 
     try {
-      honeypotBalances = await Promise.all(
+      poolsAddressBalances = await Promise.all(
         userRewards.map(async (reward) => {
-          const honeyPotBalance = await RewardsService.getHoneyPotContractBalance(
-            reward.challengeHoneyPotAddress
+          const honeyPotBalance = await RewardsService.getPoolAddressBalance(
+            reward.poolPublicAddress
           );
           return {
-            address: reward.challengeHoneyPotAddress,
+            address: reward.poolPublicAddress,
             balance: honeyPotBalance?.balanceInWei.toString(),
           };
         })
@@ -95,7 +95,7 @@ export class UserService {
       rewardsCount: parseInt(`${userRewards[0].count || 0}`),
       invitesCount: parseInt(`${invites[0].count || 0}`),
       user_rewards: userRewards,
-      honeypotBalances,
+      poolsAddressBalances,
     };
   }
 }

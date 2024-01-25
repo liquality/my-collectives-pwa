@@ -141,10 +141,12 @@ export async function seed(knex: Knex): Promise<void> {
         expiration: "2024-01-27T13:20:06.433Z",
         expired: null,
         totalMints: 5,
+        salt: 1120321012230231,
         imageUrl: null,
         network: "goerli",
         creatorOfMint: "0xe7910F0b83ad155737043c771E2594f74B0BB739",
-        honeyPotAddress: "0x9Eb40653adeda1084835741c16b10f6fee305988",
+        honeyPotAddress: "0xCFCcD90197de5e5a8Fc0929ee4821026ED3C3F77",
+        createdAt: new Date()
       },
       {
         id: "6dbfa2f3-51aa-4d36-b4a3-209418cec944",
@@ -156,13 +158,15 @@ export async function seed(knex: Knex): Promise<void> {
         kind: "erc1155",
         platform: "Zora",
         floorPrice: null,
-        expiration: "2024-01-26T13:15:30.834Z",
+        expiration: "2024-01-27T13:15:30.834Z",
         expired: null,
+        salt: 3310331321212112,
         totalMints: 2,
         imageUrl: null,
         network: "goerli",
         creatorOfMint: "0xe7910F0b83ad155737043c771E2594f74B0BB739",
-        honeyPotAddress: "0x4952809a56aa7C259B17737cFcc925905B8FC358",
+        honeyPotAddress: "0x9Dea92dad09fB680ABe877669Ce8AC28eEBC1fBd",
+        createdAt: new Date()
       },
     ]);
   });
