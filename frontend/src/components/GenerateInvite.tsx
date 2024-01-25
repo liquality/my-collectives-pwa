@@ -8,7 +8,7 @@ import { copy } from "ionicons/icons";
 
 export interface InviteBtnProps {
   groupId: string;
-  type?: "button" | "text";
+  type?: "button" | "text" | "mint";
   text?: string;
 }
 
@@ -59,16 +59,19 @@ const GenerateInviteBtn = ({
 
   if (type === "button") {
     return <IonButton onClick={handleGenerateInvite}>{text}</IonButton>;
+  } else if (type === "mint")
+    return <h4 onClick={handleGenerateInvite}>Invite others to do the same</h4>;
+  else {
+    return (
+      <IonText
+        color="primary"
+        style={{ pointer: "cursor" }}
+        onClick={handleGenerateInvite}
+      >
+        {text}
+      </IonText>
+    );
   }
-  return (
-    <IonText
-      color="primary"
-      style={{ pointer: "cursor" }}
-      onClick={handleGenerateInvite}
-    >
-      {text}
-    </IonText>
-  );
 };
 
 export default GenerateInviteBtn;

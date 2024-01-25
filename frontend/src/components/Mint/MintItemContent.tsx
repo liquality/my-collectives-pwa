@@ -112,10 +112,11 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
           groupId,
           groupMintCount
         );
-        console.log(mintResult, "mintresult");
+        //const mintResult ={ status: "success"}
+        console.log(selectedGroup, "selected group!");
         if (mintResult?.status === "success") {
           setPendingMint(false);
-          setResult({ success: true });
+          setResult({ success: true, group: selectedGroup });
         } else {
           throw Error("Transaction was not successfull");
         }
