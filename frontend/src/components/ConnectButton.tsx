@@ -14,15 +14,20 @@ import {
 import { logIn, logOut, wallet } from "ionicons/icons";
 import React from "react";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
-import { useAccount, useDisconnect } from "wagmi";
+import { useAccount, useBalance, useDisconnect } from "wagmi";
 import { Auth } from "@/utils";
 import { useDisplayEns } from "@/hooks/useDisplayEns";
+import { goerli, mainnet } from "viem/chains";
 
 const ConnectButton: React.FC = () => {
   const { open } = useWeb3Modal();
   const { address, isConnecting, isDisconnected } = useAccount();
   const { disconnect } = useDisconnect();
   const { ens } = useDisplayEns(address);
+  const connectedBalance = useBalance({
+    address: address,
+    chainId: 42161,
+  });
 
   const logout = () => {
     Auth.clearAccessToken();
@@ -56,7 +61,9 @@ const ConnectButton: React.FC = () => {
               {ens ? ens : shortenAddress(address || "")}
             </IonLabel>
             <div className="divider"></div>
-            <IonLabel className="balance">100 ETH</IonLabel>
+            <IonLabel className="balance">
+              {connectedBalance.data?.formatted.slice(0, 6)} ETH
+            </IonLabel>
           </IonChip>
           <IonPopover
             size="auto"

@@ -32,9 +32,11 @@ const MintItemResult: React.FC<MintItemResultProps> = ({
   collective,
 }: MintItemResultProps) => {
   const [loadingImage, setLoadingImage] = useState(true);
+
+  console.log(result?.group, "result group!!!");
   return (
     <>
-      {result?.success ? (
+      {result?.success && result?.group ? (
         <IonGrid>
           <IonRow className="ion-justify-content-center">
             <IonCol className="ion-text-center">
@@ -78,13 +80,11 @@ const MintItemResult: React.FC<MintItemResultProps> = ({
           </IonRow>
           <IonRow className="ion-justify-content-center ion-margin-top">
             <IonCol className="ion-text-center">
-              <h4>Invite others to do the same</h4>
+              <GenerateInviteBtn type="mint" groupId={result.group.id} />
             </IonCol>
           </IonRow>
           <IonRow className="ion-justify-content-center ion-margin-bottom ">
             <IonCol size="auto">
-              {/* <GenerateInviteBtn groupId={collective.id} /> */}
-
               {/*        <IonButton onClick={joinCollective} color="primary" shape="round">
                 Invite to Group
               </IonButton>  */}
