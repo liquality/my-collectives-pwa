@@ -143,6 +143,19 @@ const ApiService = {
       `/v1/groups/challenge/${challengeId}`
     );
   },
+
+  saveClaimedRewards: async function (
+    groupId: string,
+    honeyPotAddresses: string[]
+    ) {
+      return NetworkService.postResourceWithAuth(
+        '/v1/user/save-claimed-rewards',
+        {
+          groupId,
+          honeyPotAddresses
+        }
+      );
+    },
 };
 
 export default ApiService;

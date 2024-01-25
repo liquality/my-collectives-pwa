@@ -155,143 +155,150 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
       {pendingMint ? (
         <PageLoadingIndicator />
       ) : (
-        <IonRow className="ion-justify-content-center">
-          <IonCol
-            size="8"
-            style={{ display: "flex", justifyContent: "center" }}
-          >
-            <IonCard className="challenge-mint-card">
-              <img
-                className="challenge-mint-img"
-                alt="NFT Image"
-                style={{ display: loadingImage ? "none" : "block" }}
-                src={ipfsImageUrl}
-                onLoad={() => setLoadingImage(false)}
-                onError={() => setLoadingImage(false)}
-              />
-              {loadingImage ? (
-                <IonSkeletonText
-                  className="challenge-mint-img-skeleton"
-                  animated={true}
-                ></IonSkeletonText>
-              ) : null}
-              <div className="challenge-time-chip challenge-time-chip-ontop">
-                {convertDateToReadable(expiration)}
-              </div>
-              <IonCardHeader>
-                <IonCardTitle>
-                  {loadingImage ? (
-                    <IonSkeletonText animated={true}></IonSkeletonText>
-                  ) : (
-                    handleDisplayAddress(creatorOfMint ?? "")
-                  )}
-                </IonCardTitle>
-                <IonCardSubtitle>
-                  {<div className="name">{cutOffTooLongString(name, 30)}</div>}
-                </IonCardSubtitle>
-              </IonCardHeader>
-              <IonCardContent>
-                <IonGrid className="">
-                  <IonRow className="ion-justify-content-left ion-align-items-center">
-                    <IonCol size="auto">
-                      <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>
-                      <IonLabel>{totalMints}</IonLabel>
-                    </IonCol>
-                  </IonRow>
-                </IonGrid>
-              </IonCardContent>
-            </IonCard>
-          </IonCol>
-        </IonRow>
+        <>
+          <IonRow className="ion-justify-content-center">
+            <IonCol
+              size="8"
+              style={{ display: "flex", justifyContent: "center" }}
+            >
+              <IonCard className="challenge-mint-card">
+                <img
+                  className="challenge-mint-img"
+                  alt="NFT Image"
+                  style={{ display: loadingImage ? "none" : "block" }}
+                  src={ipfsImageUrl}
+                  onLoad={() => setLoadingImage(false)}
+                  onError={() => setLoadingImage(false)}
+                />
+                {loadingImage ? (
+                  <IonSkeletonText
+                    className="challenge-mint-img-skeleton"
+                    animated={true}
+                  ></IonSkeletonText>
+                ) : null}
+                <div className="challenge-time-chip challenge-time-chip-ontop">
+                  {convertDateToReadable(expiration)}
+                </div>
+                <IonCardHeader>
+                  <IonCardTitle>
+                    {loadingImage ? (
+                      <IonSkeletonText animated={true}></IonSkeletonText>
+                    ) : (
+                      handleDisplayAddress(creatorOfMint ?? "")
+                    )}
+                  </IonCardTitle>
+                  <IonCardSubtitle>
+                    {
+                      <div className="name">
+                        {cutOffTooLongString(name, 30)}
+                      </div>
+                    }
+                  </IonCardSubtitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  <IonGrid className="">
+                    <IonRow className="ion-justify-content-left ion-align-items-center">
+                      <IonCol size="auto">
+                        <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>
+                        <IonLabel>{totalMints}</IonLabel>
+                      </IonCol>
+                    </IonRow>
+                  </IonGrid>
+                </IonCardContent>
+              </IonCard>
+            </IonCol>
+          </IonRow>
+          <IonRow className="ion-justify-content-center ion-align-items-center">
+            <IonCol size="8" className="challenge-mint-amount-container">
+              <IonButton
+                className="challenge-mint-amount-btn"
+                fill="outline"
+                shape="round"
+                size="small"
+                onClick={handlePlusClick}
+              >
+                <IonIcon slot="icon-only" icon={add}></IonIcon>
+              </IonButton>
+
+              <IonInput
+                className="challenge-mint-amount"
+                type="number"
+                value={quantityToMint}
+              ></IonInput>
+              <IonButton
+                className="challenge-mint-amount-btn"
+                fill="outline"
+                shape="round"
+                size="small"
+                onClick={handleMinusClick}
+                disabled={quantityToMint <= 1}
+              >
+                <IonIcon slot="icon-only" icon={remove}></IonIcon>
+              </IonButton>
+            </IonCol>
+          </IonRow>
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="6">
+              NFT & Fee: {displayPrice(floorPrice, params)}
+            </IonCol>
+            <IonCol size="2">
+              <IonButton fill="clear" size="small" onClick={handleDetailsClick}>
+                Details
+              </IonButton>
+            </IonCol>
+          </IonRow>
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="6">{selectedGroup?.name}</IonCol>
+
+            <IonCol size="2">
+              <IonButton
+                fill="clear"
+                size="small"
+                onClick={handleChangeCollectiveClick}
+              >
+                Change
+              </IonButton>
+            </IonCol>
+          </IonRow>
+          {showGroupList ? (
+            <IonRow className="ion-justify-content-center">
+              <IonCol size="9">
+                <IonList lines="none">
+                  {groups?.map((group, index) => (
+                    <IonItem
+                      key={index}
+                      button
+                      disabled={group.id === selectedGroup?.id}
+                      onClick={() => handleSelectGroup(group)}
+                    >
+                      <IonLabel>{group.name}</IonLabel>
+                    </IonItem>
+                  ))}
+                </IonList>
+              </IonCol>
+            </IonRow>
+          ) : null}
+          <IonRow className="mint-content-bottom-ribbon ion-justify-content-center ion-align-items-center">
+            <IonCol size="12">
+              <IonButton fill="clear" size="small" className="ion-no-padding">
+                Mint in a Group
+              </IonButton>
+              <IonLabel> for a chance to get rewared</IonLabel>
+            </IonCol>
+          </IonRow>
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="auto">
+              <IonButton
+                onClick={() => handleMintClick()}
+                color="primary"
+                shape="round"
+              >
+                Mint {displayPrice(floorPrice, params)} ETH
+              </IonButton>
+            </IonCol>
+          </IonRow>
+        </>
       )}
-
-      <IonRow className="ion-justify-content-center ion-align-items-center">
-        <IonCol size="8" className="challenge-mint-amount-container">
-          <IonButton
-            className="challenge-mint-amount-btn"
-            fill="outline"
-            shape="round"
-            size="small"
-            onClick={handlePlusClick}
-          >
-            <IonIcon slot="icon-only" icon={add}></IonIcon>
-          </IonButton>
-
-          <IonInput
-            className="challenge-mint-amount"
-            type="number"
-            value={quantityToMint}
-          ></IonInput>
-          <IonButton
-            className="challenge-mint-amount-btn"
-            fill="outline"
-            shape="round"
-            size="small"
-            onClick={handleMinusClick}
-            disabled={quantityToMint <= 1}
-          >
-            <IonIcon slot="icon-only" icon={remove}></IonIcon>
-          </IonButton>
-        </IonCol>
-      </IonRow>
-      <IonRow className="ion-justify-content-center">
-        <IonCol size="6">NFT & Fee: {displayPrice(floorPrice, params)}</IonCol>
-        <IonCol size="2">
-          <IonButton fill="clear" size="small" onClick={handleDetailsClick}>
-            Details
-          </IonButton>
-        </IonCol>
-      </IonRow>
-      <IonRow className="ion-justify-content-center">
-        <IonCol size="6">{selectedGroup?.name}</IonCol>
-
-        <IonCol size="2">
-          <IonButton
-            fill="clear"
-            size="small"
-            onClick={handleChangeCollectiveClick}
-          >
-            Change
-          </IonButton>
-        </IonCol>
-      </IonRow>
-      {showGroupList ? (
-        <IonRow className="ion-justify-content-center">
-          <IonCol size="9">
-            <IonList lines="none">
-              {groups?.map((group, index) => (
-                <IonItem
-                  key={index}
-                  button
-                  disabled={group.id === selectedGroup?.id}
-                  onClick={() => handleSelectGroup(group)}
-                >
-                  <IonLabel>{group.name}</IonLabel>
-                </IonItem>
-              ))}
-            </IonList>
-          </IonCol>
-        </IonRow>
-      ) : null}
-      <IonRow className="mint-content-bottom-ribbon ion-justify-content-center ion-align-items-center">
-        <IonCol size="12">
-          <IonButton fill="clear" size="small" className="ion-no-padding">
-            Mint in a Group
-          </IonButton>
-          <IonLabel> for a chance to get rewared</IonLabel>
-        </IonCol>
-      </IonRow>
-      <IonRow className="ion-justify-content-center">
-        <IonCol size="auto">
-          <IonButton
-            onClick={() => handleMintClick()}
-            color="primary"
-            shape="round"
-          >
-            Mint {displayPrice(floorPrice, params)} ETH
-          </IonButton>
-        </IonCol>
-      </IonRow>
     </IonGrid>
   );
 };

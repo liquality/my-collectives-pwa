@@ -35,9 +35,9 @@ const NFTPage: React.FC<NFTPageProps> = ({ match }) => {
       <IonContent className="ion-padding" color="light">
         {loading ? (
           <PageLoadingIndicator />
-        ) : challenge ? (
+        ) : challenge && (
           <MintItemScreen challenge={challenge} />
-        ) : null}
+        )}
       </IonContent>
     </IonPage>
   );
