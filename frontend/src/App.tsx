@@ -34,7 +34,7 @@ import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
 
 import { createConfig, configureChains, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
-import { mainnet } from "wagmi/chains";
+import { arbitrum, goerli, mainnet } from "wagmi/chains";
 import { baseGoerli } from "wagmi/chains";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useSignInWallet } from "./hooks/useSignInWallet";
@@ -80,7 +80,7 @@ const { publicClient, webSocketPublicClient } = configureChains(
   [publicProvider()]
 );
 
-const chains = [baseGoerli];
+const chains = [baseGoerli, goerli, arbitrum, mainnet];
 const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
 const config = createConfig({
   autoConnect: true,

@@ -26,7 +26,7 @@ const ConnectButton: React.FC = () => {
   const { ens } = useDisplayEns(address);
   const connectedBalance = useBalance({
     address: address,
-    chainId: 5,
+    chainId: 42161,
   });
 
   const logout = () => {
