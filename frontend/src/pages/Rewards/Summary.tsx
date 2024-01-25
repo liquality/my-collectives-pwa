@@ -115,13 +115,21 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
 
   const handleWithdrawRewards = async (group: Group) => {
     setLoadingWithdrawal(true);
+    const matchingUserRewards = summary.user_rewards.filter(
+      (reward: any) => reward.groupId === group.id
+    );
 
-    console.log("honeyPotAddresses", honeyPotAddresses[group.id]);
+    // Extract poolPublicAddresses from the matching user rewards
+    const poolPublicAddresses = matchingUserRewards.map(
+      (reward: any) => reward.poolPublicAddress
+    );
+
+    console.log(poolPublicAddresses);
     const response = await ContractService.withdrawRewards(
-      group.publicAddress || "",
-      group.walletAddress || "",
+      group.publicAddress,
+      group.walletAddress,
       group.nonceKey,
-      honeyPotAddresses[group.id]
+      poolPublicAddresses
     );
     if (response.status === "success") {
       // update inside the database
