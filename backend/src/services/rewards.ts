@@ -260,6 +260,20 @@ export class RewardsService {
     };
   }
 
+  public static async getPoolAddressBalance(
+    poolAddress: string
+  ): Promise<any> {
+    //TODO make it multichain
+    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+    const balanceInWei = await provider.getBalance(poolAddress);
+    const balanceInEth = ethers.utils.formatEther(balanceInWei);
+    console.log(balanceInEth, "balance in eth inside pool balance");
+    return {
+      balanceInWei,
+      balanceInEth,
+    };
+  }
+
   public static async saveClaimedRewards(
     userId: string,
     groupId: string,

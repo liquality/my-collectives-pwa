@@ -87,27 +87,23 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
     }
   }, [myCollectives, summary]);
 
-  const honeyPotHasBalance = (address: string) => {
-    return !!summary?.honeypotBalances.find(
+  console.log(summary, "summary");
+  const poolAddressHasBalance = (address: string) => {
+    return !!summary?.poolsAddressBalances.find(
       (h: any) =>
         h.address.toLowerCase() === address.toLowerCase() &&
         ethers.BigNumber.from(h.balance).gt(0)
     );
   };
 
-  console.log(
-    honeyPotHasBalance("0x9Eb40653adeda1084835741c16b10f6fee305988"),
-    "honey pot has balance?"
-  );
-
   const showWithdrawal = (groupId: string) => {
     const currentDate = new Date();
     return !!summary.user_rewards.find((reward: any) => {
       return (
-        currentDate < new Date(reward.challengeExpiration) &&
+        currentDate > new Date(reward.challengeExpiration) &&
         reward.groupId === groupId &&
         !reward.claimedAt &&
-        honeyPotHasBalance(reward.challengeHoneyPotAddress)
+        poolAddressHasBalance(reward.poolPublicAddress)
       );
     });
   };
