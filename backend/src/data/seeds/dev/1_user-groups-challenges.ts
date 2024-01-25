@@ -160,12 +160,12 @@ export async function seed(knex: Knex): Promise<void> {
         floorPrice: null,
         expiration: "2024-01-27T13:15:30.834Z",
         expired: null,
-        salt: 3203310232120200,
+        salt: 3310331321212112,
         totalMints: 2,
         imageUrl: null,
         network: "goerli",
         creatorOfMint: "0xe7910F0b83ad155737043c771E2594f74B0BB739",
-        honeyPotAddress: "0x788aC966226117ED5916ee1983E432eB62e027f3",
+        honeyPotAddress: "0x9Dea92dad09fB680ABe877669Ce8AC28eEBC1fBd",
         createdAt: new Date()
       },
     ]);
