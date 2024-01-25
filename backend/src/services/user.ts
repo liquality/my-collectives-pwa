@@ -73,7 +73,6 @@ export class UserService {
     }, BigNumber.from(0));
     let poolsAddressBalances: any = [];
 
-    console.log(userRewards, 'user rewards')
     try {
       poolsAddressBalances = await Promise.all(
         userRewards.map(async (reward) => {

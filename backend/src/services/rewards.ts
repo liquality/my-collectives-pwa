@@ -287,7 +287,7 @@ export class RewardsService {
         .where("pools.groupId", "=", groupId)
         .join("challenges", "pools.challengeId", "=", "challenges.id")
         .join("groups", "pools.groupId", "=", "groups.id");
-
+      console.log(poolsData, 'poolsdata in save')
       const poolIds = poolsData.map((p) => p.poolId);
       console.log({ poolIds, userId, groupId });
       await dbClient("user_rewards")

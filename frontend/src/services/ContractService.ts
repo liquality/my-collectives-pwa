@@ -54,7 +54,9 @@ const ContractService = {
     },
 
     async withdrawRewards(cAddress: string, cWallet: string, nonceKey: bigint, poolAddresses: string[]) {
+        this.initSDKConfig()
 
+        console.log(this.getProvider(), 'this got provider?')
         console.log({ address: cAddress, wallet: cWallet, nonceKey }, poolAddresses, 'all withdrawal params')
         const response = await MyCollectives.Pool.withdrawRewards(this.getProvider(), { address: cAddress, wallet: cWallet, nonceKey }, poolAddresses, await this.getProvider().getSigner().getAddress())
         console.log("!!!!! response withdrawal => ", response)

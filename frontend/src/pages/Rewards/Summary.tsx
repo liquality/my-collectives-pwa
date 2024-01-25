@@ -124,7 +124,6 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
       (reward: any) => reward.poolPublicAddress
     );
 
-    console.log(poolPublicAddresses);
     const response = await ContractService.withdrawRewards(
       group.publicAddress,
       group.walletAddress,
