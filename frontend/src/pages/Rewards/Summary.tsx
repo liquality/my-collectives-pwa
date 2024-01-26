@@ -296,6 +296,17 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
                             {group.name}{" "}
                           </div>
                           <div className="rewards-collective-card-group-actions">
+                            {honeyPotAddresses[group.id]
+                              ? showWithdrawal(group.id) && (
+                                  <WithdrawalButton
+                                    group={group}
+                                    loadingWithdrawal={loadingWithdrawal}
+                                    handleWithdrawRewards={
+                                      handleWithdrawRewards
+                                    }
+                                  />
+                                )
+                              : null}
                             <GenerateInviteBtn groupId={group.id} /> |{" "}
                             <IonText
                               color="primary"

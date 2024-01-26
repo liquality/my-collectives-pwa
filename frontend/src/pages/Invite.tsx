@@ -18,6 +18,8 @@ import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { pathConstants } from "@/utils/routeNames";
 import { useSignInWallet } from "@/hooks/useSignInWallet";
 import ContractService from "@/services/ContractService";
+import useToast from "@/hooks/useToast";
+import { banOutline } from "ionicons/icons";
 export interface InvitePageProps
   extends RouteComponentProps<{
     id?: string;
@@ -35,6 +37,8 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
   const { address } = useAccount();
   const { open } = useWeb3Modal();
   const { user } = useSignInWallet();
+  const { presentToast } = useToast();
+
   const claimInviteAvailable = invite && user && address;
 
   useEffect(() => {
@@ -53,43 +57,40 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
     setLoading(false);
   }, [id, code]);
 
-  async function handleConnect() {
+  async function claimInvite() {
     setProcessing(true);
     if (claimInviteAvailable && inviteSig && inviteId) {
       try {
-        await ContractService.joinCollective(
+        const txResponse = await ContractService.joinCollective(
           inviteId,
           invite.groupPublicAddress,
           invite.groupWalletAddress,
           invite.groupNonceKey,
           inviteSig
         );
-        await InvitesService.claim(invite.id, address!);
-        const url = pathConstants.collective.mints.replace(
-          ":groupId",
-          invite.groupId
-        );
-        router.push(url);
+        if (txResponse && txResponse.status === "success") {
+          await InvitesService.claim(invite.id, address!);
+          const url = pathConstants.collective.mints.replace(
+            ":groupId",
+            invite.groupId
+          );
+          router.push(url);
+        } else throw Error("Contract transaction failed :(");
       } catch (error) {
-        console.log(error, "Error adding member");
+        presentToast(
+          "You could not join the collective, reason:" + error,
+          "danger",
+          banOutline
+        );
       }
     }
     setProcessing(false);
   }
 
-  useEffect(() => {
-    if (user) {
-      //TODO: Imo not great UX to auto-join, so commented out for now
-      //handleConnect();
-    }
-  }, [user]);
-
   async function onConnect() {
     if (invite) {
       setProcessing(true);
       if (address) {
-        //TODO: Imo not great UX to auto-join, so commented out for now
-        //await handleConnect();
       } else {
         await open();
       }
@@ -163,21 +164,19 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
             <>
               <IonRow className="ion-margin-top">
                 <IonCol size="12" className="ion-text-center">
-                  <IonButton
-                    disabled={processing}
-                    shape="round"
-                    fill="solid"
-                    className="invite-action-btn"
-                    onClick={claimInviteAvailable ? handleConnect : onConnect}
-                  >
-                    {processing ? (
-                      <IonSpinner name="circular"></IonSpinner>
-                    ) : claimInviteAvailable ? (
-                      "Confirm Invite"
-                    ) : (
-                      "Connect"
-                    )}
-                  </IonButton>
+                  {processing ? (
+                    <IonSpinner name="circular"></IonSpinner>
+                  ) : (
+                    <IonButton
+                      disabled={processing}
+                      shape="round"
+                      fill="solid"
+                      className="invite-action-btn"
+                      onClick={claimInviteAvailable ? claimInvite : onConnect}
+                    >
+                      {claimInviteAvailable ? "Confirm Invite" : "Connect"}
+                    </IonButton>
+                  )}
                 </IonCol>
               </IonRow>
               <IonRow>
