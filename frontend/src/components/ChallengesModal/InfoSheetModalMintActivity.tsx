@@ -17,6 +17,8 @@ const InfoSheetModalMintActivity: React.FC<InfoSheetModalMintActivityProps> = (
     network,
     tokenId ?? ""
   );
+
+  console.log(mintActivity, "mint activity?");
   return (
     <IonGrid className="ion-padding">
       <IonRow>
@@ -31,7 +33,7 @@ const InfoSheetModalMintActivity: React.FC<InfoSheetModalMintActivityProps> = (
         </IonCol>
       </IonRow>
       {mintActivity?.map((mint: any) => (
-        <IonRow>
+        <IonRow key={mint.address}>
           <IonCol size="6">{shortenAddress(mint.address)} </IonCol>
           <IonCol size="4">
             <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>{" "}
