@@ -41,7 +41,7 @@ export function useSignInWallet() {
       if (dbUser && !Auth.isAuthenticated) {
         // Step 2: Sign message with the user
         //By signing, you are proving you own this wallet and logging in. This does not initiate a transaction or cost any fees.
-        signMessage({ message: "By signing, you are proving you own this wallet and logging in. This does not initiate a transaction or cost any fees. " + dbUser.nonce })  //Here we are listening to onSuccess using the signMessage hook and then logging in User
+        signMessage({ message: "By signing, you are proving you own this wallet and logging in. This does not initiate a transaction or cost any fees. Nonce: " + dbUser.nonce })  //Here we are listening to onSuccess using the signMessage hook and then logging in User
       }
       else if (!dbUser) {
         Auth.clearAccessToken();
