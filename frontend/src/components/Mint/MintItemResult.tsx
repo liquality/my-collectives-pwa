@@ -33,7 +33,7 @@ const MintItemResult: React.FC<MintItemResultProps> = ({
 }: MintItemResultProps) => {
   const [loadingImage, setLoadingImage] = useState(true);
 
-  console.log(result?.group, "result group!!!");
+  console.log(result, "result group!!!");
   return (
     <>
       {result?.success && result?.group ? (

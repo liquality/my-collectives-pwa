@@ -114,6 +114,7 @@ const MintItemContent: React.FC<MintItemContentProps> = ({
         );
         //const mintResult ={ status: "success"}
         console.log(selectedGroup, "selected group!");
+        console.log(mintResult, "mintResult!");
         if (mintResult?.status === "success") {
           setPendingMint(false);
           setResult({ success: true, group: selectedGroup });
