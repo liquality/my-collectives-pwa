@@ -16,10 +16,13 @@ import {
   IonCol,
   IonIcon,
   IonButton,
+  isPlatform,
 } from "@ionic/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import GenerateInviteBtn from "../GenerateInvite";
 import SocialShareButton from "../SocialShareButton";
+
+const shareText = `I just minted in MyCollective.tech`;
 
 export interface MintItemResultProps {
   challenge: Challenge;
@@ -33,8 +36,29 @@ const MintItemResult: React.FC<MintItemResultProps> = ({
   collective,
 }: MintItemResultProps) => {
   const [loadingImage, setLoadingImage] = useState(true);
+  const [canUseShare, setCanUseShare] = useState(false);
+  const [shareData, setShareData] = useState<ShareData | undefined>(undefined);
 
   console.log(result, "result group!!!");
+
+  const handleShare = () => {
+    navigator.share(shareData);
+  };
+  useEffect(() => {
+    if (challenge) {
+      const data = {
+        url:   `${import.meta.env.VITE_CLIENT_PRODUCTION_URL}mint/nft/${challenge.id}`,
+        text: shareText,
+      };
+      if (navigator.canShare && navigator.canShare(data)) {
+        setCanUseShare(true);
+        setShareData(data);
+      } else {
+        setCanUseShare(false);
+      }
+    }
+  }, [challenge]);
+
   return (
     <>
       {result?.success && result?.group ? (
@@ -98,11 +122,27 @@ const MintItemResult: React.FC<MintItemResultProps> = ({
           </IonRow>
           <IonRow className="ion-justify-content-center">
             <IonCol size="auto">
-              <SocialShareButton socialNetwork="x" challengeId={challenge.id}/>
-              {/* <SocialShareButton socialNetwork="discord" challengeId={challenge.id}/> */}
-              <SocialShareButton socialNetwork="telegram" challengeId={challenge.id}/>
-              {/* <SocialShareButton socialNetwork="sound" challengeId={challenge.id}/> */}
-              
+              {!isPlatform("desktop") && canUseShare ? (
+                <IonButton shape="round" onClick={handleShare}>
+                  Share
+                </IonButton>
+              ) : (
+                <>
+                  <SocialShareButton
+                    socialNetwork="x"
+                    text={shareText}
+                    url={shareData?.url}
+                  />
+                  {/* <SocialShareButton socialNetwork="discord" challengeId={challenge.id}/> */}
+                  <SocialShareButton
+                    socialNetwork="telegram"
+                    text={shareText}
+                    url={shareData?.url}
+                  />
+                  {/* <SocialShareButton socialNetwork="sound" challengeId={challenge.id}/> */}
+                </>
+              )}
+              <></>
             </IonCol>
           </IonRow>
         </IonGrid>

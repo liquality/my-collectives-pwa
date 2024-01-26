@@ -1,9 +1,11 @@
 import { IonButton, IonIcon } from "@ionic/react";
 
 const urls = {
-  x: (text: string, url: string) => `https://x.com/intent/tweet?text=${text}&url=${url}`,
+  x: (text: string, url: string) =>
+    `https://x.com/intent/tweet?text=${text}&url=${url}`,
   discord: (text: string, url: string) => ``,
-  telegram: (text: string, url: string) => `https://telegram.me/share/url?text=${text}&url=${url}`,
+  telegram: (text: string, url: string) =>
+    `https://telegram.me/share/url?text=${text}&url=${url}`,
   sound: (text: string, url: string) => ``,
 };
 
@@ -15,20 +17,20 @@ const icons = {
 };
 export interface SocialShareButtonProps {
   socialNetwork: "x" | "discord" | "telegram" | "sound";
-  challengeId: string;
+  url?: string;
+  title?: string;
+  text: string;
 }
 
 const SocialShareButton: React.FC<SocialShareButtonProps> = ({
-  challengeId,
+  url,
   socialNetwork,
+  text,
 }) => {
-  const baseUrl = import.meta.env.VITE_CLIENT_PRODUCTION_URL || "";
-  const text = `I just minted in MyCollective.tech`;
-
   return (
     <IonButton
       fill="clear"
-      href={urls[socialNetwork](text, `${baseUrl}mint/nft/${challengeId}`)}
+      href={urls[socialNetwork](text, url || '')}
       target="_blank"
     >
       <IonIcon slot="icon-only" src={icons[socialNetwork]} />
