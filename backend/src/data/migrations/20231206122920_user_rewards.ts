@@ -5,8 +5,9 @@ import { Knex } from "knex";
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable("user_rewards", (table) => {
     table.uuid('id').primary().defaultTo(knex.fn.uuid());
-    table.string("numberOfMints").nullable(); //increment this value after user has minted something in our app
-    table.string("amountInEthEarned").nullable(); //increment this value after listening to withdrawalReward()→ emits an event (participant: userWhoGetTheReward, amount)
+    table.string("numberOfMints").nullable();
+    table.string("amountInEthEarned").nullable();
+    table.string("rewardAvailable").nullable();
     table.uuid("userId").notNullable();
     table.uuid("poolId").nullable();
     table.uuid("groupId").nullable();
@@ -15,9 +16,7 @@ export async function up(knex: Knex): Promise<void> {
     table.foreign("userId").references("users.id").onDelete("CASCADE");
     table.unique(["userId", "groupId"]);
     table.unique(["userId", "groupId", "poolId"]);
-    table.unique(["poolId", "groupId"]);
     table.dateTime("claimedAt").nullable();
-
     table.timestamps({ useCamelCase: true });
   });
 }

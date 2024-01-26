@@ -32,6 +32,8 @@ const ContractService = {
             console.log({ address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteIdAsUint8Array }, 'PARAMS FOR Collective.Join()')
             const response = await MyCollectives.Collective.join(provider, { address: cAddress, wallet: cWallet, nonceKey }, { inviteSignature: inviteSig, inviteCode: inviteIdAsUint8Array })
             console.log("!!!!! response frontend contract service => ", response)
+
+            return response
         }
     },
 
