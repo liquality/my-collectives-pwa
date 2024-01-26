@@ -89,6 +89,7 @@ export class RewardsService {
         userRewards.push({
           numberOfMints: poolParticipation.contribution,
           amountInEthEarned: poolParticipation.rewardAmount,
+          rewardAvailable: poolParticipation.rewardAvailable,
           userId: user.id,
           poolId: pool.poolId,
           groupId: pool.groupId,

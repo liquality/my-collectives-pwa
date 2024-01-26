@@ -40,16 +40,23 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
   const { user } = useSignInWallet();
   const { summary, loading: loadingSummary } = useGetRewardsSummary();
   const [loadingWithdrawal, setLoadingWithdrawal] = useState(false);
-  const [honeyPotAddresses, setHoneyPotAddresses] = useState<any>({});
+  const [updatedSummary, setUpdatedSummary] = useState<any | null>(null);
+
   const router = useIonRouter();
   const { presentToast } = useToast();
+
+  useEffect(() => {
+    if (summary && !updatedSummary) {
+      setUpdatedSummary(summary);
+    }
+  }, [summary, updatedSummary?.user_rewards]);
 
   const loadingAllData = !myGroups && loading && loadingSummary;
 
   const getHoneyPotAddressesByGroupId = (groupId: string) => {
     const currentDate = new Date();
     const addresses =
-      summary?.user_rewards
+      updatedSummary?.user_rewards
         .filter((reward: any) => {
           return (
             reward.groupId === groupId &&
@@ -72,24 +79,8 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
     } else return [];
   }, [myGroups, user?.id]);
 
-  useEffect(() => {
-    if (myGroups && user?.id && summary) {
-      const _honeyPotAddresses = myCollectives
-        .map((group) => ({
-          groupId: group.id,
-          honeyPotAddresses: getHoneyPotAddressesByGroupId(group.id),
-        }))
-        .reduce((prev: any, curr: any) => {
-          prev[curr.groupId] = curr.honeyPotAddresses;
-          return prev;
-        }, {});
-      setHoneyPotAddresses(_honeyPotAddresses);
-    }
-  }, [myCollectives, summary]);
-
-  console.log(summary, "summary");
   const poolAddressHasBalance = (address: string) => {
-    return !!summary?.poolsAddressBalances.find(
+    return !!updatedSummary?.poolsAddressBalances.find(
       (h: any) =>
         h.address.toLowerCase() === address.toLowerCase() &&
         ethers.BigNumber.from(h.balance).gt(0)
@@ -98,12 +89,14 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
 
   const showWithdrawal = (groupId: string) => {
     const currentDate = new Date();
-    return !!summary.user_rewards.find((reward: any) => {
+
+    return !!updatedSummary?.user_rewards.find((reward: any) => {
       return (
         currentDate > new Date(reward.challengeExpiration) &&
         reward.groupId === groupId &&
         !reward.claimedAt &&
-        poolAddressHasBalance(reward.poolPublicAddress)
+        poolAddressHasBalance(reward.poolPublicAddress) &&
+        Number(reward.rewardAvailable) > 0
       );
     });
   };
@@ -115,7 +108,7 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
 
   const handleWithdrawRewards = async (group: Group) => {
     setLoadingWithdrawal(true);
-    const matchingUserRewards = summary.user_rewards.filter(
+    const matchingUserRewards = updatedSummary?.user_rewards.filter(
       (reward: any) => reward.groupId === group.id
     );
 
@@ -134,12 +127,27 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
       // update inside the database
       await ApiService.saveClaimedRewards(
         group.id,
-        honeyPotAddresses[group.id]
+        getHoneyPotAddressesByGroupId(group.id)
       );
-      let updateAddresses = { ...honeyPotAddresses };
-      delete updateAddresses[group.id];
-      setHoneyPotAddresses(updateAddresses);
+
+      // Set the rewardAvailable to 0 after successful withdrawal
+      const updatedUserRewards = (updatedSummary?.user_rewards || []).map(
+        (reward: any) => {
+          if (reward.groupId === group.id) {
+            return {
+              ...reward,
+              rewardAvailable: "1.000000",
+            };
+          }
+          return reward;
+        }
+      );
+      setUpdatedSummary({
+        ...updatedSummary,
+        user_rewards: updatedUserRewards,
+      });
       setLoadingWithdrawal(false);
+
       presentToast(
         "You successfully withdrew your rewards!",
         "primary",
@@ -188,7 +196,7 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
                 <IonCol size="6">
                   <div className="rewards-summary-item">
                     <div className="rewards-summary-amount">
-                      {summary?.invitesCount || 0}
+                      {updatedSummary?.invitesCount || 0}
                     </div>
                     <div className="rewards-summary-description">
                       Succesful Invites
@@ -198,7 +206,7 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
                 <IonCol size="6">
                   <div className="rewards-summary-item">
                     <div className="rewards-summary-amount">
-                      {summary?.mintsAmount || 0}
+                      {updatedSummary?.mintsAmount || 0}
                     </div>
                     <div className="rewards-summary-description">Mints</div>
                   </div>
@@ -208,7 +216,7 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
                 <IonCol size="6">
                   <div className="rewards-summary-item">
                     <div className="rewards-summary-amount">
-                      {summary?.rewardsCount || 0}
+                      {updatedSummary?.rewardsCount || 0}
                     </div>
                     <div className="rewards-summary-description">Rewards</div>
                   </div>
@@ -216,7 +224,7 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
                 <IonCol size="6">
                   <div className="rewards-summary-item">
                     <div className="rewards-summary-amount">
-                      {summary?.ethEarned || "0.00"}
+                      {updatedSummary?.ethEarned || "0.00"}
                     </div>
                     <div className="rewards-summary-description">
                       ETH Earned
@@ -240,17 +248,13 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
                             {group.name}{" "}
                           </div>
                           <div className="rewards-collective-card-group-actions">
-                            {honeyPotAddresses[group.id]
-                              ? showWithdrawal(group.id) && (
-                                  <WithdrawalButton
-                                    group={group}
-                                    loadingWithdrawal={loadingWithdrawal}
-                                    handleWithdrawRewards={
-                                      handleWithdrawRewards
-                                    }
-                                  />
-                                )
-                              : null}
+                            {showWithdrawal(group.id) ? (
+                              <WithdrawalButton
+                                group={group}
+                                loadingWithdrawal={loadingWithdrawal}
+                                handleWithdrawRewards={handleWithdrawRewards}
+                              />
+                            ) : null}
                             <GenerateInviteBtn groupId={group.id} /> |{" "}
                             <IonText
                               color="primary"
@@ -296,17 +300,13 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
                             {group.name}{" "}
                           </div>
                           <div className="rewards-collective-card-group-actions">
-                            {honeyPotAddresses[group.id]
-                              ? showWithdrawal(group.id) && (
-                                  <WithdrawalButton
-                                    group={group}
-                                    loadingWithdrawal={loadingWithdrawal}
-                                    handleWithdrawRewards={
-                                      handleWithdrawRewards
-                                    }
-                                  />
-                                )
-                              : null}
+                            {showWithdrawal(group.id) ? (
+                              <WithdrawalButton
+                                group={group}
+                                loadingWithdrawal={loadingWithdrawal}
+                                handleWithdrawRewards={handleWithdrawRewards}
+                              />
+                            ) : null}
                             <GenerateInviteBtn groupId={group.id} /> |{" "}
                             <IonText
                               color="primary"

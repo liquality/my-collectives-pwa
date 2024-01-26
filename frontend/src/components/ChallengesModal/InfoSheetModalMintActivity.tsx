@@ -18,7 +18,6 @@ const InfoSheetModalMintActivity: React.FC<InfoSheetModalMintActivityProps> = (
     tokenId ?? ""
   );
 
-  console.log(mintActivity, "mint activity?");
   return (
     <IonGrid className="ion-padding">
       <IonRow>
