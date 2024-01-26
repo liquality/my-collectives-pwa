@@ -15,7 +15,7 @@ export class AuthService {
   ): Promise<string | null> {
     const user = await this.findByAddress(publicAddress);
     if (user) {
-      const decodedAddress = ethers.utils.verifyMessage(user.nonce, signature);
+      const decodedAddress = ethers.utils.verifyMessage("By signing, you are proving you own this wallet and logging in. This does not initiate a transaction or cost any fees. " + user.nonce, signature);
 
       //TODO: improve validation
       if (publicAddress.toLowerCase() === decodedAddress.toLowerCase()) {
