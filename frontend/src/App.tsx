@@ -89,7 +89,6 @@ const config = createConfig({
 });
 
 // 3. Create modal
-createWeb3Modal({ wagmiConfig, projectId, chains });
 const App: React.FC = () => {
   const HideMenuOnRoutes = ["/invite", "/join"];
   const AppRouterOutlet = (
@@ -135,6 +134,8 @@ const App: React.FC = () => {
     );
   };
   const Main = () => {
+    createWeb3Modal({ wagmiConfig, projectId, chains });
+
     useSignInWallet();
     return (
       <IonApp>
