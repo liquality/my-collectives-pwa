@@ -11,11 +11,11 @@ export class AuthService {
 
   public static async loginWithPublicAddress(
     publicAddress: string,
-    signature: string
+    data: { message: string, signature: string }
   ): Promise<string | null> {
     const user = await this.findByAddress(publicAddress);
     if (user) {
-      const decodedAddress = ethers.utils.verifyMessage(user.nonce, signature);
+      const decodedAddress = ethers.utils.verifyMessage(user.nonce, data.signature);
 
       //TODO: improve validation
       if (publicAddress.toLowerCase() === decodedAddress.toLowerCase()) {

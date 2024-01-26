@@ -4,17 +4,22 @@ import { useState, } from "react";
 import {
   useAccount,
   useDisconnect,
+  useNetwork,
   useSignMessage,
 } from "wagmi";
+import { SiweMessage } from 'siwe'
+
 
 export function useSignInWallet() {
   const [user, setUser] = useState<any>(null);
-  const { signMessage } = useSignMessage({
+  const { chain } = useNetwork()
+
+  const { signMessage, signMessageAsync } = useSignMessage({
     //Listen to successfully signed message and login after that
     onSuccess: async (data, args) => {
-      await login(data);
+      //await login(data);
       //TODO: investiage better way to reloadGroups
-      window.location.reload()
+      //window.location.reload()
     },
 
 
@@ -39,9 +44,27 @@ export function useSignInWallet() {
       // Step 1: Get the user
       const dbUser = await getUser();
       if (dbUser && !Auth.isAuthenticated) {
+
         // Step 2: Sign message with the user
-        signMessage({ message: dbUser.nonce })  //Here we are listening to onSuccess using the signMessage hook and then logging in User
+
+        const message = new SiweMessage({
+          domain: window.location.host,
+          address,
+          statement: 'By signing, you are proving you own this wallet and logging in. This does not initiate a transaction or cost any fees.',
+          uri: window.location.origin,
+          version: '1',
+          chainId: chain?.id || 0,
+          nonce: dbUser.nonce,
+        })
+
+        const signature = await signMessageAsync({
+          message: message.prepareMessage(),
+        })
+        await login({ message, signature });
+        //Here we are listening to onSuccess using the signMessage hook and then logging in User
       }
+      /* 
+       */
       else if (!dbUser) {
         Auth.clearAccessToken();
 
