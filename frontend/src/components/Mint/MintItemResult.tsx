@@ -19,6 +19,7 @@ import {
 } from "@ionic/react";
 import React, { useState } from "react";
 import GenerateInviteBtn from "../GenerateInvite";
+import SocialShareButton from "../SocialShareButton";
 
 export interface MintItemResultProps {
   challenge: Challenge;
@@ -97,30 +98,11 @@ const MintItemResult: React.FC<MintItemResultProps> = ({
           </IonRow>
           <IonRow className="ion-justify-content-center">
             <IonCol size="auto">
-              <IonButton fill="clear">
-                <IonIcon
-                  slot="icon-only"
-                  src="/assets/icons/social_twitter.svg"
-                />
-              </IonButton>
-              <IonButton fill="clear">
-                <IonIcon
-                  slot="icon-only"
-                  src="/assets/icons/social_discord.svg"
-                />
-              </IonButton>
-              <IonButton fill="clear">
-                <IonIcon
-                  slot="icon-only"
-                  src="/assets/icons/social_telegram.svg"
-                />
-              </IonButton>
-              <IonButton fill="clear">
-                <IonIcon
-                  slot="icon-only"
-                  src="/assets/icons/social_sound.svg"
-                />
-              </IonButton>
+              <SocialShareButton socialNetwork="x" challengeId={challenge.id}/>
+              {/* <SocialShareButton socialNetwork="discord" challengeId={challenge.id}/> */}
+              <SocialShareButton socialNetwork="telegram" challengeId={challenge.id}/>
+              {/* <SocialShareButton socialNetwork="sound" challengeId={challenge.id}/> */}
+              
             </IonCol>
           </IonRow>
         </IonGrid>
