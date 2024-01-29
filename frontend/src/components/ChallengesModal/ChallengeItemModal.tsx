@@ -133,7 +133,9 @@ const ChallengeItemModal = ({
   useEffect(() => {
     if (selectedChallengeId) {
       const index = challenges.findIndex(
-        (challenge) => challenge?.id === selectedChallengeId
+        (challenge) =>
+          challenge?.id === selectedChallengeId ||
+          challenge?.challengeId === selectedChallengeId
       );
 
       if (index >= 0) {
