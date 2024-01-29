@@ -104,11 +104,6 @@ const App: React.FC = () => {
       <Route path="/mint" component={Mint} />
       <Route path={pathConstants.rewards.manage} component={ManageCollective} />
 
-      {/* Default route (not requiring authentication) */}
-      <Route exact path={"/" || ""}>
-        <Redirect to="/discover" />
-      </Route>
-
       {/* Protected routes, needs auth */}
       <ProtectedRoute>
         <Route path="/settings" render={() => <Settings />} exact />
