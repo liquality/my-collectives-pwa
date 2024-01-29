@@ -36,8 +36,6 @@ const CollectiveMint: React.FC<CollectiveMintProps> = ({ match }) => {
     Challenge | undefined | null
   >();
 
-  console.log(challenges, "challegnes by groupID");
-
   const onCloseChallenteItemModal = () => {
     setSelectedChallenge(null);
   };
@@ -55,11 +53,12 @@ const CollectiveMint: React.FC<CollectiveMintProps> = ({ match }) => {
         setSelectedChallenge(challenges[index]);
       }
     }
+    
   }, [challengeId, challenges]);
 
   useEffect(() => {
     if (selectedChallenge) {
-      !itemModalIsOpen && setItemModalIsOpen(true);
+      setItemModalIsOpen(true);
     } else {
       setItemModalIsOpen(false);
     }
@@ -111,7 +110,7 @@ const CollectiveMint: React.FC<CollectiveMintProps> = ({ match }) => {
         <ChallengeItemModal
           isOpen={itemModalIsOpen}
           challenges={challenges || []}
-          selectedChallengeId={selectedChallenge?.id}
+          selectedChallengeId={selectedChallenge?.challengeId}
           dismiss={onCloseChallenteItemModal}
         />
       </IonContent>
