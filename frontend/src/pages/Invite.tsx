@@ -61,21 +61,34 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
     setProcessing(true);
     if (claimInviteAvailable && inviteSig && inviteId) {
       try {
-        const txResponse = await ContractService.joinCollective(
-          inviteId,
+        const isMember = await ContractService.verifyIfIsMember(
           invite.groupPublicAddress,
           invite.groupWalletAddress,
-          invite.groupNonceKey,
-          inviteSig
+          invite.groupNonceKey
         );
-        if (txResponse && txResponse.status === "success") {
-          await InvitesService.claim(invite.id, address!);
-          const url = pathConstants.collective.mints.replace(
-            ":groupId",
-            invite.groupId
+
+        if (isMember) {
+          throw Error("The user is already a member.");
+        } else {
+          const txResponse = await ContractService.joinCollective(
+            inviteId,
+            invite.groupPublicAddress,
+            invite.groupWalletAddress,
+            invite.groupNonceKey,
+            inviteSig
           );
-          router.push(url);
-        } else throw Error("Contract transaction failed :(");
+
+          if (txResponse?.status === "success") {
+            await InvitesService.claim(invite.id, address!);
+            const url = pathConstants.collective.mints.replace(
+              ":groupId",
+              invite.groupId
+            );
+            router.push(url);
+          } else {
+            throw Error("Contract transaction failed :(");
+          }
+        }
       } catch (error) {
         presentToast(
           "You could not join the collective, reason:" + error,
@@ -83,6 +96,12 @@ const Invite: React.FC<InvitePageProps> = ({ match }) => {
           banOutline
         );
       }
+    } else {
+      presentToast(
+        "You could not join the collective, reason: The invite is not valid.",
+        "danger",
+        banOutline
+      );
     }
     setProcessing(false);
   }

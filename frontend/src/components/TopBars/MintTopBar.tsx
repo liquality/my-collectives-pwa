@@ -1,10 +1,10 @@
 import PageTopBar from "@/components/PageTopBar";
 import { pathConstants } from "@/utils/routeNames";
 import { RouteComponentProps } from "react-router";
-export interface DiscoverTopBarProps {
+export interface MintTopBarProps {
   children?: React.ReactNode;
 }
-const MintTopBar: React.FC<DiscoverTopBarProps> = ({ children }) => {
+const MintTopBar: React.FC<MintTopBarProps> = ({ children }) => {
   return (
     <PageTopBar
       tabs={[

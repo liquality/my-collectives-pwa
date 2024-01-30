@@ -2,10 +2,10 @@ import PageTopBar from "@/components/PageTopBar";
 import useGetChallengesByGroupId from "@/hooks/Collective/useGetChallengesByGroupId";
 import { pathConstants } from "@/utils/routeNames";
 import { useParams } from "react-router";
-export interface DiscoverTopBarProps {
+export interface CollectiveTopBarProps {
   children?: React.ReactNode;
 }
-const CollectiveTopBar: React.FC<DiscoverTopBarProps> = ({ children }) => {
+const CollectiveTopBar: React.FC<CollectiveTopBarProps> = ({ children }) => {
   const { groupId } = useParams<{ groupId: string }>();
   const { pools, loading } = useGetChallengesByGroupId(groupId);
 

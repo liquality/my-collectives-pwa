@@ -16,9 +16,14 @@ import CreateChallengeModal from "./CreateChallengeModal";
 import { Challenge, GroupedChallenge } from "@/types/challenges";
 import ChallengeItemModal from "@/components/ChallengesModal/ChallengeItemModal";
 import { useSignInWallet } from "@/hooks/useSignInWallet";
+import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 
 const New: React.FC<RouteComponentProps> = (routerProps) => {
-  const { challenges, loading, setChallenges } = useGetChallenges();
+  const {
+    challenges,
+    loading: loadingChallenges,
+    setChallenges,
+  } = useGetChallenges();
   const page = useRef(undefined);
   const createChallengeModal = useRef<HTMLIonModalElement>(null);
   const [itemModalIsOpen, setItemModalIsOpen] = useState(false);
@@ -110,29 +115,32 @@ const New: React.FC<RouteComponentProps> = (routerProps) => {
             />
           </>
         ) : null}
-
-        {Object.keys(groupedChallenges).map((category: string) => (
-          <div key={category}>
-            <div className="spaced-on-sides">
-              <IonLabel className="ion-text-capitalize">
-                {category} | {groupedChallenges[category]?.length}
-              </IonLabel>
-              {challenges ? (
-                <IonLabel
-                  onClick={() => onChallengeSelected(challenges[0])}
-                  color="primary"
-                >
-                  See All
+        {loadingChallenges ? (
+          <PageLoadingIndicator />
+        ) : (
+          Object.keys(groupedChallenges).map((category: string) => (
+            <div key={category}>
+              <div className="spaced-on-sides">
+                <IonLabel className="ion-text-capitalize">
+                  {category} | {groupedChallenges[category]?.length}
                 </IonLabel>
-              ) : null}
+                {challenges ? (
+                  <IonLabel
+                    onClick={() => onChallengeSelected(challenges[0])}
+                    color="primary"
+                  >
+                    See All
+                  </IonLabel>
+                ) : null}
+              </div>
+              <HorizontalSwipe
+                imageData={groupedChallenges[category]}
+                setSelectedChallenge={onChallengeSelected}
+                loading={loadingChallenges}
+              ></HorizontalSwipe>
             </div>
-            <HorizontalSwipe
-              imageData={groupedChallenges[category]}
-              setSelectedChallenge={onChallengeSelected}
-              loading={loading}
-            ></HorizontalSwipe>
-          </div>
-        ))}
+          ))
+        )}
 
         <ChallengeItemModal
           isOpen={itemModalIsOpen}
