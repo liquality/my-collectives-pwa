@@ -45,6 +45,7 @@ import Join from "./pages/Join";
 import Rewards from "./pages/Rewards/Rewards";
 import { pathConstants } from "./utils/routeNames";
 import ManageCollective from "./pages/Rewards/ManageCollective";
+import { useAccountConnector } from "./hooks/useAccountConnector";
 
 setupIonicReact({
   mode: "ios",
@@ -130,8 +131,9 @@ const App: React.FC = () => {
   };
   const Main = () => {
     createWeb3Modal({ wagmiConfig, projectId, chains });
-
+   
     useSignInWallet();
+    useAccountConnector();
     return (
       <IonApp>
         <AppContent />

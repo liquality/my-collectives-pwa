@@ -20,6 +20,7 @@ import { useDisplayEns } from "@/hooks/useDisplayEns";
 import { goerli, mainnet } from "viem/chains";
 
 const ConnectButton: React.FC = () => {
+  
   const { open } = useWeb3Modal();
   const { address, isConnecting, isDisconnected } = useAccount();
   const { disconnect } = useDisconnect();
@@ -42,7 +43,8 @@ const ConnectButton: React.FC = () => {
       // TODO: show error message to the users
     }
   };
-
+  
+  
   return (
     <>
       {isDisconnected ? (
