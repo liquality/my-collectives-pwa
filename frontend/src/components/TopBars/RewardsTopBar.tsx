@@ -1,10 +1,10 @@
 import PageTopBar from "@/components/PageTopBar";
 import { pathConstants } from "@/utils/routeNames";
 import { RouteComponentProps } from "react-router";
-export interface DiscoverTopBarProps {
+export interface RewardsTopBarProps {
   children?: React.ReactNode;
 }
-const RewardsTopBar: React.FC<DiscoverTopBarProps> = ({ children }) => {
+const RewardsTopBar: React.FC<RewardsTopBarProps> = ({ children }) => {
   return (
     <PageTopBar
       tabs={[
