@@ -4,17 +4,23 @@ import * as MyCollectives from "@liquality/my-collectives-sdk";
 import { Config } from "@liquality/my-collectives-sdk";
 import ApiService from "./ApiService";
 import { zeroAddress } from "viem";
+import { Connector } from "@wagmi/connectors";
+
+let CurrentConnector: Connector | null | undefined;
 
 const ContractService = {
+  setConnector: (connector?: Connector) => {
+    CurrentConnector = connector;
+  },
   createCollective: async function (
     tokenContracts: string[],
     honeyPots: string[]
   ) {
     this.initSDKConfig();
     const salt = generateSalt();
-
+    const provider = await this.getProvider();
     const response = await MyCollectives.Collective.create(
-      this.getProvider(),
+      provider,
       { tokenContracts, honeyPots: honeyPots },
       salt
     );
@@ -28,7 +34,7 @@ const ContractService = {
     nonceKey: bigint
   ) {
     this.initSDKConfig();
-    const provider = this.getProvider();
+    const provider = await this.getProvider();
     const isMemberResponse = await MyCollectives.Collective.isMember(
       provider,
       { address: cAddress, wallet: cWallet, nonceKey },
@@ -45,7 +51,7 @@ const ContractService = {
     inviteSig: string
   ) {
     this.initSDKConfig();
-    const provider = this.getProvider();
+    const provider = await this.getProvider();
     const inviteIdAsUint8Array = utils.arrayify(inviteId);
     console.log(
       { address: cAddress, wallet: cWallet, nonceKey },
@@ -76,9 +82,8 @@ const ContractService = {
     );
     // Sign the inviteID hash to get the inviteSig from the initiator
     let messageHashBinary = ethers.utils.arrayify(messageHash);
-    let inviteSig = await this.getProvider()
-      .getSigner()
-      .signMessage(messageHashBinary); //TODO: the person INVITING should generate and sign this before getting the copyclip invite
+    const provider = await this.getProvider();
+    let inviteSig = provider.getSigner().signMessage(messageHashBinary); //TODO: the person INVITING should generate and sign this before getting the copyclip invite
     console.log("inviteSig >> ", inviteSig, inviteCodeBytes);
     const inviteIdInHex = ethers.utils.hexlify(inviteCodeBytes).toString();
 
@@ -92,18 +97,18 @@ const ContractService = {
     poolAddresses: string[]
   ) {
     this.initSDKConfig();
-
-    console.log(this.getProvider(), "this got provider?");
+    const provider = await this.getProvider();
+    console.log(provider, "this got provider?");
     console.log(
       { address: cAddress, wallet: cWallet, nonceKey },
       poolAddresses,
       "all withdrawal params"
     );
     const response = await MyCollectives.Pool.withdrawRewards(
-      this.getProvider(),
+      provider,
       { address: cAddress, wallet: cWallet, nonceKey },
       poolAddresses,
-      await this.getProvider().getSigner().getAddress()
+      await provider.getSigner().getAddress()
     );
     console.log("!!!!! response withdrawal => ", response);
     return response;
@@ -111,12 +116,10 @@ const ContractService = {
 
   async createHoneyPot() {
     this.initSDKConfig();
+    const provider = await this.getProvider();
     const salt = generateSalt();
-    const createResponse = await MyCollectives.HoneyPot.create(
-      this.getProvider(),
-      salt
-    );
-    const response = await MyCollectives.HoneyPot.get(this.getProvider(), salt);
+    const createResponse = await MyCollectives.HoneyPot.create(provider, salt);
+    const response = await MyCollectives.HoneyPot.get(provider, salt);
     console.log("!!!!! response honey pot address => ", response);
     return response;
   },
@@ -129,14 +132,15 @@ const ContractService = {
     honeyPots: string[]
   ) {
     this.initSDKConfig();
+    const provider = await this.getProvider();
     console.log(
-      this.getProvider(),
+      provider,
       { address: cAddress, wallet: cWallet, nonceKey },
       { tokenContracts, honeyPots },
       "wwwwwaaa"
     );
     const response = await MyCollectives.Pool.createPools(
-      this.getProvider(),
+      provider,
       { address: cAddress, wallet: cWallet, nonceKey },
       { tokenContracts, honeyPots }
     );
@@ -159,6 +163,7 @@ const ContractService = {
   ) {
     this.initSDKConfig();
     try {
+      const provider = await this.getProvider();
       const poolAddress = await this.getPoolAddress(
         cAddress,
         cWallet,
@@ -175,7 +180,7 @@ const ContractService = {
         "All of the PARAMS: Pool.mint()",
         { address: cAddress, wallet: cWallet, nonceKey },
         {
-          recipient: await this.getProvider().getSigner().getAddress(),
+          recipient: await provider.getSigner().getAddress(),
           tokenID: tokenId ? Number(tokenId) : generatedTokenId,
           amount,
           quantity,
@@ -188,10 +193,10 @@ const ContractService = {
         }
       );
       const response = await MyCollectives.Pool.mint(
-        this.getProvider(),
+        provider,
         { address: cAddress, wallet: cWallet, nonceKey },
         {
-          recipient: await this.getProvider().getSigner().getAddress(),
+          recipient: await provider.getSigner().getAddress(),
           tokenID: tokenId ? Number(tokenId) : generatedTokenId,
           amount, // amount, //amount in WEI bigint
           quantity,
@@ -230,8 +235,9 @@ const ContractService = {
       honeyPot,
       "params in getPoolByHoneyPoot"
     );
+    const provider = await this.getProvider();
     const response = await MyCollectives.Collective.getPoolByHoneyPot(
-      this.getProvider(),
+      provider,
       { address: cAddress, wallet: cWallet, nonceKey },
       honeyPot
     );
@@ -241,7 +247,8 @@ const ContractService = {
 
   async leaveCollective(cAddress: string, cWallet: string, nonceKey: bigint) {
     this.initSDKConfig();
-    const response = await MyCollectives.Collective.leave(this.getProvider(), {
+    const provider = await this.getProvider();
+    const response = await MyCollectives.Collective.leave(provider, {
       address: cAddress,
       wallet: cWallet,
       nonceKey,
@@ -256,8 +263,9 @@ const ContractService = {
     return bytes16;
   },
 
-  getProvider: function () {
-    return new ethers.providers.Web3Provider((window as any).ethereum);
+  getProvider: async function () {
+    const provider = await CurrentConnector?.getProvider();
+    return new ethers.providers.Web3Provider(provider);
   },
 
   initSDKConfig: function () {

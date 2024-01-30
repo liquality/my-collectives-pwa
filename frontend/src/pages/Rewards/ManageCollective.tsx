@@ -146,7 +146,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
       setPendingEdit(false);
       console.log(error, "wats error?");
       presentToast(
-        "We could not edit your group :( reason:",
+        `We could not edit your group :( reason: ${error}`,
         "danger",
         banOutline
       );
@@ -171,7 +171,7 @@ const ManageCollective: React.FC<ManageCollectivePageProps> = () => {
 
   return (
     <IonPage>
-      <Header title="Manage Collective" goBack={true}/>
+      <Header title="Manage Collective" goBack={true} />
       {pendingEdit ? (
         <IonContent>
           <PageLoadingIndicator />
