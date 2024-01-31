@@ -22,6 +22,7 @@ import { fetchBalance, erc20ABI, FetchBalanceResult } from "@wagmi/core";
 import { setBalance } from "viem/_types/actions/test/setBalance";
 
 const ConnectButton: React.FC = () => {
+  
   const { open } = useWeb3Modal();
   const { address, isConnecting, isDisconnected } = useAccount();
   const { disconnect } = useDisconnect();
@@ -68,7 +69,8 @@ const connectedBalance = useBalance({
       // TODO: show error message to the users
     }
   };
-
+  
+  
   return (
     <>
       {isDisconnected ? (
