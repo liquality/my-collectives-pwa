@@ -1,16 +1,10 @@
-import {
-  IonContent,
-  IonPage,
-  IonRouterOutlet,
-  useIonRouter,
-} from "@ionic/react";
+import { IonContent, IonPage, IonRouterOutlet } from "@ionic/react";
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
 import {
   Redirect,
   Route,
   RouteComponentProps,
   useLocation,
-  useParams,
 } from "react-router";
 import MintCollectiveContent from "./MintCollectiveContent";
 import NoGroups from "./NoGroups";
@@ -23,21 +17,11 @@ import NFTPage from "./NFTPage";
 import { useEffect } from "react";
 
 const Mint: React.FC<RouteComponentProps> = (routerProps) => {
-  const { myGroups, loading } = useGetMyGroups();
-  const router = useIonRouter();
+  const { loading } = useGetMyGroups();
   const location = useLocation();
 
-  //TODO: make the logic for this more bug-proof
   useEffect(() => {
-    console.log(
-      location.pathname,
-      "ÖÖÖÖÖ",
-      pathConstants.collective.collective,
-      "wats the pathnames?",
-      location.pathname.startsWith(pathConstants.collective.collective)
-    );
     if (location.pathname.startsWith(pathConstants.collective.collective)) {
-      console.log("coming here to replace:", routerProps.location.pathname);
       routerProps.history.replace(pathConstants.mintPage.myCollectives);
     }
   }, []);

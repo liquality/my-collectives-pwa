@@ -21,6 +21,7 @@ import {
   closeOutline,
 } from "ionicons/icons";
 import { useHistory } from "react-router";
+import { pathConstants } from "@/utils/routeNames";
 
 export interface HeaderProps {
   title?: string;
@@ -32,17 +33,12 @@ const BackButton = () => {
   const router = useIonRouter();
   const history = useHistory();
 
-  const handleBack = () => {
-    // Replace the current route with the new path and clear history
-    history.replace("/discover/new");
-  };
-
   return (
     <IonButton
       className="header-back-button"
       fill="clear"
       color="dark"
-      onClick={handleBack}
+      onClick={() => router.push(pathConstants.discover.new)}
     >
       <IonIcon icon={chevronBackOutline} />
     </IonButton>
