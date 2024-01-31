@@ -84,6 +84,7 @@ const ChallengeItemModal = ({
   function onDismissMintModal() {
     setMintModalIsOpen(false);
     setItemInfoIsOpen(true);
+    setInfoHeight(initialInfoBreakpoint);
   }
 
   function onClickReject() {
@@ -104,6 +105,7 @@ const ChallengeItemModal = ({
 
   function reduceInfoHeigth() {
     infoSheetModalRef.current?.setCurrentBreakpoint(initialInfoBreakpoint);
+    setInfoHeight(initialInfoBreakpoint);
   }
 
   function setCurrentCard(index: number = -1) {
@@ -144,6 +146,7 @@ const ChallengeItemModal = ({
       }
     }
   }, [selectedChallengeId]);
+
   useEffect(() => {
     if (challenges.length <= 1) {
       setDisableNav(true);
@@ -151,6 +154,7 @@ const ChallengeItemModal = ({
       setDisableNav(false);
     }
   }, [challenges]);
+
   useEffect(() => {
     if (infoHeight > initialInfoBreakpoint) {
       setShowArrowDown(true);

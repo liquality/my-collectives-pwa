@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import MintItemScreen from "@/components/Mint/MintItemScreen";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 import ApiService from "@/services/ApiService";
@@ -32,6 +33,7 @@ const NFTPage: React.FC<NFTPageProps> = ({ match }) => {
 
   return (
     <IonPage>
+       <Header title="Mint" />
       <IonContent className="ion-padding" color="light">
         {loading ? (
           <PageLoadingIndicator />
