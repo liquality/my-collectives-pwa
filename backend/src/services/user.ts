@@ -92,8 +92,8 @@ export class UserService {
     return {
       ethEarned: utils.formatUnits(ethEarned, "ether"),
       mintsAmount,
-      rewardsCount: parseInt(`${userRewards[0].count || 0}`),
-      invitesCount: parseInt(`${invites[0].count || 0}`),
+      rewardsCount: parseInt(`${userRewards[0]?.count || 0}`),
+      invitesCount: parseInt(`${invites[0]?.count || 0}`),
       user_rewards: userRewards,
       poolsAddressBalances,
     };
