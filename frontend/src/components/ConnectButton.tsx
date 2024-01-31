@@ -1,6 +1,5 @@
 import { shortenAddress } from "@/utils/adddress";
 import {
-  IonButton,
   IonContent,
   IonPopover,
   IonIcon,
@@ -8,21 +7,16 @@ import {
   IonItem,
   IonList,
   IonLabel,
-  isPlatform,
   IonChip,
 } from "@ionic/react";
-import { logIn, logOut, wallet } from "ionicons/icons";
+import { logOut } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
-import { useAccount, useBalance, useContractRead, useDisconnect } from "wagmi";
+import { useAccount, useDisconnect } from "wagmi";
 import { Auth } from "@/utils";
 import { useDisplayEns } from "@/hooks/useDisplayEns";
-import { goerli, mainnet } from "viem/chains";
-import { fetchBalance, erc20ABI, FetchBalanceResult } from "@wagmi/core";
-import { setBalance } from "viem/_types/actions/test/setBalance";
 
 const ConnectButton: React.FC = () => {
-  
   const { open } = useWeb3Modal();
   const { address, isConnecting, isDisconnected } = useAccount();
   const { disconnect } = useDisconnect();
@@ -69,8 +63,7 @@ const connectedBalance = useBalance({
       // TODO: show error message to the users
     }
   };
-  
-  
+
   return (
     <>
       {isDisconnected ? (

@@ -1,16 +1,10 @@
-import {
-  IonContent,
-  IonPage,
-  IonRouterOutlet,
-  useIonRouter,
-} from "@ionic/react";
+import { IonContent, IonPage, IonRouterOutlet } from "@ionic/react";
 import useGetMyGroups from "@/hooks/Groups/useGetMyGroups";
 import {
   Redirect,
   Route,
   RouteComponentProps,
   useLocation,
-  useParams,
 } from "react-router";
 import MintCollectiveContent from "./MintCollectiveContent";
 import NoGroups from "./NoGroups";
@@ -20,14 +14,17 @@ import MyMints from "./MyMints";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 import CollectiveDetail from "./CollectiveDetail/CollectiveDetail";
 import NFTPage from "./NFTPage";
+import { useEffect } from "react";
 
-const Mint: React.FC<RouteComponentProps> = ({ match }) => {
-  const { myGroups, loading } = useGetMyGroups();
-  const router = useIonRouter();
-
+const Mint: React.FC<RouteComponentProps> = (routerProps) => {
+  const { loading } = useGetMyGroups();
   const location = useLocation();
 
-  //TODO: make the logic for this more bug-proof
+  useEffect(() => {
+    if (location.pathname.startsWith(pathConstants.collective.collective)) {
+      routerProps.history.replace(pathConstants.mintPage.myCollectives);
+    }
+  }, []);
 
   return (
     <IonPage>
@@ -56,7 +53,11 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
               component={CollectiveDetail}
             />
 
-            <Route path={pathConstants.mintPage.nftPage} component={NFTPage} exact />
+            <Route
+              path={pathConstants.mintPage.nftPage}
+              component={NFTPage}
+              exact
+            />
             <Route exact path={pathConstants.mintPage.mint}>
               <Redirect
                 to={

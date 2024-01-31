@@ -44,10 +44,11 @@ export class UserController {
       res.status(401).send({ error: "Authentication required" });
     } else {
       try {
-        const summary = await UserService.getRewardsSummary(user.id, );
+        const summary = await UserService.getRewardsSummary(user.id);
+        console.log(summary, 'wats summary?')
         res.status(200).send(summary);
       } catch (err: any) {
-        console.log(err, 'wats err')
+        console.log(err, 'wats err get rewards summary')
         res.status(500).send({ error: err.message });
       }
     }

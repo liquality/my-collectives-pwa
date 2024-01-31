@@ -68,7 +68,7 @@ const CollectiveChat: React.FC<CollectiveChatProps> = ({ match }) => {
   };
   return (
     <IonPage>
-    <Header title={group?.name} goBack={true}/>
+      <Header title={group?.name} goBack={true} />
       <IonContent className="ion-padding" color="light">
         <CollectiveTopBar>
           <PageSearchBar />
@@ -77,7 +77,7 @@ const CollectiveChat: React.FC<CollectiveChatProps> = ({ match }) => {
           <IonList lines="none" className="ion-padding chat-container">
             {messages.map((message, index) => {
               const isMyMessage =
-                message.userAddress === address || user.id === message.userId;
+                message.userAddress === address || user?.id === message.userId;
 
               return (
                 <IonItem key={index}>
