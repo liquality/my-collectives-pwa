@@ -14,20 +14,18 @@ import MintItemScreen from "../Mint/MintItemScreen";
 export interface ChallengeItemMintModalProps {
   dismiss: () => void;
   challenge: Challenge;
-  isOpen: boolean;
   presentingElement?: HTMLIonModalElement | null;
 }
 
 const ChallengeItemMintModal = ({
   dismiss,
   challenge,
-  isOpen,
   presentingElement,
 }: ChallengeItemMintModalProps) => {
   return (
     <IonModal
       className="challenge-item-mint-modal"
-      isOpen={isOpen}
+      isOpen={true}
       presentingElement={presentingElement!}
       onIonModalDidDismiss={() => dismiss()}
     >
