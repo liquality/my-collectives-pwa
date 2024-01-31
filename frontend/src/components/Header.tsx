@@ -20,18 +20,30 @@ import {
   chevronBackOutline,
   closeOutline,
 } from "ionicons/icons";
+import { useHistory } from "react-router";
 
 export interface HeaderProps {
   title?: string;
   children?: React.ReactNode;
-  goBack?: boolean
+  goBack?: boolean;
 }
 
 const BackButton = () => {
   const router = useIonRouter();
+  const history = useHistory();
+
+  const handleBack = () => {
+    // Replace the current route with the new path and clear history
+    history.replace("/discover/new");
+  };
+
   return (
-    <IonButton className="header-back-button" 
-    fill="clear" color="dark" onClick={() => router.goBack()}>
+    <IonButton
+      className="header-back-button"
+      fill="clear"
+      color="dark"
+      onClick={handleBack}
+    >
       <IonIcon icon={chevronBackOutline} />
     </IonButton>
   );
@@ -42,9 +54,7 @@ const Header = ({ title, children, goBack }: HeaderProps) => {
       <IonToolbar>
         {isPlatform("desktop") ? (
           <>
-            <IonButtons slot="start">
-              {goBack && <BackButton />}
-            </IonButtons>
+            <IonButtons slot="start">{goBack && <BackButton />}</IonButtons>
             <IonLabel className="header-title-text">{title}</IonLabel>
           </>
         ) : (
@@ -57,7 +67,7 @@ const Header = ({ title, children, goBack }: HeaderProps) => {
       {!isPlatform("desktop") && (
         <div className="header-title-container">
           <div className="ion-padding-no-border page-header-title">
-          {goBack && <BackButton />}
+            {goBack && <BackButton />}
             {title ? (
               <>
                 <IonLabel className="header-title-text">{title}</IonLabel>

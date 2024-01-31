@@ -20,14 +20,27 @@ import MyMints from "./MyMints";
 import { PageLoadingIndicator } from "@/components/PageLoadingIndicator";
 import CollectiveDetail from "./CollectiveDetail/CollectiveDetail";
 import NFTPage from "./NFTPage";
+import { useEffect } from "react";
 
-const Mint: React.FC<RouteComponentProps> = ({ match }) => {
+const Mint: React.FC<RouteComponentProps> = (routerProps) => {
   const { myGroups, loading } = useGetMyGroups();
   const router = useIonRouter();
-
   const location = useLocation();
 
   //TODO: make the logic for this more bug-proof
+  useEffect(() => {
+    console.log(
+      location.pathname,
+      "ÖÖÖÖÖ",
+      pathConstants.collective.collective,
+      "wats the pathnames?",
+      location.pathname.startsWith(pathConstants.collective.collective)
+    );
+    if (location.pathname.startsWith(pathConstants.collective.collective)) {
+      console.log("coming here to replace:", routerProps.location.pathname);
+      routerProps.history.replace(pathConstants.mintPage.myCollectives);
+    }
+  }, []);
 
   return (
     <IonPage>
@@ -56,7 +69,11 @@ const Mint: React.FC<RouteComponentProps> = ({ match }) => {
               component={CollectiveDetail}
             />
 
-            <Route path={pathConstants.mintPage.nftPage} component={NFTPage} exact />
+            <Route
+              path={pathConstants.mintPage.nftPage}
+              component={NFTPage}
+              exact
+            />
             <Route exact path={pathConstants.mintPage.mint}>
               <Redirect
                 to={
