@@ -300,6 +300,15 @@ ion-toolbar {
   border-radius: 0.938rem;
 }
 
+.challenge-cards-swiper {
+  height: 100% !important;
+}
+
+.challenge-cards-swiper .swiper-slide{
+  width: 100% !important;
+  border-radius: 0.938rem;
+}
+
 .card-img-swiper {
   margin: 0;
   width: 100%;
@@ -1075,7 +1084,7 @@ ion-modal#sheet-info-modal::part(handle) {
 }
 
 .challenge-info-cards {
-  position: relative;
+  position: absolute;
   background-color: #ffffff;
 }
 

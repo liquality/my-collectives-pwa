@@ -1,3 +1,4 @@
+import "swiper/css/effect-cards";
 import {
   IonHeader,
   IonToolbar,
@@ -16,9 +17,11 @@ import { useEffect, useRef, useState } from "react";
 import { Challenge } from "@/types/challenges";
 import { closeOutline, arrowDownOutline } from "ionicons/icons";
 import { convertIpfsImageUrl } from "@/utils";
-import ChallengeImageCard from "./ChallengeImageCard";
-import { AnimatePresence, motion } from "framer";
 import ChallengeItemMintModal from "./ChallengeItemMintModal";
+import ImageLoader from "../Images/ImageLoader";
+import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
+import { EffectCards } from "swiper/modules";
+
 export interface ChallengeItemModalProps {
   dismiss: () => void;
   challenges: Challenge[];
@@ -26,27 +29,7 @@ export interface ChallengeItemModalProps {
   isOpen: boolean;
   presentingElement?: HTMLElement;
 }
-
 const initialInfoBreakpoint = 0.25;
-type CardSwipeDirection = "left" | "right";
-
-export const easeOutExpo = [0.16, 1, 0.3, 1];
-
-const cardVariants = {
-  current: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0 },
-  },
-  exit: {
-    opacity: 0,
-    x: -300,
-    y: 40,
-    rotate: -20,
-    transition: { duration: 0.3, ease: easeOutExpo },
-  },
-};
 
 const ChallengeItemModal = ({
   dismiss,
@@ -59,12 +42,10 @@ const ChallengeItemModal = ({
   const [mintModalIsOpen, setMintModalIsOpen] = useState(false);
   const [showArrowDown, setShowArrowDown] = useState(false);
   const [infoHeight, setInfoHeight] = useState(initialInfoBreakpoint);
-  const [nextIndex, setNextIndex] = useState(1);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [applyRejectAnimation, setApplyRejectAnimation] = useState(false);
   const [disableNav, setDisableNav] = useState(false);
   const infoSheetModalRef = useRef<HTMLIonModalElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(-1);
+  const [swiperRef, setSwiperRef] = useState<SwiperClass>();
 
   function handleDismiss() {
     setItemInfoIsOpen(false);
@@ -87,47 +68,34 @@ const ChallengeItemModal = ({
   }
 
   function onClickReject() {
-    setApplyRejectAnimation(true);
-    setCurrentCard();
-    setTimeout(() => {
-      setApplyRejectAnimation(false);
-    }, 300);
+    swiperRef?.slideNext();
   }
 
-  function handleCardSwipe(direction: string) {
-    if ((direction as CardSwipeDirection) === "left") {
-      setCurrentCard();
-    } else {
-      onClickMint();
+  function handleOnSwiper(swiper: SwiperClass) {
+    swiper.slideTo(currentIndex, 0, false);
+    setSwiperRef(swiper);
+  }
+
+  function handleActiveIndexChange(swiper: SwiperClass) {
+    if (currentIndex !== swiper.realIndex) {
+      console.log(
+        "handleActiveIndexChange",
+        currentIndex,
+        swiper.realIndex,
+        swiper.swipeDirection
+      );
+
+      if (swiper.swipeDirection === "prev") {
+        onClickMint();
+        swiper.slideTo(currentIndex, 0, false);
+      } else {
+        setCurrentIndex(swiper.realIndex);
+      }
     }
   }
 
   function reduceInfoHeigth() {
     infoSheetModalRef.current?.setCurrentBreakpoint(initialInfoBreakpoint);
-  }
-
-  function setCurrentCard(index: number = -1) {
-    if (index >= 0) {
-      setCurrentIndex(index);
-      if (index + 1 >= challenges.length - 1) {
-        setNextIndex(0);
-      } else {
-        setNextIndex(index + 1);
-      }
-    } else {
-      if (currentIndex < challenges.length - 1) {
-        const _currentIndex = currentIndex + 1;
-        setCurrentIndex(_currentIndex);
-        if (_currentIndex + 1 >= challenges.length - 1) {
-          setNextIndex(0);
-        } else {
-          setNextIndex(_currentIndex + 1);
-        }
-      } else {
-        setCurrentIndex(0);
-        setNextIndex(1);
-      }
-    }
   }
 
   useEffect(() => {
@@ -137,13 +105,13 @@ const ChallengeItemModal = ({
           challenge?.id === selectedChallengeId ||
           challenge?.challengeId === selectedChallengeId
       );
-
       if (index >= 0) {
-        setCurrentCard(index);
+        setCurrentIndex(index);
         setItemInfoIsOpen(true);
       }
     }
   }, [selectedChallengeId]);
+
   useEffect(() => {
     if (challenges.length <= 1) {
       setDisableNav(true);
@@ -151,6 +119,7 @@ const ChallengeItemModal = ({
       setDisableNav(false);
     }
   }, [challenges]);
+
   useEffect(() => {
     if (infoHeight > initialInfoBreakpoint) {
       setShowArrowDown(true);
@@ -162,7 +131,7 @@ const ChallengeItemModal = ({
   return (
     <IonModal
       isOpen={isOpen}
-      onIonModalDidDismiss={() => handleDismiss()}
+      onIonModalDidDismiss={handleDismiss}
       presentingElement={presentingElement!}
       className="challenge-item-modal"
     >
@@ -189,42 +158,30 @@ const ChallengeItemModal = ({
         <IonGrid className="challenge-info-grid">
           <IonRow>
             <IonCol className="challenge-info-cards">
-              {disableNav ? null : (
-                <AnimatePresence>
-                  <motion.div
-                    variants={cardVariants}
-                    animate={
-                      !disableNav && applyRejectAnimation ? "" : "current"
-                    }
-                  >
-                    <ChallengeImageCard
-                      disableNav={disableNav}
-                      onSwipe={handleCardSwipe}
-                      url={convertIpfsImageUrl(
-                        challenges[nextIndex]?.imageUrl || ""
-                      )}
-                      setIsDragging={setIsDragging}
-                      isDragging={isDragging}
-                    />
-                  </motion.div>
-                </AnimatePresence>
-              )}
-              <AnimatePresence>
-                <motion.div
-                  variants={cardVariants}
-                  animate={!disableNav && applyRejectAnimation ? "exit" : ""}
-                >
-                  <ChallengeImageCard
-                    disableNav={disableNav}
-                    onSwipe={handleCardSwipe}
-                    url={convertIpfsImageUrl(
-                      challenges[currentIndex]?.imageUrl || ""
-                    )}
-                    setIsDragging={setIsDragging}
-                    isDragging={isDragging}
-                  />
-                </motion.div>
-              </AnimatePresence>
+              <Swiper
+                onSwiper={handleOnSwiper}
+                onRealIndexChange={handleActiveIndexChange}
+                effect={"cards"}
+                grabCursor={true}
+                slidesPerView={1}
+                spaceBetween={0}
+                loop={true}
+                navigation={true}
+                modules={[EffectCards]}
+                className="challenge-cards-swiper"
+              >
+                {disableNav || !swiperRef
+                  ? null
+                  : challenges.map((challenge: any, index: number) => (
+                      <SwiperSlide key={index}>
+                        <ImageLoader
+                          src={convertIpfsImageUrl(challenge.imageUrl || "")}
+                          className="challenge-info-img"
+                        />
+                        ;
+                      </SwiperSlide>
+                    ))}
+              </Swiper>
             </IonCol>
           </IonRow>
           <IonRow>
