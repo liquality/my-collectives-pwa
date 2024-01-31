@@ -109,7 +109,11 @@ const CollectiveMint: React.FC<CollectiveMintProps> = ({ match }) => {
         )}
         <ChallengeItemModal
           isOpen={itemModalIsOpen}
-          challenges={challenges || []}
+          challenges={
+            selectedChallenge
+              ? groupedChallenges[selectedChallenge.category]
+              : challenges || []
+          }
           selectedChallengeId={selectedChallenge?.challengeId}
           dismiss={onCloseChallenteItemModal}
         />
