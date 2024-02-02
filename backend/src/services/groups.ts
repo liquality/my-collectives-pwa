@@ -175,17 +175,13 @@ export class GroupsService {
 
   public static async getMyMints(publicAddress: string): Promise<any> {
     const challenges = await ChallengesService.findAll()
-    console.log(challenges, 'challenges')
     const userCollections = await getUserCollections(publicAddress)
-    console.log(userCollections, 'user collections')
-
     if (challenges && challenges.length) {
       const combinedArray = challenges.map(challenge => {
         const matchingCollection = userCollections.find((collection: { collection: { id: string; }; }) => {
 
           return collection.collection.id === challenge.mintingContractAddress;
         });
-        console.log(matchingCollection, 'matching collection found!')
 
         if (matchingCollection) {
           return {
@@ -193,11 +189,10 @@ export class GroupsService {
             ownershipTokenCount: matchingCollection.ownership.tokenCount,
           };
         }
-
         return challenge;
       });
 
-      console.log(combinedArray, 'combined array???')
+      console.log(combinedArray, 'combined arry')
       return combinedArray;
     } else return null
 

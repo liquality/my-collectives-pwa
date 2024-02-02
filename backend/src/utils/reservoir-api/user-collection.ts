@@ -8,7 +8,6 @@ export async function getUserCollections(publicAddress: string) {
         const data = response.data;
 
         if (data) {
-            console.log(data, 'user collection data')
             return data.collections
         } else throw Error("Could not find any data for address: " + publicAddress)
 
