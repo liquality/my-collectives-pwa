@@ -56,6 +56,22 @@ export class GroupsController {
     }
   };
 
+  public getMyMints: RequestHandler = async (req, res) => {
+    try {
+      const user = await AuthService.find((req as any).auth?.sub);
+      const myMints = await GroupsService.getMyMints(user.publicAddress);
+      if (!myMints) {
+        res.status(404).send({ error: "mymints not found" });
+      } else {
+        res.status(200).send(myMints);
+      }
+    } catch (err: any) {
+      console.log(err, 'wats err get my mints')
+      res.status(500).send({ error: err.message });
+    }
+
+  };
+
   public create: RequestHandler = async (req, res) => {
     const { group, pools } = req.body;
 

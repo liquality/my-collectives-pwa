@@ -8,6 +8,8 @@ import { PoolsController } from "../controllers/v1";
 import { PoolsService } from "./pools";
 import { getTopContributorFromEvents } from "../utils/events-query/top-contributor-zora";
 import { Contract, ethers } from "ethers";
+import { ChallengesService } from "./challenges";
+import { getUserCollections } from "../utils/reservoir-api/user-collection";
 //import * as MyCollective from "@liquality/my-collectives";
 //import { Config } from "@liquality/my-collectives";
 
@@ -170,6 +172,39 @@ export class GroupsService {
     }
     return { success: true }
   }
+
+  public static async getMyMints(publicAddress: string): Promise<any> {
+    const challenges = await ChallengesService.findAll()
+    console.log(challenges, 'challenges')
+    const userCollections = await getUserCollections(publicAddress)
+    console.log(userCollections, 'user collections')
+
+    if (challenges && challenges.length) {
+      const combinedArray = challenges.map(challenge => {
+        const matchingCollection = userCollections.find((collection: { collection: { id: string; }; }) => {
+
+          return collection.collection.id === challenge.mintingContractAddress;
+        });
+        console.log(matchingCollection, 'matching collection found!')
+
+        if (matchingCollection) {
+          return {
+            ...challenge,
+            ownershipTokenCount: matchingCollection.ownership.tokenCount,
+          };
+        }
+
+        return challenge;
+      });
+
+      console.log(combinedArray, 'combined array???')
+      return combinedArray;
+    } else return null
+
+
+
+  }
+
 
 
   /*   public static async find(id: string, authenticatedUserId: string): Promise<Group | null> {
