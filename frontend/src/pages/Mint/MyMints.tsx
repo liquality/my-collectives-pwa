@@ -20,6 +20,7 @@ import PageSearchBar from "@/components/PageSearchBar";
 import useGetGroupById from "@/hooks/Groups/useGetGroupById";
 import useGetChallengesByGroupId from "@/hooks/Collective/useGetChallengesByGroupId";
 import { useMemo, useState } from "react";
+import useGetMyMints from "@/hooks/Collective/useGetMyMints";
 
 export interface MyMintsProps
   extends RouteComponentProps<{
@@ -28,28 +29,29 @@ export interface MyMintsProps
 const MyMints: React.FC<MyMintsProps> = (routerProps) => {
   const { groupId } = routerProps.match.params;
   const { group } = useGetGroupById(groupId);
-  const { pools, loading } = useGetChallengesByGroupId(
+  /*   const { pools, loading } = useGetChallengesByGroupId(
     "245d7847-9d60-477a-970c-4c5e151736d8"
-  );
+  ); */
+  const { myMints, loading } = useGetMyMints();
   const [mintFilter, setMintFilter] = useState("");
 
   //TODO backend function fetch from user_rewards the poolIds that have been minted from a user and all the groups
   const filteredMints = useMemo(() => {
-    let filteredPools = pools || [];
+    let filteredMints = myMints || [];
 
     if (mintFilter === "challenge") {
-      filteredPools = [...filteredPools].sort((a, b) =>
+      filteredMints = [...filteredMints].sort((a, b) =>
         a.name.localeCompare(b.name)
       );
     } else if (mintFilter === "expiration") {
-      filteredPools = [...filteredPools].sort(
+      filteredMints = [...filteredMints].sort(
         (a, b) =>
           new Date(a.expiration).getTime() - new Date(b.expiration).getTime()
       );
     }
 
-    return filteredPools;
-  }, [pools, mintFilter]);
+    return filteredMints;
+  }, [myMints, mintFilter]);
 
   return (
     <IonPage>
@@ -95,8 +97,8 @@ const MyMints: React.FC<MyMintsProps> = (routerProps) => {
         </div>
 
         <div>
-          {!loading && pools
-            ? filteredMints.map((pool: any, index: number) => (
+          {!loading && myMints
+            ? filteredMints.map((myMint: any, index: number) => (
                 <div key={index} className="flexDirectionRow">
                   <div
                     style={{ width: "100%", backgroundColor: "white" }}
@@ -109,27 +111,29 @@ const MyMints: React.FC<MyMintsProps> = (routerProps) => {
                           <img
                             className="row-img"
                             alt="group-avatar"
-                            src={convertIpfsImageUrl(pool.imageUrl)}
+                            src={convertIpfsImageUrl(myMint.imageUrl)}
                           />
                         </div>
                         <div className="flexDirectionCol">
                           <p className="collective-card-name">
-                            {cutOffTooLongString(pool.name, 25)}
+                            {cutOffTooLongString(myMint.name, 25)}
                           </p>
                           <p className="public-address">
-                            {handleDisplayAddress(pool.creatorOfMint)}
+                            {handleDisplayAddress(myMint.creatorOfMint)}
                           </p>
                           <div className="flexDirectionRow mint-icon">
                             <p className="public-address">
                               {" "}
-                              <IonLabel>GroupName</IonLabel>{" "}
+                              <IonLabel>
+                                {myMint.kind} | {myMint.platform}
+                              </IonLabel>{" "}
                               <IonIcon src="/assets/icons/mint-tile.svg"></IonIcon>{" "}
                               <IonLabel style={{ marginRight: 10 }}>
-                                {pool.totalMints}
+                                {myMint.ownershipTokenCount}
                               </IonLabel>{" "}
                               <IonLabel>
                                 {" "}
-                                {convertDateToReadable(pool.expiration)}{" "}
+                                {convertDateToReadable(myMint.expiration)}{" "}
                               </IonLabel>{" "}
                             </p>
                           </div>

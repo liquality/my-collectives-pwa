@@ -71,6 +71,10 @@ const ApiService = {
     );
   },
 
+  getMyMints: async function () {
+    return NetworkService.getResourceWithAuth("/v1/groups/my/mints");
+  },
+
   getNumberOfMembersInGroup: async function (groupAddress: string) {
     return NetworkService.getResourceWithAuth("/v1/members/" + groupAddress);
   },
@@ -147,15 +151,15 @@ const ApiService = {
   saveClaimedRewards: async function (
     groupId: string,
     honeyPotAddresses: string[]
-    ) {
-      return NetworkService.postResourceWithAuth(
-        '/v1/user/save-claimed-rewards',
-        {
-          groupId,
-          honeyPotAddresses
-        }
-      );
-    },
+  ) {
+    return NetworkService.postResourceWithAuth(
+      '/v1/user/save-claimed-rewards',
+      {
+        groupId,
+        honeyPotAddresses
+      }
+    );
+  },
 };
 
 export default ApiService;

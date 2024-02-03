@@ -95,6 +95,9 @@ export class PoolsService {
 
     return poolsWithChallenges;
   }
+
+
+
   //TODO: rewrite this function
   public static async find(id: string): Promise<PoolWithMeta | null> {
     /*  const pool = await dbClient("pools")

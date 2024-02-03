@@ -8,6 +8,7 @@ groupsRouter.post("/", authentication, ctrl.create);
 groupsRouter.get("/address/:address", authentication, ctrl.findByUserAddress);
 groupsRouter.get("/challenge/:challengeId", authentication, ctrl.findByChallenge);
 groupsRouter.get("/:id/members", authentication, ctrl.findMembers);
+groupsRouter.get("/my/mints", authentication, ctrl.getMyMints);
 groupsRouter.get("/:id", authentication, ctrl.find);
 groupsRouter.put("/:id", authentication, ctrl.update);
 groupsRouter.put("/toggle/:groupId/:userId", authentication, ctrl.toggleAdminStatus);
