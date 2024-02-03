@@ -136,7 +136,7 @@ const Summary: React.FC<RouteComponentProps> = (routerProps) => {
           if (reward.groupId === group.id) {
             return {
               ...reward,
-              rewardAvailable: "1.000000",
+              rewardAvailable: "0.000000",
             };
           }
           return reward;
