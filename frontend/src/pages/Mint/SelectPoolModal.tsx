@@ -56,13 +56,19 @@ const SelectPoolModal = forwardRef(function CreateGroupModal(
             selectedPool?.challengeId === challenge?.id ||
             selectedPool?.id === challenge?.id
         );
-        // include challenge if it doesn't exist in selectedPools
-        return !existsInSelectedPools;
+
+        // include challenge if it doesn't exist in selectedPools and is not expired
+        return (
+          !existsInSelectedPools &&
+          convertDateToReadable(challenge.expiration) !== "expired "
+        );
       });
     } else {
       return [];
     }
   }, [challenges, selectedPools]);
+
+  console.log(filteredChallenges, "filtered challenges");
 
   return (
     <IonModal
